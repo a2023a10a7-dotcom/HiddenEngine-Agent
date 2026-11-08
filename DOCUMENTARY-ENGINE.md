@@ -53,3 +53,72 @@ The checker validates references and production metadata. A pass is structural Q
 ## Safety and cost boundaries
 
 The engine does not call ElevenLabs, render video, publish, or modify repository secrets. Those actions require separate explicit authorization. Do not use generic stock footage as evidence of a specific event. Do not invent missing financial figures or source links.
+
+## Topic-driven research lead discovery (v1)
+
+```bash
+PROJECT_ID=<project-id> npm run documentary:research
+```
+
+Runs five topic-specific Google News RSS searches (topic, business model, financial results, strategy/competition, and primary-source leads). Saves `research/discovery-leads.json` and appends the leads to `research.sources` in the project.
+
+**Important:** these are unverified discovery leads, not facts or independent corroboration. This module does not scrape publisher pages, extract filing tables, authenticate documents, adjudicate contradictions, or verify claims. Search URLs may be redirects. A human or a later source-ingestion stage must resolve canonical publisher URLs and add primary documents. Failures are recorded per query; partial discovery is retained.
+
+## Evidence ledger audit (v1)
+
+```bash
+PROJECT_ID=<project-id> npm run documentary:evidence-audit
+```
+
+Writes `EVIDENCE-AUDIT.json` with source metadata checks, claim-to-source traceability, primary-source linkage counts, unresolved contradiction flags, and missing attribution/caveat/reasoning warnings. It blocks malformed references but does **not** verify factual truth, authenticate source content, or decide whether evidence is sufficient. A claim marked `verified` without a linked primary-source type is flagged for review, not automatically downgraded.
+
+Source records should use stable IDs and a source type such as `primary_filing`, `annual_report`, `regulatory_filing`, `court_record`, `official_dataset`, `company_statement`, `technical_paper`, `original_interview`, or `secondary_lead`.
+
+Claim records should include:
+- `id`, `text`, `classification`, and `sourceIds`
+- `attribution` for attributed statements
+- `caveat` and methodology for estimates
+- `reasoning` for analysis
+- `confidence` as an editorial assessment, never a substitute for evidence
+
+## Public source ingestion (v1)
+
+```bash
+PROJECT_ID=<project-id> npm run documentary:ingest
+```
+
+Fetches publicly accessible HTTP(S) source URLs already present in the project's source ledger. It follows ordinary redirects, records the final URL, HTTP status, content type, retrieval time, and a SHA-256 hash of extracted HTML text. For HTML pages it attempts lightweight metadata and article/main text extraction into `research/source-snapshots/`; it writes `research/ingestion-report.json`.
+
+PDFs are detected but not parsed in this version. Unsupported content types are recorded without downloading binary files. The fetcher applies a timeout and response-size limit, rejects obvious localhost/private-network URLs, and does not log in, bypass paywalls, execute page scripts, or download arbitrary assets.
+
+**Critical limitation:** extracted text is not fact-checked and may omit tables, footnotes, charts, or dynamic content. A successful fetch does not prove that a source supports a claim. Researchers must inspect the original document and link exact passages/page numbers to claims before narration.
+
+## Evidence-linked story architecture (v1)
+
+```bash
+PROJECT_ID=<project-id> npm run documentary:script-plan
+```
+
+Builds `SCRIPT-ARCHITECTURE.json` from the project's research ledger. It groups eligible claims into a seven-part documentary arc: cold open, system, hidden engine, strategic bet, turning point, economic consequences, and conclusion. Each scene contains candidate claim IDs and mandatory editorial checks.
+
+This is an outline/architecture generator, **not a prose scriptwriter**. It deliberately blocks when no eligible researched claims exist. Keyword grouping is a drafting aid and requires editorial review; it does not understand claim meaning or establish relevance. Every eventual narration sentence must be mapped to claim IDs and checked against the original source passages before voice production.
+
+## Evidence-linked script draft assembly (v1)
+
+```bash
+PROJECT_ID=<project-id> npm run documentary:write-script
+```
+
+Requires `SCRIPT-ARCHITECTURE.json` and the project's research ledger. Writes `SCRIPT-DRAFT.json` and `SCRIPT-DRAFT.md`. It assembles eligible claim text into the seven-scene structure, preserves each claim's classification and source references, adds editorial transitions and qualification language, and marks every block as requiring passage review.
+
+This is deliberately **not** a polished generative scriptwriter. It does not invent connective facts, quotations, statistics, or scenes. It cannot confirm that a source supports the claim; exact passage and page/table references remain unverified unless a human records and checks them. It blocks voice generation in its output until passage-level fact checking and human approval are complete. A human editor must rewrite for natural narration, check counter-evidence, and approve before TTS.
+
+## Visual direction and asset acquisition plan (v1)
+
+```bash
+PROJECT_ID=<project-id> npm run documentary:visual-plan
+```
+
+Requires `SCRIPT-DRAFT.json`. Produces `VISUAL-DIRECTION.json`, `VISUAL-DIRECTION.md`, and `visual-assets/ASSET-REGISTER.json`. It creates a scene-by-scene shot plan, restrained visual language, chart/document/map/archival-footage briefs, edit and audio notes, and a rights/provenance register.
+
+This stage does **not** download, license, or clear any media. Every asset begins as `not_acquired`; no suggested stock footage may be represented as real evidence. Before use, record the original URL, creator, exact license and evidence, territory, expiry, and attribution requirements. Match products, people, places, and dates to the story. Chart figures must come from verified claim records and show units, period, source, and methodology.

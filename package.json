@@ -8,7 +8,13 @@
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
     "documentary:new": "node src/documentary-engine.js",
-    "documentary:qa": "node src/documentary-qa.js"
+    "documentary:qa": "node src/documentary-qa.js",
+    "documentary:research": "node src/research-agent.js",
+    "documentary:evidence-audit": "node src/evidence-audit.js",
+    "documentary:ingest": "node src/source-ingest.js",
+    "documentary:script-plan": "node src/script-architect.js",
+    "documentary:write-script": "node src/script-writer.js",
+    "documentary:visual-plan": "node src/visual-director.js"
   },
   "dependencies": {
     "dotenv": "^16.4.7",
