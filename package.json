@@ -1,4 +1,3 @@
-
 {
   "name": "hiddenengine-agent",
   "version": "1.0.0",
@@ -7,7 +6,9 @@
   "type": "module",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "node --watch src/server.js"
+    "dev": "node --watch src/server.js",
+    "documentary:new": "node src/documentary-engine.js",
+    "documentary:qa": "node src/documentary-qa.js"
   },
   "dependencies": {
     "dotenv": "^16.4.7",
