@@ -1,15 +1,11 @@
 import Parser from "rss-parser";
-import {
-  mkdir,
-  writeFile,
-  readFile
-} from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const parser = new Parser({
   timeout: 20000,
   headers: {
-    "User-Agent": "TheHiddenEngineResearchBot/1.0"
+    "User-Agent": "TheHiddenEngineResearchBot/2.0"
   }
 });
 
@@ -25,30 +21,24 @@ const CONFIG = {
   outputDirectory: "reports",
   language: "en-US",
   googleNewsRegion: "US",
-  minimumCoverageSources: 2
+
+  // Coverage discovery is an indicator, not fact verification.
+  minimumCoverageSources: 2,
+
+  // Diversity limits for the top opportunities.
+  maxTopPerSource: 2,
+  maxTopPerCategory: 4,
+
+  // Minimum title similarity for accepting a coverage result.
+  minimumCoverageSimilarity: 0.38
 };
 
 const SOURCES = [
-  {
-    name: "TechCrunch",
-    url: "https://techcrunch.com/feed/"
-  },
-  {
-    name: "Ars Technica",
-    url: "https://feeds.arstechnica.com/arstechnica/index"
-  },
-  {
-    name: "The Verge",
-    url: "https://www.theverge.com/rss/index.xml"
-  },
-  {
-    name: "BBC Technology",
-    url: "https://feeds.bbci.co.uk/news/technology/rss.xml"
-  },
-  {
-    name: "MIT Technology Review",
-    url: "https://www.technologyreview.com/feed/"
-  }
+  { name: "TechCrunch", url: "https://techcrunch.com/feed/" },
+  { name: "Ars Technica", url: "https://feeds.arstechnica.com/arstechnica/index" },
+  { name: "The Verge", url: "https://www.theverge.com/rss/index.xml" },
+  { name: "BBC Technology", url: "https://feeds.bbci.co.uk/news/technology/rss.xml" },
+  { name: "MIT Technology Review", url: "https://www.technologyreview.com/feed/" }
 ];
 
 const CATEGORIES = {
@@ -109,9 +99,20 @@ const CATEGORY_ANGLES = {
 
 function cleanText(value = "") {
   return String(value)
+    .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1")
     .replace(/<[^>]*>/g, " ")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&")
+    .replace(/&#(\d+);/g, (_, code) =>
+      String.fromCodePoint(Number(code))
+    )
+    .replace(/&#x([0-9a-f]+);/gi, (_, code) =>
+      String.fromCodePoint(parseInt(code, 16))
+    )
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&quot;/gi, '"')
+    .replace(/&apos;/gi, "'")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -119,15 +120,22 @@ function cleanText(value = "") {
 function normalizeTitle(title = "") {
   return cleanText(title)
     .toLowerCase()
-    .replace(/[^\p{L}\p{N}\s]/gu, "")
-    .replace(/\b(the|a|an|and|or|to|of|in|on|for|with)\b/g, " ")
+    .replace(/[^\p{L}\p{N}\s]/gu, " ")
+    .replace(/\b(the|a|an|and|or|to|of|in|on|for|with|from|by|as|at)\b/g, " ")
     .replace(/\s+/g, " ")
     .trim();
+}
+
+function titleTokens(title = "") {
+  return normalizeTitle(title)
+    .split(" ")
+    .filter((word) => word.length > 2);
 }
 
 function getDomain(url = "") {
   try {
     return new URL(url).hostname
+      .toLowerCase()
       .replace(/^www\./, "");
   } catch {
     return "";
@@ -139,9 +147,7 @@ function validDate(value) {
 
   const date = new Date(value);
 
-  if (Number.isNaN(date.getTime())) {
-    return null;
-  }
+  if (Number.isNaN(date.getTime())) return null;
 
   if (date.getTime() > Date.now() + 86400000) {
     return null;
@@ -154,17 +160,32 @@ function unique(values) {
   return [...new Set(values.filter(Boolean))];
 }
 
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+// Match complete words or phrases, not accidental substrings.
+// Example: "AI" should not match inside "chair".
+function containsTerm(text, term) {
+  const escaped = escapeRegExp(term.toLowerCase().trim())
+    .replace(/\s+/g, "\\s+");
+
+  return new RegExp(`(^|[^a-z0-9])${escaped}($|[^a-z0-9])`, "i")
+    .test(text);
+}
+
 // -------------------------------------
-// ARTICLE CLASSIFICATION
+// CLASSIFICATION
 // -------------------------------------
 
 function classify(text) {
+  const normalized = text.toLowerCase();
   const scores = {};
 
   for (const [category, words] of Object.entries(CATEGORIES)) {
     scores[category] = words.reduce(
       (total, word) =>
-        total + (text.includes(word.toLowerCase()) ? 1 : 0),
+        total + (containsTerm(normalized, word) ? 1 : 0),
       0
     );
   }
@@ -177,6 +198,7 @@ function classify(text) {
       ranked[0]?.[1] > 0
         ? ranked[0][0]
         : "General Technology",
+
     matchedCategories: ranked
       .filter((item) => item[1] > 0)
       .map((item) => item[0])
@@ -188,8 +210,8 @@ function classify(text) {
 // -------------------------------------
 
 function similarity(a, b) {
-  const wordsA = new Set(normalizeTitle(a).split(" "));
-  const wordsB = new Set(normalizeTitle(b).split(" "));
+  const wordsA = new Set(titleTokens(a));
+  const wordsB = new Set(titleTokens(b));
 
   if (!wordsA.size || !wordsB.size) return 0;
 
@@ -205,16 +227,12 @@ function removeDuplicates(articles) {
   const result = [];
 
   for (const article of articles) {
-    const duplicate = result.find((existing) => {
-      return (
-        existing.link === article.link ||
-        similarity(existing.title, article.title) >= 0.78
-      );
-    });
+    const duplicate = result.find((existing) =>
+      existing.link === article.link ||
+      similarity(existing.title, article.title) >= 0.78
+    );
 
-    if (!duplicate) {
-      result.push(article);
-    }
+    if (!duplicate) result.push(article);
   }
 
   return result;
@@ -280,6 +298,111 @@ async function collectNews() {
 }
 
 // -------------------------------------
+// GOOGLE NEWS RSS SOURCE EXTRACTION
+// -------------------------------------
+
+function extractGoogleSourceTags(xml) {
+  const blocks = [
+    ...xml.matchAll(/<item\b[^>]*>([\s\S]*?)<\/item>/gi)
+  ];
+
+  return blocks.map((match) => {
+    const block = match[1];
+
+    const sourceMatch = block.match(
+      /<source\b([^>]*)>([\s\S]*?)<\/source>/i
+    );
+
+    if (!sourceMatch) {
+      return {
+        name: "",
+        url: ""
+      };
+    }
+
+    const attributes = sourceMatch[1];
+    const name = cleanText(sourceMatch[2]);
+
+    const urlMatch = attributes.match(
+      /\burl\s*=\s*["']([^"']+)["']/i
+    );
+
+    return {
+      name,
+      url: urlMatch?.[1] || ""
+    };
+  });
+}
+
+function cleanPublisherName(name = "") {
+  let publisher = cleanText(name);
+
+  publisher = publisher
+    .replace(/\s*[-|]\s*Google News\s*$/i, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return publisher;
+}
+
+function publisherKey(report) {
+  const domain = getDomain(report.publisherUrl);
+
+  if (domain) return domain;
+
+  return cleanPublisherName(report.publisher)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
+function extractPublisherFromTitle(title = "") {
+  const parts = cleanText(title).split(/\s[-–|]\s/);
+
+  if (parts.length < 2) return "";
+
+  return parts[parts.length - 1].trim();
+}
+
+function removePublisherSuffix(title = "", publisher = "") {
+  const cleanTitle = cleanText(title);
+
+  if (!publisher) return cleanTitle;
+
+  const suffix = new RegExp(
+    `\\s[-–|]\\s${escapeRegExp(publisher)}\\s*$`,
+    "i"
+  );
+
+  return cleanTitle.replace(suffix, "").trim();
+}
+
+// -------------------------------------
+// COVERAGE RELEVANCE
+// -------------------------------------
+
+function coverageSimilarity(originalTitle, reportTitle) {
+  const original = new Set(titleTokens(originalTitle));
+  const candidate = new Set(titleTokens(reportTitle));
+
+  if (!original.size || !candidate.size) return 0;
+
+  const overlap = [...original]
+    .filter((word) => candidate.has(word));
+
+  const overlapAgainstOriginal = overlap.length / original.size;
+  const overlapAgainstCandidate = overlap.length / candidate.size;
+
+  // A result must share a meaningful portion of the original title.
+  // This is a discovery filter, not proof that both articles describe
+  // exactly the same event.
+  return Math.max(
+    overlapAgainstOriginal * 0.7 + overlapAgainstCandidate * 0.3,
+    overlapAgainstOriginal * 0.85
+  );
+}
+
+// -------------------------------------
 // GOOGLE NEWS COVERAGE SEARCH
 // -------------------------------------
 
@@ -298,7 +421,7 @@ async function findCoverage(article) {
     const response = await fetch(url, {
       signal: AbortSignal.timeout(CONFIG.requestTimeout),
       headers: {
-        "User-Agent": "Mozilla/5.0 TheHiddenEngine/1.0"
+        "User-Agent": "Mozilla/5.0 TheHiddenEngine/2.0"
       }
     });
 
@@ -308,30 +431,83 @@ async function findCoverage(article) {
 
     const xml = await response.text();
     const feed = await parser.parseString(xml);
+    const sourceTags = extractGoogleSourceTags(xml);
 
-    const reports = (feed.items || []).map((item) => {
-      const publisher =
-        cleanText(item.creator || item.source?.title || "");
+    const reports = [];
 
+    for (let index = 0; index < (feed.items || []).length; index++) {
+      const item = feed.items[index];
+      const sourceTag = sourceTags[index] || {};
+
+      const rawTitle = cleanText(item.title || "");
+      const sourceFromTitle = extractPublisherFromTitle(rawTitle);
+
+      const publisher = cleanPublisherName(
+        sourceTag.name ||
+        item.creator ||
+        item.source?.title ||
+        sourceFromTitle
+      );
+
+      const publisherUrl = sourceTag.url || "";
+      const title = removePublisherSuffix(rawTitle, publisher);
       const link = item.link || "";
 
-      return {
-        title: cleanText(item.title || ""),
-        publisher: publisher || getDomain(link),
-        link,
-        date: item.isoDate || item.pubDate || ""
-      };
-    });
+      if (!title || !link) continue;
 
-    const publishers = unique(
-      reports.map((item) => item.publisher.toLowerCase())
+      const matchScore = coverageSimilarity(
+        article.title,
+        title
+      );
+
+      if (matchScore < CONFIG.minimumCoverageSimilarity) {
+        continue;
+      }
+
+      reports.push({
+        title,
+        publisher: publisher || "Publisher not identified",
+        publisherUrl,
+        publisherDomain:
+          getDomain(publisherUrl) || getDomain(link),
+        link,
+        date: item.isoDate || item.pubDate || "",
+        relevance: Number(matchScore.toFixed(3))
+      });
+    }
+
+    // Remove duplicate links.
+    const uniqueReports = [];
+    const seenLinks = new Set();
+
+    for (const report of reports) {
+      if (seenLinks.has(report.link)) continue;
+
+      seenLinks.add(report.link);
+      uniqueReports.push(report);
+    }
+
+    // Count distinct publisher identifiers.
+    // This does NOT establish independent ownership or reporting.
+    const publisherIds = unique(
+      uniqueReports
+        .map(publisherKey)
+        .filter(Boolean)
     );
 
     return {
       status: "searched",
-      reports: reports.slice(0, 12),
-      publisherCount: publishers.length,
-      publishers: publishers.slice(0, 12)
+      reports: uniqueReports.slice(0, 12),
+      publisherCount: publisherIds.length,
+      publishers: uniqueReports
+        .map((item) => item.publisher)
+        .filter((name, index, list) =>
+          list.findIndex(
+            (other) => other.toLowerCase() === name.toLowerCase()
+          ) === index
+        )
+        .slice(0, 12),
+      note: "Distinct publisher identifiers found; independence and factual accuracy are not verified."
     };
 
   } catch (error) {
@@ -340,7 +516,8 @@ async function findCoverage(article) {
       error: error.message,
       reports: [],
       publisherCount: 0,
-      publishers: []
+      publishers: [],
+      note: "Coverage search unavailable."
     };
   }
 }
@@ -348,6 +525,12 @@ async function findCoverage(article) {
 // -------------------------------------
 // EDITORIAL EVALUATION
 // -------------------------------------
+
+function countMatches(text, words) {
+  return words.filter((word) =>
+    containsTerm(text, word)
+  ).length;
+}
 
 function evaluate(article) {
   const text =
@@ -364,99 +547,166 @@ function evaluate(article) {
   ];
 
   const technicalWords = [
-    "ai", "chip", "engine", "robot",
-    "computer", "technology", "drone",
-    "radar", "software", "science",
-    "engineering", "system", "processor"
+    "artificial intelligence", "ai", "chip",
+    "engine", "robot", "computer", "technology",
+    "drone", "radar", "software", "science",
+    "engineering", "system", "processor",
+    "semiconductor", "algorithm", "satellite"
   ];
 
   const storyWords = [
     "company", "history", "secret",
     "failure", "founder", "battle",
     "competition", "rival", "crisis",
-    "strategy", "rise", "collapse"
+    "strategy", "rise", "collapse",
+    "decision", "conflict", "investigation"
   ];
-
-  const countMatches = (words) =>
-    words.filter((word) => text.includes(word)).length;
 
   const interest = Math.min(
     20,
-    5 + countMatches(interestWords) * 2
+    4 + countMatches(text, interestWords) * 2
   );
 
   const technical = Math.min(
     15,
-    3 + countMatches(technicalWords) * 2
+    2 + countMatches(text, technicalWords) * 2
   );
 
   const storytelling = Math.min(
     15,
-    3 + countMatches(storyWords) * 2
+    2 + countMatches(text, storyWords) * 2
   );
 
   const date = validDate(article.date);
 
-  let freshness = 4;
+  let freshness = 3;
 
   if (date) {
-    const ageDays =
-      Math.max(0, (Date.now() - date.getTime()) / 86400000);
+    const ageDays = Math.max(
+      0,
+      (Date.now() - date.getTime()) / 86400000
+    );
 
-    freshness = Math.max(0, 15 - ageDays * 1.5);
+    freshness = Math.max(
+      0,
+      Math.round(15 - ageDays * 1.5)
+    );
   }
 
   const relevance = Math.min(
     25,
-    8 + (matchedCategories.length * 4)
+    5 + matchedCategories.length * 5
   );
 
-  // This is a neutral starting value.
-  // It is not a factual credibility rating.
-  const sourceCoverage = 5;
+  // Specificity measures whether the available material contains
+  // concrete names, numbers, dates, or technical details.
+  const hasNumbers = /\b\d+(?:[.,]\d+)?%?\b/.test(text);
+  const hasNamedEntities = /\b[A-Z][a-z]{2,}\b/.test(
+    `${article.title} ${article.summary}`
+  );
+  const hasLongSummary = article.summary.length >= 250;
+
+  const specificity = Math.min(
+    10,
+    2 +
+    (hasNumbers ? 3 : 0) +
+    (hasNamedEntities ? 2 : 0) +
+    (hasLongSummary ? 3 : 0)
+  );
+
+  const scoreBreakdown = {
+    relevance,
+    interest,
+    technical,
+    storytelling,
+    freshness,
+    specificity
+  };
+
+  const score = Object.values(scoreBreakdown)
+    .reduce((sum, value) => sum + value, 0);
 
   return {
     ...article,
     category,
     matchedCategories,
     dateValid: Boolean(date),
-    score: 0,
-    scoreBreakdown: {
-      relevance,
-      interest,
-      technical,
-      storytelling,
-      freshness: Math.round(freshness),
-      sourceCoverage
-    },
+    score,
+    scoreBreakdown,
     angle: CATEGORY_ANGLES[category],
     coverage: null
   };
 }
 
+// -------------------------------------
+// SCORE UPDATE
+// -------------------------------------
+
 function updateScore(article) {
-  const breakdown = article.scoreBreakdown;
-
-  const coverageBonus = Math.min(
-    10,
-    Math.max(0, article.coverage.publisherCount - 1) * 2
-  );
-
-  breakdown.sourceCoverage = 5 + coverageBonus;
-
-  article.score = Math.min(
-    100,
-    Math.round(
-      breakdown.relevance +
-      breakdown.interest +
-      breakdown.technical +
-      breakdown.storytelling +
-      breakdown.freshness +
-      breakdown.sourceCoverage
-    )
-  );
+  // Coverage is deliberately excluded from the editorial score.
+  // More search results do not automatically make a story better.
+  article.score = Object.values(article.scoreBreakdown)
+    .reduce((sum, value) => sum + value, 0);
 
   return article;
+}
+
+// -------------------------------------
+// EDITORIAL DIVERSITY
+// -------------------------------------
+
+function selectDiverseOpportunities(articles) {
+  const selected = [];
+  const remaining = [...articles];
+
+  const sourceCounts = new Map();
+  const categoryCounts = new Map();
+
+  function canSelect(article) {
+    const sourceCount =
+      sourceCounts.get(article.source) || 0;
+
+    const categoryCount =
+      categoryCounts.get(article.category) || 0;
+
+    return (
+      sourceCount < CONFIG.maxTopPerSource &&
+      categoryCount < CONFIG.maxTopPerCategory
+    );
+  }
+
+  while (
+    selected.length < CONFIG.topOpportunities &&
+    remaining.length
+  ) {
+    const index = remaining.findIndex(canSelect);
+
+    if (index === -1) break;
+
+    const [article] = remaining.splice(index, 1);
+    selected.push(article);
+
+    sourceCounts.set(
+      article.source,
+      (sourceCounts.get(article.source) || 0) + 1
+    );
+
+    categoryCounts.set(
+      article.category,
+      (categoryCounts.get(article.category) || 0) + 1
+    );
+  }
+
+  // If strict diversity limits prevent filling the list,
+  // fill remaining positions with the highest-scoring stories.
+  while (
+    selected.length < CONFIG.topOpportunities &&
+    remaining.length
+  ) {
+    selected.push(remaining.shift());
+  }
+
+  return selected;
 }
 
 // -------------------------------------
@@ -469,9 +719,18 @@ function makeRecommendation(article) {
 
   const warnings = [];
 
-  if (coverageCount < CONFIG.minimumCoverageSources) {
+  if (
+    article.coverage?.status === "searched" &&
+    coverageCount < CONFIG.minimumCoverageSources
+  ) {
     warnings.push(
-      "Limited independent coverage found. Verify before publication."
+      "Few matching coverage results found. Search for additional reporting and primary sources."
+    );
+  }
+
+  if (article.coverage?.status === "unavailable") {
+    warnings.push(
+      "Coverage search failed. No conclusion can be drawn about how widely this story is reported."
     );
   }
 
@@ -491,7 +750,7 @@ function makeRecommendation(article) {
     priority:
       article.score >= 75
         ? "High"
-        : article.score >= 60
+        : article.score >= 55
           ? "Medium"
           : "Low",
 
@@ -522,6 +781,8 @@ function markdownEscape(value = "") {
 }
 
 function buildMarkdown(articles, sourceStatus, date) {
+  const topArticles = selectDiverseOpportunities(articles);
+
   let report = `# THE HIDDEN ENGINE
 ## Editorial Intelligence Report
 
@@ -529,7 +790,8 @@ Date: ${date}
 Articles analyzed: ${articles.length}
 
 > Scores are automated editorial estimates, not facts or predictions of video performance.
-> Coverage counts indicate search results from Google News, not proof of truth.
+> Coverage counts are matching Google News search results, not proof of accuracy or independent reporting.
+> Coverage discovery is not fact-checking.
 
 ## SOURCE STATUS
 
@@ -551,20 +813,18 @@ Articles analyzed: ${articles.length}
 
   report += "\n## TOP VIDEO OPPORTUNITIES\n\n";
 
-  articles
-    .slice(0, CONFIG.topOpportunities)
-    .forEach((article, index) => {
-      const recommendation = makeRecommendation(article);
-      const breakdown = article.scoreBreakdown;
+  topArticles.forEach((article, index) => {
+    const recommendation = makeRecommendation(article);
+    const breakdown = article.scoreBreakdown;
 
-      report += `### ${index + 1}. ${article.title}
+    report += `### ${index + 1}. ${article.title}
 
 - **Score:** ${article.score}/100
 - **Priority:** ${recommendation.priority}
 - **Category:** ${article.category}
 - **Original source:** ${article.source}
 - **Publication date:** ${article.date || "Unknown"}
-- **Coverage publishers found:** ${article.coverage?.publisherCount ?? "Not searched"}
+- **Matching coverage publishers:** ${article.coverage?.publisherCount ?? "Not searched"}
 - **Suggested format:** ${recommendation.format}
 - **Target audience:** ${recommendation.audience}
 
@@ -574,7 +834,7 @@ Articles analyzed: ${articles.length}
 - Technical depth: ${breakdown.technical}/15
 - Storytelling potential: ${breakdown.storytelling}/15
 - Freshness: ${breakdown.freshness}/15
-- Coverage indicator: ${breakdown.sourceCoverage}/15
+- Specificity: ${breakdown.specificity}/10
 
 **Why it matters:** ${article.summary}
 
@@ -583,28 +843,31 @@ Articles analyzed: ${articles.length}
 **Coverage search**
 `;
 
-      if (article.coverage?.reports?.length) {
-        article.coverage.reports.slice(0, 6).forEach((item) => {
-          report += `- ${item.publisher}: ${item.title} — ${item.link}\n`;
-        });
-      } else {
-        report += "- No coverage results available.\n";
-      }
+    if (article.coverage?.reports?.length) {
+      article.coverage.reports.slice(0, 6).forEach((item) => {
+        report += `- ${item.publisher}: ${item.title} — ${item.link}\n`;
+      });
 
-      if (recommendation.warnings.length) {
-        report += "\n**Research warnings**\n";
+      report += `\nDistinct publisher identifiers: ${article.coverage.publisherCount}\n`;
+      report += `Note: ${article.coverage.note}\n`;
+    } else {
+      report += "- No matching coverage results available.\n";
+    }
 
-        recommendation.warnings.forEach((warning) => {
-          report += `- ${warning}\n`;
-        });
-      }
+    if (recommendation.warnings.length) {
+      report += "\n**Research warnings**\n";
 
-      report += `\n**Original article:** ${article.link}
+      recommendation.warnings.forEach((warning) => {
+        report += `- ${warning}\n`;
+      });
+    }
+
+    report += `\n**Original article:** ${article.link}
 
 ---
 
 `;
-    });
+  });
 
   report += "\n## ALL ANALYZED STORIES\n\n";
 
@@ -614,7 +877,7 @@ Articles analyzed: ${articles.length}
 - Score: ${article.score}/100
 - Category: ${article.category}
 - Source: ${article.source}
-- Coverage publishers: ${article.coverage?.publisherCount ?? "Not searched"}
+- Matching coverage publishers: ${article.coverage?.publisherCount ?? "Not searched"}
 - Link: ${article.link}
 
 `;
@@ -625,11 +888,12 @@ Articles analyzed: ${articles.length}
 
 1. Read the original article.
 2. Open the coverage links and compare the reporting.
-3. Find primary sources, official statements, documents, or data.
+3. Identify primary sources, official statements, documents, or data.
 4. Separate confirmed facts from claims and opinions.
 5. Check dates, numbers, names, and quotations.
-6. Decide whether the topic deserves a video.
-7. Prepare the research dossier before writing the script.
+6. Check whether different outlets rely on the same original report.
+7. Decide whether the topic deserves a video.
+8. Prepare the research dossier before writing the script.
 
 `;
 
@@ -653,6 +917,7 @@ function buildCSV(articles) {
       "Source",
       "Date",
       "Coverage Publishers",
+      "Coverage Status",
       "Link"
     ]
   ];
@@ -665,6 +930,7 @@ function buildCSV(articles) {
       article.source,
       article.date,
       article.coverage?.publisherCount ?? 0,
+      article.coverage?.status ?? "not_checked",
       article.link
     ]);
   }
@@ -691,7 +957,6 @@ async function main() {
 
   console.log(`Collected ${evaluated.length} unique articles.`);
 
-  // Search coverage for the most promising stories.
   const coverageTargets = evaluated.slice(
     0,
     CONFIG.articlesToCheck
@@ -702,9 +967,14 @@ async function main() {
 
     article.coverage = await findCoverage(article);
     updateScore(article);
+
+    console.log(
+      `Matching reports: ${article.coverage.reports.length}; ` +
+      `publisher identifiers: ${article.coverage.publisherCount}`
+    );
   }
 
-  // Reorder after coverage research.
+  // Scores do not depend on coverage.
   evaluated.sort((a, b) => b.score - a.score);
 
   for (const article of evaluated) {
@@ -713,7 +983,8 @@ async function main() {
         status: "not_checked",
         publisherCount: 0,
         publishers: [],
-        reports: []
+        reports: [],
+        note: "Coverage was not searched for this article."
       };
     }
 
@@ -741,6 +1012,8 @@ async function main() {
     configuration: CONFIG,
     sourceStatus,
     totalArticles: evaluated.length,
+    topOpportunities: selectDiverseOpportunities(evaluated)
+      .map((article) => article.title),
     articles: evaluated
   };
 
@@ -764,27 +1037,23 @@ async function main() {
   );
 
   // Dated archive.
-  await mkdir(
-    path.join(CONFIG.outputDirectory, "archive"),
-    { recursive: true }
+  const archiveDirectory = path.join(
+    CONFIG.outputDirectory,
+    "archive"
   );
 
+  await mkdir(archiveDirectory, {
+    recursive: true
+  });
+
   await writeFile(
-    path.join(
-      CONFIG.outputDirectory,
-      "archive",
-      `${date}.json`
-    ),
+    path.join(archiveDirectory, `${date}.json`),
     JSON.stringify(data, null, 2),
     "utf8"
   );
 
   await writeFile(
-    path.join(
-      CONFIG.outputDirectory,
-      "archive",
-      `${date}.md`
-    ),
+    path.join(archiveDirectory, `${date}.md`),
     report,
     "utf8"
   );
