@@ -1,0 +1,81 @@
+name: HiddenEngine Script JSON Integrity Check
+
+on:
+  push:
+    paths:
+      - "production/projects/**/script.json"
+      - ".github/workflows/script-json-integrity.yml"
+  pull_request:
+    paths:
+      - "production/projects/**/script.json"
+      - ".github/workflows/script-json-integrity.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-json:
+    name: Validate every production script JSON
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Parse all script.json files with precise diagnostics
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+
+          const root = 'production/projects';
+          const files = [];
+
+          function walk(dir) {
+            if (!fs.existsSync(dir)) return;
+            for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+              const full = path.join(dir, entry.name);
+              if (entry.isDirectory()) walk(full);
+              else if (entry.isFile() && entry.name === 'script.json') files.push(full);
+            }
+          }
+
+          walk(root);
+          files.sort();
+
+          if (files.length === 0) {
+            console.error('::error::No production script.json files found under production/projects.');
+            process.exit(1);
+          }
+
+          let failed = false;
+          for (const file of files) {
+            const source = fs.readFileSync(file, 'utf8');
+            try {
+              JSON.parse(source);
+              console.log(`::notice file=${file}::Valid JSON (${Buffer.byteLength(source, 'utf8')} bytes)`);
+            } catch (error) {
+              failed = true;
+              const message = String(error.message || error);
+              const match = message.match(/position (\d+)/i);
+              let detail = message;
+              if (match) {
+                const position = Number(match[1]);
+                const before = source.slice(0, position);
+                const line = before.split('\n').length;
+                const column = position - before.lastIndexOf('\n');
+                detail += ` (line ${line}, column ${column}, character offset ${position})`;
+              }
+              console.error(`::error file=${file}::Invalid JSON: ${detail}`);
+            }
+          }
+
+          console.log(`Checked ${files.length} script.json file(s).`);
+          if (failed) process.exit(1);
+          NODE
