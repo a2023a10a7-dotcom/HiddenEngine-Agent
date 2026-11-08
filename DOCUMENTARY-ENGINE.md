@@ -112,3 +112,13 @@ PROJECT_ID=<project-id> npm run documentary:write-script
 Requires `SCRIPT-ARCHITECTURE.json` and the project's research ledger. Writes `SCRIPT-DRAFT.json` and `SCRIPT-DRAFT.md`. It assembles eligible claim text into the seven-scene structure, preserves each claim's classification and source references, adds editorial transitions and qualification language, and marks every block as requiring passage review.
 
 This is deliberately **not** a polished generative scriptwriter. It does not invent connective facts, quotations, statistics, or scenes. It cannot confirm that a source supports the claim; exact passage and page/table references remain unverified unless a human records and checks them. It blocks voice generation in its output until passage-level fact checking and human approval are complete. A human editor must rewrite for natural narration, check counter-evidence, and approve before TTS.
+
+## Visual direction and asset acquisition plan (v1)
+
+```bash
+PROJECT_ID=<project-id> npm run documentary:visual-plan
+```
+
+Requires `SCRIPT-DRAFT.json`. Produces `VISUAL-DIRECTION.json`, `VISUAL-DIRECTION.md`, and `visual-assets/ASSET-REGISTER.json`. It creates a scene-by-scene shot plan, restrained visual language, chart/document/map/archival-footage briefs, edit and audio notes, and a rights/provenance register.
+
+This stage does **not** download, license, or clear any media. Every asset begins as `not_acquired`; no suggested stock footage may be represented as real evidence. Before use, record the original URL, creator, exact license and evidence, territory, expiry, and attribution requirements. Match products, people, places, and dates to the story. Chart figures must come from verified claim records and show units, period, source, and methodology.
