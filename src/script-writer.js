@@ -31,7 +31,7 @@ for(const outline of architecture.scenes||[]){
     }));
     const qualification={
       verified:"The research ledger classifies this as verified; independently recheck the cited passage before recording.",
-      attributed:"Attribute this statement explicitly to "+(c.attribution||"the named source");,
+      attributed:"Attribute this statement explicitly to "+(c.attribution||"the named source") + ".",
       estimated:"Present this only as an estimate and state its limitations: "+(c.caveat||"caveat not supplied")+".",
       analysis:"Present this as analysis, not reported fact. Reasoning: "+(c.reasoning||"reasoning not supplied")+"."
     }[c.classification];
