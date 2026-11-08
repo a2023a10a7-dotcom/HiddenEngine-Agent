@@ -18,6 +18,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   render:
@@ -37,13 +38,21 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ffmpeg fonts-dejavu-core
 
-      - name: Check required voice configuration
-        env:
-          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
-          ELEVENLABS_VOICE_ID: ${{ vars.ELEVENLABS_VOICE_ID }}
+      - name: Restore existing narration from previous successful render
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 42534387530
+          name: hiddenengine-cinematic-2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re
+          path: narration-cache
+
+      - name: Verify restored narration cache
         run: |
-          test -n "$ELEVENLABS_API_KEY" || (echo "::error::Add ELEVENLABS_API_KEY to GitHub Actions Secrets."; exit 1)
-          test -n "$ELEVENLABS_VOICE_ID" || (echo "::error::Add ELEVENLABS_VOICE_ID to GitHub Actions Variables."; exit 1)
+          for i in 01 02 03 04 05 06 07; do
+            test -s "narration-cache/scene-$i.mp3" || (echo "::error::Missing cached narration scene-$i.mp3"; exit 1)
+          done
+          echo "All seven original narration tracks restored."
 
       - name: Render cinematic documentary
         env:
@@ -51,6 +60,7 @@ jobs:
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
           ELEVENLABS_VOICE_ID: ${{ vars.ELEVENLABS_VOICE_ID }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          NARRATION_CACHE_DIR: ${{ github.workspace }}/narration-cache
         run: node src/render-video.js
 
       - name: Upload MP4 and production assets
