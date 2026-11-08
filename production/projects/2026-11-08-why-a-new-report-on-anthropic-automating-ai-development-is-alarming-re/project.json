@@ -1,0 +1,45 @@
+{
+  "project": "The Hidden Engine",
+  "projectId": "2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re",
+  "status": "research_required",
+  "generatedAt": "2026-11-08T12:45:31.589Z",
+  "researchReportGeneratedAt": "2026-11-08T12:04:23.271Z",
+  "selectedStory": {
+    "title": "Why a new report on Anthropic automating AI development is alarming researchers",
+    "source": "The Verge",
+    "link": "https://www.theverge.com/ai-artificial-intelligence/1029126/anthropic-metr-report-accelerating-ai-development",
+    "date": "2026-11-07T12:30:00.000Z",
+    "summary": "Anthropic CEO Dario Amodei. | Photo: Jason Henry/Bloomberg via Getty Images Anthropic is using AI to build more powerful AI. And it appears to be working remarkably well, with the company's models improving roughly twice as quickly as a year ago, with little indication of slowing down. That's according to a new report published Thursday by the AI safety research organization METR, following an 11-week investigation inside the company, as part of a report evaluating its AI research and development. The probe is separate from a program offering safety researchers \"employee-like\" access to systems in the wake of high-profile hacking incidents over the summer. The findings offer some of the clearest evidence yet of AI … Read the full story at The Verge.",
+    "category": "Business Stories",
+    "editorialScore": 55,
+    "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
+    "coverage": {
+      "status": "searched",
+      "reports": [
+        {
+          "title": "Why a new report on Anthropic automating AI development is alarming researchers",
+          "publisher": "The Verge",
+          "publisherUrl": "https://www.theverge.com",
+          "publisherDomain": "theverge.com",
+          "link": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOLUNwUWpsbVpwenM2Y3NvU2MzWU01UUptX2psb0NBbHhKWlpVQkgzSTJJNktuakkweXlpYjhLYjhETjJHRko4eC1UX2x4UW9LTlFSZmJnTVE3Q1RZR0kwSGoyQWdXYW9qMnlmcVdJY2JOTFMwZkt0TDJTbXhrZTBZbEdGWHEzMjBDX1R2aXBZUTVOTnB4Y2YzU0tTUGdJbS02ZXJGM0ppdWZkNDhRenc?oc=5",
+          "date": "2026-11-07T12:30:00.000Z",
+          "relevance": 1
+        }
+      ],
+      "publisherCount": 1,
+      "publishers": [
+        "The Verge"
+      ],
+      "note": "Distinct publisher identifiers found; independence and factual accuracy are not verified."
+    },
+    "automatedWarnings": [
+      "Few matching coverage results found. Search for additional reporting and primary sources."
+    ]
+  },
+  "editorialRules": {
+    "independentVerificationRequired": true,
+    "primarySourcesRequired": true,
+    "noUnsupportedClaims": true,
+    "ownerApprovalBeforePublishing": true
+  }
+}
