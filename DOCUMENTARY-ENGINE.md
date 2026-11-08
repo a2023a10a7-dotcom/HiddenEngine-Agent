@@ -147,3 +147,43 @@ The renderer consumes `production/projects/<project-id>/script.json`, while the 
 6. Only after it succeeds, run the existing manual render workflow.
 
 The adapter maps approved narration blocks to the renderer's expected `title`, `subtitle`, `narration`, `visual_query`, and `visual` scene fields. It does not acquire footage, create polished visual assets, independently verify claims, or grant legal clearance. The SHA-256 value binds approval to one exact draft; any subsequent edit requires a new review and approval.
+
+
+## Rights-cleared still images and video per scene (v1)
+
+The renderer no longer performs broad Pexels searches or silently treats generic stock footage as story evidence. Instead, supply assets deliberately in the project folder and bind each approved asset to a scene.
+
+1. Place image/video files under `production/projects/<project-id>/visual-assets/`.
+2. Create `visual-assets/approved-assets.json` with this structure:
+
+```json
+{
+  "projectId": "the-exact-project-id",
+  "status": "approved",
+  "assets": [
+    {
+      "id": "ASSET-001",
+      "sceneId": "S01",
+      "mediaType": "image",
+      "filePath": "visual-assets/company-archive-photo.jpg",
+      "sourceUrl": "https://example.org/original-item",
+      "creator": "Photographer or rights holder",
+      "license": "Exact license name and version",
+      "licenseEvidence": "URL or repository record proving the grant",
+      "territory": "Worldwide",
+      "expiry": null,
+      "attribution": "Exact required credit",
+      "rightsStatus": "cleared",
+      "editorialVerification": "approved"
+    }
+  ]
+}
+```
+
+3. Run `PROJECT_ID=<project-id> npm run documentary:validate-visuals`. It checks manifest/project status, required rights and provenance fields, expiry, safe project-relative paths, file existence, and media streams/resolution with ffprobe. It writes `VISUAL-ASSETS-READY.json`. A failed validation blocks handoff.
+4. Run the approved script handoff. Its generated `script.json` binds each matching scene to its validated asset. The renderer creates a restrained motion treatment for still images and loops/crops video to the narration duration, with the channel's title and evidence overlays.
+5. Review `visual-credits.json` and `CREDITS.md` before publication.
+
+Images and videos are not downloaded automatically: a URL is provenance, not permission to download or use. Acquire files only through a source and license that permit the intended use. For documentary evidence, prefer original company archives, regulator filings, court records, official datasets, and licensed editorial archives. For illustrative b-roll, label it as illustrative in the edit and do not imply it depicts the actual company, person, product, place, or event.
+
+If no approved asset is assigned to a scene, the renderer falls back to an original branded motion graphic. This v1 does not yet automate archive discovery, image/video licensing, face/object matching, visual-content verification, or word-level shot synchronization. It uses scene-level assignment and narration-duration conformance.
