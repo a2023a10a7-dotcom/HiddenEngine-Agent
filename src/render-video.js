@@ -220,7 +220,7 @@ async function main() {
         "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,eq=contrast=1.12:saturation=0.78,drawbox=x=0:y=0:w=iw:h=ih:color=#08090b@0.18:t=fill[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
         "-map","[v]","-map","1:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
     } else if (still) {
-      const imagePath=clip.replace(/\.mp4$/,".img");
+      const imagePath=clip.replace(/\.mp4$/,".jpg");
       await download(still.url, imagePath);
       credits.push({ scene:i+1, query, provider:still.license ? "Wikimedia Commons photo" : "Pexels photo", page:still.page, creator:still.creator, creatorUrl:still.creatorUrl || "", license:still.license || "Pexels License", licenseUrl:still.licenseUrl || "", usage:"Illustrative still; not proof of a named event or entity." });
       await run("ffmpeg", ["-y","-loop","1","-i",imagePath,"-i",mixedAudio,"-loop","1","-i",svg,
@@ -235,8 +235,6 @@ async function main() {
     clips.push(rendered);
     console.log("Rendered scene " + (i+1) + "/" + script.scenes.length + (asset ? " with licensed stock footage." : " with branded motion graphics."));
   }
-  const list = path.join(OUT,"concat.txt");
-  await writeFile(list, clips.map(f=>"file '"+path.basename(f)+"'").join("\n")+"\n");
   const stockScenes = credits.filter(item => item.provider === "Pexels video" || item.provider === "Pexels photo" || item.provider === "Wikimedia Commons photo").length;
   const minimumStockScenes = Math.min(4, script.scenes.length);
   if (stockScenes < minimumStockScenes) {
