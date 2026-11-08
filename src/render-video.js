@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile, copyFile, access } from "node:fs/promises";
 import { spawn } from "node:child_process";
 import path from "node:path";
 
@@ -9,6 +9,7 @@ const OUT = path.join("dist", PROJECT_ID);
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
 const ELEVENLABS_VOICE_ID = process.env.ELEVENLABS_VOICE_ID;
 const PEXELS_API_KEY = process.env.PEXELS_API_KEY;
+const NARRATION_CACHE_DIR = process.env.NARRATION_CACHE_DIR || "";
 
 function run(command, args) {
   return new Promise((resolve, reject) => {
@@ -124,7 +125,7 @@ async function findCommonsImage(query) {
   const q = String(query || "").trim();
   if (!q) return null;
   const endpoint = "https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=" +
-    encodeURIComponent("filetype:bitmap " + q) +
+    encodeURIComponent(q) +
     "&gsrnamespace=6&gsrlimit=12&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=1920&format=json";
   const response = await fetch(endpoint, {
     headers: { "User-Agent": "HiddenEngineDocumentaryBot/1.0 (asset attribution and license verification)" }
@@ -201,7 +202,17 @@ async function main() {
     const svg = path.join(OUT, stem + ".svg");
     const clip = path.join(OUT, stem + "-visual.mp4");
     const rendered = path.join(OUT, stem + ".mp4");
-    await elevenLabs(scene.narration, audio);
+    let reusedNarration = false;
+    if (NARRATION_CACHE_DIR) {
+      const cached = path.join(NARRATION_CACHE_DIR, stem + ".mp3");
+      try {
+        await access(cached);
+        await copyFile(cached, audio);
+        reusedNarration = true;
+        console.log("Reusing verified project narration cache for scene " + (i+1));
+      } catch {}
+    }
+    if (!reusedNarration) await elevenLabs(scene.narration, audio);
     await createSoundDesign(audio, sfx, mixedAudio);
     await writeFile(svg, overlaySvg(scene, i, script.scenes.length));
     const query = scene.visual_query || [scene.title, scene.subtitle].filter(Boolean).join(" ");
