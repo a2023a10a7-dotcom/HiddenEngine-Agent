@@ -39,7 +39,7 @@ jobs:
           node-version: 20
       - name: Prepare production dossier
         env:
-          STORY_INDEX: \${{ inputs.story_index }}
+          STORY_INDEX: ${{ inputs.story_index }}
         run: node src/production.js
       - name: Save production project
         run: |
