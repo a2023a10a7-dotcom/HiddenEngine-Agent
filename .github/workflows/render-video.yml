@@ -32,13 +32,13 @@ jobs:
 
       - name: Render documentary draft
         env:
-          PROJECT_ID: \${{ inputs.project_id }}
+          PROJECT_ID: ${{ inputs.project_id }}
         run: node src/render-video.js
 
       - name: Upload MP4 and project assets
         uses: actions/upload-artifact@v4
         with:
-          name: hiddenengine-documentary-\${{ inputs.project_id }}
-          path: dist/\${{ inputs.project_id }}/
+          name: hiddenengine-documentary-${{ inputs.project_id }}
+          path: dist/${{ inputs.project_id }}/
           if-no-files-found: error
           retention-days: 14
