@@ -102,3 +102,13 @@ PROJECT_ID=<project-id> npm run documentary:script-plan
 Builds `SCRIPT-ARCHITECTURE.json` from the project's research ledger. It groups eligible claims into a seven-part documentary arc: cold open, system, hidden engine, strategic bet, turning point, economic consequences, and conclusion. Each scene contains candidate claim IDs and mandatory editorial checks.
 
 This is an outline/architecture generator, **not a prose scriptwriter**. It deliberately blocks when no eligible researched claims exist. Keyword grouping is a drafting aid and requires editorial review; it does not understand claim meaning or establish relevance. Every eventual narration sentence must be mapped to claim IDs and checked against the original source passages before voice production.
+
+## Evidence-linked script draft assembly (v1)
+
+```bash
+PROJECT_ID=<project-id> npm run documentary:write-script
+```
+
+Requires `SCRIPT-ARCHITECTURE.json` and the project's research ledger. Writes `SCRIPT-DRAFT.json` and `SCRIPT-DRAFT.md`. It assembles eligible claim text into the seven-scene structure, preserves each claim's classification and source references, adds editorial transitions and qualification language, and marks every block as requiring passage review.
+
+This is deliberately **not** a polished generative scriptwriter. It does not invent connective facts, quotations, statistics, or scenes. It cannot confirm that a source supports the claim; exact passage and page/table references remain unverified unless a human records and checks them. It blocks voice generation in its output until passage-level fact checking and human approval are complete. A human editor must rewrite for natural narration, check counter-evidence, and approve before TTS.
