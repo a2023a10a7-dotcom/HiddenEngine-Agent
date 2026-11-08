@@ -65,6 +65,8 @@ async function elevenLabs(text, output) {
   await writeFile(output, Buffer.from(await response.arrayBuffer()));
 }
 async function findPexelsVideo(query) {
+  // Do not pass generic stock footage off as company-specific evidence.
+  return null;
   if (!PEXELS_API_KEY) return null;
   const response = await fetch("https://api.pexels.com/videos/search?query=" + encodeURIComponent(query) + "&orientation=landscape&per_page=8", {
     headers: { Authorization: PEXELS_API_KEY }
@@ -145,6 +147,9 @@ async function main() {
     "Review all claims, pronunciations, visual relevance, licenses, and credits before publication.",
     "No automatic YouTube upload."
   ].join("\n")+"\n");
-  console.log("Rendered: "+output);
+  const qa = await new Promise((resolve,reject) => { const p=spawn("ffprobe",["-v","error","-show_entries","format=duration:stream=codec_type,width,height","-of","json",output]); let data=""; p.stdout.on("data",d=>data+=d); p.on("error",reject); p.on("close",code=>code===0?resolve(JSON.parse(data)):reject(new Error("ffprobe failed"))); });
+  if (!qa.streams.some(x=>x.codec_type==="video" && x.width===1920 && x.height===1080) || !qa.streams.some(x=>x.codec_type==="audio")) throw new Error("Final MP4 failed audio/1080p QA.");
+  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:Number(qa.format.duration),audio:true,scenes:clips.length},null,2)+"\n");
+  console.log("Rendered and passed technical QA: "+output);
 }
 main().catch(error=>{console.error("Render failed:",error);process.exit(1);});
