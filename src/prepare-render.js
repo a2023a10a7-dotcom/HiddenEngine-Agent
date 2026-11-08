@@ -12,6 +12,13 @@ const projectPath=path.join(dir,"project.json");
 const [draftText,approvalText,projectText]=await Promise.all([
   readFile(draftPath,"utf8"),readFile(approvalPath,"utf8"),readFile(projectPath,"utf8")
 ]);
+let visualAssets=null;
+try { visualAssets=JSON.parse(await readFile(path.join(dir,"VISUAL-ASSETS-READY.json"),"utf8")); }
+catch(e) { if(e.code!=="ENOENT") throw e; }
+if(visualAssets && (visualAssets.projectId!==projectId || visualAssets.status!=="ready" || visualAssets.errors?.length)) {
+  throw new Error("Visual asset validation report is not ready for this project.");
+}
+const assetsByScene=new Map((visualAssets?.assets||[]).map(asset=>[asset.sceneId,asset]));
 const draft=JSON.parse(draftText);
 const approval=JSON.parse(approvalText);
 const project=JSON.parse(projectText);
@@ -42,7 +49,8 @@ for(const [index,scene] of (draft.scenes||[]).entries()){
     subtitle:scene.editorialGoal||"",
     narration:blocks.map(block=>block.narrationText.trim()).join("\n\n"),
     visual_query:"",
-    visual:null
+    visual:null,
+    visualAsset:assetsByScene.has(scene.id)?assetsByScene.get(scene.id):null
   });
 }
 if(errors.length){
@@ -63,4 +71,4 @@ project.approvals=project.approvals||{};
 project.approvals.script={status:"approved_for_recording",approvedBy:approval.approvedBy,approvedAt:approval.approvedAt,draftSha256:digest};
 project.updatedAt=new Date().toISOString();
 await writeFile(projectPath,JSON.stringify(project,null,2)+"\n");
-console.log(JSON.stringify({status:"ready_for_render",projectId,scenes:scenes.length,approvedBy:approval.approvedBy,output:destination,draftSha256:digest},null,2));
+console.log(JSON.stringify({status:"ready_for_render",projectId,scenes:scenes.length,visualScenes:scenes.filter(scene=>scene.visualAsset).length,approvedBy:approval.approvedBy,output:destination,draftSha256:digest},null,2));
