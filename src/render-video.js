@@ -52,7 +52,7 @@ function sceneSvg(scene, index, total) {
       '" width="12" height="' + h + '" rx="6" fill="#65d6c4" opacity="' +
       (0.18 + (i % 4) * 0.1).toFixed(2) + '"/>';
   }).join("\n");
-  return \`<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#071522"/><stop offset="1" stop-color="#142d40"/>
@@ -69,14 +69,14 @@ function sceneSvg(scene, index, total) {
   <circle cx="1510" cy="380" r="620" fill="url(#glow)"/>
   <path d="M0 850 L1920 580" stroke="#65d6c4" stroke-opacity=".12" stroke-width="2"/>
   <path d="M0 900 L1920 630" stroke="#65d6c4" stroke-opacity=".08" stroke-width="2"/>
-  <g opacity=".7">\${bars}</g>
+  <g opacity=".7">${bars}</g>
   <text x="110" y="115" class="brand">THE HIDDEN ENGINE</text>
   <rect x="110" y="160" width="90" height="6" rx="3" fill="#65d6c4"/>
-  \${title}
-  \${subtitle}
+  ${title}
+  ${subtitle}
   <text x="110" y="960" class="small">TECHNOLOGY • ENGINEERING • STRATEGY</text>
-  <text x="1790" y="960" text-anchor="end" class="small">\${String(index + 1).padStart(2,"0")} / \${total}</text>
-  </svg>\`;
+  <text x="1790" y="960" text-anchor="end" class="small">${String(index + 1).padStart(2,"0")} / ${total}</text>
+  </svg>`;
 }
 async function main() {
   const script = JSON.parse(await readFile(SCRIPT_PATH, "utf8"));
