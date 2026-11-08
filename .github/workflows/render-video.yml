@@ -1,4 +1,4 @@
-name: HiddenEngine Render Documentary
+name: HiddenEngine Cinematic Documentary Render
 
 on:
   workflow_dispatch:
@@ -15,7 +15,7 @@ permissions:
 jobs:
   render:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - name: Get project
         uses: actions/checkout@v4
@@ -25,20 +25,31 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install free rendering tools
+      - name: Install rendering tools and fonts
         run: |
           sudo apt-get update
-          sudo apt-get install -y ffmpeg espeak-ng fonts-dejavu-core
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
 
-      - name: Render documentary draft
+      - name: Check required voice configuration
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          ELEVENLABS_VOICE_ID: ${{ vars.ELEVENLABS_VOICE_ID }}
+        run: |
+          test -n "$ELEVENLABS_API_KEY" || (echo "::error::Add ELEVENLABS_API_KEY to GitHub Actions Secrets."; exit 1)
+          test -n "$ELEVENLABS_VOICE_ID" || (echo "::error::Add ELEVENLABS_VOICE_ID to GitHub Actions Variables."; exit 1)
+
+      - name: Render cinematic documentary
         env:
           PROJECT_ID: ${{ inputs.project_id }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          ELEVENLABS_VOICE_ID: ${{ vars.ELEVENLABS_VOICE_ID }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
         run: node src/render-video.js
 
-      - name: Upload MP4 and project assets
+      - name: Upload MP4 and production assets
         uses: actions/upload-artifact@v4
         with:
-          name: hiddenengine-documentary-${{ inputs.project_id }}
+          name: hiddenengine-cinematic-${{ inputs.project_id }}
           path: dist/${{ inputs.project_id }}/
           if-no-files-found: error
           retention-days: 14
