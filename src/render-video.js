@@ -93,25 +93,31 @@ async function elevenLabs(text, output) {
   await writeFile(output, Buffer.from(await response.arrayBuffer()));
 }
 async function findPexelsVideo(query) {
-  // Do not pass generic stock footage off as company-specific evidence.
-  return null;
+  // Pexels footage is illustrative only; never label it as evidence of a specific company or event.
   if (!PEXELS_API_KEY) return null;
-  const response = await fetch("https://api.pexels.com/videos/search?query=" + encodeURIComponent(query) + "&orientation=landscape&per_page=8", {
+  const searchQuery = String(query || "").trim();
+  if (!searchQuery) return null;
+  const endpoint = "https://api.pexels.com/videos/search?query=" + encodeURIComponent(searchQuery) + "&orientation=landscape&per_page=8";
+  const response = await fetch(endpoint, {
     headers: { Authorization: PEXELS_API_KEY }
   });
-  if (!response.ok) throw new Error("Pexels search failed (" + response.status + ").");
+  if (!response.ok) throw new Error("Pexels search failed (" + response.status + "): " + (await response.text()).slice(0, 500));
   const data = await response.json();
-  const videos = (data.videos || []).filter(v => v.video_files?.length);
+  const videos = (data.videos || []).filter(video =>
+    video.url && video.video_files?.some(file => file.link && /mp4/i.test(file.file_type || ""))
+  );
   videos.sort((a,b) => (b.width*b.height) - (a.width*a.height));
-  const video = videos[0];
-  if (!video) return null;
-  const file = video.video_files.find(f => f.width >= 1280 && /mp4/i.test(f.file_type || "")) ||
-    video.video_files.find(f => /mp4/i.test(f.file_type || ""));
-  if (!file) return null;
-  return {
-    url: file.link, page: video.url, creator: video.user?.name || "Unknown creator",
-    creatorUrl: video.user?.url || "", duration: video.duration
-  };
+  for (const video of videos) {
+    const files = video.video_files.filter(file => file.link && /mp4/i.test(file.file_type || ""));
+    files.sort((a,b) => (b.width*b.height) - (a.width*a.height));
+    const file = files.find(item => item.width >= 1280) || files[0];
+    if (!file) continue;
+    return {
+      url: file.link, page: video.url, creator: video.user?.name || "Unknown creator",
+      creatorUrl: video.user?.url || "", duration: video.duration
+    };
+  }
+  return null;
 }
 async function download(url, dest) {
   const response = await fetch(url);
