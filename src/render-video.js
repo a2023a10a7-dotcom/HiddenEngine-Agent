@@ -11,6 +11,15 @@ const ELEVENLABS_VOICE_ID = process.env.ELEVENLABS_VOICE_ID;
 const PEXELS_API_KEY = process.env.PEXELS_API_KEY;
 const NARRATION_CACHE_DIR = process.env.NARRATION_CACHE_DIR || "";
 
+async function fetchWithTimeout(url, options = {}, timeoutMs = 12000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
 function run(command, args) {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, { stdio: "inherit" });
@@ -114,7 +123,7 @@ async function createSoundDesign(narration, sfx, mixed) {
 async function findPexelsImage(query) {
   if (!PEXELS_API_KEY || !String(query || "").trim()) return null;
   const endpoint = "https://api.pexels.com/v1/search?query=" + encodeURIComponent(query) + "&orientation=landscape&per_page=8";
-  const response = await fetch(endpoint,{headers:{Authorization:PEXELS_API_KEY}});
+  const response = await fetchWithTimeout(endpoint,{headers:{Authorization:PEXELS_API_KEY}});
   if (!response.ok) throw new Error("Pexels photo search failed ("+response.status+"): "+(await response.text()).slice(0,300));
   const data=await response.json();
   const photos=(data.photos||[]).filter(p=>p.src && (p.src.landscape||p.src.large2x||p.src.large));
@@ -159,7 +168,7 @@ async function findPexelsVideo(query) {
   const searchQuery = String(query || "").trim();
   if (!searchQuery) return null;
   const endpoint = "https://api.pexels.com/videos/search?query=" + encodeURIComponent(searchQuery) + "&orientation=landscape&per_page=8";
-  const response = await fetch(endpoint, {
+  const response = await fetchWithTimeout(endpoint, {
     headers: { Authorization: PEXELS_API_KEY }
   });
   if (!response.ok) throw new Error("Pexels search failed (" + response.status + "): " + (await response.text()).slice(0, 500));
@@ -181,7 +190,7 @@ async function findPexelsVideo(query) {
   return null;
 }
 async function download(url, dest) {
-  const response = await fetch(url);
+  const response = await fetchWithTimeout(url, {}, 20000);
   if (!response.ok) throw new Error("Asset download failed (" + response.status + ").");
   await writeFile(dest, Buffer.from(await response.arrayBuffer()));
 }
