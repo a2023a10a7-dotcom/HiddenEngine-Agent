@@ -53,3 +53,13 @@ The checker validates references and production metadata. A pass is structural Q
 ## Safety and cost boundaries
 
 The engine does not call ElevenLabs, render video, publish, or modify repository secrets. Those actions require separate explicit authorization. Do not use generic stock footage as evidence of a specific event. Do not invent missing financial figures or source links.
+
+## Topic-driven research lead discovery (v1)
+
+```bash
+PROJECT_ID=<project-id> npm run documentary:research
+```
+
+Runs five topic-specific Google News RSS searches (topic, business model, financial results, strategy/competition, and primary-source leads). Saves `research/discovery-leads.json` and appends the leads to `research.sources` in the project.
+
+**Important:** these are unverified discovery leads, not facts or independent corroboration. This module does not scrape publisher pages, extract filing tables, authenticate documents, adjudicate contradictions, or verify claims. Search URLs may be redirects. A human or a later source-ingestion stage must resolve canonical publisher URLs and add primary documents. Failures are recorded per query; partial discovery is retained.
