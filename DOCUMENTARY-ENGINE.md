@@ -63,3 +63,20 @@ PROJECT_ID=<project-id> npm run documentary:research
 Runs five topic-specific Google News RSS searches (topic, business model, financial results, strategy/competition, and primary-source leads). Saves `research/discovery-leads.json` and appends the leads to `research.sources` in the project.
 
 **Important:** these are unverified discovery leads, not facts or independent corroboration. This module does not scrape publisher pages, extract filing tables, authenticate documents, adjudicate contradictions, or verify claims. Search URLs may be redirects. A human or a later source-ingestion stage must resolve canonical publisher URLs and add primary documents. Failures are recorded per query; partial discovery is retained.
+
+## Evidence ledger audit (v1)
+
+```bash
+PROJECT_ID=<project-id> npm run documentary:evidence-audit
+```
+
+Writes `EVIDENCE-AUDIT.json` with source metadata checks, claim-to-source traceability, primary-source linkage counts, unresolved contradiction flags, and missing attribution/caveat/reasoning warnings. It blocks malformed references but does **not** verify factual truth, authenticate source content, or decide whether evidence is sufficient. A claim marked `verified` without a linked primary-source type is flagged for review, not automatically downgraded.
+
+Source records should use stable IDs and a source type such as `primary_filing`, `annual_report`, `regulatory_filing`, `court_record`, `official_dataset`, `company_statement`, `technical_paper`, `original_interview`, or `secondary_lead`.
+
+Claim records should include:
+- `id`, `text`, `classification`, and `sourceIds`
+- `attribution` for attributed statements
+- `caveat` and methodology for estimates
+- `reasoning` for analysis
+- `confidence` as an editorial assessment, never a substitute for evidence
