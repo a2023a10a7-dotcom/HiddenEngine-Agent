@@ -80,3 +80,15 @@ Claim records should include:
 - `caveat` and methodology for estimates
 - `reasoning` for analysis
 - `confidence` as an editorial assessment, never a substitute for evidence
+
+## Public source ingestion (v1)
+
+```bash
+PROJECT_ID=<project-id> npm run documentary:ingest
+```
+
+Fetches publicly accessible HTTP(S) source URLs already present in the project's source ledger. It follows ordinary redirects, records the final URL, HTTP status, content type, retrieval time, and a SHA-256 hash of extracted HTML text. For HTML pages it attempts lightweight metadata and article/main text extraction into `research/source-snapshots/`; it writes `research/ingestion-report.json`.
+
+PDFs are detected but not parsed in this version. Unsupported content types are recorded without downloading binary files. The fetcher applies a timeout and response-size limit, rejects obvious localhost/private-network URLs, and does not log in, bypass paywalls, execute page scripts, or download arbitrary assets.
+
+**Critical limitation:** extracted text is not fact-checked and may omit tables, footnotes, charts, or dynamic content. A successful fetch does not prove that a source supports a claim. Researchers must inspect the original document and link exact passages/page numbers to claims before narration.
