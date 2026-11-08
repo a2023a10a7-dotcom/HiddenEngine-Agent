@@ -136,16 +136,27 @@ async function main() {
     const rendered = path.join(OUT, stem + ".mp4");
     await elevenLabs(scene.narration, audio);
     await writeFile(svg, overlaySvg(scene, i, script.scenes.length));
-    const query = scene.visual_query || [scene.title, scene.subtitle].filter(Boolean).join(" ");
-    const asset = await findPexelsVideo(query);
-    if (asset) {
-      await download(asset.url, clip);
-      credits.push({ scene: i+1, query, provider:"Pexels", page:asset.page, creator:asset.creator, creatorUrl:asset.creatorUrl });
-      await run("ffmpeg", ["-y","-stream_loop","-1","-i",clip,"-i",audio,"-loop","1","-i",svg,
-        "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,eq=contrast=1.12:saturation=0.78,drawbox=x=0:y=0:w=iw:h=ih:color=#08090b@0.18:t=fill[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
-        "-map","[v]","-map","1:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
+    const visualAsset = scene.visualAsset || null;
+    if (visualAsset) {
+      const assetPath = path.resolve(ROOT, visualAsset.filePath || "");
+      if (!assetPath.startsWith(path.resolve(ROOT) + path.sep)) throw new Error("Scene " + (i+1) + " visual asset path escapes project folder.");
+      const assetStat = await (await import("node:fs/promises")).stat(assetPath);
+      if (!assetStat.isFile() || assetStat.size === 0) throw new Error("Scene " + (i+1) + " visual asset is missing or empty.");
+      if (visualAsset.mediaType === "image") {
+        credits.push({scene:i+1,assetId:visualAsset.id,mediaType:"image",sourceUrl:visualAsset.sourceUrl,creator:visualAsset.creator,license:visualAsset.license,attribution:visualAsset.attribution});
+        await run("ffmpeg", ["-y","-loop","1","-framerate","25","-i",assetPath,"-i",audio,"-loop","1","-i",svg,
+          "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,eq=contrast=1.08:saturation=0.82,zoompan=z='min(zoom+0.00025,1.06)':d=125:s=1920x1080:fps=25,format=yuv420p[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
+          "-map","[v]","-map","1:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
+      } else if (visualAsset.mediaType === "video") {
+        credits.push({scene:i+1,assetId:visualAsset.id,mediaType:"video",sourceUrl:visualAsset.sourceUrl,creator:visualAsset.creator,license:visualAsset.license,attribution:visualAsset.attribution});
+        await run("ffmpeg", ["-y","-stream_loop","-1","-i",assetPath,"-i",audio,"-loop","1","-i",svg,
+          "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,eq=contrast=1.12:saturation=0.78,drawbox=x=0:y=0:w=iw:h=ih:color=#08090b@0.18:t=fill[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
+          "-map","[v]","-map","1:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
+      } else {
+        throw new Error("Scene " + (i+1) + " has unsupported visual asset type.");
+      }
     } else {
-      credits.push({ scene:i+1, query, provider:"Original motion graphic", note:"No matching Pexels video was returned; generated a branded animated graphic instead." });
+      credits.push({scene:i+1,provider:"Original motion graphic",note:"No approved scene asset was supplied; generated a branded motion graphic instead."});
       await run("ffmpeg", ["-y","-f","lavfi","-i","color=c=#101113:s=1920x1080:r=25","-i",audio,"-loop","1","-i",svg,
         "-filter_complex","[0:v]zoompan=z='min(zoom+0.00035,1.08)':d=125:s=1920x1080:fps=25,format=yuv420p[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
         "-map","[v]","-map","1:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
@@ -160,17 +171,17 @@ async function main() {
   await writeFile(path.join(OUT,"visual-credits.json"),JSON.stringify(credits,null,2)+"\n");
   await writeFile(path.join(OUT,"CREDITS.md"),[
     "# Visual credits","",
-    "Stock footage is sourced from Pexels. Review the linked asset page and applicable license before publication.",
+    "Visual assets are supplied through the project approved-assets manifest. Review the source, license evidence, and attribution for every asset before publication.",
     "Pexels footage is used as illustrative material and must not be presented as actual footage of a specific company, person, product, or event unless independently verified.",
     "",
-    ...credits.map(c=>c.provider==="Pexels"
-      ? "- Scene "+c.scene+": [Pexels video]("+c.page+") — "+c.creator+(c.creatorUrl?" ([creator]("+c.creatorUrl+"))":"")
+    ...credits.map(c=>c.assetId
+      ? "- Scene "+c.scene+": "+c.mediaType+" asset "+c.assetId+" — "+c.creator+"; "+c.license+"; "+c.sourceUrl+"; attribution: "+c.attribution
       : "- Scene "+c.scene+": "+c.provider+" — "+c.note)
   ].join("\n")+"\n");
   await writeFile(path.join(OUT,"README.txt"),[
     "The Hidden Engine documentary render",
     "Narration: ElevenLabs API (natural AI voice; selected voice configured by repository secret/variable).",
-    "Visuals: Pexels stock footage where relevant; otherwise original branded motion graphics.",
+    "Visuals: rights-cleared, scene-assigned image/video assets where supplied; otherwise original branded motion graphics.",
     "Identity: charcoal/black, ivory typography, restrained copper accents, documentary-investigative overlays.",
     "Review all claims, pronunciations, visual relevance, licenses, and credits before publication.",
     "No automatic YouTube upload."
