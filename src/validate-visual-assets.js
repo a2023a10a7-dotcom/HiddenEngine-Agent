@@ -20,7 +20,7 @@ const seen=new Set();
 for(const asset of manifest.assets){
  const label=asset.id||"unnamed asset";
  if(!asset.id||seen.has(asset.id)){errors.push(label+": missing or duplicate id.");continue;} seen.add(asset.id);
- if(!/^S\\d{2}$/.test(asset.sceneId||"")){errors.push(label+": sceneId must match S01, S02, etc.");continue;}
+ if(!/^S\d{2}$/.test(asset.sceneId||"")){errors.push(label+": sceneId must match S01, S02, etc.");continue;}
  if(!["image","video"].includes(asset.mediaType)){errors.push(label+": mediaType must be image or video.");continue;}
  if(asset.rightsStatus!=="cleared"||asset.editorialVerification!=="approved"){errors.push(label+": rights and editorial approval are both required.");continue;}
  for(const field of ["sourceUrl","creator","license","licenseEvidence","territory","attribution"]){
@@ -46,6 +46,6 @@ for(const asset of manifest.assets){
 }
 const sceneIds=new Set(ready.map(a=>a.sceneId));
 const report={projectId,checkedAt:new Date().toISOString(),status:errors.length?"blocked":"ready",assetCount:ready.length,assets:ready,errors,rule:"Only explicitly rights-cleared and editorially approved local assets are eligible for rendering. Illustrative assets must not be represented as evidence."};
-await writeFile(path.join(root,"VISUAL-ASSETS-READY.json"),JSON.stringify(report,null,2)+"\\n");
+await writeFile(path.join(root,"VISUAL-ASSETS-READY.json"),JSON.stringify(report,null,2)+"\n");
 console.log(JSON.stringify({status:report.status,assetCount:ready.length,scenesWithAssets:[...sceneIds],errors},null,2));
 if(errors.length) process.exit(1);
