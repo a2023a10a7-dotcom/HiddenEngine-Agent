@@ -53,7 +53,8 @@ function visualMarkup(scene) {
   }
   return "";
 }
-\nfunction overlaySvg(scene, index, total) {
+
+function overlaySvg(scene, index, total) {
   const title = lines((scene.title || "").toUpperCase(), 28).slice(0, 2)
     .map((s,i) => '<text x="120" y="' + (760 + i*76) + '" class="title">' + xml(s) + '</text>').join("");
   const subtitle = lines(scene.subtitle || "", 58).slice(0, 2)
@@ -73,7 +74,10 @@ function visualMarkup(scene) {
   .eyebrow{font:700 18px 'DejaVu Sans';letter-spacing:4px;fill:#C08A58}
   .title{font:700 64px 'DejaVu Sans';fill:#F0EDE5}
   .sub{font:400 27px 'DejaVu Sans';fill:#D5D1C8}
-  .visual-label{font:700 18px DejaVu Sans;letter-spacing:2px;fill:#C08A58}\n  .visual-value{font:700 82px DejaVu Sans;fill:#F0EDE5}\n  .visual-detail{font:400 20px DejaVu Sans;fill:#D5D1C8}\n  .page{font:400 20px 'DejaVu Sans';fill:#D5D1C8}
+  .visual-label{font:700 18px DejaVu Sans;letter-spacing:2px;fill:#C08A58}
+  .visual-value{font:700 82px DejaVu Sans;fill:#F0EDE5}
+  .visual-detail{font:400 20px DejaVu Sans;fill:#D5D1C8}
+  .page{font:400 20px 'DejaVu Sans';fill:#D5D1C8}
   </style></svg>`;
 }
 async function elevenLabs(text, output) {
