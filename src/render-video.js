@@ -29,6 +29,31 @@ function lines(value, max = 34) {
   if (line) out.push(line);
   return out;
 }
+
+function visualMarkup(scene) {
+  const v = scene.visual;
+  if (!v || !v.type) return "";
+  const label = xml(v.source_label || "SOURCE NOT VERIFIED");
+  if (v.type === "metric") {
+    return '<g transform="translate(1220 360)"><rect width="560" height="260" rx="8" fill="#111315" stroke="#A8794D" stroke-width="2"/><text x="36" y="54" class="visual-label">' + label + '</text><text x="36" y="166" class="visual-value">' + xml(v.value) + '</text><text x="36" y="218" class="visual-detail">' + xml(v.detail || "") + '</text></g>';
+  }
+  if (v.type === "comparison" && Array.isArray(v.items)) {
+    const rows = v.items.slice(0,3).map((item,i) => {
+      const y=92+i*72, width=Math.max(0,Math.min(100,Number(item.percent)||0))*3.8;
+      return '<text x="32" y="'+y+'" class="visual-detail">'+xml(item.label)+'</text><rect x="32" y="'+(y+14)+'" width="380" height="16" fill="#292b2d"/><rect x="32" y="'+(y+14)+'" width="'+width+'" height="16" fill="#A8794D"/><text x="430" y="'+(y+29)+'" class="visual-detail">'+xml(item.value)+'</text>';
+    }).join("");
+    return '<g transform="translate(1190 330)"><rect width="590" height="330" rx="8" fill="#111315" stroke="#A8794D" stroke-width="2"/><text x="32" y="52" class="visual-label">'+label+'</text>'+rows+'</g>';
+  }
+  if (v.type === "timeline" && Array.isArray(v.events)) {
+    const events=v.events.slice(0,4).map((item,i) => {
+      const x=42+i*132;
+      return '<circle cx="'+x+'" cy="150" r="8" fill="#C08A58"/><text x="'+x+'" y="116" text-anchor="middle" class="visual-label">'+xml(item.date)+'</text><text x="'+x+'" y="184" text-anchor="middle" class="visual-detail">'+xml(item.label)+'</text>';
+    }).join("");
+    return '<g transform="translate(1060 390)"><rect width="650" height="250" rx="8" fill="#111315" stroke="#A8794D" stroke-width="2"/><text x="34" y="48" class="visual-label">'+label+'</text><path d="M42 150 H570" stroke="#777" stroke-width="3"/>'+events+'</g>';
+  }
+  return "";
+}
+
 function overlaySvg(scene, index, total) {
   const title = lines((scene.title || "").toUpperCase(), 28).slice(0, 2)
     .map((s,i) => '<text x="120" y="' + (760 + i*76) + '" class="title">' + xml(s) + '</text>').join("");
@@ -42,13 +67,16 @@ function overlaySvg(scene, index, total) {
   <text x="154" y="180" class="kicker">BUSINESS • STRATEGY • THE HIDDEN ECONOMICS</text>
   <text x="120" y="710" class="eyebrow">THE INVESTIGATION / ${String(index+1).padStart(2,"0")}</text>
   ${title}${subtitle}
-  <text x="1795" y="1010" text-anchor="end" class="page">${String(index+1).padStart(2,"0")} / ${total}</text>
+  ${visualMarkup(scene)}\n  <text x="1795" y="1010" text-anchor="end" class="page">${String(index+1).padStart(2,"0")} / ${total}</text>
   <style>
   .brand{font:700 30px 'DejaVu Sans';letter-spacing:6px;fill:#F0EDE5}
   .kicker{font:400 17px 'DejaVu Sans';letter-spacing:3px;fill:#C3B7A8}
   .eyebrow{font:700 18px 'DejaVu Sans';letter-spacing:4px;fill:#C08A58}
   .title{font:700 64px 'DejaVu Sans';fill:#F0EDE5}
   .sub{font:400 27px 'DejaVu Sans';fill:#D5D1C8}
+  .visual-label{font:700 18px DejaVu Sans;letter-spacing:2px;fill:#C08A58}
+  .visual-value{font:700 82px DejaVu Sans;fill:#F0EDE5}
+  .visual-detail{font:400 20px DejaVu Sans;fill:#D5D1C8}
   .page{font:400 20px 'DejaVu Sans';fill:#D5D1C8}
   </style></svg>`;
 }
@@ -65,6 +93,8 @@ async function elevenLabs(text, output) {
   await writeFile(output, Buffer.from(await response.arrayBuffer()));
 }
 async function findPexelsVideo(query) {
+  // Do not pass generic stock footage off as company-specific evidence.
+  return null;
   if (!PEXELS_API_KEY) return null;
   const response = await fetch("https://api.pexels.com/videos/search?query=" + encodeURIComponent(query) + "&orientation=landscape&per_page=8", {
     headers: { Authorization: PEXELS_API_KEY }
@@ -145,6 +175,9 @@ async function main() {
     "Review all claims, pronunciations, visual relevance, licenses, and credits before publication.",
     "No automatic YouTube upload."
   ].join("\n")+"\n");
-  console.log("Rendered: "+output);
+  const qa = await new Promise((resolve,reject) => { const p=spawn("ffprobe",["-v","error","-show_entries","format=duration:stream=codec_type,width,height","-of","json",output]); let data=""; p.stdout.on("data",d=>data+=d); p.on("error",reject); p.on("close",code=>code===0?resolve(JSON.parse(data)):reject(new Error("ffprobe failed"))); });
+  if (!qa.streams.some(x=>x.codec_type==="video" && x.width===1920 && x.height===1080) || !qa.streams.some(x=>x.codec_type==="audio")) throw new Error("Final MP4 failed audio/1080p QA.");
+  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:Number(qa.format.duration),audio:true,scenes:clips.length},null,2)+"\n");
+  console.log("Rendered and passed technical QA: "+output);
 }
 main().catch(error=>{console.error("Render failed:",error);process.exit(1);});
