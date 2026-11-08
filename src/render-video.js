@@ -51,6 +51,17 @@ function visualMarkup(scene) {
     }).join("");
     return '<g transform="translate(1060 390)"><rect width="650" height="250" rx="8" fill="#111315" stroke="#A8794D" stroke-width="2"/><text x="34" y="48" class="visual-label">'+label+'</text><path d="M42 150 H570" stroke="#777" stroke-width="3"/>'+events+'</g>';
   }
+  if (v.type === "map" && Array.isArray(v.points) && v.points.length >= 2) {
+    const points = v.points.slice(0,8).filter(p => Number.isFinite(Number(p.x)) && Number.isFinite(Number(p.y)));
+    if (points.length >= 2) {
+      const coords = points.map(p => (80 + Math.max(0,Math.min(100,Number(p.x)))*4.8) + "," + (80 + Math.max(0,Math.min(100,Number(p.y)))*3.2)).join(" ");
+      const pins = points.map((p,i) => {
+        const x=80+Math.max(0,Math.min(100,Number(p.x)))*4.8, y=80+Math.max(0,Math.min(100,Number(p.y)))*3.2;
+        return '<circle cx="'+x+'" cy="'+y+'" r="13" fill="#C08A58" stroke="#F0EDE5" stroke-width="3"/><text x="'+(x+20)+'" y="'+(y-16)+'" class="visual-detail">'+xml(p.label || ("Point "+(i+1)))+'</text>';
+      }).join("");
+      return '<g transform="translate(1050 300)"><rect width="720" height="570" rx="8" fill="#111315" stroke="#A8794D" stroke-width="2"/><text x="34" y="48" class="visual-label">'+label+'</text><path d="M30 120 Q180 80 300 180 T690 250 M60 450 Q240 350 380 430 T680 500" fill="none" stroke="#34383A" stroke-width="5"/><polyline points="'+coords+'" fill="none" stroke="#C08A58" stroke-width="5" stroke-dasharray="12 10"/>'+pins+'</g>';
+    }
+  }
   return "";
 }
 
@@ -91,6 +102,23 @@ async function elevenLabs(text, output) {
   });
   if (!response.ok) throw new Error("ElevenLabs TTS failed (" + response.status + "): " + (await response.text()).slice(0, 500));
   await writeFile(output, Buffer.from(await response.arrayBuffer()));
+}
+async function createSoundDesign(narration, sfx, mixed) {
+  // A short, restrained transition whoosh only. No music bed is generated or added.
+  await run("ffmpeg", ["-y","-i",narration,"-f","lavfi","-i","anoisesrc=color=pink:duration=1.15:sample_rate=44100",
+    "-filter_complex","[1:a]highpass=f=220,lowpass=f=1700,afade=t=in:st=0:d=0.12,afade=t=out:st=0.35:d=0.75,volume=0.09[sfx];[0:a][sfx]amix=inputs=2:duration=first:dropout_transition=0,loudnorm=I=-16:TP=-1.5:LRA=11[a]",
+    "-map","[a]","-c:a","libmp3lame","-b:a","192k",mixed]);
+}
+async function findPexelsImage(query) {
+  if (!PEXELS_API_KEY || !String(query || "").trim()) return null;
+  const endpoint = "https://api.pexels.com/v1/search?query=" + encodeURIComponent(query) + "&orientation=landscape&per_page=8";
+  const response = await fetch(endpoint,{headers:{Authorization:PEXELS_API_KEY}});
+  if (!response.ok) throw new Error("Pexels photo search failed ("+response.status+"): "+(await response.text()).slice(0,300));
+  const data=await response.json();
+  const photos=(data.photos||[]).filter(p=>p.src && (p.src.landscape||p.src.large2x||p.src.large));
+  photos.sort((a,b)=>(b.width*b.height)-(a.width*a.height));
+  const p=photos[0];
+  return p ? {url:p.src.landscape||p.src.large2x||p.src.large,page:p.url,creator:p.photographer||"Unknown creator",creatorUrl:p.photographer_url||""} : null;
 }
 async function findPexelsVideo(query) {
   // Pexels footage is illustrative only; never label it as evidence of a specific company or event.
@@ -137,22 +165,34 @@ async function main() {
     if (!scene.narration?.trim()) throw new Error("Scene " + (i+1) + " has no narration.");
     const stem = "scene-" + String(i+1).padStart(2,"0");
     const audio = path.join(OUT, stem + ".mp3");
+    const mixedAudio = path.join(OUT, stem + "-sound-designed.mp3");
+    const sfx = path.join(OUT, stem + "-transition.wav");
     const svg = path.join(OUT, stem + ".svg");
     const clip = path.join(OUT, stem + "-visual.mp4");
     const rendered = path.join(OUT, stem + ".mp4");
     await elevenLabs(scene.narration, audio);
+    await createSoundDesign(audio, sfx, mixedAudio);
     await writeFile(svg, overlaySvg(scene, i, script.scenes.length));
     const query = scene.visual_query || [scene.title, scene.subtitle].filter(Boolean).join(" ");
-    const asset = await findPexelsVideo(query);
+    let asset = await findPexelsVideo(query);
+    let still = null;
+    if (!asset) still = await findPexelsImage(query);
     if (asset) {
       await download(asset.url, clip);
-      credits.push({ scene: i+1, query, provider:"Pexels", page:asset.page, creator:asset.creator, creatorUrl:asset.creatorUrl });
-      await run("ffmpeg", ["-y","-stream_loop","-1","-i",clip,"-i",audio,"-loop","1","-i",svg,
+      credits.push({ scene: i+1, query, provider:"Pexels video", page:asset.page, creator:asset.creator, creatorUrl:asset.creatorUrl, usage:"Illustrative footage; not proof of a named event or entity." });
+      await run("ffmpeg", ["-y","-stream_loop","-1","-i",clip,"-i",mixedAudio,"-loop","1","-i",svg,
         "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,eq=contrast=1.12:saturation=0.78,drawbox=x=0:y=0:w=iw:h=ih:color=#08090b@0.18:t=fill[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
         "-map","[v]","-map","1:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
+    } else if (still) {
+      await download(still.url, clip.replace(/\.mp4$/,".jpg"));
+      const imagePath=clip.replace(/\.mp4$/,".jpg");
+      credits.push({ scene:i+1, query, provider:"Pexels photo", page:still.page, creator:still.creator, creatorUrl:still.creatorUrl, usage:"Illustrative still; not proof of a named event or entity." });
+      await run("ffmpeg", ["-y","-loop","1","-i",imagePath,"-i",mixedAudio,"-loop","1","-i",svg,
+        "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,zoompan=z='min(zoom+0.0003,1.07)':d=125:s=1920x1080:fps=25,eq=contrast=1.08:saturation=0.82[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
+        "-map","[v]","-map","1:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
     } else {
-      credits.push({ scene:i+1, query, provider:"Original motion graphic", note:"No matching Pexels video was returned; generated a branded animated graphic instead." });
-      await run("ffmpeg", ["-y","-f","lavfi","-i","color=c=#101113:s=1920x1080:r=25","-i",audio,"-loop","1","-i",svg,
+      credits.push({ scene:i+1, query, provider:"Original motion graphic", note:"No matching Pexels video or photo was returned; generated a branded animated graphic instead." });
+      await run("ffmpeg", ["-y","-f","lavfi","-i","color=c=#101113:s=1920x1080:r=25","-i",mixedAudio,"-loop","1","-i",svg,
         "-filter_complex","[0:v]zoompan=z='min(zoom+0.00035,1.08)':d=125:s=1920x1080:fps=25,format=yuv420p[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
         "-map","[v]","-map","1:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
     }
@@ -176,14 +216,15 @@ async function main() {
   await writeFile(path.join(OUT,"README.txt"),[
     "The Hidden Engine documentary render",
     "Narration: ElevenLabs API (natural AI voice; selected voice configured by repository secret/variable).",
-    "Visuals: Pexels stock footage where relevant; otherwise original branded motion graphics.",
+    "Visuals: Pexels stock video or photos where relevant; otherwise original branded motion graphics.",
+    "Audio: ElevenLabs narration with restrained generated transition sound effects; no background music.",
     "Identity: charcoal/black, ivory typography, restrained copper accents, documentary-investigative overlays.",
     "Review all claims, pronunciations, visual relevance, licenses, and credits before publication.",
     "No automatic YouTube upload."
   ].join("\n")+"\n");
   const qa = await new Promise((resolve,reject) => { const p=spawn("ffprobe",["-v","error","-show_entries","format=duration:stream=codec_type,width,height","-of","json",output]); let data=""; p.stdout.on("data",d=>data+=d); p.on("error",reject); p.on("close",code=>code===0?resolve(JSON.parse(data)):reject(new Error("ffprobe failed"))); });
   if (!qa.streams.some(x=>x.codec_type==="video" && x.width===1920 && x.height===1080) || !qa.streams.some(x=>x.codec_type==="audio")) throw new Error("Final MP4 failed audio/1080p QA.");
-  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:Number(qa.format.duration),audio:true,scenes:clips.length},null,2)+"\n");
+  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:Number(qa.format.duration),audio:true,audioDesign:"narration_plus_subtle_transition_sfx_no_music",scenes:clips.length,visualProviders:[...new Set(credits.map(c=>c.provider))]},null,2)+"\n");
   console.log("Rendered and passed technical QA: "+output);
 }
 main().catch(error=>{console.error("Render failed:",error);process.exit(1);});
