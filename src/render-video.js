@@ -158,7 +158,7 @@ async function findCommonsImage(query) {
     const details = await detailsResponse.json();
     for (const page of Object.values(details.query?.pages || {})) {
       const info = page.imageinfo?.[0];
-      if (!info || !/^image\\/(jpeg|png|webp)$/i.test(info.mime || "")) continue;
+      if (!info || !/^image\/(jpeg|png|webp)$/i.test(info.mime || "")) continue;
       const meta = info.extmetadata || {};
       const license = clean(meta.LicenseShortName?.value);
       if (!allowed.test(license)) continue;
