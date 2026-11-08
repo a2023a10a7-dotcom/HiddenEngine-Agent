@@ -132,35 +132,69 @@ async function findPexelsImage(query) {
   return p ? {url:p.src.landscape||p.src.large2x||p.src.large,page:p.url,creator:p.photographer||"Unknown creator",creatorUrl:p.photographer_url||""} : null;
 }
 async function findCommonsImage(query) {
-  const q = String(query || "").trim();
-  if (!q) return null;
-  const endpoint = "https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=" +
-    encodeURIComponent(q) +
-    "&gsrnamespace=6&gsrlimit=12&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=1920&format=json";
-  const response = await fetch(endpoint, {
-    headers: { "User-Agent": "HiddenEngineDocumentaryBot/1.0 (asset attribution and license verification)" }
-  });
-  if (!response.ok) throw new Error("Wikimedia Commons image search failed ("+response.status+").");
-  const data = await response.json();
-  const pages = Object.values(data.query?.pages || {});
-  const allowed = /^(CC0|Public domain|CC BY|CC BY-SA)/i;
-  for (const page of pages) {
-    const info = page.imageinfo?.[0];
-    if (!info || !/^image\/(jpeg|png|webp)$/i.test(info.mime || "")) continue;
-    const meta = info.extmetadata || {};
-    const license = String(meta.LicenseShortName?.value || "").replace(/<[^>]*>/g,"").trim();
-    if (!allowed.test(license)) continue;
-    const clean = value => String(value || "").replace(/<[^>]*>/g,"").replace(/&nbsp;/g," ").trim();
-    return {
-      url: info.thumburl || info.url,
-      page: info.descriptionurl || ("https://commons.wikimedia.org/wiki/" + encodeURIComponent(page.title.replace(/ /g,"_"))),
-      creator: clean(meta.Artist?.value || "Unknown creator"),
-      license,
-      licenseUrl: clean(meta.LicenseUrl?.value || ""),
-      attribution: clean(meta.AttributionRequired?.value || "")
-    };
+  const raw = String(query || "").trim();
+  if (!raw) return null;
+  const terms = raw.split(/\\s+/);
+  const searches = [...new Set([raw, terms.slice(0,3).join(" "), terms.slice(0,2).join(" ")])];
+  const allowed = /^(CC0|Public domain|CC BY(?:-|\\s)|CC BY-SA)/i;
+  const clean = value => String(value || "").replace(/<[^>]*>/g,"").replace(/&nbsp;/g," ").trim();
+  for (const q of searches) {
+    const endpoint = "https://commons.wikimedia.org/w/api.php?action=query&list=search&srnamespace=6&srlimit=20&srsearch=" +
+      encodeURIComponent(q) + "&format=json";
+    const response = await fetchWithTimeout(endpoint, {
+      headers: { "User-Agent": "HiddenEngineDocumentaryBot/1.0 (asset attribution and license verification)" }
+    });
+    if (!response.ok) throw new Error("Wikimedia Commons search failed ("+response.status+").");
+    const data = await response.json();
+    const titles = (data.query?.search || []).map(item => item.title).filter(Boolean);
+    console.log("Wikimedia Commons query ["+q+"] returned "+titles.length+" file candidates.");
+    if (!titles.length) continue;
+    const detailsUrl = "https://commons.wikimedia.org/w/api.php?action=query&titles=" +
+      encodeURIComponent(titles.join("|")) + "&prop=imageinfo&iiprop=url|mime|extmetadata&iiurlwidth=1920&format=json";
+    const detailsResponse = await fetchWithTimeout(detailsUrl, {
+      headers: { "User-Agent": "HiddenEngineDocumentaryBot/1.0 (asset attribution and license verification)" }
+    });
+    if (!detailsResponse.ok) throw new Error("Wikimedia Commons image details failed ("+detailsResponse.status+").");
+    const details = await detailsResponse.json();
+    for (const page of Object.values(details.query?.pages || {})) {
+      const info = page.imageinfo?.[0];
+      if (!info || !/^image\\/(jpeg|png|webp)$/i.test(info.mime || "")) continue;
+      const meta = info.extmetadata || {};
+      const license = clean(meta.LicenseShortName?.value);
+      if (!allowed.test(license)) continue;
+      return {
+        url: info.thumburl || info.url,
+        page: info.descriptionurl || ("https://commons.wikimedia.org/wiki/" + encodeURIComponent(page.title.replace(/ /g,"_"))),
+        creator: clean(meta.Artist?.value || "Unknown creator"),
+        license,
+        licenseUrl: clean(meta.LicenseUrl?.value || ""),
+        attribution: clean(meta.AttributionRequired?.value || "")
+      };
+    }
   }
   return null;
+}
+async function findOpenverseImage(query) {
+  const q = String(query || "").trim();
+  if (!q) return null;
+  const endpoint = "https://api.openverse.org/v1/images/?q=" + encodeURIComponent(q) +
+    "&license=cc0,pdm,by,by-sa&aspect_ratio=wide&page_size=10";
+  const response = await fetchWithTimeout(endpoint, {
+    headers: { "User-Agent": "HiddenEngineDocumentaryBot/1.0 (licensed visual discovery)" }
+  });
+  if (!response.ok) throw new Error("Openverse image search failed ("+response.status+").");
+  const data = await response.json();
+  const results = (data.results || []).filter(item => item.url && item.license && /^(cc0|pdm|by|by-sa)$/i.test(item.license));
+  console.log("Openverse query ["+q+"] returned "+results.length+" licensed images.");
+  const item = results.find(result => result.thumbnail || result.url);
+  return item ? {
+    url: item.thumbnail || item.url,
+    page: item.foreign_landing_url || item.detail_url || item.url,
+    creator: item.creator || "Unknown creator",
+    license: String(item.license).toUpperCase(),
+    licenseUrl: item.license_url || "",
+    creatorUrl: item.creator_url || ""
+  } : null;
 }
 async function findPexelsVideo(query) {
   // Pexels footage is illustrative only; never label it as evidence of a specific company or event.
@@ -232,6 +266,7 @@ async function main() {
     let still = null;
     if (!asset) still = await findPexelsImage(query);
     if (!asset && !still) still = await findCommonsImage(query);
+    if (!asset && !still) still = await findOpenverseImage(query);
     if (asset) console.log("Pexels video selected for scene " + (i+1));
     else if (still) console.log((still.license ? "Wikimedia Commons image ("+still.license+")" : "Pexels photo") + " selected for scene " + (i+1));
     else console.log("No licensed stock asset found for scene " + (i+1));
