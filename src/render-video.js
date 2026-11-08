@@ -120,6 +120,37 @@ async function findPexelsImage(query) {
   const p=photos[0];
   return p ? {url:p.src.landscape||p.src.large2x||p.src.large,page:p.url,creator:p.photographer||"Unknown creator",creatorUrl:p.photographer_url||""} : null;
 }
+async function findCommonsImage(query) {
+  const q = String(query || "").trim();
+  if (!q) return null;
+  const endpoint = "https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=" +
+    encodeURIComponent("filetype:bitmap " + q) +
+    "&gsrnamespace=6&gsrlimit=12&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=1920&format=json";
+  const response = await fetch(endpoint, {
+    headers: { "User-Agent": "HiddenEngineDocumentaryBot/1.0 (asset attribution and license verification)" }
+  });
+  if (!response.ok) throw new Error("Wikimedia Commons image search failed ("+response.status+").");
+  const data = await response.json();
+  const pages = Object.values(data.query?.pages || {});
+  const allowed = /^(CC0|Public domain|CC BY|CC BY-SA)/i;
+  for (const page of pages) {
+    const info = page.imageinfo?.[0];
+    if (!info || !/^image\/(jpeg|png|webp)$/i.test(info.mime || "")) continue;
+    const meta = info.extmetadata || {};
+    const license = String(meta.LicenseShortName?.value || "").replace(/<[^>]*>/g,"").trim();
+    if (!allowed.test(license)) continue;
+    const clean = value => String(value || "").replace(/<[^>]*>/g,"").replace(/&nbsp;/g," ").trim();
+    return {
+      url: info.thumburl || info.url,
+      page: info.descriptionurl || ("https://commons.wikimedia.org/wiki/" + encodeURIComponent(page.title.replace(/ /g,"_"))),
+      creator: clean(meta.Artist?.value || "Unknown creator"),
+      license,
+      licenseUrl: clean(meta.LicenseUrl?.value || ""),
+      attribution: clean(meta.AttributionRequired?.value || "")
+    };
+  }
+  return null;
+}
 async function findPexelsVideo(query) {
   // Pexels footage is illustrative only; never label it as evidence of a specific company or event.
   if (!PEXELS_API_KEY) return null;
@@ -174,9 +205,14 @@ async function main() {
     await createSoundDesign(audio, sfx, mixedAudio);
     await writeFile(svg, overlaySvg(scene, i, script.scenes.length));
     const query = scene.visual_query || [scene.title, scene.subtitle].filter(Boolean).join(" ");
+    console.log("Searching visual asset for scene " + (i+1) + ": " + query);
     let asset = await findPexelsVideo(query);
     let still = null;
     if (!asset) still = await findPexelsImage(query);
+    if (!asset && !still) still = await findCommonsImage(query);
+    if (asset) console.log("Pexels video selected for scene " + (i+1));
+    else if (still) console.log((still.license ? "Wikimedia Commons image ("+still.license+")" : "Pexels photo") + " selected for scene " + (i+1));
+    else console.log("No licensed stock asset found for scene " + (i+1));
     if (asset) {
       await download(asset.url, clip);
       credits.push({ scene: i+1, query, provider:"Pexels video", page:asset.page, creator:asset.creator, creatorUrl:asset.creatorUrl, usage:"Illustrative footage; not proof of a named event or entity." });
@@ -184,9 +220,9 @@ async function main() {
         "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,eq=contrast=1.12:saturation=0.78,drawbox=x=0:y=0:w=iw:h=ih:color=#08090b@0.18:t=fill[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
         "-map","[v]","-map","1:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
     } else if (still) {
-      await download(still.url, clip.replace(/\.mp4$/,".jpg"));
-      const imagePath=clip.replace(/\.mp4$/,".jpg");
-      credits.push({ scene:i+1, query, provider:"Pexels photo", page:still.page, creator:still.creator, creatorUrl:still.creatorUrl, usage:"Illustrative still; not proof of a named event or entity." });
+      const imagePath=clip.replace(/\.mp4$/,".img");
+      await download(still.url, imagePath);
+      credits.push({ scene:i+1, query, provider:still.license ? "Wikimedia Commons photo" : "Pexels photo", page:still.page, creator:still.creator, creatorUrl:still.creatorUrl || "", license:still.license || "Pexels License", licenseUrl:still.licenseUrl || "", usage:"Illustrative still; not proof of a named event or entity." });
       await run("ffmpeg", ["-y","-loop","1","-i",imagePath,"-i",mixedAudio,"-loop","1","-i",svg,
         "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,zoompan=z='min(zoom+0.0003,1.07)':d=125:s=1920x1080:fps=25,eq=contrast=1.08:saturation=0.82[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
         "-map","[v]","-map","1:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
@@ -201,16 +237,23 @@ async function main() {
   }
   const list = path.join(OUT,"concat.txt");
   await writeFile(list, clips.map(f=>"file '"+path.basename(f)+"'").join("\n")+"\n");
+  const stockScenes = credits.filter(item => item.provider === "Pexels video" || item.provider === "Pexels photo" || item.provider === "Wikimedia Commons photo").length;
+  const minimumStockScenes = Math.min(4, script.scenes.length);
+  if (stockScenes < minimumStockScenes) {
+    throw new Error("Visual QA failed: only " + stockScenes + "/" + script.scenes.length + " scenes have licensed photographic/video assets; minimum required is " + minimumStockScenes + ". Check PEXELS_API_KEY or Wikimedia Commons availability. Refusing to publish another graphics-only render.");
+  }
+  const list = path.join(OUT,"concat.txt");
+  await writeFile(list, clips.map(f=>"file '"+path.basename(f)+"'").join("\n")+"\n");
   const output = path.join(OUT,"the-hidden-engine-documentary.mp4");
   await run("ffmpeg",["-y","-f","concat","-safe","0","-i",list,"-c","copy","-movflags","+faststart",output]);
   await writeFile(path.join(OUT,"visual-credits.json"),JSON.stringify(credits,null,2)+"\n");
   await writeFile(path.join(OUT,"CREDITS.md"),[
     "# Visual credits","",
-    "Stock footage is sourced from Pexels. Review the linked asset page and applicable license before publication.",
+    "Stock photos/videos are sourced from Pexels or Wikimedia Commons. Review each linked asset page and license before publication.",
     "Pexels footage is used as illustrative material and must not be presented as actual footage of a specific company, person, product, or event unless independently verified.",
     "",
-    ...credits.map(c=>c.provider==="Pexels"
-      ? "- Scene "+c.scene+": [Pexels video]("+c.page+") — "+c.creator+(c.creatorUrl?" ([creator]("+c.creatorUrl+"))":"")
+    ...credits.map(c=>c.page
+      ? "- Scene "+c.scene+": ["+c.provider+"]("+c.page+") — "+c.creator+" — "+(c.license||"Pexels License")+(c.licenseUrl?" ("+c.licenseUrl+")":"")
       : "- Scene "+c.scene+": "+c.provider+" — "+c.note)
   ].join("\n")+"\n");
   await writeFile(path.join(OUT,"README.txt"),[
