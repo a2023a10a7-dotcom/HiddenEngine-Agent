@@ -1,6 +1,13 @@
 name: HiddenEngine Cinematic Documentary Render
 
 on:
+  push:
+    branches:
+      - "feature/documentary-renderer-v2"
+    paths:
+      - "src/render-video.js"
+      - ".github/workflows/render-video.yml"
+      - "production/projects/2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re/script.json"
   workflow_dispatch:
     inputs:
       project_id:
@@ -40,7 +47,7 @@ jobs:
 
       - name: Render cinematic documentary
         env:
-          PROJECT_ID: ${{ inputs.project_id }}
+          PROJECT_ID: ${{ inputs.project_id || '2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re' }}
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
           ELEVENLABS_VOICE_ID: ${{ vars.ELEVENLABS_VOICE_ID }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
@@ -49,7 +56,7 @@ jobs:
       - name: Upload MP4 and production assets
         uses: actions/upload-artifact@v4
         with:
-          name: hiddenengine-cinematic-${{ inputs.project_id }}
-          path: dist/${{ inputs.project_id }}/
+          name: hiddenengine-cinematic-${{ inputs.project_id || '2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re' }}
+          path: dist/${{ inputs.project_id || '2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re' }}/
           if-no-files-found: error
           retention-days: 14
