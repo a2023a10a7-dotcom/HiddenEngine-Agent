@@ -134,9 +134,9 @@ async function findPexelsImage(query) {
 async function findCommonsImage(query) {
   const raw = String(query || "").trim();
   if (!raw) return null;
-  const terms = raw.split(/\\s+/);
+  const terms = raw.split(/\s+/);
   const searches = [...new Set([raw, terms.slice(0,3).join(" "), terms.slice(0,2).join(" ")])];
-  const allowed = /^(CC0|Public domain|CC BY(?:-|\\s)|CC BY-SA)/i;
+  const allowed = /^(CC0|Public domain|CC BY(?:-|\s)|CC BY-SA)/i;
   const clean = value => String(value || "").replace(/<[^>]*>/g,"").replace(/&nbsp;/g," ").trim();
   for (const q of searches) {
     const endpoint = "https://commons.wikimedia.org/w/api.php?action=query&list=search&srnamespace=6&srlimit=20&srsearch=" +
