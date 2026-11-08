@@ -93,6 +93,7 @@ function overlaySvg(scene, index, total) {
   </style></svg>`;
 }
 async function elevenLabs(text, output) {
+  if (!ELEVENLABS_API_KEY || !ELEVENLABS_VOICE_ID) throw new Error("Narration cache is missing and ElevenLabs credentials are unavailable.");
   const response = await fetch("https://api.elevenlabs.io/v1/text-to-speech/" + encodeURIComponent(ELEVENLABS_VOICE_ID), {
     method: "POST",
     headers: { "xi-api-key": ELEVENLABS_API_KEY, "Content-Type": "application/json", "Accept": "audio/mpeg" },
@@ -185,10 +186,10 @@ async function download(url, dest) {
   await writeFile(dest, Buffer.from(await response.arrayBuffer()));
 }
 async function main() {
-  if (!ELEVENLABS_API_KEY || !ELEVENLABS_VOICE_ID) {
-    throw new Error("Natural narration requires ELEVENLABS_API_KEY and ELEVENLABS_VOICE_ID in GitHub Actions Secrets/Variables. No robotic fallback voice will be generated.");
-  }
   const script = JSON.parse(await readFile(path.join(ROOT, "script.json"), "utf8"));
+  if (!NARRATION_CACHE_DIR && (!ELEVENLABS_API_KEY || !ELEVENLABS_VOICE_ID)) {
+    throw new Error("Natural narration requires cached audio or ELEVENLABS_API_KEY and ELEVENLABS_VOICE_ID.");
+  }
   if (!Array.isArray(script.scenes) || !script.scenes.length) throw new Error("script.json has no scenes.");
   await mkdir(OUT, { recursive: true });
   const clips = [], credits = [];
@@ -216,6 +217,7 @@ async function main() {
     await createSoundDesign(audio, sfx, mixedAudio);
     await writeFile(svg, overlaySvg(scene, i, script.scenes.length));
     const query = scene.visual_query || [scene.title, scene.subtitle].filter(Boolean).join(" ");
+    console.log("Pexels key configured: " + Boolean(PEXELS_API_KEY));
     console.log("Searching visual asset for scene " + (i+1) + ": " + query);
     let asset = await findPexelsVideo(query);
     let still = null;
