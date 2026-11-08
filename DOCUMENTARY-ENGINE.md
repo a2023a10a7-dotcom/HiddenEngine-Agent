@@ -92,3 +92,13 @@ Fetches publicly accessible HTTP(S) source URLs already present in the project's
 PDFs are detected but not parsed in this version. Unsupported content types are recorded without downloading binary files. The fetcher applies a timeout and response-size limit, rejects obvious localhost/private-network URLs, and does not log in, bypass paywalls, execute page scripts, or download arbitrary assets.
 
 **Critical limitation:** extracted text is not fact-checked and may omit tables, footnotes, charts, or dynamic content. A successful fetch does not prove that a source supports a claim. Researchers must inspect the original document and link exact passages/page numbers to claims before narration.
+
+## Evidence-linked story architecture (v1)
+
+```bash
+PROJECT_ID=<project-id> npm run documentary:script-plan
+```
+
+Builds `SCRIPT-ARCHITECTURE.json` from the project's research ledger. It groups eligible claims into a seven-part documentary arc: cold open, system, hidden engine, strategic bet, turning point, economic consequences, and conclusion. Each scene contains candidate claim IDs and mandatory editorial checks.
+
+This is an outline/architecture generator, **not a prose scriptwriter**. It deliberately blocks when no eligible researched claims exist. Keyword grouping is a drafting aid and requires editorial review; it does not understand claim meaning or establish relevance. Every eventual narration sentence must be mapped to claim IDs and checked against the original source passages before voice production.
