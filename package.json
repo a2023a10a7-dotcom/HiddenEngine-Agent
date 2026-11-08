@@ -8,7 +8,8 @@
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
     "documentary:new": "node src/documentary-engine.js",
-    "documentary:qa": "node src/documentary-qa.js"
+    "documentary:qa": "node src/documentary-qa.js",
+    "documentary:research": "node src/research-agent.js"
   },
   "dependencies": {
     "dotenv": "^16.4.7",
