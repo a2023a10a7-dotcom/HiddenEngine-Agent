@@ -191,6 +191,7 @@ async function findOpenverseImage(query) {
     url: item.thumbnail || item.url,
     page: item.foreign_landing_url || item.detail_url || item.url,
     creator: item.creator || "Unknown creator",
+    provider: "Openverse photo",
     license: String(item.license).toUpperCase(),
     licenseUrl: item.license_url || "",
     creatorUrl: item.creator_url || ""
@@ -279,7 +280,7 @@ async function main() {
     } else if (still) {
       const imagePath=clip.replace(/\.mp4$/,".jpg");
       await download(still.url, imagePath);
-      credits.push({ scene:i+1, query, provider:still.license ? "Wikimedia Commons photo" : "Pexels photo", page:still.page, creator:still.creator, creatorUrl:still.creatorUrl || "", license:still.license || "Pexels License", licenseUrl:still.licenseUrl || "", usage:"Illustrative still; not proof of a named event or entity." });
+      credits.push({ scene:i+1, query, provider:still.provider || (still.license ? "Wikimedia Commons photo" : "Pexels photo"), page:still.page, creator:still.creator, creatorUrl:still.creatorUrl || "", license:still.license || "Pexels License", licenseUrl:still.licenseUrl || "", usage:"Illustrative still; not proof of a named event or entity." });
       await run("ffmpeg", ["-y","-loop","1","-i",imagePath,"-i",mixedAudio,"-loop","1","-i",svg,
         "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,zoompan=z='min(zoom+0.0003,1.07)':d=125:s=1920x1080:fps=25,eq=contrast=1.08:saturation=0.82[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
         "-map","[v]","-map","1:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
@@ -292,7 +293,7 @@ async function main() {
     clips.push(rendered);
     console.log("Rendered scene " + (i+1) + "/" + script.scenes.length + (asset ? " with licensed stock footage." : " with branded motion graphics."));
   }
-  const stockScenes = credits.filter(item => item.provider === "Pexels video" || item.provider === "Pexels photo" || item.provider === "Wikimedia Commons photo").length;
+  const stockScenes = credits.filter(item => item.provider === "Pexels video" || item.provider === "Pexels photo" || item.provider === "Wikimedia Commons photo" || item.provider === "Openverse photo").length;
   const minimumStockScenes = Math.min(4, script.scenes.length);
   if (stockScenes < minimumStockScenes) {
     throw new Error("Visual QA failed: only " + stockScenes + "/" + script.scenes.length + " scenes have licensed photographic/video assets; minimum required is " + minimumStockScenes + ". Check PEXELS_API_KEY or Wikimedia Commons availability. Refusing to publish another graphics-only render.");
