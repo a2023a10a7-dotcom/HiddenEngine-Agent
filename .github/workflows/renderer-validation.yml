@@ -1,0 +1,58 @@
+name: Documentary Renderer Validation
+
+on:
+  pull_request:
+    paths:
+      - "src/render-video.js"
+      - "production/projects/**/script.json"
+      - ".github/workflows/renderer-validation.yml"
+  push:
+    branches:
+      - "feature/documentary-renderer-v2"
+    paths:
+      - "src/render-video.js"
+      - "production/projects/**/script.json"
+      - ".github/workflows/renderer-validation.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check JavaScript syntax
+        run: node --check src/render-video.js
+      - name: Validate production scripts
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync, readdirSync, statSync } from 'node:fs';
+          import path from 'node:path';
+          const root = 'production/projects';
+          const projects = readdirSync(root).map(name => path.join(root, name)).filter(p => statSync(p).isDirectory());
+          let count = 0;
+          for (const project of projects) {
+            const file = path.join(project, 'script.json');
+            try {
+              const data = JSON.parse(readFileSync(file, 'utf8'));
+              if (!Array.isArray(data.scenes) || data.scenes.length === 0) throw new Error('scenes must be a non-empty array');
+              data.scenes.forEach((scene, i) => {
+                if (typeof scene.narration !== 'string' || !scene.narration.trim()) throw new Error('scene ' + (i + 1) + ' has no narration');
+                if (scene.visual?.type === 'metric' && (!scene.visual.value || !scene.visual.source_label)) throw new Error('scene ' + (i + 1) + ' metric lacks value/source label');
+                if (scene.visual?.type === 'comparison' && (!Array.isArray(scene.visual.items) || !scene.visual.source_label)) throw new Error('scene ' + (i + 1) + ' comparison lacks items/source label');
+                if (scene.visual?.type === 'timeline' && (!Array.isArray(scene.visual.events) || !scene.visual.source_label)) throw new Error('scene ' + (i + 1) + ' timeline lacks events/source label');
+              });
+              count++;
+              console.log('Validated ' + file);
+            } catch (error) {
+              if (error.code === 'ENOENT') continue;
+              throw new Error(file + ': ' + error.message);
+            }
+          }
+          if (!count) throw new Error('No production script.json files were validated');
+          console.log('Validated ' + count + ' production script(s).');
+          NODE
