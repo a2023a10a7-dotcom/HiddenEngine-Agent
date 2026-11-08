@@ -137,7 +137,8 @@ async function main() {
   const articles = Array.isArray(report.articles) ? report.articles : [];
   if (!articles.length) throw new Error("No articles found in reports/research.json");
   const requestedTitle = process.env.STORY_TITLE?.trim();
-  const requestedIndex = Number.parseInt(process.env.STORY_INDEX || "2", 10);
+  const rawStoryIndex = (process.env.STORY_INDEX ?? "").trim();
+  const requestedIndex = rawStoryIndex === "" ? 2 : Number(rawStoryIndex);
   const topTitles = Array.isArray(report.topOpportunities) ? report.topOpportunities : [];
   let article;
   if (requestedTitle) {
