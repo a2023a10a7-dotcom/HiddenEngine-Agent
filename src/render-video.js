@@ -36,7 +36,7 @@ async function capture(command, args) {
     child.on("close", code => code === 0 ? resolve({ stdout, stderr }) : reject(new Error(command + " exited with code " + code + ": " + stderr.slice(-1200))));
   });
 }
-function splitNarration(text, targetWords = 22) {
+function splitNarration(text, targetWords = 14) {
   const sentences = String(text).match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [String(text)];
   const units = [];
   for (const sentence of sentences) {
@@ -57,7 +57,7 @@ function splitNarration(text, targetWords = 22) {
   const packed = [];
   for (const unit of units) {
     const last = packed[packed.length-1];
-    if (last && last.length < 15 && last.length + unit.length <= targetWords + 8) last.push(...unit);
+    if (last && last.length < 10 && last.length + unit.length <= targetWords + 4) last.push(...unit);
     else packed.push([...unit]);
   }
   return packed.map(words => words.join(" "));
