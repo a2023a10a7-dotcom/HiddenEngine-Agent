@@ -1,5 +1,6 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
+import { createHash } from "node:crypto";
 
 const projectId = process.env.PROJECT_ID;
 if (!projectId || !/^[a-z0-9-]+$/.test(projectId)) {
@@ -36,7 +37,9 @@ const countWords = value => wordsOf(value).length;
 const round2 = value => Number(value.toFixed(2));
 const SENTENCE_END = /[.!?؟؛:]["')\]”’]*$/;
 
-const draft = JSON.parse(await readFile(draftPath, "utf8"));
+const draftText = await readFile(draftPath, "utf8");
+const draft = JSON.parse(draftText);
+const sourceDraftSha256 = createHash("sha256").update(draftText).digest("hex");
 if (draft.projectId !== projectId) throw new Error("Project ID mismatch.");
 if (!Array.isArray(draft.scenes) || !draft.scenes.length) {
   throw new Error("The script draft contains no scenes.");
@@ -216,6 +219,7 @@ const estimatedDurations = scenes.flatMap(scene =>
 const plan = {
   schemaVersion: "2.0.0",
   projectId,
+  sourceDraftSha256,
   createdAt: new Date().toISOString(),
   status: errors.length ? "blocked" : "awaiting_visual_research_and_review",
   timing: {
