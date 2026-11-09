@@ -91,6 +91,20 @@ async function elevenLabs(text, output) {
   if (!response.ok) throw new Error("ElevenLabs TTS failed (" + response.status + "): " + (await response.text()).slice(0, 500));
   await writeFile(output, Buffer.from(await response.arrayBuffer()));
 }
+async function probeAudioDuration(file) {
+  return await new Promise((resolve, reject) => {
+    const child = spawn("ffprobe", ["-v","error","-show_entries","format=duration","-of","default=noprint_wrappers=1:nokey=1",file]);
+    let output = "";
+    child.stdout.on("data", chunk => output += chunk);
+    child.on("error", reject);
+    child.on("close", code => {
+      const duration = Number(output.trim());
+      if (code !== 0 || !Number.isFinite(duration) || duration <= 0) {
+        reject(new Error("Could not verify generated narration duration with FFprobe."));
+      } else resolve(duration);
+    });
+  });
+}
 async function download(url, dest) {
   const response = await fetch(url);
   if (!response.ok) throw new Error("Asset download failed (" + response.status + ").");
@@ -103,7 +117,7 @@ async function main() {
   const script = JSON.parse(await readFile(path.join(ROOT, "script.json"), "utf8"));
   if (!Array.isArray(script.scenes) || !script.scenes.length) throw new Error("script.json has no scenes.");
   await mkdir(OUT, { recursive: true });
-  const clips = [], credits = [];
+  const clips = [], credits = [], sceneDurations = [];
   for (let i=0; i<script.scenes.length; i++) {
     const scene = script.scenes[i];
     if (!scene.narration?.trim()) throw new Error("Scene " + (i+1) + " has no narration.");
@@ -113,6 +127,11 @@ async function main() {
     const clip = path.join(OUT, stem + "-visual.mp4");
     const rendered = path.join(OUT, stem + ".mp4");
     await elevenLabs(scene.narration, audio);
+    const actualNarrationSeconds = await probeAudioDuration(audio);
+    if (actualNarrationSeconds > 12.05) {
+      throw new Error("Scene " + (i+1) + " narration is " + actualNarrationSeconds.toFixed(2) + " seconds; maximum allowed is 12 seconds. Re-segment the approved narration before rendering.");
+    }
+    sceneDurations.push(actualNarrationSeconds);
     await writeFile(svg, overlaySvg(scene, i, script.scenes.length));
     const visualAsset = scene.visualAsset || null;
     if (visualAsset) {
@@ -166,7 +185,14 @@ async function main() {
   ].join("\n")+"\n");
   const qa = await new Promise((resolve,reject) => { const p=spawn("ffprobe",["-v","error","-show_entries","format=duration:stream=codec_type,width,height","-of","json",output]); let data=""; p.stdout.on("data",d=>data+=d); p.on("error",reject); p.on("close",code=>code===0?resolve(JSON.parse(data)):reject(new Error("ffprobe failed"))); });
   if (!qa.streams.some(x=>x.codec_type==="video" && x.width===1920 && x.height===1080) || !qa.streams.some(x=>x.codec_type==="audio")) throw new Error("Final MP4 failed audio/1080p QA.");
-  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:Number(qa.format.duration),audio:true,scenes:clips.length},null,2)+"\n");
-  console.log("Rendered and passed technical QA: "+output);
+  const averageSceneSeconds = sceneDurations.reduce((sum,value)=>sum+value,0)/sceneDurations.length;
+  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({
+    file:path.basename(output),width:1920,height:1080,duration:Number(qa.format.duration),
+    audio:true,scenes:clips.length,
+    averageSceneSeconds:Number(averageSceneSeconds.toFixed(2)),
+    longestSceneSeconds:Number(Math.max(...sceneDurations).toFixed(2)),
+    sceneDurationsSeconds:sceneDurations.map(value=>Number(value.toFixed(2)))
+  },null,2)+"\n");
+  console.log("Rendered and passed technical QA: "+output+" ("+clips.length+" scenes; average "+averageSceneSeconds.toFixed(2)+"s; longest "+Math.max(...sceneDurations).toFixed(2)+"s).");
 }
 main().catch(error=>{console.error("Render failed:",error);process.exit(1);});
