@@ -83,7 +83,7 @@ for (const plannedScene of plan.scenes || []) {
     .map(shot => String(shot.narration || "").trim())
     .filter(Boolean)
     .join(" ")
-    .replace(/\\s+/g, " ");
+    .replace(/\s+/g, " ");
 
   if (!Array.isArray(shots) || !shots.length) {
     errors.push(sceneId + ": no shots in visual plan.");
