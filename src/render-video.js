@@ -276,7 +276,10 @@ async function main() {
     throw new Error("Final MP4 failed audio/1080p QA.");
   }
   const measuredShotsTotal = sceneDurations.reduce((sum, value) => sum + value, 0);
-  const finalAudioDuration = Number(audioStream.duration || qa.format.duration);
+  const streamAudioDuration = Number(audioStream.duration);
+  const finalAudioDuration = Number.isFinite(streamAudioDuration) && streamAudioDuration > 0
+    ? streamAudioDuration
+    : Number(qa.format.duration);
   const durationDifference = Math.abs(measuredShotsTotal - finalAudioDuration);
   if (!Number.isFinite(finalAudioDuration) || durationDifference > 0.5) {
     throw new Error("Audio duration gate failed: summed shot audio " + measuredShotsTotal.toFixed(3) +
