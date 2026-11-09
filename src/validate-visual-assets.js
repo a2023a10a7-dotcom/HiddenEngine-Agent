@@ -47,11 +47,11 @@ for (const asset of manifest.assets) {
     errors.push(label + ": missing asset id/shotId or duplicate shotId.");
     continue;
   }
-  if (!/^S\\d{2}$/.test(asset.sceneId || "")) {
+  if (!/^S\d{2}$/.test(asset.sceneId || "")) {
     errors.push(label + ": sceneId must match S01, S02, etc.");
     continue;
   }
-  if (!/^S\\d{2}-\\d{2}$/.test(asset.shotId) ||
+  if (!/^S\d{2}-\d{2}$/.test(asset.shotId) ||
       !asset.shotId.startsWith(asset.sceneId + "-")) {
     errors.push(label + ": shotId must match its scene, e.g. S01-01.");
     continue;
@@ -62,7 +62,7 @@ for (const asset of manifest.assets) {
     errors.push(label + ": mediaType must be image or video.");
     continue;
   }
-  if (!/^https:\\/\\/(commons\\.wikimedia\\.org|upload\\.wikimedia\\.org|www\\.pexels\\.com|images\\.pexels\\.com|openverse\\.org)\\//i.test(asset.sourceUrl || "")) {
+  if (!/^https:\/\/(commons\.wikimedia\.org|upload\.wikimedia\.org|www\.pexels\.com|images\.pexels\.com|openverse\.org)\//i.test(asset.sourceUrl || "")) {
     errors.push(label + ": source must be Wikimedia Commons, Pexels, or Openverse.");
     continue;
   }
@@ -156,7 +156,7 @@ for (const { sceneId, shot } of shots) {
     errors.push(shot.shotId + ": requires an approved asset or a complete data-card fallback.");
   }
   if (!asset && fallback) {
-    const hasNumberOrDate = /\\d/.test(fallback.title + " " + fallback.body);
+    const hasNumberOrDate = /\d/.test(fallback.title + " " + fallback.body);
     if (hasNumberOrDate &&
         (!Array.isArray(fallback.sourceLines) || !fallback.sourceLines.some(line => String(line).trim()))) {
       errors.push(shot.shotId + ": data card contains a number/date but has no source line.");
@@ -187,7 +187,7 @@ const report = {
 
 await writeFile(
   path.join(root, "VISUAL-ASSETS-READY.json"),
-  JSON.stringify(report, null, 2) + "\\n"
+  JSON.stringify(report, null, 2) + "\n"
 );
 
 console.log(JSON.stringify({
