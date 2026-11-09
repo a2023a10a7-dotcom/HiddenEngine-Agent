@@ -1,5 +1,4 @@
-import { mkdir, readFile, writeFile, copyFile, access, rm } from "node:fs/promises";
-import { createHash } from "node:crypto";
+import { mkdir, readFile, writeFile, rm } from "node:fs/promises";
 import { spawn } from "node:child_process";
 import path from "node:path";
 
@@ -8,8 +7,7 @@ if (!PROJECT_ID || !/^[a-z0-9-]+$/.test(PROJECT_ID)) throw new Error("PROJECT_ID
 const ROOT = path.join("production", "projects", PROJECT_ID);
 const OUT = path.join("dist", PROJECT_ID);
 const PEXELS_API_KEY = process.env.PEXELS_API_KEY;
-const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY || "";
-const ELEVENLABS_VOICE_ID = process.env.ELEVENLABS_VOICE_ID || "";
+const SCENE_DURATION_SECONDS = 8;
 
 async function fetchWithTimeout(url, options = {}, timeoutMs = 12000) {
   const controller = new AbortController();
@@ -37,97 +35,6 @@ async function capture(command, args) {
     child.on("error", reject);
     child.on("close", code => code === 0 ? resolve({ stdout, stderr }) : reject(new Error(command + " exited with code " + code + ": " + stderr.slice(-1200))));
   });
-}
-function splitWordsByCount(text, count) {
-  const words = String(text).trim().split(/\s+/).filter(Boolean);
-  if (!words.length) throw new Error('A narration scene has no words.');
-  const chunks = []; let offset = 0;
-  for (let i=0;i<count;i++) {
-    const take = Math.ceil((words.length-offset)/(count-i));
-    chunks.push(words.slice(offset,offset+take).join(' ')); offset += take;
-  }
-  return chunks;
-}
-async function audioDuration(file) {
-  const result = await capture('ffprobe',['-v','error','-show_entries','format=duration','-of','default=noprint_wrappers=1:nokey=1',file]);
-  const duration = Number(result.stdout.trim());
-  if (!Number.isFinite(duration) || duration <= 0) throw new Error('Could not determine narration duration for '+file);
-  return duration;
-}
-async function generateNarrationTracks(script, outputDir) {
-  if (!ELEVENLABS_API_KEY || !ELEVENLABS_VOICE_ID) {
-    throw new Error("Fresh narration requires ELEVENLABS_API_KEY and ELEVENLABS_VOICE_ID. No old narration cache will be reused.");
-  }
-  const narrationDir = path.join(outputDir, "source-narration");
-  await mkdir(narrationDir, { recursive: true });
-  const scriptFingerprint = createHash("sha256")
-    .update(JSON.stringify(script.scenes.map(scene => scene.narration || "")))
-    .digest("hex");
-  for (let i = 0; i < script.scenes.length; i++) {
-    const narration = String(script.scenes[i].narration || "").trim();
-    if (!narration) throw new Error("Scene " + (i + 1) + " has no narration text.");
-    const stem = "scene-" + String(i + 1).padStart(2, "0");
-    const destination = path.join(narrationDir, stem + ".mp3");
-    console.log("Generating fresh ElevenLabs narration " + (i + 1) + "/" + script.scenes.length + ".");
-    const response = await fetchWithTimeout(
-      "https://api.elevenlabs.io/v1/text-to-speech/" + encodeURIComponent(ELEVENLABS_VOICE_ID),
-      {
-        method: "POST",
-        headers: {
-          "xi-api-key": ELEVENLABS_API_KEY,
-          "Content-Type": "application/json",
-          "Accept": "audio/mpeg"
-        },
-        body: JSON.stringify({
-          text: narration,
-          model_id: "eleven_multilingual_v2",
-          voice_settings: { stability: 0.5, similarity_boost: 0.75 }
-        })
-      },
-      120000
-    );
-    if (!response.ok) {
-      throw new Error("ElevenLabs narration failed for " + stem + " (" + response.status + "): " + (await response.text()).slice(0, 500));
-    }
-    await writeFile(destination, Buffer.from(await response.arrayBuffer()));
-  }
-  await writeFile(path.join(outputDir, "NARRATION-MANIFEST.json"), JSON.stringify({
-    projectId: PROJECT_ID,
-    scriptFingerprint,
-    sourceScenes: script.scenes.length,
-    provider: "ElevenLabs",
-    model: "eleven_multilingual_v2",
-    generatedAt: new Date().toISOString(),
-    cachePolicy: "fresh-per-render; no cross-project narration reuse"
-  }, null, 2) + "\n");
-  return narrationDir;
-}
-async function prepareSceneSegments(sourceScenes,narrationDir,outputDir) {
-  const expanded=[];
-  for (let sourceIndex=0;sourceIndex<sourceScenes.length;sourceIndex++) {
-    const scene=sourceScenes[sourceIndex];
-    const sourceStem='scene-'+String(sourceIndex+1).padStart(2,'0');
-    const sourceAudio=path.join(narrationDir,sourceStem+'.mp3');
-    try { await access(sourceAudio); } catch { throw new Error('Approved narration cache is missing for '+sourceStem+'; refusing to regenerate speech.'); }
-    const duration=await audioDuration(sourceAudio);
-    const segmentCount=Math.max(1,Math.round(duration/7.2));
-    const chunks=splitWordsByCount(scene.narration,segmentCount);
-    for (let partIndex=0;partIndex<segmentCount;partIndex++) {
-      const start=duration*partIndex/segmentCount;
-      const end=duration*(partIndex+1)/segmentCount;
-      const partDuration=end-start;
-      if (partDuration<5.4 || partDuration>12) throw new Error('Scene timing QA failed for '+sourceStem+' segment '+(partIndex+1)+': '+partDuration.toFixed(2)+' seconds.');
-      const segmentPath=path.join(outputDir,'narration-'+String(expanded.length+1).padStart(2,'0')+'.mp3');
-      await run('ffmpeg',['-y','-ss',String(start),'-i',sourceAudio,'-t',String(partDuration),'-vn','-c:a','libmp3lame','-q:a','2',segmentPath]);
-      expanded.push({...scene,title:partIndex===0?scene.title:(scene.title||'THE INVESTIGATION'),subtitle:partIndex===0?(scene.subtitle||''):'',narration:chunks[partIndex],_audioPath:segmentPath,_sourceScene:sourceIndex+1,_duration:partDuration});
-    }
-  }
-  if (expanded.length<35 || expanded.length>50) throw new Error('Scene-count QA failed: generated '+expanded.length+' scenes; required 35–50.');
-  const longest=Math.max(...expanded.map(scene=>scene._duration));
-  const shortest=Math.min(...expanded.map(scene=>scene._duration));
-  if (longest>12 || shortest<5.4) throw new Error('Scene-duration QA failed: shortest '+shortest.toFixed(2)+'s, longest '+longest.toFixed(2)+'s.');
-  console.log('Narration segmented into '+expanded.length+' scenes; average '+(expanded.reduce((n,scene)=>n+scene._duration,0)/expanded.length).toFixed(2)+'s; longest '+longest.toFixed(2)+'s.');
-  return expanded;
 }
 function xml(value) {
   return String(value ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&apos;" })[c]);
@@ -317,34 +224,22 @@ async function main() {
   if (!Array.isArray(script.scenes) || !script.scenes.length) throw new Error("script.json has no scenes.");
   await rm(OUT, { recursive: true, force: true });
   await mkdir(OUT, { recursive: true });
-  const sourceSceneCount = script.scenes.length;
-  const narrationDir = await generateNarrationTracks(script, OUT);
-  script.scenes = await prepareSceneSegments(script.scenes, narrationDir, OUT);
   const clips = [], credits = [];
   for (let i=0; i<script.scenes.length; i++) {
     const scene = script.scenes[i];
-    if (!scene.narration?.trim()) throw new Error("Scene " + (i+1) + " has no narration.");
     const stem = "scene-" + String(i+1).padStart(2,"0");
-    const audio = path.join(OUT, stem + ".mp3");
     const svg = path.join(OUT, stem + ".svg");
     const clip = path.join(OUT, stem + "-visual.mp4");
     const rendered = path.join(OUT, stem + ".mp4");
-    const cached = scene._audioPath;
-    try { await access(cached); }
-    catch { throw new Error("Prepared narration segment is missing for " + stem + "."); }
-    await copyFile(cached, audio);
-    console.log("Using approved narration segment " + (i+1) + "/" + script.scenes.length + " (source scene " + scene._sourceScene + ").");
     await writeFile(svg, overlaySvg(scene, i, script.scenes.length));
     const query = scene.visual_query || [scene.title, scene.subtitle].filter(Boolean).join(" ");
     console.log("Pexels key configured: " + Boolean(PEXELS_API_KEY));
     console.log("Searching visual asset for scene " + (i+1) + ": " + query);
     let asset = null;
     let still = null;
-    // An outage at one provider must not abort the render or block later approved sources.
     const tryProvider = async (name, search) => {
-      try {
-        return await search();
-      } catch (error) {
+      try { return await search(); }
+      catch (error) {
         console.warn(name + " unavailable for scene " + (i+1) + "; continuing: " + error.message);
         return null;
       }
@@ -353,30 +248,27 @@ async function main() {
     if (!asset) still = await tryProvider("Pexels photo", () => findPexelsImage(query));
     if (!asset && !still) still = await tryProvider("Wikimedia Commons", () => findCommonsImage(query));
     if (!asset && !still) still = await tryProvider("Openverse", () => findOpenverseImage(query));
-    if (asset) console.log("Pexels video selected for scene " + (i+1));
-    else if (still) console.log((still.license ? "Wikimedia Commons image ("+still.license+")" : "Pexels photo") + " selected for scene " + (i+1));
-    else console.log("No licensed stock asset found for scene " + (i+1));
     if (asset) {
       await download(asset.url, clip);
-      credits.push({ scene: i+1, query, provider:"Pexels video", page:asset.page, creator:asset.creator, creatorUrl:asset.creatorUrl, usage:"Illustrative footage; not proof of a named event or entity." });
-      await run("ffmpeg", ["-y","-stream_loop","-1","-i",clip,"-i",audio,"-loop","1","-i",svg,
-        "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,eq=contrast=1.12:saturation=0.78,drawbox=x=0:y=0:w=iw:h=ih:color=#08090b@0.18:t=fill[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
-        "-map","[v]","-map","1:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
+      credits.push({ scene:i+1, query, provider:"Pexels video", page:asset.page, creator:asset.creator, creatorUrl:asset.creatorUrl, usage:"Illustrative footage; not proof of a named event or entity." });
+      await run("ffmpeg", ["-y","-stream_loop","-1","-i",clip,"-loop","1","-i",svg,
+        "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,eq=contrast=1.12:saturation=0.78,drawbox=x=0:y=0:w=iw:h=ih:color=#08090b@0.18:t=fill[bg];[bg][1:v]overlay=0:0,format=yuv420p[v]",
+        "-map","[v]","-t",String(SCENE_DURATION_SECONDS),"-an","-c:v","libx264","-preset","veryfast","-crf","21","-movflags","+faststart",rendered]);
     } else if (still) {
       const imagePath=clip.replace(/\.mp4$/,".jpg");
       await download(still.url, imagePath);
       credits.push({ scene:i+1, query, provider:still.provider || (still.license ? "Wikimedia Commons photo" : "Pexels photo"), page:still.page, creator:still.creator, creatorUrl:still.creatorUrl || "", license:still.license || "Pexels License", licenseUrl:still.licenseUrl || "", usage:"Illustrative still; not proof of a named event or entity." });
-      await run("ffmpeg", ["-y","-loop","1","-framerate","25","-i",imagePath,"-i",audio,"-loop","1","-i",svg,
-        "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,zoompan=z='min(zoom+0.0003,1.07)':d=1:s=1920x1080:fps=25,eq=contrast=1.08:saturation=0.82[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
-        "-map","[v]","-map","1:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
+      await run("ffmpeg", ["-y","-loop","1","-framerate","25","-i",imagePath,"-loop","1","-i",svg,
+        "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,zoompan=z='min(zoom+0.0003,1.07)':d=1:s=1920x1080:fps=25,eq=contrast=1.08:saturation=0.82[bg];[bg][1:v]overlay=0:0,format=yuv420p[v]",
+        "-map","[v]","-t",String(SCENE_DURATION_SECONDS),"-an","-c:v","libx264","-preset","veryfast","-crf","21","-movflags","+faststart",rendered]);
     } else {
-      credits.push({ scene:i+1, query, provider:"Original motion graphic", note:"No matching Pexels video or photo was returned; generated a branded animated graphic instead." });
-      await run("ffmpeg", ["-y","-f","lavfi","-i","color=c=#101113:s=1920x1080:r=25","-i",audio,"-loop","1","-i",svg,
-        "-filter_complex","[0:v]format=yuv420p[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
-        "-map","[v]","-map","1:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
+      credits.push({ scene:i+1, query, provider:"Original motion graphic", note:"No matching licensed stock asset was returned; generated a branded motion graphic instead." });
+      await run("ffmpeg", ["-y","-f","lavfi","-i","color=c=#101113:s=1920x1080:r=25:d="+SCENE_DURATION_SECONDS,"-loop","1","-i",svg,
+        "-filter_complex","[0:v]format=yuv420p[bg];[bg][1:v]overlay=0:0,format=yuv420p[v]",
+        "-map","[v]","-t",String(SCENE_DURATION_SECONDS),"-an","-c:v","libx264","-preset","veryfast","-crf","21","-movflags","+faststart",rendered]);
     }
     clips.push(rendered);
-    console.log("Rendered scene " + (i+1) + "/" + script.scenes.length + (asset ? " with licensed stock footage." : " with branded motion graphics."));
+    console.log("Rendered silent visual scene " + (i+1) + "/" + script.scenes.length + ".");
   }
   const stockScenes = credits.filter(item => item.provider === "Pexels video" || item.provider === "Pexels photo" || item.provider === "Wikimedia Commons photo" || item.provider === "Openverse photo").length;
   const minimumStockScenes = Math.min(4, script.scenes.length);
@@ -386,31 +278,31 @@ async function main() {
   const list = path.join(OUT,"concat.txt");
   await writeFile(list, clips.map(f=>"file '"+path.basename(f)+"'").join("\n")+"\n");
   const output = path.join(OUT,"the-hidden-engine-documentary.mp4");
-  await run("ffmpeg",["-y","-f","concat","-safe","0","-i",list,"-c","copy","-movflags","+faststart",output]);
+  await run("ffmpeg",["-y","-f","concat","-safe","0","-i",list,"-c","copy","-an","-movflags","+faststart",output]);
   await writeFile(path.join(OUT,"visual-credits.json"),JSON.stringify(credits,null,2)+"\n");
   await writeFile(path.join(OUT,"CREDITS.md"),[
     "# Visual credits","",
-    "Stock photos/videos are sourced from Pexels or Wikimedia Commons. Review each linked asset page and license before publication.",
-    "Pexels footage is used as illustrative material and must not be presented as actual footage of a specific company, person, product, or event unless independently verified.",
+    "Stock photos/videos are sourced from Pexels, Wikimedia Commons, or Openverse. Review each linked asset page and license before publication.",
+    "Pexels footage is illustrative material and must not be presented as actual footage of a specific company, person, product, or event unless independently verified.",
     "",
     ...credits.map(c=>c.page
       ? "- Scene "+c.scene+": ["+c.provider+"]("+c.page+") — "+c.creator+" — "+(c.license||"Pexels License")+(c.licenseUrl?" ("+c.licenseUrl+")":"")
       : "- Scene "+c.scene+": "+c.provider+" — "+c.note)
   ].join("\n")+"\n");
   await writeFile(path.join(OUT,"README.txt"),[
-    "The Hidden Engine documentary render",
-    "Narration: ElevenLabs API (natural AI voice; selected voice configured by repository secret/variable).",
+    "The Hidden Engine visual-only documentary render",
+    "Audio: intentionally omitted; this render is for visual scene inspection only.",
     "Visuals: Pexels stock video or photos where relevant; otherwise original branded motion graphics.",
-    "Audio: approved cached narration only; no music and no sound effects.",
+    "No narration, music, or sound effects.",
     "Identity: charcoal/black, ivory typography, restrained copper accents, documentary-investigative overlays.",
-    "Review all claims, pronunciations, visual relevance, licenses, and credits before publication.",
+    "Review visual relevance, licenses, and credits before publication.",
     "No automatic YouTube upload."
   ].join("\n")+"\n");
   const qa = await new Promise((resolve,reject) => { const p=spawn("ffprobe",["-v","error","-show_entries","format=duration:stream=codec_type,width,height","-of","json",output]); let data=""; p.stdout.on("data",d=>data+=d); p.on("error",reject); p.on("close",code=>code===0?resolve(JSON.parse(data)):reject(new Error("ffprobe failed"))); });
-  if (!qa.streams.some(x=>x.codec_type==="video" && x.width===1920 && x.height===1080) || !qa.streams.some(x=>x.codec_type==="audio")) throw new Error("Final MP4 failed audio/1080p QA.");
+  if (!qa.streams.some(x=>x.codec_type==="video" && x.width===1920 && x.height===1080) || qa.streams.some(x=>x.codec_type==="audio")) throw new Error("Final MP4 failed silent 1080p QA.");
   const averageSceneDuration = Number(qa.format.duration) / clips.length;
-  if (clips.length < 35 || clips.length > 50 || averageSceneDuration > 10.5) throw new Error("Final pacing QA failed: " + clips.length + " scenes, average " + averageSceneDuration.toFixed(2) + " seconds.");
-  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:Number(qa.format.duration),audio:true,audioDesign:"narration_only_no_music_or_sfx",scenes:clips.length,sourceScenes:sourceSceneCount,averageSceneDuration,maximumSceneDuration:Math.max(...script.scenes.map(scene=>scene._duration)),visualProviders:[...new Set(credits.map(c=>c.provider))]},null,2)+"\n");
-  console.log("Rendered and passed technical QA: "+output);
+  if (clips.length < 5 || averageSceneDuration > 10.5) throw new Error("Final pacing QA failed: " + clips.length + " scenes, average " + averageSceneDuration.toFixed(2) + " seconds.");
+  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:Number(qa.format.duration),audio:false,audioDesign:"silent_visual_inspection_only",scenes:clips.length,averageSceneDuration,visualProviders:[...new Set(credits.map(c=>c.provider))]},null,2)+"\n");
+  console.log("Rendered and passed silent visual QA: "+output);
 }
 main().catch(error=>{console.error("Render failed:",error);process.exit(1);});
