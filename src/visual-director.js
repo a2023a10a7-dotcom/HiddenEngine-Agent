@@ -105,6 +105,47 @@ function queryQuality(query) {
   return hasAnchor ? "needs_human_review" : "blocked";
 }
 
+const ANCHOR_STOP_WORDS = new Set([
+  "the", "a", "an", "this", "that", "these", "those", "what", "when",
+  "where", "which", "who", "why", "how", "inside", "after", "before",
+  "company", "report", "study", "system", "market", "world", "engine",
+  "investigation", "loop", "process", "platform", "business"
+]);
+
+function findSpecificAnchor(text) {
+  const pattern = /\\b(?:[A-Z]{2,}[A-Z0-9.-]*|[A-Z][a-zA-Z0-9.-]+(?:\\s+[A-Z][a-zA-Z0-9.-]+){0,2}|(?:19|20)\\d{2})\\b/g;
+  for (const match of text.matchAll(pattern)) {
+    const candidate = match[0].split(/\\s+/)
+      .filter(word => !ANCHOR_STOP_WORDS.has(word.toLowerCase()))
+      .join(" ")
+      .trim();
+    if (!candidate) continue;
+    if (GENERIC_QUERY_WORDS.has(candidate.toLowerCase())) continue;
+    if (/^(19|20)\\d{2}$/.test(candidate) || /[A-Z]{2,}|[A-Z][a-z]/.test(candidate)) {
+      return candidate;
+    }
+  }
+  return "";
+}
+
+function inferVisualKind(text) {
+  if (/\\b(percentage|percent|ratio|revenue|profit|loss|margin|data|chart|metric)\\b|%|نسبة|بيانات/i.test(text)) return "data";
+  if (/\\b(document|filing|report|paper|contract|letter|memo)\\b|وثيقة|تقرير/i.test(text)) return "document";
+  if (/\\b(researcher|scientist|founder|executive|person|ceo)\\b|باحث|شخص/i.test(text)) return "person";
+  if (/\\b(server|chip|phone|device|computer|robot|hardware|model)\\b|جهاز|حاسوب/i.test(text)) return "device";
+  if (/\\b(headquarters|office|city|country|factory|lab|location)\\b|مقر|مدينة|مصنع/i.test(text)) return "place";
+  return "event";
+}
+
+const VISUAL_QUERY_SUFFIX = {
+  event: "documentary event",
+  device: "hardware closeup",
+  person: "researcher portrait",
+  place: "location exterior",
+  document: "official document",
+  data: "data chart"
+};
+
 function sourceLinesFor(scene, part) {
   const values = Array.isArray(scene.dataCardSourceLines)
     ? scene.dataCardSourceLines
@@ -159,8 +200,15 @@ draft.scenes.forEach((sourceScene, sceneIndex) => {
 
   const shots = segments.map((segment, part) => {
     const shotId = `${sceneId}-${String(part + 1).padStart(2, "0")}`;
-    const visualBrief = suppliedBriefs[part] || null;
-    const visualQuery = clean(suppliedQueries[part]);
+    const anchorText = findSpecificAnchor(segment);
+    const kind = inferVisualKind(segment);
+    const visualBrief = suppliedBriefs[part] || (anchorText ? {
+      kind,
+      subject: anchorText,
+      mustShow: [anchorText, VISUAL_QUERY_SUFFIX[kind]]
+    } : null);
+    const visualQuery = clean(suppliedQueries[part]) ||
+      (anchorText ? `${anchorText} ${VISUAL_QUERY_SUFFIX[kind]}` : "");
     const queryStatus = queryQuality(visualQuery);
     const estimatedDurationSeconds = round2(countWords(segment) / wordsPerSecond);
 
