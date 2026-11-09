@@ -113,15 +113,15 @@ const ANCHOR_STOP_WORDS = new Set([
 ]);
 
 function findSpecificAnchor(text) {
-  const pattern = /\\b(?:[A-Z]{2,}[A-Z0-9.-]*|[A-Z][a-zA-Z0-9.-]+(?:\\s+[A-Z][a-zA-Z0-9.-]+){0,2}|(?:19|20)\\d{2})\\b/g;
+  const pattern = /\b(?:[A-Z]{2,}[A-Z0-9.-]*|[A-Z][a-zA-Z0-9.-]+(?:\s+[A-Z][a-zA-Z0-9.-]+){0,2}|(?:19|20)\d{2})\b/g;
   for (const match of text.matchAll(pattern)) {
-    const candidate = match[0].split(/\\s+/)
+    const candidate = match[0].split(/\s+/)
       .filter(word => !ANCHOR_STOP_WORDS.has(word.toLowerCase()))
       .join(" ")
       .trim();
     if (!candidate) continue;
     if (GENERIC_QUERY_WORDS.has(candidate.toLowerCase())) continue;
-    if (/^(19|20)\\d{2}$/.test(candidate) || /[A-Z]{2,}|[A-Z][a-z]/.test(candidate)) {
+    if (/^(19|20)\d{2}$/.test(candidate) || /[A-Z]{2,}|[A-Z][a-z]/.test(candidate)) {
       return candidate;
     }
   }
@@ -129,11 +129,11 @@ function findSpecificAnchor(text) {
 }
 
 function inferVisualKind(text) {
-  if (/\\b(percentage|percent|ratio|revenue|profit|loss|margin|data|chart|metric)\\b|%|نسبة|بيانات/i.test(text)) return "data";
-  if (/\\b(document|filing|report|paper|contract|letter|memo)\\b|وثيقة|تقرير/i.test(text)) return "document";
-  if (/\\b(researcher|scientist|founder|executive|person|ceo)\\b|باحث|شخص/i.test(text)) return "person";
-  if (/\\b(server|chip|phone|device|computer|robot|hardware|model)\\b|جهاز|حاسوب/i.test(text)) return "device";
-  if (/\\b(headquarters|office|city|country|factory|lab|location)\\b|مقر|مدينة|مصنع/i.test(text)) return "place";
+  if (/\b(percentage|percent|ratio|revenue|profit|loss|margin|data|chart|metric)\b|%|نسبة|بيانات/i.test(text)) return "data";
+  if (/\b(document|filing|report|paper|contract|letter|memo)\b|وثيقة|تقرير/i.test(text)) return "document";
+  if (/\b(researcher|scientist|founder|executive|person|ceo)\b|باحث|شخص/i.test(text)) return "person";
+  if (/\b(server|chip|phone|device|computer|robot|hardware|model)\b|جهاز|حاسوب/i.test(text)) return "device";
+  if (/\b(headquarters|office|city|country|factory|lab|location)\b|مقر|مدينة|مصنع/i.test(text)) return "place";
   return "event";
 }
 
