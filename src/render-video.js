@@ -1,4 +1,5 @@
-import { mkdir, readFile, writeFile, copyFile, access } from "node:fs/promises";
+import { mkdir, readFile, writeFile, copyFile, access, rm } from "node:fs/promises";
+import { createHash } from "node:crypto";
 import { spawn } from "node:child_process";
 import path from "node:path";
 
@@ -7,7 +8,8 @@ if (!PROJECT_ID || !/^[a-z0-9-]+$/.test(PROJECT_ID)) throw new Error("PROJECT_ID
 const ROOT = path.join("production", "projects", PROJECT_ID);
 const OUT = path.join("dist", PROJECT_ID);
 const PEXELS_API_KEY = process.env.PEXELS_API_KEY;
-const NARRATION_CACHE_DIR = process.env.NARRATION_CACHE_DIR || "";
+const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY || "";
+const ELEVENLABS_VOICE_ID = process.env.ELEVENLABS_VOICE_ID || "";
 
 async function fetchWithTimeout(url, options = {}, timeoutMs = 12000) {
   const controller = new AbortController();
@@ -51,6 +53,54 @@ async function audioDuration(file) {
   const duration = Number(result.stdout.trim());
   if (!Number.isFinite(duration) || duration <= 0) throw new Error('Could not determine narration duration for '+file);
   return duration;
+}
+async function generateNarrationTracks(script, outputDir) {
+  if (!ELEVENLABS_API_KEY || !ELEVENLABS_VOICE_ID) {
+    throw new Error("Fresh narration requires ELEVENLABS_API_KEY and ELEVENLABS_VOICE_ID. No old narration cache will be reused.");
+  }
+  const narrationDir = path.join(outputDir, "source-narration");
+  await mkdir(narrationDir, { recursive: true });
+  const scriptFingerprint = createHash("sha256")
+    .update(JSON.stringify(script.scenes.map(scene => scene.narration || "")))
+    .digest("hex");
+  for (let i = 0; i < script.scenes.length; i++) {
+    const narration = String(script.scenes[i].narration || "").trim();
+    if (!narration) throw new Error("Scene " + (i + 1) + " has no narration text.");
+    const stem = "scene-" + String(i + 1).padStart(2, "0");
+    const destination = path.join(narrationDir, stem + ".mp3");
+    console.log("Generating fresh ElevenLabs narration " + (i + 1) + "/" + script.scenes.length + ".");
+    const response = await fetchWithTimeout(
+      "https://api.elevenlabs.io/v1/text-to-speech/" + encodeURIComponent(ELEVENLABS_VOICE_ID),
+      {
+        method: "POST",
+        headers: {
+          "xi-api-key": ELEVENLABS_API_KEY,
+          "Content-Type": "application/json",
+          "Accept": "audio/mpeg"
+        },
+        body: JSON.stringify({
+          text: narration,
+          model_id: "eleven_multilingual_v2",
+          voice_settings: { stability: 0.5, similarity_boost: 0.75 }
+        })
+      },
+      120000
+    );
+    if (!response.ok) {
+      throw new Error("ElevenLabs narration failed for " + stem + " (" + response.status + "): " + (await response.text()).slice(0, 500));
+    }
+    await writeFile(destination, Buffer.from(await response.arrayBuffer()));
+  }
+  await writeFile(path.join(outputDir, "NARRATION-MANIFEST.json"), JSON.stringify({
+    projectId: PROJECT_ID,
+    scriptFingerprint,
+    sourceScenes: script.scenes.length,
+    provider: "ElevenLabs",
+    model: "eleven_multilingual_v2",
+    generatedAt: new Date().toISOString(),
+    cachePolicy: "fresh-per-render; no cross-project narration reuse"
+  }, null, 2) + "\n");
+  return narrationDir;
 }
 async function prepareSceneSegments(sourceScenes,narrationDir,outputDir) {
   const expanded=[];
@@ -264,11 +314,12 @@ async function download(url, dest) {
 }
 async function main() {
   const script = JSON.parse(await readFile(path.join(ROOT, "script.json"), "utf8"));
-  if (!NARRATION_CACHE_DIR) throw new Error("NARRATION_CACHE_DIR is required; this renderer must reuse the approved narration and must not generate replacement speech.");
   if (!Array.isArray(script.scenes) || !script.scenes.length) throw new Error("script.json has no scenes.");
+  await rm(OUT, { recursive: true, force: true });
   await mkdir(OUT, { recursive: true });
   const sourceSceneCount = script.scenes.length;
-  script.scenes = await prepareSceneSegments(script.scenes, NARRATION_CACHE_DIR, OUT);
+  const narrationDir = await generateNarrationTracks(script, OUT);
+  script.scenes = await prepareSceneSegments(script.scenes, narrationDir, OUT);
   const clips = [], credits = [];
   for (let i=0; i<script.scenes.length; i++) {
     const scene = script.scenes[i];
