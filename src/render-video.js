@@ -37,7 +37,7 @@ async function capture(command, args) {
   });
 }
 function splitWordsByCount(text, count) {
-  const words = String(text).trim().split(/\\s+/).filter(Boolean);
+  const words = String(text).trim().split(/\s+/).filter(Boolean);
   if (!words.length) throw new Error('A narration scene has no words.');
   const chunks = []; let offset = 0;
   for (let i=0;i<count;i++) {
@@ -60,7 +60,7 @@ async function prepareSceneSegments(sourceScenes,narrationDir,outputDir) {
     const sourceAudio=path.join(narrationDir,sourceStem+'.mp3');
     try { await access(sourceAudio); } catch { throw new Error('Approved narration cache is missing for '+sourceStem+'; refusing to regenerate speech.'); }
     const duration=await audioDuration(sourceAudio);
-    const segmentCount=Math.max(1,Math.ceil(duration/9));
+    const segmentCount=Math.max(1,Math.round(duration/7.2));
     const chunks=splitWordsByCount(scene.narration,segmentCount);
     for (let partIndex=0;partIndex<segmentCount;partIndex++) {
       const start=duration*partIndex/segmentCount;
@@ -169,7 +169,7 @@ async function findCommonsImage(query) {
   if (!raw) return null;
   const terms = raw.split(/\s+/);
   const searches = [...new Set([terms.slice(0,4).join(" ")])];
-  const allowed = /^(CC0|Public domain|CC BY(?:-|\s)|CC BY-SA)/i;
+  const allowed = /^(CC0|Public domain|CC BY(?:-SA)? \d)/i;
   const clean = value => String(value || "").replace(/<[^>]*>/g,"").replace(/&nbsp;/g," ").trim();
   for (const q of searches) {
     const endpoint = "https://commons.wikimedia.org/w/api.php?action=query&list=search&srnamespace=6&srlimit=20&srsearch=" +
@@ -315,13 +315,13 @@ async function main() {
       const imagePath=clip.replace(/\.mp4$/,".jpg");
       await download(still.url, imagePath);
       credits.push({ scene:i+1, query, provider:still.provider || (still.license ? "Wikimedia Commons photo" : "Pexels photo"), page:still.page, creator:still.creator, creatorUrl:still.creatorUrl || "", license:still.license || "Pexels License", licenseUrl:still.licenseUrl || "", usage:"Illustrative still; not proof of a named event or entity." });
-      await run("ffmpeg", ["-y","-loop","1","-i",imagePath,"-i",audio,"-loop","1","-i",svg,
-        "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,zoompan=z='min(zoom+0.0003,1.07)':d=125:s=1920x1080:fps=25,eq=contrast=1.08:saturation=0.82[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
+      await run("ffmpeg", ["-y","-loop","1","-framerate","25","-i",imagePath,"-i",audio,"-loop","1","-i",svg,
+        "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,zoompan=z='min(zoom+0.0003,1.07)':d=1:s=1920x1080:fps=25,eq=contrast=1.08:saturation=0.82[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
         "-map","[v]","-map","1:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
     } else {
       credits.push({ scene:i+1, query, provider:"Original motion graphic", note:"No matching Pexels video or photo was returned; generated a branded animated graphic instead." });
       await run("ffmpeg", ["-y","-f","lavfi","-i","color=c=#101113:s=1920x1080:r=25","-i",audio,"-loop","1","-i",svg,
-        "-filter_complex","[0:v]zoompan=z='min(zoom+0.00035,1.08)':d=125:s=1920x1080:fps=25,format=yuv420p[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
+        "-filter_complex","[0:v]format=yuv420p[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
         "-map","[v]","-map","1:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
     }
     clips.push(rendered);
