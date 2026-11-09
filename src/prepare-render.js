@@ -47,6 +47,9 @@ if (!approval.approvedAt || Number.isNaN(Date.parse(approval.approvedAt))) {
 if (approval.draftSha256 !== digest) {
   errors.push("Approval hash does not match the current SCRIPT-DRAFT.json.");
 }
+if (plan.sourceDraftSha256 !== digest) {
+  errors.push("VISUAL-PLAN.json was not generated from the currently approved SCRIPT-DRAFT.json.");
+}
 if (plan.status !== "awaiting_visual_research_and_review" ||
     !Array.isArray(plan.scenes) || !plan.scenes.length) {
   errors.push("VISUAL-PLAN.json is blocked or incomplete.");
