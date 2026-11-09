@@ -262,12 +262,12 @@ async function main() {
       const imagePath=clip.replace(/\.mp4$/,".jpg");
       await download(still.url, imagePath);
       credits.push({ scene:i+1, query, provider:still.provider || (still.license ? "Wikimedia Commons photo" : "Pexels photo"), page:still.page, creator:still.creator, creatorUrl:still.creatorUrl || "", license:still.license || "Pexels License", licenseUrl:still.licenseUrl || "", usage:"Illustrative still; not proof of a named event or entity." });
-      await run("ffmpeg", ["-y","-loop","1","-i",imagePath,"-i",mixedAudio,"-loop","1","-i",svg,
+      await run("ffmpeg", ["-y","-loop","1","-i",imagePath,"-i",audio,"-loop","1","-i",svg,
         "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,zoompan=z='min(zoom+0.0003,1.07)':d=125:s=1920x1080:fps=25,eq=contrast=1.08:saturation=0.82[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
         "-map","[v]","-map","1:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
     } else {
       credits.push({ scene:i+1, query, provider:"Original motion graphic", note:"No matching Pexels video or photo was returned; generated a branded animated graphic instead." });
-      await run("ffmpeg", ["-y","-f","lavfi","-i","color=c=#101113:s=1920x1080:r=25","-i",mixedAudio,"-loop","1","-i",svg,
+      await run("ffmpeg", ["-y","-f","lavfi","-i","color=c=#101113:s=1920x1080:r=25","-i",audio,"-loop","1","-i",svg,
         "-filter_complex","[0:v]zoompan=z='min(zoom+0.00035,1.08)':d=125:s=1920x1080:fps=25,format=yuv420p[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
         "-map","[v]","-map","1:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
     }
