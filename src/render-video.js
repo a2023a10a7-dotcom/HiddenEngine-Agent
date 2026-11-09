@@ -110,6 +110,56 @@ function overlaySvg(scene, index, total) {
   .page{font:400 20px 'DejaVu Sans';fill:#D5D1C8}
   </style></svg>`;
 }
+const PIXABAY_API_KEY = process.env.PIXABAY_API_KEY;
+
+function relevanceScore(query, tags) {
+  const stop = new Set(["with","from","that","this","into","over","under","about","computer","image","video","photo"]);
+  const terms = [...new Set(String(query || "").toLowerCase().match(/[a-z0-9]{3,}/g) || [])].filter(t => !stop.has(t));
+  const tagSet = new Set(String(tags || "").toLowerCase().split(/[,; ]+/).filter(Boolean));
+  if (!terms.length) return 0;
+  const matched = terms.filter(term => [...tagSet].some(tag => tag === term || (term.length >= 5 && tag.includes(term)) || (tag.length >= 5 && term.includes(tag))));
+  const needed = terms.length >= 4 ? 2 : 1;
+  return matched.length >= needed ? matched.length / terms.length : 0;
+}
+
+async function findPixabayVideo(query) {
+  if (!PIXABAY_API_KEY || !String(query || "").trim()) return null;
+  const endpoint = "https://pixabay.com/api/videos/?key=" + encodeURIComponent(PIXABAY_API_KEY) +
+    "&q=" + encodeURIComponent(query) + "&safesearch=true&per_page=20";
+  const response = await fetchWithTimeout(endpoint, {}, 15000);
+  if (!response.ok) throw new Error("Pixabay video search failed (" + response.status + ").");
+  const data = await response.json();
+  const hits = (data.hits || []).map(hit => ({hit, score: relevanceScore(query, hit.tags)}))
+    .filter(item => item.score >= 0.25 && item.hit.videos);
+  hits.sort((a,b) => b.score-a.score || (b.hit.videos.large?.width || 0) - (a.hit.videos.large?.width || 0));
+  for (const {hit} of hits) {
+    const files = Object.values(hit.videos || {}).filter(v => v && v.url && v.width >= 960).sort((a,b) => b.width-a.width);
+    const video = files[0] || Object.values(hit.videos || {}).find(v => v?.url);
+    if (!video) continue;
+    return {url:video.url,page:hit.pageURL,creator:hit.user||"Pixabay contributor",creatorUrl:"",duration:hit.duration,provider:"Pixabay video",tags:hit.tags};
+  }
+  console.log("Pixabay video search returned no sufficiently relevant result for: " + query);
+  return null;
+}
+
+async function findPixabayImage(query) {
+  if (!PIXABAY_API_KEY || !String(query || "").trim()) return null;
+  const endpoint = "https://pixabay.com/api/?key=" + encodeURIComponent(PIXABAY_API_KEY) +
+    "&q=" + encodeURIComponent(query) + "&image_type=photo&orientation=horizontal&safesearch=true&per_page=20";
+  const response = await fetchWithTimeout(endpoint, {}, 15000);
+  if (!response.ok) throw new Error("Pixabay image search failed (" + response.status + ").");
+  const data = await response.json();
+  const hits = (data.hits || []).map(hit => ({hit, score: relevanceScore(query, hit.tags)}))
+    .filter(item => item.score >= 0.25 && item.hit.largeImageURL);
+  hits.sort((a,b) => b.score-a.score || (b.hit.imageWidth*b.hit.imageHeight)-(a.hit.imageWidth*a.hit.imageHeight));
+  const best = hits[0]?.hit;
+  if (!best) {
+    console.log("Pixabay image search returned no sufficiently relevant result for: " + query);
+    return null;
+  }
+  return {url:best.largeImageURL,page:best.pageURL,creator:best.user||"Pixabay contributor",creatorUrl:"",provider:"Pixabay photo",license:"Pixabay Content License",tags:best.tags};
+}
+
 async function findPexelsImage(query) {
   if (!PEXELS_API_KEY || !String(query || "").trim()) return null;
   const endpoint = "https://api.pexels.com/v1/search?query=" + encodeURIComponent(query) + "&orientation=landscape&per_page=8";
@@ -119,7 +169,7 @@ async function findPexelsImage(query) {
   const photos=(data.photos||[]).filter(p=>p.src && (p.src.landscape||p.src.large2x||p.src.large));
   photos.sort((a,b)=>(b.width*b.height)-(a.width*a.height));
   const p=photos[0];
-  return p ? {url:p.src.landscape||p.src.large2x||p.src.large,page:p.url,creator:p.photographer||"Unknown creator",creatorUrl:p.photographer_url||""} : null;
+  return p ? {url:p.src.landscape||p.src.large2x||p.src.large,page:p.url,creator:p.photographer||"Unknown creator",creatorUrl:p.photographer_url||"",provider:"Pexels photo"} : null;
 }
 async function findCommonsImage(query) {
   const raw = String(query || "").trim();
@@ -209,7 +259,7 @@ async function findPexelsVideo(query) {
     if (!file) continue;
     return {
       url: file.link, page: video.url, creator: video.user?.name || "Unknown creator",
-      creatorUrl: video.user?.url || "", duration: video.duration
+      creatorUrl: video.user?.url || "", duration: video.duration, provider: "Pexels video"
     };
   }
   return null;
@@ -244,13 +294,15 @@ async function main() {
         return null;
       }
     };
-    asset = await tryProvider("Pexels video", () => findPexelsVideo(query));
-    if (!asset) still = await tryProvider("Pexels photo", () => findPexelsImage(query));
+    asset = await tryProvider("Pixabay video", () => findPixabayVideo(query));
+    if (!asset) asset = await tryProvider("Pexels video", () => findPexelsVideo(query));
+    if (!asset) still = await tryProvider("Pixabay photo", () => findPixabayImage(query));
+    if (!asset && !still) still = await tryProvider("Pexels photo", () => findPexelsImage(query));
     if (!asset && !still) still = await tryProvider("Wikimedia Commons", () => findCommonsImage(query));
     if (!asset && !still) still = await tryProvider("Openverse", () => findOpenverseImage(query));
     if (asset) {
       await download(asset.url, clip);
-      credits.push({ scene:i+1, query, provider:"Pexels video", page:asset.page, creator:asset.creator, creatorUrl:asset.creatorUrl, usage:"Illustrative footage; not proof of a named event or entity." });
+      credits.push({ scene:i+1, query, provider:asset.provider || "Pexels video", page:asset.page, creator:asset.creator, creatorUrl:asset.creatorUrl, usage:"Illustrative footage; not proof of a named event or entity." });
       await run("ffmpeg", ["-y","-stream_loop","-1","-i",clip,"-loop","1","-i",svg,
         "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,eq=contrast=1.12:saturation=0.78,drawbox=x=0:y=0:w=iw:h=ih:color=#08090b@0.18:t=fill[bg];[bg][1:v]overlay=0:0,format=yuv420p[v]",
         "-map","[v]","-t",String(SCENE_DURATION_SECONDS),"-an","-c:v","libx264","-preset","veryfast","-crf","21","-movflags","+faststart",rendered]);
@@ -270,7 +322,7 @@ async function main() {
     clips.push(rendered);
     console.log("Rendered silent visual scene " + (i+1) + "/" + script.scenes.length + ".");
   }
-  const stockScenes = credits.filter(item => item.provider === "Pexels video" || item.provider === "Pexels photo" || item.provider === "Wikimedia Commons photo" || item.provider === "Openverse photo").length;
+  const stockScenes = credits.filter(item => ["Pixabay video","Pixabay photo","Pexels video","Pexels photo","Wikimedia Commons photo","Openverse photo"].includes(item.provider)).length;
   console.log("Visual assets: " + stockScenes + "/" + script.scenes.length + " scenes use licensed photo/video; remaining scenes use original motion graphics.");
   const list = path.join(OUT,"concat.txt");
   await writeFile(list, clips.map(f=>"file '"+path.basename(f)+"'").join("\n")+"\n");
@@ -289,7 +341,7 @@ async function main() {
   await writeFile(path.join(OUT,"README.txt"),[
     "The Hidden Engine visual-only documentary render",
     "Audio: intentionally omitted; this render is for visual scene inspection only.",
-    "Visuals: Pexels stock video or photos where relevant; otherwise original branded motion graphics.",
+    "Visuals: relevance-filtered Pixabay or Pexels stock video/photos, then Wikimedia Commons/Openverse; otherwise original branded motion graphics.",
     "No narration, music, or sound effects.",
     "Identity: charcoal/black, ivory typography, restrained copper accents, documentary-investigative overlays.",
     "Review visual relevance, licenses, and credits before publication.",
