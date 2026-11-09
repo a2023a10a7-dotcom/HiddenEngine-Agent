@@ -1,19 +1,11 @@
 name: HiddenEngine Cinematic Documentary Render
 
 on:
-  push:
-    branches:
-      - "feature/documentary-renderer-v2"
-    paths:
-      - "src/render-video.js"
-      - ".github/workflows/render-video.yml"
-      - "production/projects/2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re/script.json"
   workflow_dispatch:
     inputs:
       project_id:
         description: "Production project folder ID"
         required: true
-        default: "2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re"
         type: string
 
 permissions:
@@ -38,35 +30,18 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ffmpeg fonts-dejavu-core
 
-      - name: Restore existing narration from previous successful render
-        uses: actions/download-artifact@v4
-        with:
-          github-token: ${{ github.token }}
-          repository: ${{ github.repository }}
-          run-id: 42534387530
-          name: hiddenengine-cinematic-2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re
-          path: narration-cache
-
-      - name: Verify restored narration cache
-        run: |
-          for i in 01 02 03 04 05 06 07; do
-            test -s "narration-cache/scene-$i.mp3" || (echo "::error::Missing cached narration scene-$i.mp3"; exit 1)
-          done
-          echo "All seven original narration tracks restored."
-
       - name: Render cinematic documentary
         env:
-          PROJECT_ID: ${{ inputs.project_id || '2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re' }}
+          PROJECT_ID: ${{ inputs.project_id }}
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
           ELEVENLABS_VOICE_ID: ${{ vars.ELEVENLABS_VOICE_ID }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
-          NARRATION_CACHE_DIR: ${{ github.workspace }}/narration-cache
         run: node src/render-video.js
 
       - name: Upload MP4 and production assets
         uses: actions/upload-artifact@v4
         with:
-          name: hiddenengine-cinematic-${{ inputs.project_id || '2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re' }}
-          path: dist/${{ inputs.project_id || '2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re' }}/
+          name: hiddenengine-cinematic-${{ inputs.project_id }}
+          path: dist/${{ inputs.project_id }}/
           if-no-files-found: error
           retention-days: 14
