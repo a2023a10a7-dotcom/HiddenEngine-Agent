@@ -33,8 +33,6 @@ jobs:
       - name: Render cinematic documentary
         env:
           PROJECT_ID: ${{ inputs.project_id }}
-          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
-          ELEVENLABS_VOICE_ID: ${{ vars.ELEVENLABS_VOICE_ID }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
         run: node src/render-video.js
 
