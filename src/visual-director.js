@@ -30,11 +30,11 @@ const GENERIC_QUERY_WORDS = new Set([
 const root = path.resolve("production", "projects", projectId);
 const draftPath = path.join(root, "SCRIPT-DRAFT.json");
 const outputPath = path.join(root, "VISUAL-PLAN.json");
-const clean = value => String(value || "").replace(/\\s+/g, " ").trim();
+const clean = value => String(value || "").replace(/\s+/g, " ").trim();
 const wordsOf = value => clean(value).split(" ").filter(Boolean);
 const countWords = value => wordsOf(value).length;
 const round2 = value => Number(value.toFixed(2));
-const SENTENCE_END = /[.!?؟؛:]["')\\]”’]*$/;
+const SENTENCE_END = /[.!?؟؛:]["')\]”’]*$/;
 
 const draft = JSON.parse(await readFile(draftPath, "utf8"));
 if (draft.projectId !== projectId) throw new Error("Project ID mismatch.");
@@ -95,7 +95,7 @@ function queryQuality(query) {
   if (!meaningful.length) return "blocked";
 
   const hasAnchor = meaningful.some(word =>
-    /\\d/.test(word) ||
+    /\d/.test(word) ||
     /^[A-Z]{2,}[A-Z0-9-]*$/.test(word) ||
     /^[A-Z][a-zA-Z0-9-]{2,}$/.test(word)
   );
