@@ -32,6 +32,31 @@ if(!approval.approvedAt||Number.isNaN(Date.parse(approval.approvedAt))) errors.p
 if(approval.draftSha256!==digest) errors.push("Approval hash does not match the current SCRIPT-DRAFT.json. Re-review and re-approve the exact draft.");
 if(!Array.isArray(draft.scenes)||!draft.scenes.length) errors.push("Draft has no scenes.");
 
+function narrationSegments(text, targetWords = 19, maxWords = 24) {
+  const words = String(text || "")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+
+  const chunks = [];
+  let current = [];
+
+  for (const word of words) {
+    current.push(word);
+
+    if (current.length >= targetWords && /[.!?؟؛:]$/.test(word)) {
+      chunks.push(current.join(" "));
+      current = [];
+    } else if (current.length >= maxWords) {
+      chunks.push(current.join(" "));
+      current = [];
+    }
+  }
+
+  if (current.length) chunks.push(current.join(" "));
+  return chunks;
+}
+
 const scenes=[];
 for(const [index,scene] of (draft.scenes||[]).entries()){
   const blocks=scene.narrationBlocks||[];
@@ -44,13 +69,30 @@ for(const [index,scene] of (draft.scenes||[]).entries()){
     if(!Array.isArray(block.sourceRefs)||!block.sourceRefs.length) errors.push("Claim "+(block.claimId||"unknown")+" has no source references.");
     if((block.sourceRefs||[]).some(ref=>!ref.passageReference?.trim())) errors.push("Claim "+(block.claimId||"unknown")+" has a source without a precise passage/page/table reference.");
   }
-  scenes.push({
-    title:scene.act||scene.id||"Documentary scene",
-    subtitle:scene.editorialGoal||"",
-    narration:blocks.map(block=>block.narrationText.trim()).join("\n\n"),
-    visual_query:"",
-    visual:null,
-    visualAsset:assetsByScene.has(scene.id)?assetsByScene.get(scene.id):null
+  const narration = blocks
+    .map(block => block.narrationText.trim())
+    .join(" ");
+
+  const segments = narrationSegments(narration);
+
+  segments.forEach((segment, part) => {
+    scenes.push({
+      title: part === 0
+        ? (scene.act || scene.id || "Documentary scene")
+        : "",
+      subtitle: part === 0 ? (scene.editorialGoal || "") : "",
+      narration: segment,
+      estimatedDurationSeconds: Number(
+        (segment.split(/\s+/).length / 2.4).toFixed(2)
+      ),
+      sourceSceneId: scene.id,
+      visual_query: "",
+      visual: null,
+      visualAsset:
+        part === 0 && assetsByScene.has(scene.id)
+          ? assetsByScene.get(scene.id)
+          : null
+    });
   });
 }
 if(errors.length){
@@ -61,7 +103,17 @@ const renderScript={
   schemaVersion:"1.0.0",projectId,topic:draft.topic,language:draft.language,
   targetDurationSeconds:draft.targetDurationSeconds,
   approvedBy:approval.approvedBy,approvedAt:approval.approvedAt,
-  sourceDraftSha256:digest,scenes
+  sourceDraftSha256:digest,
+  scenes,
+  averageEstimatedSceneSeconds: Number(
+    (
+      scenes.reduce((total, scene) => total + scene.estimatedDurationSeconds, 0) /
+      scenes.length
+    ).toFixed(2)
+  ),
+  longestEstimatedSceneSeconds: Math.max(
+    ...scenes.map(scene => scene.estimatedDurationSeconds)
+  )
 };
 const destination=path.join(dir,"script.json");
 const temporary=destination+".tmp";
