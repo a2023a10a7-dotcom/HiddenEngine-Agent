@@ -36,90 +36,49 @@ async function capture(command, args) {
     child.on("close", code => code === 0 ? resolve({ stdout, stderr }) : reject(new Error(command + " exited with code " + code + ": " + stderr.slice(-1200))));
   });
 }
-function splitNarration(text, targetWords = 14) {
-  const sentences = String(text).match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [String(text)];
-  const units = [];
-  for (const sentence of sentences) {
-    const words = sentence.trim().split(/\s+/).filter(Boolean);
-    if (words.length <= targetWords + 5) { units.push(words); continue; }
-    let current = [];
-    for (const part of sentence.split(/(?<=[,;:])\s+/)) {
-      const partWords = part.trim().split(/\s+/).filter(Boolean);
-      if (current.length && current.length + partWords.length > targetWords) {
-        units.push(current); current = [];
-      }
-      if (partWords.length > targetWords + 5) {
-        for (let i=0;i<partWords.length;i+=targetWords) units.push(partWords.slice(i,i+targetWords));
-      } else current.push(...partWords);
-    }
-    if (current.length) units.push(current);
+function splitWordsByCount(text, count) {
+  const words = String(text).trim().split(/\\s+/).filter(Boolean);
+  if (!words.length) throw new Error('A narration scene has no words.');
+  const chunks = []; let offset = 0;
+  for (let i=0;i<count;i++) {
+    const take = Math.ceil((words.length-offset)/(count-i));
+    chunks.push(words.slice(offset,offset+take).join(' ')); offset += take;
   }
-  const packed = [];
-  for (const unit of units) {
-    const last = packed[packed.length-1];
-    if (last && last.length < 10 && last.length + unit.length <= targetWords + 4) last.push(...unit);
-    else packed.push([...unit]);
-  }
-  return packed.map(words => words.join(" "));
+  return chunks;
 }
 async function audioDuration(file) {
-  const result = await capture("ffprobe", ["-v","error","-show_entries","format=duration","-of","default=noprint_wrappers=1:nokey=1",file]);
+  const result = await capture('ffprobe',['-v','error','-show_entries','format=duration','-of','default=noprint_wrappers=1:nokey=1',file]);
   const duration = Number(result.stdout.trim());
-  if (!Number.isFinite(duration) || duration <= 0) throw new Error("Could not determine narration duration for " + file);
+  if (!Number.isFinite(duration) || duration <= 0) throw new Error('Could not determine narration duration for '+file);
   return duration;
 }
-async function silencePoints(file) {
-  const result = await capture("ffmpeg", ["-hide_banner","-i",file,"-af","silencedetect=noise=-34dB:d=0.16","-f","null","-"]);
-  return [...result.stderr.matchAll(/silence_end:\s*([0-9.]+)/g)].map(match => Number(match[1])).filter(Number.isFinite);
-}
-async function prepareSceneSegments(sourceScenes, narrationDir, outputDir) {
-  const expanded = [];
-  for (let sourceIndex=0; sourceIndex<sourceScenes.length; sourceIndex++) {
-    const scene = sourceScenes[sourceIndex];
-    const sourceStem = "scene-" + String(sourceIndex+1).padStart(2,"0");
-    const sourceAudio = path.join(narrationDir, sourceStem + ".mp3");
-    try { await access(sourceAudio); }
-    catch { throw new Error("Approved narration cache is missing for " + sourceStem + "; refusing to regenerate speech."); }
-    const chunks = splitNarration(scene.narration);
-    const duration = await audioDuration(sourceAudio);
-    if (duration / chunks.length > 12.2) {
-      throw new Error("Narration segmentation would create a scene longer than 12 seconds for " + sourceStem + ".");
-    }
-    const silences = await silencePoints(sourceAudio);
-    const cuts = [];
-    for (let i=1;i<chunks.length;i++) {
-      const target = duration * (chunks.slice(0,i).reduce((sum,part)=>sum+part.split(/\s+/).length,0) / chunks.join(" ").split(/\s+/).length);
-      const candidates = silences.filter(point => point > (cuts.at(-1) || 0) + 3.5 && point < duration - 3.5);
-      const nearest = candidates.sort((a,b)=>Math.abs(a-target)-Math.abs(b-target))[0];
-      cuts.push(nearest && Math.abs(nearest-target) <= 2.5 ? nearest : target);
-    }
-    const boundaries = [0, ...cuts, duration];
-    for (let partIndex=0;partIndex<chunks.length;partIndex++) {
-      const start = boundaries[partIndex], end = boundaries[partIndex+1];
-      const partDuration = end-start;
-      if (partDuration < 3 || partDuration > 12.5) throw new Error("Scene timing QA failed for " + sourceStem + " segment " + (partIndex+1) + ": " + partDuration.toFixed(2) + " seconds.");
-      const segmentPath = path.join(outputDir, "narration-" + String(expanded.length+1).padStart(2,"0") + ".mp3");
-      await run("ffmpeg", ["-y","-ss",String(start),"-to",String(end),"-i",sourceAudio,"-vn","-c:a","libmp3lame","-q:a","2",segmentPath]);
-      expanded.push({
-        ...scene,
-        title: partIndex === 0 ? scene.title : (scene.title || "THE INVESTIGATION"),
-        subtitle: partIndex === 0 ? (scene.subtitle || "") : "",
-        narration: chunks[partIndex],
-        _audioPath: segmentPath,
-        _sourceScene: sourceIndex+1,
-        _duration: partDuration
-      });
+async function prepareSceneSegments(sourceScenes,narrationDir,outputDir) {
+  const expanded=[];
+  for (let sourceIndex=0;sourceIndex<sourceScenes.length;sourceIndex++) {
+    const scene=sourceScenes[sourceIndex];
+    const sourceStem='scene-'+String(sourceIndex+1).padStart(2,'0');
+    const sourceAudio=path.join(narrationDir,sourceStem+'.mp3');
+    try { await access(sourceAudio); } catch { throw new Error('Approved narration cache is missing for '+sourceStem+'; refusing to regenerate speech.'); }
+    const duration=await audioDuration(sourceAudio);
+    const segmentCount=Math.max(1,Math.ceil(duration/9));
+    const chunks=splitWordsByCount(scene.narration,segmentCount);
+    for (let partIndex=0;partIndex<segmentCount;partIndex++) {
+      const start=duration*partIndex/segmentCount;
+      const end=duration*(partIndex+1)/segmentCount;
+      const partDuration=end-start;
+      if (partDuration<5.4 || partDuration>12) throw new Error('Scene timing QA failed for '+sourceStem+' segment '+(partIndex+1)+': '+partDuration.toFixed(2)+' seconds.');
+      const segmentPath=path.join(outputDir,'narration-'+String(expanded.length+1).padStart(2,'0')+'.mp3');
+      await run('ffmpeg',['-y','-ss',String(start),'-i',sourceAudio,'-t',String(partDuration),'-vn','-c:a','libmp3lame','-q:a','2',segmentPath]);
+      expanded.push({...scene,title:partIndex===0?scene.title:(scene.title||'THE INVESTIGATION'),subtitle:partIndex===0?(scene.subtitle||''):'',narration:chunks[partIndex],_audioPath:segmentPath,_sourceScene:sourceIndex+1,_duration:partDuration});
     }
   }
-  if (expanded.length < 35 || expanded.length > 50) {
-    throw new Error("Scene-count QA failed: generated " + expanded.length + " scenes; required 35–50. Refusing to render another version with the old pacing.");
-  }
-  const longest = Math.max(...expanded.map(scene=>scene._duration));
-  if (longest > 12.5) throw new Error("Scene-duration QA failed: longest scene is " + longest.toFixed(2) + " seconds; maximum is 12.");
-  console.log("Narration segmented into " + expanded.length + " scenes; average " + (expanded.reduce((n,scene)=>n+scene._duration,0)/expanded.length).toFixed(2) + "s; longest " + longest.toFixed(2) + "s.");
+  if (expanded.length<35 || expanded.length>50) throw new Error('Scene-count QA failed: generated '+expanded.length+' scenes; required 35–50.');
+  const longest=Math.max(...expanded.map(scene=>scene._duration));
+  const shortest=Math.min(...expanded.map(scene=>scene._duration));
+  if (longest>12 || shortest<5.4) throw new Error('Scene-duration QA failed: shortest '+shortest.toFixed(2)+'s, longest '+longest.toFixed(2)+'s.');
+  console.log('Narration segmented into '+expanded.length+' scenes; average '+(expanded.reduce((n,scene)=>n+scene._duration,0)/expanded.length).toFixed(2)+'s; longest '+longest.toFixed(2)+'s.');
   return expanded;
 }
-
 function xml(value) {
   return String(value ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&apos;" })[c]);
 }
