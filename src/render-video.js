@@ -25,6 +25,101 @@ function run(command, args) {
     child.on("close", code => code === 0 ? resolve() : reject(new Error(command + " exited with code " + code)));
   });
 }
+
+async function capture(command, args) {
+  return new Promise((resolve, reject) => {
+    const child = spawn(command, args, { stdio: ["ignore", "pipe", "pipe"] });
+    let stdout = "", stderr = "";
+    child.stdout.on("data", d => stdout += d);
+    child.stderr.on("data", d => stderr += d);
+    child.on("error", reject);
+    child.on("close", code => code === 0 ? resolve({ stdout, stderr }) : reject(new Error(command + " exited with code " + code + ": " + stderr.slice(-1200))));
+  });
+}
+function splitNarration(text, targetWords = 22) {
+  const sentences = String(text).match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [String(text)];
+  const units = [];
+  for (const sentence of sentences) {
+    const words = sentence.trim().split(/\s+/).filter(Boolean);
+    if (words.length <= targetWords + 5) { units.push(words); continue; }
+    let current = [];
+    for (const part of sentence.split(/(?<=[,;:])\s+/)) {
+      const partWords = part.trim().split(/\s+/).filter(Boolean);
+      if (current.length && current.length + partWords.length > targetWords) {
+        units.push(current); current = [];
+      }
+      if (partWords.length > targetWords + 5) {
+        for (let i=0;i<partWords.length;i+=targetWords) units.push(partWords.slice(i,i+targetWords));
+      } else current.push(...partWords);
+    }
+    if (current.length) units.push(current);
+  }
+  const packed = [];
+  for (const unit of units) {
+    const last = packed[packed.length-1];
+    if (last && last.length < 15 && last.length + unit.length <= targetWords + 8) last.push(...unit);
+    else packed.push([...unit]);
+  }
+  return packed.map(words => words.join(" "));
+}
+async function audioDuration(file) {
+  const result = await capture("ffprobe", ["-v","error","-show_entries","format=duration","-of","default=noprint_wrappers=1:nokey=1",file]);
+  const duration = Number(result.stdout.trim());
+  if (!Number.isFinite(duration) || duration <= 0) throw new Error("Could not determine narration duration for " + file);
+  return duration;
+}
+async function silencePoints(file) {
+  const result = await capture("ffmpeg", ["-hide_banner","-i",file,"-af","silencedetect=noise=-34dB:d=0.16","-f","null","-"]);
+  return [...result.stderr.matchAll(/silence_end:\s*([0-9.]+)/g)].map(match => Number(match[1])).filter(Number.isFinite);
+}
+async function prepareSceneSegments(sourceScenes, narrationDir, outputDir) {
+  const expanded = [];
+  for (let sourceIndex=0; sourceIndex<sourceScenes.length; sourceIndex++) {
+    const scene = sourceScenes[sourceIndex];
+    const sourceStem = "scene-" + String(sourceIndex+1).padStart(2,"0");
+    const sourceAudio = path.join(narrationDir, sourceStem + ".mp3");
+    try { await access(sourceAudio); }
+    catch { throw new Error("Approved narration cache is missing for " + sourceStem + "; refusing to regenerate speech."); }
+    const chunks = splitNarration(scene.narration);
+    const duration = await audioDuration(sourceAudio);
+    if (duration / chunks.length > 12.2) {
+      throw new Error("Narration segmentation would create a scene longer than 12 seconds for " + sourceStem + ".");
+    }
+    const silences = await silencePoints(sourceAudio);
+    const cuts = [];
+    for (let i=1;i<chunks.length;i++) {
+      const target = duration * (chunks.slice(0,i).reduce((sum,part)=>sum+part.split(/\s+/).length,0) / chunks.join(" ").split(/\s+/).length);
+      const candidates = silences.filter(point => point > (cuts.at(-1) || 0) + 3.5 && point < duration - 3.5);
+      const nearest = candidates.sort((a,b)=>Math.abs(a-target)-Math.abs(b-target))[0];
+      cuts.push(nearest && Math.abs(nearest-target) <= 2.5 ? nearest : target);
+    }
+    const boundaries = [0, ...cuts, duration];
+    for (let partIndex=0;partIndex<chunks.length;partIndex++) {
+      const start = boundaries[partIndex], end = boundaries[partIndex+1];
+      const partDuration = end-start;
+      if (partDuration < 3 || partDuration > 12.5) throw new Error("Scene timing QA failed for " + sourceStem + " segment " + (partIndex+1) + ": " + partDuration.toFixed(2) + " seconds.");
+      const segmentPath = path.join(outputDir, "narration-" + String(expanded.length+1).padStart(2,"0") + ".mp3");
+      await run("ffmpeg", ["-y","-ss",String(start),"-to",String(end),"-i",sourceAudio,"-vn","-c:a","libmp3lame","-q:a","2",segmentPath]);
+      expanded.push({
+        ...scene,
+        title: partIndex === 0 ? scene.title : (scene.title || "THE INVESTIGATION"),
+        subtitle: partIndex === 0 ? (scene.subtitle || "") : "",
+        narration: chunks[partIndex],
+        _audioPath: segmentPath,
+        _sourceScene: sourceIndex+1,
+        _duration: partDuration
+      });
+    }
+  }
+  if (expanded.length < 35 || expanded.length > 50) {
+    throw new Error("Scene-count QA failed: generated " + expanded.length + " scenes; required 35–50. Refusing to render another version with the old pacing.");
+  }
+  const longest = Math.max(...expanded.map(scene=>scene._duration));
+  if (longest > 12.5) throw new Error("Scene-duration QA failed: longest scene is " + longest.toFixed(2) + " seconds; maximum is 12.");
+  console.log("Narration segmented into " + expanded.length + " scenes; average " + (expanded.reduce((n,scene)=>n+scene._duration,0)/expanded.length).toFixed(2) + "s; longest " + longest.toFixed(2) + "s.");
+  return expanded;
+}
+
 function xml(value) {
   return String(value ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&apos;" })[c]);
 }
@@ -213,6 +308,8 @@ async function main() {
   if (!NARRATION_CACHE_DIR) throw new Error("NARRATION_CACHE_DIR is required; this renderer must reuse the approved narration and must not generate replacement speech.");
   if (!Array.isArray(script.scenes) || !script.scenes.length) throw new Error("script.json has no scenes.");
   await mkdir(OUT, { recursive: true });
+  const sourceSceneCount = script.scenes.length;
+  script.scenes = await prepareSceneSegments(script.scenes, NARRATION_CACHE_DIR, OUT);
   const clips = [], credits = [];
   for (let i=0; i<script.scenes.length; i++) {
     const scene = script.scenes[i];
@@ -222,14 +319,11 @@ async function main() {
     const svg = path.join(OUT, stem + ".svg");
     const clip = path.join(OUT, stem + "-visual.mp4");
     const rendered = path.join(OUT, stem + ".mp4");
-    const cached = path.join(NARRATION_CACHE_DIR, stem + ".mp3");
-    try {
-      await access(cached);
-    } catch {
-      throw new Error("Approved narration cache is missing for " + stem + "; refusing to regenerate speech.");
-    }
+    const cached = scene._audioPath;
+    try { await access(cached); }
+    catch { throw new Error("Prepared narration segment is missing for " + stem + "."); }
     await copyFile(cached, audio);
-    console.log("Reusing approved narration cache for scene " + (i+1));
+    console.log("Using approved narration segment " + (i+1) + "/" + script.scenes.length + " (source scene " + scene._sourceScene + ").");
     await writeFile(svg, overlaySvg(scene, i, script.scenes.length));
     const query = scene.visual_query || [scene.title, scene.subtitle].filter(Boolean).join(" ");
     console.log("Pexels key configured: " + Boolean(PEXELS_API_KEY));
@@ -304,7 +398,9 @@ async function main() {
   ].join("\n")+"\n");
   const qa = await new Promise((resolve,reject) => { const p=spawn("ffprobe",["-v","error","-show_entries","format=duration:stream=codec_type,width,height","-of","json",output]); let data=""; p.stdout.on("data",d=>data+=d); p.on("error",reject); p.on("close",code=>code===0?resolve(JSON.parse(data)):reject(new Error("ffprobe failed"))); });
   if (!qa.streams.some(x=>x.codec_type==="video" && x.width===1920 && x.height===1080) || !qa.streams.some(x=>x.codec_type==="audio")) throw new Error("Final MP4 failed audio/1080p QA.");
-  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:Number(qa.format.duration),audio:true,audioDesign:"narration_only_no_music_or_sfx",scenes:clips.length,visualProviders:[...new Set(credits.map(c=>c.provider))]},null,2)+"\n");
+  const averageSceneDuration = Number(qa.format.duration) / clips.length;
+  if (clips.length < 35 || clips.length > 50 || averageSceneDuration > 10.5) throw new Error("Final pacing QA failed: " + clips.length + " scenes, average " + averageSceneDuration.toFixed(2) + " seconds.");
+  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:Number(qa.format.duration),audio:true,audioDesign:"narration_only_no_music_or_sfx",scenes:clips.length,sourceScenes:sourceSceneCount,averageSceneDuration,maximumSceneDuration:Math.max(...script.scenes.map(scene=>scene._duration)),visualProviders:[...new Set(credits.map(c=>c.provider))]},null,2)+"\n");
   console.log("Rendered and passed technical QA: "+output);
 }
 main().catch(error=>{console.error("Render failed:",error);process.exit(1);});
