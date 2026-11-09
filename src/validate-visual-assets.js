@@ -22,6 +22,7 @@ for(const asset of manifest.assets){
  if(!asset.id||seen.has(asset.id)){errors.push(label+": missing or duplicate id.");continue;} seen.add(asset.id);
  if(!/^S\d{2}$/.test(asset.sceneId||"")){errors.push(label+": sceneId must match S01, S02, etc.");continue;}
  if(!["image","video"].includes(asset.mediaType)){errors.push(label+": mediaType must be image or video.");continue;}
+ if(!/^https:\/\/(commons\.wikimedia\.org|upload\.wikimedia\.org|www\.pexels\.com|images\.pexels\.com|openverse\.org)\//i.test(asset.sourceUrl||"")){errors.push(label+": source must be Wikimedia Commons, Pexels, or Openverse.");continue;}
  if(asset.rightsStatus!=="cleared"||asset.editorialVerification!=="approved"){errors.push(label+": rights and editorial approval are both required.");continue;}
  for(const field of ["sourceUrl","creator","license","licenseEvidence","territory","attribution"]){
   if(!String(asset[field]||"").trim()){errors.push(label+": missing "+field+".");}
@@ -35,7 +36,7 @@ for(const asset of manifest.assets){
  try{
   const info=await stat(file);
   if(!info.isFile()||info.size===0) throw new Error("file is empty or not a regular file");
-  const probe=JSON.parse(await run("ffprobe",["-v","error","-show_entries","format=duration:stream=codec_type,width,height","-of","json",file]));
+  const probe=JSON.parse(await run("ffprobe",["-v","error","-select_streams","v:0","-show_entries","stream=codec_type,width,height","-of","json",file]));
   const streams=probe.streams||[];
   const valid=asset.mediaType==="image"
    ? streams.some(s=>s.codec_type==="video"&&s.width>=640&&s.height>=360)

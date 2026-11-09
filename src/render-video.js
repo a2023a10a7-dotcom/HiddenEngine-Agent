@@ -8,7 +8,6 @@ const ROOT = path.join("production", "projects", PROJECT_ID);
 const OUT = path.join("dist", PROJECT_ID);
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
 const ELEVENLABS_VOICE_ID = process.env.ELEVENLABS_VOICE_ID;
-const PEXELS_API_KEY = process.env.PEXELS_API_KEY;
 
 function run(command, args) {
   return new Promise((resolve, reject) => {
@@ -56,18 +55,18 @@ function visualMarkup(scene) {
 
 function overlaySvg(scene, index, total) {
   const title = lines((scene.title || "").toUpperCase(), 28).slice(0, 2)
-    .map((s,i) => '<text x="120" y="' + (760 + i*76) + '" class="title">' + xml(s) + '</text>').join("");
+    .map((s,i) => '<text x="120" y="' + (650 + i*70) + '" class="title">' + xml(s) + '</text>').join("");
   const subtitle = lines(scene.subtitle || "", 58).slice(0, 2)
-    .map((s,i) => '<text x="124" y="' + (930 + i*38) + '" class="sub">' + xml(s) + '</text>').join("");
+    .map((s,i) => '<text x="124" y="' + (790 + i*34) + '" class="sub">' + xml(s) + '</text>').join("");
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080">
   <defs><linearGradient id="shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#08090b" stop-opacity=".25"/><stop offset=".48" stop-color="#08090b" stop-opacity=".05"/><stop offset="1" stop-color="#08090b" stop-opacity=".92"/></linearGradient></defs>
   <rect width="1920" height="1080" fill="url(#shade)"/>
   <rect x="120" y="112" width="7" height="68" fill="#A8794D"/>
   <text x="154" y="145" class="brand">THE HIDDEN ENGINE</text>
   <text x="154" y="180" class="kicker">BUSINESS • STRATEGY • THE HIDDEN ECONOMICS</text>
-  <text x="120" y="710" class="eyebrow">THE INVESTIGATION / ${String(index+1).padStart(2,"0")}</text>
+  <text x="120" y="590" class="eyebrow">THE INVESTIGATION</text>
   ${title}${subtitle}
-  ${visualMarkup(scene)}\n  <text x="1795" y="1010" text-anchor="end" class="page">${String(index+1).padStart(2,"0")} / ${total}</text>
+  ${visualMarkup(scene)}\n
   <style>
   .brand{font:700 30px 'DejaVu Sans';letter-spacing:6px;fill:#F0EDE5}
   .kicker{font:400 17px 'DejaVu Sans';letter-spacing:3px;fill:#C3B7A8}
@@ -91,27 +90,6 @@ async function elevenLabs(text, output) {
   });
   if (!response.ok) throw new Error("ElevenLabs TTS failed (" + response.status + "): " + (await response.text()).slice(0, 500));
   await writeFile(output, Buffer.from(await response.arrayBuffer()));
-}
-async function findPexelsVideo(query) {
-  // Do not pass generic stock footage off as company-specific evidence.
-  return null;
-  if (!PEXELS_API_KEY) return null;
-  const response = await fetch("https://api.pexels.com/videos/search?query=" + encodeURIComponent(query) + "&orientation=landscape&per_page=8", {
-    headers: { Authorization: PEXELS_API_KEY }
-  });
-  if (!response.ok) throw new Error("Pexels search failed (" + response.status + ").");
-  const data = await response.json();
-  const videos = (data.videos || []).filter(v => v.video_files?.length);
-  videos.sort((a,b) => (b.width*b.height) - (a.width*a.height));
-  const video = videos[0];
-  if (!video) return null;
-  const file = video.video_files.find(f => f.width >= 1280 && /mp4/i.test(f.file_type || "")) ||
-    video.video_files.find(f => /mp4/i.test(f.file_type || ""));
-  if (!file) return null;
-  return {
-    url: file.link, page: video.url, creator: video.user?.name || "Unknown creator",
-    creatorUrl: video.user?.url || "", duration: video.duration
-  };
 }
 async function download(url, dest) {
   const response = await fetch(url);
@@ -145,12 +123,12 @@ async function main() {
       if (visualAsset.mediaType === "image") {
         credits.push({scene:i+1,assetId:visualAsset.id,mediaType:"image",sourceUrl:visualAsset.sourceUrl,creator:visualAsset.creator,license:visualAsset.license,attribution:visualAsset.attribution});
         await run("ffmpeg", ["-y","-loop","1","-framerate","25","-i",assetPath,"-i",audio,"-loop","1","-i",svg,
-          "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,eq=contrast=1.08:saturation=0.82,zoompan=z='min(zoom+0.00025,1.06)':d=125:s=1920x1080:fps=25,format=yuv420p[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
+          "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,zoompan=z='min(zoom+0.0002,1.05)':d=1:s=1920x1080:fps=25,format=yuv420p[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
           "-map","[v]","-map","1:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
       } else if (visualAsset.mediaType === "video") {
         credits.push({scene:i+1,assetId:visualAsset.id,mediaType:"video",sourceUrl:visualAsset.sourceUrl,creator:visualAsset.creator,license:visualAsset.license,attribution:visualAsset.attribution});
         await run("ffmpeg", ["-y","-stream_loop","-1","-i",assetPath,"-i",audio,"-loop","1","-i",svg,
-          "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,eq=contrast=1.12:saturation=0.78,drawbox=x=0:y=0:w=iw:h=ih:color=#08090b@0.18:t=fill[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
+          "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
           "-map","[v]","-map","1:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
       } else {
         throw new Error("Scene " + (i+1) + " has unsupported visual asset type.");
@@ -158,11 +136,11 @@ async function main() {
     } else {
       credits.push({scene:i+1,provider:"Original motion graphic",note:"No approved scene asset was supplied; generated a branded motion graphic instead."});
       await run("ffmpeg", ["-y","-f","lavfi","-i","color=c=#101113:s=1920x1080:r=25","-i",audio,"-loop","1","-i",svg,
-        "-filter_complex","[0:v]zoompan=z='min(zoom+0.00035,1.08)':d=125:s=1920x1080:fps=25,format=yuv420p[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
+        "-filter_complex","[0:v]zoompan=z='min(zoom+0.0002,1.03)':d=1:s=1920x1080:fps=25,format=yuv420p[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
         "-map","[v]","-map","1:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
     }
     clips.push(rendered);
-    console.log("Rendered scene " + (i+1) + "/" + script.scenes.length + (asset ? " with licensed stock footage." : " with branded motion graphics."));
+    console.log("Rendered scene " + (i+1) + "/" + script.scenes.length + (visualAsset ? " with approved visual asset." : " with branded motion graphics."));
   }
   const list = path.join(OUT,"concat.txt");
   await writeFile(list, clips.map(f=>"file '"+path.basename(f)+"'").join("\n")+"\n");

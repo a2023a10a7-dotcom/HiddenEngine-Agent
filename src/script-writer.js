@@ -58,7 +58,7 @@ for(const outline of architecture.scenes||[]){
     narrationBlocks:blocks,
     missingEvidence:(outline.candidateClaimIds||[]).filter(id=>!claimMap.has(id)),
     visualDirection:[],
-    soundDirection:{music:"Use restrained documentary underscore; do not use music to imply certainty or emotion unsupported by the story.",sfx:[]},
+    soundDirection:{music:"none",sfx:[],note:"No music or sound effects."},
     status:blocks.length?"draft_assembly_needs_editorial_rewrite":"blocked_no_eligible_evidence"
   });
 }
