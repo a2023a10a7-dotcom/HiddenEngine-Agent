@@ -6,8 +6,6 @@ const PROJECT_ID = process.env.PROJECT_ID;
 if (!PROJECT_ID || !/^[a-z0-9-]+$/.test(PROJECT_ID)) throw new Error("PROJECT_ID is missing or invalid.");
 const ROOT = path.join("production", "projects", PROJECT_ID);
 const OUT = path.join("dist", PROJECT_ID);
-const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
-const ELEVENLABS_VOICE_ID = process.env.ELEVENLABS_VOICE_ID;
 const PEXELS_API_KEY = process.env.PEXELS_API_KEY;
 const NARRATION_CACHE_DIR = process.env.NARRATION_CACHE_DIR || "";
 
@@ -100,25 +98,6 @@ function overlaySvg(scene, index, total) {
   .visual-detail{font:400 20px DejaVu Sans;fill:#D5D1C8}
   .page{font:400 20px 'DejaVu Sans';fill:#D5D1C8}
   </style></svg>`;
-}
-async function elevenLabs(text, output) {
-  if (!ELEVENLABS_API_KEY || !ELEVENLABS_VOICE_ID) throw new Error("Narration cache is missing and ElevenLabs credentials are unavailable.");
-  const response = await fetch("https://api.elevenlabs.io/v1/text-to-speech/" + encodeURIComponent(ELEVENLABS_VOICE_ID), {
-    method: "POST",
-    headers: { "xi-api-key": ELEVENLABS_API_KEY, "Content-Type": "application/json", "Accept": "audio/mpeg" },
-    body: JSON.stringify({
-      text, model_id: "eleven_multilingual_v2",
-      voice_settings: { stability: 0.48, similarity_boost: 0.78, style: 0.18, use_speaker_boost: true }
-    })
-  });
-  if (!response.ok) throw new Error("ElevenLabs TTS failed (" + response.status + "): " + (await response.text()).slice(0, 500));
-  await writeFile(output, Buffer.from(await response.arrayBuffer()));
-}
-async function createSoundDesign(narration, sfx, mixed) {
-  // A short, restrained transition whoosh only. No music bed is generated or added.
-  await run("ffmpeg", ["-y","-i",narration,"-f","lavfi","-i","anoisesrc=color=pink:duration=1.15:sample_rate=44100",
-    "-filter_complex","[1:a]highpass=f=220,lowpass=f=1700,afade=t=in:st=0:d=0.12,afade=t=out:st=0.35:d=0.75,volume=0.09[sfx];[0:a][sfx]amix=inputs=2:duration=first:dropout_transition=0,loudnorm=I=-16:TP=-1.5:LRA=11[a]",
-    "-map","[a]","-c:a","libmp3lame","-b:a","192k",mixed]);
 }
 async function findPexelsImage(query) {
   if (!PEXELS_API_KEY || !String(query || "").trim()) return null;
@@ -231,9 +210,7 @@ async function download(url, dest) {
 }
 async function main() {
   const script = JSON.parse(await readFile(path.join(ROOT, "script.json"), "utf8"));
-  if (!NARRATION_CACHE_DIR && (!ELEVENLABS_API_KEY || !ELEVENLABS_VOICE_ID)) {
-    throw new Error("Natural narration requires cached audio or ELEVENLABS_API_KEY and ELEVENLABS_VOICE_ID.");
-  }
+  if (!NARRATION_CACHE_DIR) throw new Error("NARRATION_CACHE_DIR is required; this renderer must reuse the approved narration and must not generate replacement speech.");
   if (!Array.isArray(script.scenes) || !script.scenes.length) throw new Error("script.json has no scenes.");
   await mkdir(OUT, { recursive: true });
   const clips = [], credits = [];
@@ -242,39 +219,43 @@ async function main() {
     if (!scene.narration?.trim()) throw new Error("Scene " + (i+1) + " has no narration.");
     const stem = "scene-" + String(i+1).padStart(2,"0");
     const audio = path.join(OUT, stem + ".mp3");
-    const mixedAudio = path.join(OUT, stem + "-sound-designed.mp3");
-    const sfx = path.join(OUT, stem + "-transition.wav");
     const svg = path.join(OUT, stem + ".svg");
     const clip = path.join(OUT, stem + "-visual.mp4");
     const rendered = path.join(OUT, stem + ".mp4");
-    let reusedNarration = false;
-    if (NARRATION_CACHE_DIR) {
-      const cached = path.join(NARRATION_CACHE_DIR, stem + ".mp3");
-      try {
-        await access(cached);
-        await copyFile(cached, audio);
-        reusedNarration = true;
-        console.log("Reusing verified project narration cache for scene " + (i+1));
-      } catch {}
+    const cached = path.join(NARRATION_CACHE_DIR, stem + ".mp3");
+    try {
+      await access(cached);
+    } catch {
+      throw new Error("Approved narration cache is missing for " + stem + "; refusing to regenerate speech.");
     }
-    if (!reusedNarration) await elevenLabs(scene.narration, audio);
-    await createSoundDesign(audio, sfx, mixedAudio);
+    await copyFile(cached, audio);
+    console.log("Reusing approved narration cache for scene " + (i+1));
     await writeFile(svg, overlaySvg(scene, i, script.scenes.length));
     const query = scene.visual_query || [scene.title, scene.subtitle].filter(Boolean).join(" ");
     console.log("Pexels key configured: " + Boolean(PEXELS_API_KEY));
     console.log("Searching visual asset for scene " + (i+1) + ": " + query);
-    let asset = await findPexelsVideo(query);
+    let asset = null;
     let still = null;
-    if (!asset) still = await findPexelsImage(query);
-    if (!asset && !still) still = await findCommonsImage(query);
-    if (!asset && !still) still = await findOpenverseImage(query);
+    // An outage at one provider must not abort the render or block later approved sources.
+    const tryProvider = async (name, search) => {
+      try {
+        return await search();
+      } catch (error) {
+        console.warn(name + " unavailable for scene " + (i+1) + "; continuing: " + error.message);
+        return null;
+      }
+    };
+    asset = await tryProvider("Pexels video", () => findPexelsVideo(query));
+    if (!asset) still = await tryProvider("Pexels photo", () => findPexelsImage(query));
+    if (!asset && !still) still = await tryProvider("Wikimedia Commons", () => findCommonsImage(query));
+    if (!asset && !still) still = await tryProvider("Openverse", () => findOpenverseImage(query));
     if (asset) console.log("Pexels video selected for scene " + (i+1));
     else if (still) console.log((still.license ? "Wikimedia Commons image ("+still.license+")" : "Pexels photo") + " selected for scene " + (i+1));
     else console.log("No licensed stock asset found for scene " + (i+1));
     if (asset) {
       await download(asset.url, clip);
       credits.push({ scene: i+1, query, provider:"Pexels video", page:asset.page, creator:asset.creator, creatorUrl:asset.creatorUrl, usage:"Illustrative footage; not proof of a named event or entity." });
-      await run("ffmpeg", ["-y","-stream_loop","-1","-i",clip,"-i",mixedAudio,"-loop","1","-i",svg,
+      await run("ffmpeg", ["-y","-stream_loop","-1","-i",clip,"-i",audio,"-loop","1","-i",svg,
         "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,eq=contrast=1.12:saturation=0.78,drawbox=x=0:y=0:w=iw:h=ih:color=#08090b@0.18:t=fill[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
         "-map","[v]","-map","1:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
     } else if (still) {
@@ -316,14 +297,14 @@ async function main() {
     "The Hidden Engine documentary render",
     "Narration: ElevenLabs API (natural AI voice; selected voice configured by repository secret/variable).",
     "Visuals: Pexels stock video or photos where relevant; otherwise original branded motion graphics.",
-    "Audio: ElevenLabs narration with restrained generated transition sound effects; no background music.",
+    "Audio: approved cached narration only; no music and no sound effects.",
     "Identity: charcoal/black, ivory typography, restrained copper accents, documentary-investigative overlays.",
     "Review all claims, pronunciations, visual relevance, licenses, and credits before publication.",
     "No automatic YouTube upload."
   ].join("\n")+"\n");
   const qa = await new Promise((resolve,reject) => { const p=spawn("ffprobe",["-v","error","-show_entries","format=duration:stream=codec_type,width,height","-of","json",output]); let data=""; p.stdout.on("data",d=>data+=d); p.on("error",reject); p.on("close",code=>code===0?resolve(JSON.parse(data)):reject(new Error("ffprobe failed"))); });
   if (!qa.streams.some(x=>x.codec_type==="video" && x.width===1920 && x.height===1080) || !qa.streams.some(x=>x.codec_type==="audio")) throw new Error("Final MP4 failed audio/1080p QA.");
-  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:Number(qa.format.duration),audio:true,audioDesign:"narration_plus_subtle_transition_sfx_no_music",scenes:clips.length,visualProviders:[...new Set(credits.map(c=>c.provider))]},null,2)+"\n");
+  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:Number(qa.format.duration),audio:true,audioDesign:"narration_only_no_music_or_sfx",scenes:clips.length,visualProviders:[...new Set(credits.map(c=>c.provider))]},null,2)+"\n");
   console.log("Rendered and passed technical QA: "+output);
 }
 main().catch(error=>{console.error("Render failed:",error);process.exit(1);});
