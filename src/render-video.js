@@ -110,7 +110,7 @@ async function probeAudioDuration(file) {
     "-show_entries", "stream=duration",
     "-of", "default=noprint_wrappers=1:nokey=1", file
   ]);
-  const duration = Number(result.stdout.trim().split(/\\s+/)[0]);
+  const duration = Number(result.stdout.trim().split(/\s+/)[0]);
   if (!Number.isFinite(duration) || duration <= 0) {
     throw new Error("Could not verify generated narration duration with FFprobe.");
   }
@@ -124,7 +124,7 @@ async function detectSilence(file, duration) {
   ]);
   const intervals = [];
   const starts = [];
-  const pattern = /silence_(start|end):\\s*([0-9.]+)/g;
+  const pattern = /silence_(start|end):\s*([0-9.]+)/g;
   for (const match of result.stderr.matchAll(pattern)) {
     const time = Number(match[2]);
     if (match[1] === "start") {
@@ -253,8 +253,8 @@ async function main() {
       "s differs from final audio " + finalAudioDuration.toFixed(3) + "s by " +
       durationDifference.toFixed(3) + "s (maximum 0.5s).");
   }
-  await writeFile(planPath, JSON.stringify(visualPlan, null, 2) + "\\n");
-  await writeFile(scriptPath, JSON.stringify(script, null, 2) + "\\n");
+  await writeFile(planPath, JSON.stringify(visualPlan, null, 2) + "\n");
+  await writeFile(scriptPath, JSON.stringify(script, null, 2) + "\n");
   const averageSceneSeconds = sceneDurations.reduce((sum,value)=>sum+value,0)/sceneDurations.length;
   await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({
     file:path.basename(output),width:1920,height:1080,duration:Number(qa.format.duration),
