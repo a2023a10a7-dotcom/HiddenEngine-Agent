@@ -127,8 +127,8 @@ const shots = plan.scenes.flatMap(scene =>
 const shotIds = new Set();
 
 for (const { sceneId, shot } of shots) {
-  if (!/^S\\d{2}$/.test(sceneId || "") ||
-      !/^S\\d{2}-\\d{2}$/.test(shot.shotId || "") ||
+  if (!/^S\d{2}$/.test(sceneId || "") ||
+      !/^S\d{2}-\d{2}$/.test(shot.shotId || "") ||
       !shot.shotId.startsWith(sceneId + "-") ||
       shotIds.has(shot.shotId)) {
     errors.push((shot.shotId || "unnamed shot") + ": invalid or duplicate shot identity.");
