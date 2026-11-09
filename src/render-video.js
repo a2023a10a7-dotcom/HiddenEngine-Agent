@@ -143,6 +143,31 @@ async function detectSilence(file, duration) {
   }
   return intervals;
 }
+async function trimBoundarySilence(input, output, duration, intervals) {
+  let start = 0;
+  let end = duration;
+  const leading = intervals.find(interval => interval.startSeconds <= 0.08);
+  const trailing = [...intervals].reverse().find(interval => interval.endSeconds >= duration - 0.08);
+
+  if (leading) start = Math.max(0, leading.endSeconds - 0.08);
+  if (trailing) end = Math.min(duration, trailing.startSeconds + 0.08);
+
+  if (end - start < 0.2 || (start < 0.02 && duration - end < 0.02)) {
+    return { file: input, trimStartSeconds: 0, trimEndSeconds: 0 };
+  }
+
+  await run("ffmpeg", [
+    "-y", "-i", input,
+    "-af", "atrim=start=" + start.toFixed(3) + ":end=" + end.toFixed(3) + ",asetpts=PTS-STARTPTS",
+    "-c:a", "pcm_s16le", "-ar", "44100", "-ac", "2", output
+  ]);
+
+  return {
+    file: output,
+    trimStartSeconds: Number(start.toFixed(3)),
+    trimEndSeconds: Number((duration - end).toFixed(3))
+  };
+}
 async function download(url, dest) {
   const response = await fetch(url);
   if (!response.ok) throw new Error("Asset download failed (" + response.status + ").");
@@ -173,15 +198,20 @@ async function main() {
     const clip = path.join(OUT, stem + "-visual.mp4");
     const rendered = path.join(OUT, stem + ".mp4");
     await elevenLabs(scene.narration, audio);
-    const actualNarrationSeconds = await probeAudioDuration(audio);
+    const generatedDuration = await probeAudioDuration(audio);
+    const silenceIntervals = await detectSilence(audio, generatedDuration);
+    const trimmedAudio = path.join(OUT, stem + "-trimmed.wav");
+    const boundaryTrim = await trimBoundarySilence(audio, trimmedAudio, generatedDuration, silenceIntervals);
+    const audioForRender = boundaryTrim.file;
+    const actualNarrationSeconds = await probeAudioDuration(audioForRender);
     if (actualNarrationSeconds > 12) {
-      throw new Error("Shot " + (scene.shotId || i+1) + " narration is " + actualNarrationSeconds.toFixed(2) + " seconds; maximum allowed is 12 seconds.");
+      throw new Error("Shot " + (scene.shotId || i+1) + " narration is " + actualNarrationSeconds.toFixed(2) + " seconds after silence-boundary adjustment; maximum allowed is 12 seconds.");
     }
-    const silenceIntervals = await detectSilence(audio, actualNarrationSeconds);
     const plannedShot = plannedShots.get(scene.shotId);
     if (!plannedShot) throw new Error("Shot " + scene.shotId + " is missing from VISUAL-PLAN.json.");
     plannedShot.measuredDurationSeconds = Number(actualNarrationSeconds.toFixed(3));
     plannedShot.silenceIntervals = silenceIntervals;
+    plannedShot.boundaryTrim = boundaryTrim;
     scene.measuredDurationSeconds = Number(actualNarrationSeconds.toFixed(3));
     sceneDurations.push(actualNarrationSeconds);
     await writeFile(svg, overlaySvg(scene, i, script.scenes.length));
@@ -193,12 +223,12 @@ async function main() {
       if (!assetStat.isFile() || assetStat.size === 0) throw new Error("Scene " + (i+1) + " visual asset is missing or empty.");
       if (visualAsset.mediaType === "image") {
         credits.push({scene:i+1,assetId:visualAsset.id,mediaType:"image",sourceUrl:visualAsset.sourceUrl,creator:visualAsset.creator,license:visualAsset.license,attribution:visualAsset.attribution});
-        await run("ffmpeg", ["-y","-loop","1","-framerate","25","-i",assetPath,"-i",audio,"-loop","1","-i",svg,
+        await run("ffmpeg", ["-y","-loop","1","-framerate","25","-i",assetPath,"-i",audioForRender,"-loop","1","-i",svg,
           "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,zoompan=z='min(zoom+0.0002,1.05)':d=1:s=1920x1080:fps=25,format=yuv420p[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
           "-map","[v]","-map","1:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
       } else if (visualAsset.mediaType === "video") {
         credits.push({scene:i+1,assetId:visualAsset.id,mediaType:"video",sourceUrl:visualAsset.sourceUrl,creator:visualAsset.creator,license:visualAsset.license,attribution:visualAsset.attribution});
-        await run("ffmpeg", ["-y","-stream_loop","-1","-i",assetPath,"-i",audio,"-loop","1","-i",svg,
+        await run("ffmpeg", ["-y","-stream_loop","-1","-i",assetPath,"-i",audioForRender,"-loop","1","-i",svg,
           "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
           "-map","[v]","-map","1:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
       } else {
@@ -206,7 +236,7 @@ async function main() {
       }
     } else {
       credits.push({scene:i+1,provider:"Original motion graphic",note:"No approved scene asset was supplied; generated a branded motion graphic instead."});
-      await run("ffmpeg", ["-y","-f","lavfi","-i","color=c=#101113:s=1920x1080:r=25","-i",audio,"-loop","1","-i",svg,
+      await run("ffmpeg", ["-y","-f","lavfi","-i","color=c=#101113:s=1920x1080:r=25","-i",audioForRender,"-loop","1","-i",svg,
         "-filter_complex","[0:v]zoompan=z='min(zoom+0.0002,1.03)':d=1:s=1920x1080:fps=25,format=yuv420p[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
         "-map","[v]","-map","1:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
     }
