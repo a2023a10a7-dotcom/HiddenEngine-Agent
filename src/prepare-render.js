@@ -63,7 +63,7 @@ const seenShotIds = new Set();
 
 for (const plannedScene of plan.scenes || []) {
   const { sceneId, sourceSceneId, shots } = plannedScene;
-  if (!/^S\\d{2}$/.test(sceneId || "") || seenSceneIds.has(sceneId)) {
+  if (!/^S\d{2}$/.test(sceneId || "") || seenSceneIds.has(sceneId)) {
     errors.push("Invalid or duplicate visual sceneId: " + (sceneId || "missing"));
     continue;
   }
@@ -78,7 +78,7 @@ for (const plannedScene of plan.scenes || []) {
     .map(block => String(block.narrationText || "").trim())
     .filter(Boolean)
     .join(" ")
-    .replace(/\\s+/g, " ");
+    .replace(/\s+/g, " ");
   const actualNarration = (shots || [])
     .map(shot => String(shot.narration || "").trim())
     .filter(Boolean)
@@ -94,7 +94,7 @@ for (const plannedScene of plan.scenes || []) {
   }
 
   for (const shot of shots) {
-    if (!/^S\\d{2}-\\d{2}$/.test(shot.shotId || "") ||
+    if (!/^S\d{2}-\d{2}$/.test(shot.shotId || "") ||
         !shot.shotId.startsWith(sceneId + "-") || seenShotIds.has(shot.shotId)) {
       errors.push("Invalid or duplicate shotId: " + (shot.shotId || "missing"));
       continue;
@@ -128,7 +128,7 @@ for (const plannedScene of plan.scenes || []) {
       estimatedDurationSeconds: shot.estimatedDurationSeconds,
       measuredDurationSeconds: null,
       visualAsset: asset,
-      visual: shot.fallback?.type === "data_card" ? {
+      visual: !asset && shot.fallback?.type === "data_card" ? {
         type: "metric",
         source_label: (shot.fallback.sourceLines || []).join(" | ") || "SOURCE LINE REQUIRED",
         value: shot.fallback.title,
@@ -176,7 +176,7 @@ const renderScript = {
 
 const destination = path.join(dir, "script.json");
 const temporary = destination + ".tmp";
-await writeFile(temporary, JSON.stringify(renderScript, null, 2) + "\\n");
+await writeFile(temporary, JSON.stringify(renderScript, null, 2) + "\n");
 await rename(temporary, destination);
 
 project.approvals = project.approvals || {};
@@ -187,7 +187,7 @@ project.approvals.script = {
   draftSha256: digest
 };
 project.updatedAt = new Date().toISOString();
-await writeFile(projectPath, JSON.stringify(project, null, 2) + "\\n");
+await writeFile(projectPath, JSON.stringify(project, null, 2) + "\n");
 
 console.log(JSON.stringify({
   status: "ready_for_render",
