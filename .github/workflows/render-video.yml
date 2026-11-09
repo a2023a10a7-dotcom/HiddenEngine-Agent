@@ -41,6 +41,7 @@ jobs:
         env:
           PROJECT_ID: ${{ inputs.project_id || '2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re' }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
         run: node src/render-video.js
 
       - name: Upload MP4 and production assets
