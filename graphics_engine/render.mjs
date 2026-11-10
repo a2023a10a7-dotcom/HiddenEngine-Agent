@@ -6,7 +6,7 @@ import {
   createArchitectureDiagram
 } from "./graphics.mjs";
 
-const OUTPUT_SCALE = 2; // 4K PNG from a 1920x1080 vector layout.
+const OUTPUT_SCALE = 4; // 8K PNG (7680x4320) from a 1920x1080 vector layout.
 
 const makers = {
   bar: createBarChart,
