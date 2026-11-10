@@ -25,6 +25,8 @@ check("architecture", load("architecture.json"));
 check("exploded", load("exploded.json"));
 check("engine-3d", load("engine-3d.json"));
 check("phone-3d", load("phone-3d.json"));
+check("aircraft-3d", load("aircraft-3d.json"));
+check("ship-3d", load("ship-3d.json"));
 assert.match(createThreeDScene({title:"Test phone",components:[{id:"body",label:"Phone body",shape:"box",size:[2,4,.3]}]}), /SCHEMA-DRIVEN 3D COMPONENT VISUALIZATION/);
 check("timeline-1-event", { ...timeline, events: timeline.events.slice(0, 1) });
 check("timeline-8-events", {
