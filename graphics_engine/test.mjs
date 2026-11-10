@@ -8,8 +8,8 @@ const load = file =>
 
 function check(name, spec) {
   const { png, width, height } = renderSpec(spec);
-  assert.equal(width, 3840, `${name}: width`);
-  assert.equal(height, 2160, `${name}: height`);
+  assert.equal(width, 7680, `${name}: width`);
+  assert.equal(height, 4320, `${name}: height`);
   assert.ok(png.length > 5000, `${name}: PNG too small`);
   assert.equal(png[0], 0x89, `${name}: PNG signature`);
   console.log(`OK ${name} ${width}x${height} (${png.length} bytes)`);
