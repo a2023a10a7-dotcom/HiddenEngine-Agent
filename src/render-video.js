@@ -398,7 +398,7 @@ async function main() {
   const list = path.join(OUT,"concat.txt");
   await writeFile(list, clips.map(f=>"file '"+path.basename(f)+"'").join("\n")+"\n");
   const output = path.join(OUT,"the-hidden-engine-documentary.mp4");
-  await run("ffmpeg",["-y","-fflags","+genpts","-f","concat","-safe","0","-i",list,"-avoid_negative_ts","make_zero","-c:v","libx264","-preset","veryfast","-crf","21","-r","25","-pix_fmt","yuv420p","-c:a","aac","-b:a","192k","-ar","48000","-movflags","+faststart",output]);
+  await run("ffmpeg",["-y","-fflags","+genpts","-f","concat","-safe","0","-i",list,"-vf","setpts=PTS-STARTPTS,fps=25","-af","aresample=48000:async=1:first_pts=0,asetpts=N/SR/TB","-t",String(narrationDurations.reduce((sum,duration)=>sum+duration,0)),"-shortest","-c:v","libx264","-preset","veryfast","-crf","21","-r","25","-pix_fmt","yuv420p","-c:a","aac","-b:a","192k","-ar","48000","-movflags","+faststart",output]);
   await writeFile(path.join(OUT,"visual-credits.json"),JSON.stringify(credits,null,2)+"\n");
   await writeFile(path.join(OUT,"CREDITS.md"),[
     "# Visual credits","",
