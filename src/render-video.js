@@ -504,7 +504,7 @@ async function main() {
   for (let index = 0; index < clips.length; index++) {
     concatInputs.push("-i", clips[index]);
     concatFilters.push(
-      "[" + index + ":v:0]setpts=PTS-STARTPTS,fps=25,format=yuv420p[v" + index + "];" +
+      "[" + index + ":v:0]setpts=PTS-STARTPTS,fps=25,scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2,setsar=1,format=yuv420p[v" + index + "];" +
       "[" + index + ":a:0]aresample=48000,asetpts=PTS-STARTPTS[a" + index + "]"
     );
   }
