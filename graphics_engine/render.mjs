@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { Resvg } from "@resvg/resvg-js";
-import { createThreeDEngine } from "./three-dimensional.mjs";
+import { createThreeDScene } from "./three-dimensional.mjs";
 import {
   createBarChart,
   createTimeline,
@@ -15,7 +15,7 @@ const makers = {
   timeline: createTimeline,
   architecture: createArchitectureDiagram,
   exploded: createExplodedDiagram,
-  engine3d: createThreeDEngine
+  engine3d: createThreeDScene
 };
 
 export function renderSpec(spec) {
