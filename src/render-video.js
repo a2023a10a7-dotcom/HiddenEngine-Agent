@@ -381,12 +381,12 @@ async function main() {
       credits.push({ scene:i+1, query, provider:still.provider || (still.license ? "Wikimedia Commons photo" : "Pexels photo"), page:still.page, creator:still.creator, creatorUrl:still.creatorUrl || "", license:still.license || (still.provider === "Pixabay photo" ? "Pixabay Content License" : still.provider === "Pexels photo" ? "Pexels License" : "See source page"), licenseUrl:still.licenseUrl || "", usage:"Illustrative still; not proof of a named event or entity." });
       await run("ffmpeg", ["-y","-loop","1","-framerate","25","-i",imagePath,"-loop","1","-i",svg,"-i",audio,
         "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,zoompan=z='min(zoom+0.0003,1.07)':d=1:s=1920x1080:fps=25,eq=contrast=1.08:saturation=0.82[bg];[bg][1:v]overlay=0:0,format=yuv420p[v]",
-        "-map","[v]","-t",String(SCENE_DURATION_SECONDS),"-an","-c:v","libx264","-preset","veryfast","-crf","21","-movflags","+faststart",rendered]);
+        "-map","[v]","-map","2:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
     } else {
       credits.push({ scene:i+1, query, provider:"Original motion graphic", note:"No matching licensed stock asset was returned; generated a branded motion graphic instead." });
       await run("ffmpeg", ["-y","-f","lavfi","-i","color=c=#101113:s=1920x1080:r=25:d=3600","-loop","1","-i",svg,"-i",audio,
         "-filter_complex","[0:v]format=yuv420p[bg];[bg][1:v]overlay=0:0,format=yuv420p[v]",
-        "-map","[v]","-t",String(SCENE_DURATION_SECONDS),"-an","-c:v","libx264","-preset","veryfast","-crf","21","-movflags","+faststart",rendered]);
+        "-map","[v]","-map","2:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
     }
     clips.push(rendered);
     console.log("Rendered silent visual scene " + (i+1) + "/" + script.scenes.length + ".");
@@ -396,7 +396,7 @@ async function main() {
   const list = path.join(OUT,"concat.txt");
   await writeFile(list, clips.map(f=>"file '"+path.basename(f)+"'").join("\n")+"\n");
   const output = path.join(OUT,"the-hidden-engine-documentary.mp4");
-  await run("ffmpeg",["-y","-f","concat","-safe","0","-i",list,"-c","copy","-an","-movflags","+faststart",output]);
+  await run("ffmpeg",["-y","-f","concat","-safe","0","-i",list,"-c","copy","-movflags","+faststart",output]);
   await writeFile(path.join(OUT,"visual-credits.json"),JSON.stringify(credits,null,2)+"\n");
   await writeFile(path.join(OUT,"CREDITS.md"),[
     "# Visual credits","",
