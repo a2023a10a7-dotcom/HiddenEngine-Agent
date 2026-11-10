@@ -35,6 +35,7 @@ jobs:
           node graphics_engine/render.mjs graphics_engine/data/timeline.json timeline
           node graphics_engine/render.mjs graphics_engine/data/bar.json bar
           node graphics_engine/render.mjs graphics_engine/data/architecture.json architecture
+          node graphics_engine/render.mjs graphics_engine/data/exploded.json exploded
 
       - name: Upload graphics
         if: always()
