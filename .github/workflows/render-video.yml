@@ -1,3 +1,4 @@
+# Multi-shot visual coverage validation is enforced by src/render-video.js.
 name: HiddenEngine Cinematic Documentary Render
 
 on:
