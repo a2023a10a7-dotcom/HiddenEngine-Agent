@@ -37,6 +37,7 @@ jobs:
           node graphics_engine/render.mjs graphics_engine/data/architecture.json architecture
           node graphics_engine/render.mjs graphics_engine/data/exploded.json exploded
           node graphics_engine/render.mjs graphics_engine/data/engine-3d.json engine-3d
+          node graphics_engine/render.mjs graphics_engine/data/phone-3d.json phone-3d
 
       - name: Upload graphics
         if: always()
