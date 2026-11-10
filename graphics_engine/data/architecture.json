@@ -1,0 +1,23 @@
+{
+  "type": "architecture",
+  "title": "Graphics Pipeline",
+  "nodes": [
+    { "id": "script", "label": "Scene Script", "detail": "Narration text" },
+    { "id": "analyzer", "label": "Scene Analyzer", "detail": "Detects graphic type" },
+    { "id": "maker", "label": "Graphics Maker", "detail": "SVG templates" },
+    { "id": "renderer", "label": "PNG Renderer", "detail": "resvg 1920x1080" },
+    { "id": "publish", "label": "Publish", "detail": "After approval" },
+    { "id": "review", "label": "Human Review", "detail": "Facts and visuals" },
+    { "id": "assembly", "label": "Video Assembly", "detail": "FFmpeg" },
+    { "id": "animation", "label": "Animation", "detail": "Zoom and pan" }
+  ],
+  "connections": [
+    { "from": "script", "to": "analyzer" },
+    { "from": "analyzer", "to": "maker" },
+    { "from": "maker", "to": "renderer" },
+    { "from": "renderer", "to": "animation" },
+    { "from": "animation", "to": "assembly" },
+    { "from": "assembly", "to": "review" },
+    { "from": "review", "to": "publish" }
+  ]
+}
