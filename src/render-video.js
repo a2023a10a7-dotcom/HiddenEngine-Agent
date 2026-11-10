@@ -84,11 +84,17 @@ function visualMarkup(scene) {
   return "";
 }
 
-function overlaySvg(scene, index, total) {
+function titleOverlaySvg(scene) {
   const title = lines((scene.title || "").toUpperCase(), 28).slice(0, 2)
-    .map((s,i) => '<text x="120" y="' + (760 + i*76) + '" class="title">' + xml(s) + '</text>').join("");
+    .map((value, i) => '<text x="154" y="' + (760 + i*76) + '" class="title">' + xml(value) + '</text>').join("");
   const subtitle = lines(scene.subtitle || "", 58).slice(0, 2)
-    .map((s,i) => '<text x="124" y="' + (930 + i*38) + '" class="sub">' + xml(s) + '</text>').join("");
+    .map((value, i) => '<text x="158" y="' + (930 + i*38) + '" class="sub">' + xml(value) + '</text>').join("");
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080">' +
+    '<path d="M112 690 V674 H1780 V1012 H112 V982 M112 690 H130 M1762 674 H1780 V692 M1762 1012 H1780 V994" fill="none" stroke="#A8794D" stroke-width="3" opacity=".9"/>' +
+    '<path d="M112 710 V674 H380" fill="none" stroke="#F0EDE5" stroke-width="5"/>' + title + subtitle +
+    '<style>.title{font:700 64px DejaVu Sans;fill:#F0EDE5}.sub{font:400 27px DejaVu Sans;fill:#D5D1C8}</style></svg>';
+}
+function overlaySvg(scene, index, total) {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080">
   <defs><linearGradient id="shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#08090b" stop-opacity=".25"/><stop offset=".48" stop-color="#08090b" stop-opacity=".05"/><stop offset="1" stop-color="#08090b" stop-opacity=".92"/></linearGradient></defs>
   <rect width="1920" height="1080" fill="url(#shade)"/>
@@ -96,7 +102,6 @@ function overlaySvg(scene, index, total) {
   <text x="154" y="145" class="brand">THE HIDDEN ENGINE</text>
   <text x="154" y="180" class="kicker">BUSINESS • STRATEGY • THE HIDDEN ECONOMICS</text>
   <text x="120" y="710" class="eyebrow">THE INVESTIGATION / ${String(index+1).padStart(2,"0")}</text>
-  ${title}${subtitle}
   ${visualMarkup(scene)}\n  <text x="1795" y="1010" text-anchor="end" class="page">${String(index+1).padStart(2,"0")} / ${total}</text>
   <style>
   .brand{font:700 30px 'DejaVu Sans';letter-spacing:6px;fill:#F0EDE5}
@@ -344,12 +349,14 @@ async function main() {
     const scene = script.scenes[i];
     const stem = "scene-" + String(i+1).padStart(2,"0");
     const svg = path.join(OUT, stem + ".svg");
+    const titleSvg = path.join(OUT, stem + "-title.svg");
     const clip = path.join(OUT, stem + "-visual.mp4");
     const audio = path.join(OUT, stem + ".wav");
     const rendered = path.join(OUT, stem + ".mp4");
     if (!scene.narration?.trim()) throw new Error("Scene " + (i+1) + " has no narration.");
     narrationDurations.push(await piperTTS(scene.narration, audio));
     await writeFile(svg, overlaySvg(scene, i, script.scenes.length));
+    await writeFile(titleSvg, titleOverlaySvg(scene));
     const query = scene.visual_query || [scene.title, scene.subtitle].filter(Boolean).join(" ");
     console.log("Pexels key configured: " + Boolean(PEXELS_API_KEY));
     console.log("Searching visual asset for scene " + (i+1) + ": " + query);
@@ -373,20 +380,20 @@ async function main() {
 
       await download(asset.url, clip);
       credits.push({ scene:i+1, query, provider:asset.provider || "Pexels video", page:asset.page, creator:asset.creator, creatorUrl:asset.creatorUrl, usage:"Illustrative footage; not proof of a named event or entity." });
-      await run("ffmpeg", ["-y","-stream_loop","-1","-i",clip,"-loop","1","-i",svg,"-i",audio,
-        "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,eq=contrast=1.12:saturation=0.78,drawbox=x=0:y=0:w=iw:h=ih:color=#08090b@0.18:t=fill[bg];[bg][1:v]overlay=0:0,format=yuv420p[v]",
-        "-map","[v]","-map","2:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-t",String(narrationDurations[i]),"-movflags","+faststart",rendered]);
+      await run("ffmpeg", ["-y","-stream_loop","-1","-i",clip,"-loop","1","-i",svg,"-loop","1","-i",titleSvg,"-i",audio,
+        "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,eq=contrast=1.12:saturation=0.78,drawbox=x=0:y=0:w=iw:h=ih:color=#08090b@0.18:t=fill[bg];[bg][1:v]overlay=0:0[base];[2:v]format=rgba,fade=t=in:st=0:d=0.7:alpha=1,fade=t=out:st=3.6:d=0.65:alpha=1[title];[base][title]overlay=x='120-90*max(0,1-t/0.7)+90*max(0,min(1,(t-3.6)/0.65))':y=0:format=auto,format=yuv420p[v]",
+        "-map","[v]","-map","3:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-t",String(narrationDurations[i]),"-movflags","+faststart",rendered]);
     } else if (still) {
       USED_ASSET_PAGES.add(still.nasaId ? "NASA:"+still.nasaId : still.page);
       const imagePath=clip.replace(/\.mp4$/,".jpg");
       await download(still.url, imagePath);
       credits.push({ scene:i+1, query, provider:still.provider || (still.license ? "Wikimedia Commons photo" : "Pexels photo"), page:still.page, creator:still.creator, creatorUrl:still.creatorUrl || "", license:still.license || (still.provider === "Pixabay photo" ? "Pixabay Content License" : still.provider === "Pexels photo" ? "Pexels License" : "See source page"), licenseUrl:still.licenseUrl || "", usage:"Illustrative still; not proof of a named event or entity." });
-      await run("ffmpeg", ["-y","-loop","1","-framerate","25","-i",imagePath,"-loop","1","-i",svg,"-i",audio,
-        "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,zoompan=z='min(zoom+0.0003,1.07)':d=1:s=1920x1080:fps=25,eq=contrast=1.08:saturation=0.82[bg];[bg][1:v]overlay=0:0,format=yuv420p[v]",
+      await run("ffmpeg", ["-y","-loop","1","-framerate","25","-i",imagePath,"-loop","1","-i",svg,"-loop","1","-i",titleSvg,"-i",audio,
+        "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,zoompan=z='min(zoom+0.0003,1.07)':d=1:s=1920x1080:fps=25,eq=contrast=1.08:saturation=0.82[bg];[bg][1:v]overlay=0:0[base];[2:v]format=rgba,fade=t=in:st=0:d=0.7:alpha=1,fade=t=out:st=3.6:d=0.65:alpha=1[title];[base][title]overlay=x='120-90*max(0,1-t/0.7)+90*max(0,min(1,(t-3.6)/0.65))':y=0:format=auto,format=yuv420p[v]",
         "-map","[v]","-map","2:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-t",String(narrationDurations[i]),"-movflags","+faststart",rendered]);
     } else {
       credits.push({ scene:i+1, query, provider:"Original motion graphic", note:"No matching licensed stock asset was returned; generated a branded motion graphic instead." });
-      await run("ffmpeg", ["-y","-f","lavfi","-i","color=c=#101113:s=1920x1080:r=25:d=3600","-loop","1","-i",svg,"-i",audio,
+      await run("ffmpeg", ["-y","-f","lavfi","-i","color=c=#101113:s=1920x1080:r=25:d=3600","-loop","1","-i",svg,"-loop","1","-i",titleSvg,"-i",audio,
         "-filter_complex","[0:v]format=yuv420p[bg];[bg][1:v]overlay=0:0,format=yuv420p[v]",
         "-map","[v]","-map","2:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-t",String(narrationDurations[i]),"-movflags","+faststart",rendered]);
     }
