@@ -15,7 +15,8 @@ const makers = {
   timeline: createTimeline,
   architecture: createArchitectureDiagram,
   exploded: createExplodedDiagram,
-  engine3d: createThreeDScene
+  engine3d: createThreeDScene,
+  technical3d: createThreeDScene
 };
 
 export function renderSpec(spec) {
