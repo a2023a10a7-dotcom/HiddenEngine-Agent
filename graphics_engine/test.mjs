@@ -35,7 +35,7 @@ const oneEventSvg = createTimeline({
   title: "One event",
   events: [{ date: "2020", label: "A very long label that must be shortened" }]
 });
-assert.match(oneEventSvg, /A very long label…/);
+assert.match(oneEventSvg, /A very long label th…/);
 
 assert.throws(
   () => renderSpec({ type: "bar", title: "x", items: [{ label: "a", value: -1 }] }),
