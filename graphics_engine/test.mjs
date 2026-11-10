@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import assert from "node:assert/strict";
 import { renderSpec } from "./render.mjs";
 import { createTimeline } from "./graphics.mjs";
+import { createThreeDScene } from "./three-dimensional.mjs";
 import { createThreeDEngine } from "./three-dimensional.mjs";
 
 const load = file =>
@@ -23,6 +24,8 @@ check("bar", load("bar.json"));
 check("architecture", load("architecture.json"));
 check("exploded", load("exploded.json"));
 check("engine-3d", load("engine-3d.json"));
+check("phone-3d", load("phone-3d.json"));
+assert.match(createThreeDScene({title:"Test phone",components:[{id:"body",label:"Phone body",shape:"box",size:[2,4,.3]}]}), /SCHEMA-DRIVEN 3D COMPONENT VISUALIZATION/);
 check("timeline-1-event", { ...timeline, events: timeline.events.slice(0, 1) });
 check("timeline-8-events", {
   ...timeline,
