@@ -131,7 +131,7 @@ async function findPixabayVideo(query) {
   if (!response.ok) throw new Error("Pixabay video search failed (" + response.status + ").");
   const data = await response.json();
   const hits = (data.hits || []).map(hit => ({hit, score: relevanceScore(query, hit.tags)}))
-    .filter(item => item.score >= 0.25 && item.hit.videos && !USED_ASSET_PAGES.has(item.hit.pageURL));
+    .filter(item => item.score >= 0.5 && item.hit.videos && !USED_ASSET_PAGES.has(item.hit.pageURL));
   hits.sort((a,b) => b.score-a.score || (b.hit.videos.large?.width || 0) - (a.hit.videos.large?.width || 0));
   for (const {hit} of hits) {
     const files = Object.values(hit.videos || {}).filter(v => v && v.url && v.width >= 960).sort((a,b) => b.width-a.width);
@@ -151,7 +151,7 @@ async function findPixabayImage(query) {
   if (!response.ok) throw new Error("Pixabay image search failed (" + response.status + ").");
   const data = await response.json();
   const hits = (data.hits || []).map(hit => ({hit, score: relevanceScore(query, hit.tags)}))
-    .filter(item => item.score >= 0.25 && item.hit.largeImageURL && !USED_ASSET_PAGES.has(item.hit.pageURL));
+    .filter(item => item.score >= 0.5 && item.hit.largeImageURL && !USED_ASSET_PAGES.has(item.hit.pageURL));
   hits.sort((a,b) => b.score-a.score || (b.hit.imageWidth*b.hit.imageHeight)-(a.hit.imageWidth*a.hit.imageHeight));
   const best = hits[0]?.hit;
   if (!best) {
@@ -175,68 +175,79 @@ async function findPexelsImage(query) {
 async function findCommonsImage(query) {
   const raw = String(query || "").trim();
   if (!raw) return null;
-  const terms = raw.split(/\s+/);
-  const searches = [...new Set([terms.slice(0,4).join(" ")])];
   const allowed = /^(CC0|Public domain|CC BY(?:-SA)? \d)/i;
   const clean = value => String(value || "").replace(/<[^>]*>/g,"").replace(/&nbsp;/g," ").trim();
-  for (const q of searches) {
-    const endpoint = "https://commons.wikimedia.org/w/api.php?action=query&list=search&srnamespace=6&srlimit=20&srsearch=" +
-      encodeURIComponent(q) + "&format=json";
-    const response = await fetchWithTimeout(endpoint, {
-      headers: { "User-Agent": "HiddenEngineDocumentaryBot/1.0 (asset attribution and license verification)" }
-    });
-    if (!response.ok) throw new Error("Wikimedia Commons search failed ("+response.status+").");
-    const data = await response.json();
-    const titles = (data.query?.search || []).map(item => item.title).filter(Boolean);
-    console.log("Wikimedia Commons query ["+q+"] returned "+titles.length+" file candidates.");
-    if (!titles.length) continue;
-    const detailsUrl = "https://commons.wikimedia.org/w/api.php?action=query&titles=" +
-      encodeURIComponent(titles.join("|")) + "&prop=imageinfo&iiprop=url|mime|extmetadata&iiurlwidth=1920&format=json";
-    const detailsResponse = await fetchWithTimeout(detailsUrl, {
-      headers: { "User-Agent": "HiddenEngineDocumentaryBot/1.0 (asset attribution and license verification)" }
-    });
-    if (!detailsResponse.ok) throw new Error("Wikimedia Commons image details failed ("+detailsResponse.status+").");
-    const details = await detailsResponse.json();
-    for (const page of Object.values(details.query?.pages || {})) {
-      const info = page.imageinfo?.[0];
-      if (!info || !/^image\/(jpeg|png|webp)$/i.test(info.mime || "")) continue;
-      const meta = info.extmetadata || {};
-      const license = clean(meta.LicenseShortName?.value);
-      if (!allowed.test(license)) continue;
-      return {
-        url: info.thumburl || info.url,
-        page: info.descriptionurl || ("https://commons.wikimedia.org/wiki/" + encodeURIComponent(page.title.replace(/ /g,"_"))),
-        creator: clean(meta.Artist?.value || "Unknown creator"),
-        license,
-        licenseUrl: clean(meta.LicenseUrl?.value || ""),
-        attribution: clean(meta.AttributionRequired?.value || "")
-      };
-    }
-  }
-  return null;
+  const endpoint = "https://commons.wikimedia.org/w/api.php?action=query&list=search&srnamespace=6&srlimit=30&srsearch=" +
+    encodeURIComponent(raw) + "&format=json";
+  const response = await fetchWithTimeout(endpoint, {
+    headers: { "User-Agent": "HiddenEngineDocumentaryBot/1.0 (asset attribution and license verification)" }
+  });
+  if (!response.ok) throw new Error("Wikimedia Commons search failed ("+response.status+").");
+  const data = await response.json();
+  const titles = (data.query?.search || []).map(item => item.title).filter(Boolean);
+  if (!titles.length) return null;
+  const detailsUrl = "https://commons.wikimedia.org/w/api.php?action=query&titles=" +
+    encodeURIComponent(titles.join("|")) + "&prop=imageinfo&iiprop=url|mime|extmetadata&iiurlwidth=1920&format=json";
+  const detailsResponse = await fetchWithTimeout(detailsUrl, {
+    headers: { "User-Agent": "HiddenEngineDocumentaryBot/1.0 (asset attribution and license verification)" }
+  });
+  if (!detailsResponse.ok) throw new Error("Wikimedia Commons image details failed ("+detailsResponse.status+").");
+  const details = await detailsResponse.json();
+  const candidates = Object.values(details.query?.pages || {}).map(page => {
+    const info = page.imageinfo?.[0];
+    if (!info || !/^image\/(jpeg|png|webp)$/i.test(info.mime || "")) return null;
+    const meta = info.extmetadata || {};
+    const license = clean(meta.LicenseShortName?.value);
+    if (!allowed.test(license)) return null;
+    const tags = page.title + " " + clean(meta.ImageDescription?.value);
+    return {page,info,meta,license,score:relevanceScore(raw,tags)};
+  }).filter(item => item && item.score >= 0.5 && !USED_ASSET_PAGES.has(item.info.descriptionurl));
+  candidates.sort((a,b)=>b.score-a.score);
+  const best = candidates[0];
+  if (!best) return null;
+  return {
+    url: best.info.thumburl || best.info.url,
+    page: best.info.descriptionurl || ("https://commons.wikimedia.org/wiki/" + encodeURIComponent(best.page.title.replace(/ /g,"_"))),
+    creator: clean(best.meta.Artist?.value || "Unknown creator"),
+    license: best.license,
+    licenseUrl: clean(best.meta.LicenseUrl?.value || ""),
+    attribution: clean(best.meta.AttributionRequired?.value || ""),
+    provider: "Wikimedia Commons photo",
+    relevance: best.score
+  };
 }
 async function findOpenverseImage(query) {
   const q = String(query || "").trim();
   if (!q) return null;
   const endpoint = "https://api.openverse.org/v1/images/?q=" + encodeURIComponent(q) +
-    "&license=cc0,pdm,by,by-sa&aspect_ratio=wide&page_size=10";
+    "&license=cc0,pdm,by,by-sa&aspect_ratio=wide&page_size=30";
   const response = await fetchWithTimeout(endpoint, {
     headers: { "User-Agent": "HiddenEngineDocumentaryBot/1.0 (licensed visual discovery)" }
   });
   if (!response.ok) throw new Error("Openverse image search failed ("+response.status+").");
   const data = await response.json();
-  const results = (data.results || []).filter(item => item.url && item.license && /^(cc0|pdm|by|by-sa)$/i.test(item.license));
-  console.log("Openverse query ["+q+"] returned "+results.length+" licensed images.");
-  const item = results.find(result => result.thumbnail || result.url);
-  return item ? {
+  const candidates = (data.results || []).filter(item =>
+    item.url && item.license && /^(cc0|pdm|by|by-sa)$/i.test(item.license) &&
+    !USED_ASSET_PAGES.has(item.foreign_landing_url || item.detail_url)
+  ).map(item => ({item,score:relevanceScore(q,[item.title,item.tags?.map(tag=>tag.name).join(" "),item.description].join(" "))}))
+    .filter(candidate => candidate.score >= 0.5);
+  candidates.sort((a,b)=>b.score-a.score);
+  const best = candidates[0];
+  if (!best) {
+    console.log("Openverse returned no sufficiently relevant licensed image for: " + q);
+    return null;
+  }
+  const item=best.item;
+  return {
     url: item.thumbnail || item.url,
     page: item.foreign_landing_url || item.detail_url || item.url,
     creator: item.creator || "Unknown creator",
     provider: "Openverse photo",
     license: String(item.license).toUpperCase(),
     licenseUrl: item.license_url || "",
-    creatorUrl: item.creator_url || ""
-  } : null;
+    creatorUrl: item.creator_url || "",
+    relevance: best.score
+  };
 }
 async function findPexelsVideo(query) {
   // Pexels footage is illustrative only; never label it as evidence of a specific company or event.
@@ -268,12 +279,16 @@ async function findPexelsVideo(query) {
 
 async function findNasaMedia(query, mediaType) {
   const q=String(query||"").trim(); if(!q) return null;
-  const response=await fetchWithTimeout("https://images-api.nasa.gov/search?q="+encodeURIComponent(q)+"&media_type="+mediaType+"&page_size=20",{},20000);
+  const response=await fetchWithTimeout("https://images-api.nasa.gov/search?q="+encodeURIComponent(q)+"&media_type="+mediaType+"&page_size=30",{},20000);
   if(!response.ok) throw new Error("NASA media search failed ("+response.status+").");
   const data=await response.json();
-  for(const item of data.collection?.items||[]) {
-    const meta=item.data?.[0]||{}, id=meta.nasa_id;
-    if(!id || USED_ASSET_PAGES.has("NASA:"+id)) continue;
+  const candidates=(data.collection?.items||[]).map(item=>{
+    const meta=item.data?.[0]||{};
+    return {item,meta,id:meta.nasa_id,score:relevanceScore(q,[meta.title,meta.description,(meta.keywords||[]).join(" ")].join(" "))};
+  }).filter(x=>x.id && x.score>=0.5 && !USED_ASSET_PAGES.has("NASA:"+x.id));
+  candidates.sort((a,b)=>b.score-a.score);
+  for(const candidate of candidates) {
+    const {item,meta,id,score}=candidate;
     if(mediaType==="video") {
       const mr=await fetchWithTimeout("https://images-api.nasa.gov/asset/"+encodeURIComponent(id),{},20000);
       if(!mr.ok) continue;
@@ -282,13 +297,13 @@ async function findNasaMedia(query, mediaType) {
       const media=entries.find(x=>typeof x==="string" && /\.mp4(?:$|\?)/i.test(x)) ||
         entries.find(x=>typeof x?.href==="string" && /\.mp4(?:$|\?)/i.test(x.href))?.href;
       if(!media) continue;
-      return {url:media,page:"https://images.nasa.gov/details/"+encodeURIComponent(id),creator:meta.center||"NASA",creatorUrl:"https://images.nasa.gov/",provider:"NASA video",license:"NASA media usage guidelines",licenseUrl:"https://www.nasa.gov/nasa-brand-center/images-and-media/",nasaId:id};
+      return {url:media,page:"https://images.nasa.gov/details/"+encodeURIComponent(id),creator:meta.center||"NASA",creatorUrl:"https://images.nasa.gov/",provider:"NASA video",license:"NASA media usage guidelines",licenseUrl:"https://www.nasa.gov/nasa-brand-center/images-and-media/",nasaId:id,relevance:score};
     }
     const preview=item.links?.find(x=>x.rel==="preview"&&x.href)?.href;
     if(!preview || !/\.(jpg|jpeg|png|webp)(?:$|\?)/i.test(preview)) continue;
-    return {url:preview,page:"https://images.nasa.gov/details/"+encodeURIComponent(id),creator:meta.center||"NASA",creatorUrl:"https://images.nasa.gov/",provider:"NASA photo",license:"NASA media usage guidelines",licenseUrl:"https://www.nasa.gov/nasa-brand-center/images-and-media/",nasaId:id};
+    return {url:preview,page:"https://images.nasa.gov/details/"+encodeURIComponent(id),creator:meta.center||"NASA",creatorUrl:"https://images.nasa.gov/",provider:"NASA photo",license:"NASA media usage guidelines",licenseUrl:"https://www.nasa.gov/nasa-brand-center/images-and-media/",nasaId:id,relevance:score};
   }
-  console.log("NASA "+mediaType+" search returned no unused media for: "+q);
+  console.log("NASA "+mediaType+" search returned no sufficiently relevant unused media for: "+q);
   return null;
 }
 
@@ -323,10 +338,8 @@ async function main() {
       }
     };
     asset = await tryProvider("Pixabay video", () => findPixabayVideo(query));
-    if (!asset) asset = await tryProvider("Pexels video", () => findPexelsVideo(query));
     if (!asset) asset = await tryProvider("NASA video", () => findNasaMedia(query, "video"));
     if (!asset) still = await tryProvider("Pixabay photo", () => findPixabayImage(query));
-    if (!asset && !still) still = await tryProvider("Pexels photo", () => findPexelsImage(query));
     if (!asset && !still) still = await tryProvider("Wikimedia Commons", () => findCommonsImage(query));
     if (!asset && !still) still = await tryProvider("Openverse", () => findOpenverseImage(query));
     if (!asset && !still) still = await tryProvider("NASA photo", () => findNasaMedia(query, "image"));
@@ -365,7 +378,7 @@ async function main() {
   await writeFile(path.join(OUT,"CREDITS.md"),[
     "# Visual credits","",
     "Stock photos/videos are sourced from Pixabay, Pexels, Wikimedia Commons, Openverse, or NASA. Review each linked asset page and its applicable usage guidance before publication.",
-    "Pexels footage is illustrative material and must not be presented as actual footage of a specific company, person, product, or event unless independently verified.",
+    "All stock footage is illustrative material and must not be presented as actual footage of a specific company, person, product, or event unless independently verified.",
     "",
     ...credits.map(c=>c.page
       ? "- Scene "+c.scene+": ["+c.provider+"]("+c.page+") — "+c.creator+" — "+(c.license||"Pexels License")+(c.licenseUrl?" ("+c.licenseUrl+")":"")
@@ -374,7 +387,7 @@ async function main() {
   await writeFile(path.join(OUT,"README.txt"),[
     "The Hidden Engine visual-only documentary render",
     "Audio: intentionally omitted; this render is for visual scene inspection only.",
-    "Visuals: relevance-filtered Pixabay/Pexels video and photos, NASA media, Wikimedia Commons/Openverse images; otherwise original branded motion graphics.",
+    "Visuals: relevance-filtered Pixabay video and photos, NASA media, Wikimedia Commons/Openverse images; otherwise original branded motion graphics.",
     "No narration, music, or sound effects.",
     "Identity: charcoal/black, ivory typography, restrained copper accents, documentary-investigative overlays.",
     "Review visual relevance, licenses, and credits before publication.",
