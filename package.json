@@ -14,7 +14,8 @@
     "documentary:ingest": "node src/source-ingest.js",
     "documentary:script-plan": "node src/script-architect.js",
     "documentary:write-script": "node src/script-writer.js",
-    "documentary:visual-plan": "node src/visual-director.js"
+    "documentary:visual-plan": "node src/visual-director.js",
+    "documentary:prepare-render": "node src/prepare-render.js"
   },
   "dependencies": {
     "dotenv": "^16.4.7",

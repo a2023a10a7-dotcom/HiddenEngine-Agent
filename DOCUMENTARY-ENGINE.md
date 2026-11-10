@@ -122,3 +122,28 @@ PROJECT_ID=<project-id> npm run documentary:visual-plan
 Requires `SCRIPT-DRAFT.json`. Produces `VISUAL-DIRECTION.json`, `VISUAL-DIRECTION.md`, and `visual-assets/ASSET-REGISTER.json`. It creates a scene-by-scene shot plan, restrained visual language, chart/document/map/archival-footage briefs, edit and audio notes, and a rights/provenance register.
 
 This stage does **not** download, license, or clear any media. Every asset begins as `not_acquired`; no suggested stock footage may be represented as real evidence. Before use, record the original URL, creator, exact license and evidence, territory, expiry, and attribution requirements. Match products, people, places, and dates to the story. Chart figures must come from verified claim records and show units, period, source, and methodology.
+
+
+## Approved script handoff to the renderer
+
+The renderer consumes `production/projects/<project-id>/script.json`, while the evidence-linked writer emits `SCRIPT-DRAFT.json`. Do not rename or hand-edit the draft into a render script. Use the explicit approval handoff:
+
+1. A human editor rewrites each narration block and checks it against the original source.
+2. Set each approved block's `editorialStatus` to `approved`, `factCheck.exactPassageConfirmed` to `true`, and record a precise `passageReference` for every source reference.
+3. Compute the SHA-256 hash of the exact current `SCRIPT-DRAFT.json` bytes.
+4. Create `SCRIPT-APPROVAL.json` in the project folder:
+
+```json
+{
+  "projectId": "the-exact-project-id",
+  "status": "approved_for_recording",
+  "approvedBy": "Human editor name",
+  "approvedAt": "2026-11-08T18:00:00.000Z",
+  "draftSha256": "64-character SHA-256 of SCRIPT-DRAFT.json"
+}
+```
+
+5. Run `PROJECT_ID=<project-id> npm run documentary:prepare-render`. The adapter validates the approval identity, timestamp, exact draft hash, scene/block completeness, eligible claim classifications, source references, precise passage references, and passage-review flags. If any check fails, it exits without creating `script.json`.
+6. Only after it succeeds, run the existing manual render workflow.
+
+The adapter maps approved narration blocks to the renderer's expected `title`, `subtitle`, `narration`, `visual_query`, and `visual` scene fields. It does not acquire footage, create polished visual assets, independently verify claims, or grant legal clearance. The SHA-256 value binds approval to one exact draft; any subsequent edit requires a new review and approval.
