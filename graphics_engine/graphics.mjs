@@ -165,6 +165,31 @@ export function createTimeline({ title, events }) {
   `);
 }
 
+
+export function createExplodedDiagram({ title, components }) {
+  const data = validateItems(components, 6);
+  const centerX = 960;
+  const startY = 365;
+  const layerGap = Math.min(92, 500 / data.length);
+  const layers = data.map((part, index) => {
+    const y = startY + index * layerGap;
+    const depth = 30 + index * 5;
+    const width = 760 - index * 48;
+    const x = centerX - width / 2;
+    const points = `${centerX},${y - depth} ${x + width},${y} ${centerX},${y + depth} ${x},${y}`;
+    return `
+      <path d="M${centerX} ${y + depth + 4}V${y + layerGap - depth - 4}" stroke="#D6A36B" stroke-width="3" stroke-dasharray="7 8" opacity=".8"/>
+      <polygon points="${points}" fill="#24313D" stroke="#D6A36B" stroke-width="2"/>
+      <path d="M${x} ${y}V${y + 28}L${centerX} ${y + depth + 28}L${x + width} ${y + 28}V${y}" fill="#17212B" stroke="#526170" stroke-width="1.5"/>
+      <text x="${centerX}" y="${y + 8}" text-anchor="middle" fill="#F3F0E9" font-size="22" font-weight="bold" font-family="DejaVu Sans">${escapeXml(part.label)}</text>
+      <text x="${centerX + width / 2 + 40}" y="${y + 8}" fill="#AAB4BE" font-size="17" font-family="DejaVu Sans">${escapeXml(part.detail || "")}</text>
+    `;
+  }).join("");
+  return createSvg(title, `${panel(100, 300, 1720, 650)}
+    <text x="150" y="350" fill="#AAB4BE" font-size="16" letter-spacing="2" font-family="DejaVu Sans">EXPLODED TECHNICAL VIEW</text>
+    ${layers}`);
+}
+
 export function createArchitectureDiagram({ title, nodes, connections = [] }) {
   const data = validateItems(nodes, 8);
   const ids = data.map(node => node.id);
