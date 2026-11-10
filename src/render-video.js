@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile, rm } from "node:fs/promises";
+import { access, mkdir, readFile, writeFile, rm } from "node:fs/promises";
 import { spawn } from "node:child_process";
 import path from "node:path";
 
@@ -111,6 +111,9 @@ function overlaySvg(scene, index, total) {
   </style></svg>`;
 }
 const PIXABAY_API_KEY = process.env.PIXABAY_API_KEY;
+const PIPER_EXECUTABLE = process.env.PIPER_EXECUTABLE || "piper";
+const PIPER_MODEL = process.env.PIPER_MODEL || "models/piper-voice.onnx";
+const PIPER_LENGTH_SCALE = Number(process.env.PIPER_LENGTH_SCALE || "1.0");
 const USED_ASSET_PAGES = new Set();
 
 function relevanceScore(query, tags) {
@@ -312,6 +315,23 @@ async function download(url, dest) {
   if (!response.ok) throw new Error("Asset download failed (" + response.status + ").");
   await writeFile(dest, Buffer.from(await response.arrayBuffer()));
 }
+async function piperTTS(text, output) {
+  if (!Number.isFinite(PIPER_LENGTH_SCALE) || PIPER_LENGTH_SCALE <= 0) throw new Error("PIPER_LENGTH_SCALE must be a positive number.");
+  await access(PIPER_MODEL).catch(() => { throw new Error("Piper voice model not found: " + PIPER_MODEL); });
+  await access(PIPER_MODEL + ".json").catch(() => { throw new Error("Piper voice config not found: " + PIPER_MODEL + ".json"); });
+  await new Promise((resolve, reject) => {
+    const child = spawn(PIPER_EXECUTABLE, ["--model", PIPER_MODEL, "--output_file", output, "--length_scale", String(PIPER_LENGTH_SCALE)], { stdio: ["pipe", "ignore", "pipe"] });
+    let stderr = "";
+    child.stderr.on("data", chunk => stderr += chunk);
+    child.on("error", reject);
+    child.on("close", code => code === 0 ? resolve() : reject(new Error("Piper TTS exited with code " + code + ": " + stderr.slice(-1200))));
+    child.stdin.on("error", reject);
+    child.stdin.end(String(text));
+  });
+  const probe = await capture("ffprobe", ["-v", "error", "-show_entries", "format=duration", "-of", "default=noprint_wrappers=1:nokey=1", output]);
+  if (!(Number(probe.stdout.trim()) > 0)) throw new Error("Piper produced an empty narration file.");
+}
+
 async function main() {
   const script = JSON.parse(await readFile(path.join(ROOT, "script.json"), "utf8"));
   if (!Array.isArray(script.scenes) || !script.scenes.length) throw new Error("script.json has no scenes.");
@@ -323,7 +343,10 @@ async function main() {
     const stem = "scene-" + String(i+1).padStart(2,"0");
     const svg = path.join(OUT, stem + ".svg");
     const clip = path.join(OUT, stem + "-visual.mp4");
+    const audio = path.join(OUT, stem + ".wav");
     const rendered = path.join(OUT, stem + ".mp4");
+    if (!scene.narration?.trim()) throw new Error("Scene " + (i+1) + " has no narration.");
+    await piperTTS(scene.narration, audio);
     await writeFile(svg, overlaySvg(scene, i, script.scenes.length));
     const query = scene.visual_query || [scene.title, scene.subtitle].filter(Boolean).join(" ");
     console.log("Pexels key configured: " + Boolean(PEXELS_API_KEY));
@@ -348,20 +371,20 @@ async function main() {
 
       await download(asset.url, clip);
       credits.push({ scene:i+1, query, provider:asset.provider || "Pexels video", page:asset.page, creator:asset.creator, creatorUrl:asset.creatorUrl, usage:"Illustrative footage; not proof of a named event or entity." });
-      await run("ffmpeg", ["-y","-stream_loop","-1","-i",clip,"-loop","1","-i",svg,
+      await run("ffmpeg", ["-y","-stream_loop","-1","-i",clip,"-loop","1","-i",svg,"-i",audio,
         "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,eq=contrast=1.12:saturation=0.78,drawbox=x=0:y=0:w=iw:h=ih:color=#08090b@0.18:t=fill[bg];[bg][1:v]overlay=0:0,format=yuv420p[v]",
-        "-map","[v]","-t",String(SCENE_DURATION_SECONDS),"-an","-c:v","libx264","-preset","veryfast","-crf","21","-movflags","+faststart",rendered]);
+        "-map","[v]","-map","2:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
     } else if (still) {
       USED_ASSET_PAGES.add(still.nasaId ? "NASA:"+still.nasaId : still.page);
       const imagePath=clip.replace(/\.mp4$/,".jpg");
       await download(still.url, imagePath);
       credits.push({ scene:i+1, query, provider:still.provider || (still.license ? "Wikimedia Commons photo" : "Pexels photo"), page:still.page, creator:still.creator, creatorUrl:still.creatorUrl || "", license:still.license || (still.provider === "Pixabay photo" ? "Pixabay Content License" : still.provider === "Pexels photo" ? "Pexels License" : "See source page"), licenseUrl:still.licenseUrl || "", usage:"Illustrative still; not proof of a named event or entity." });
-      await run("ffmpeg", ["-y","-loop","1","-framerate","25","-i",imagePath,"-loop","1","-i",svg,
+      await run("ffmpeg", ["-y","-loop","1","-framerate","25","-i",imagePath,"-loop","1","-i",svg,"-i",audio,
         "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,zoompan=z='min(zoom+0.0003,1.07)':d=1:s=1920x1080:fps=25,eq=contrast=1.08:saturation=0.82[bg];[bg][1:v]overlay=0:0,format=yuv420p[v]",
         "-map","[v]","-t",String(SCENE_DURATION_SECONDS),"-an","-c:v","libx264","-preset","veryfast","-crf","21","-movflags","+faststart",rendered]);
     } else {
       credits.push({ scene:i+1, query, provider:"Original motion graphic", note:"No matching licensed stock asset was returned; generated a branded motion graphic instead." });
-      await run("ffmpeg", ["-y","-f","lavfi","-i","color=c=#101113:s=1920x1080:r=25:d="+SCENE_DURATION_SECONDS,"-loop","1","-i",svg,
+      await run("ffmpeg", ["-y","-f","lavfi","-i","color=c=#101113:s=1920x1080:r=25:d=3600","-loop","1","-i",svg,"-i",audio,
         "-filter_complex","[0:v]format=yuv420p[bg];[bg][1:v]overlay=0:0,format=yuv420p[v]",
         "-map","[v]","-t",String(SCENE_DURATION_SECONDS),"-an","-c:v","libx264","-preset","veryfast","-crf","21","-movflags","+faststart",rendered]);
     }
@@ -386,18 +409,18 @@ async function main() {
   ].join("\n")+"\n");
   await writeFile(path.join(OUT,"README.txt"),[
     "The Hidden Engine visual-only documentary render",
-    "Audio: intentionally omitted; this render is for visual scene inspection only.",
+    "Audio: Piper TTS narration (configurable voice model and speaking rate); no music.",
     "Visuals: relevance-filtered Pixabay video and photos, NASA media, Wikimedia Commons/Openverse images; otherwise original branded motion graphics.",
-    "No narration, music, or sound effects.",
+    "Narration: generated locally by Piper TTS. No music; only narration audio.",
     "Identity: charcoal/black, ivory typography, restrained copper accents, documentary-investigative overlays.",
     "Review visual relevance, licenses, and credits before publication.",
     "No automatic YouTube upload."
   ].join("\n")+"\n");
   const qa = await new Promise((resolve,reject) => { const p=spawn("ffprobe",["-v","error","-show_entries","format=duration:stream=codec_type,width,height","-of","json",output]); let data=""; p.stdout.on("data",d=>data+=d); p.on("error",reject); p.on("close",code=>code===0?resolve(JSON.parse(data)):reject(new Error("ffprobe failed"))); });
-  if (!qa.streams.some(x=>x.codec_type==="video" && x.width===1920 && x.height===1080) || qa.streams.some(x=>x.codec_type==="audio")) throw new Error("Final MP4 failed silent 1080p QA.");
+  if (!qa.streams.some(x=>x.codec_type==="video" && x.width===1920 && x.height===1080) || !qa.streams.some(x=>x.codec_type==="audio")) throw new Error("Final MP4 failed silent 1080p QA.");
   const averageSceneDuration = Number(qa.format.duration) / clips.length;
   if (clips.length < 5 || averageSceneDuration > 10.5) throw new Error("Final pacing QA failed: " + clips.length + " scenes, average " + averageSceneDuration.toFixed(2) + " seconds.");
-  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:Number(qa.format.duration),audio:false,audioDesign:"silent_visual_inspection_only",scenes:clips.length,averageSceneDuration,visualProviders:[...new Set(credits.map(c=>c.provider))],licensedAssetScenes:stockScenes},null,2)+"\n");
+  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:Number(qa.format.duration),audio:true,audioDesign:"Piper TTS narration; no music",scenes:clips.length,averageSceneDuration,visualProviders:[...new Set(credits.map(c=>c.provider))],licensedAssetScenes:stockScenes},null,2)+"\n");
   console.log("Rendered and passed silent visual QA: "+output);
 }
 main().catch(error=>{console.error("Render failed:",error);process.exit(1);});
