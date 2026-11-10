@@ -1,9 +1,12 @@
+# Normalize video geometry in render-video.js before concat.
+# Multi-shot visual coverage validation is enforced by src/render-video.js.
 name: HiddenEngine Cinematic Documentary Render
 
 on:
   push:
     branches:
       - feature/piper-tts-integration
+      - feature/multishot-documentary-edit
     paths:
       - "src/render-video.js"
       - ".github/workflows/render-video.yml"

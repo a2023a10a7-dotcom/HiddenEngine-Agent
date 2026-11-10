@@ -89,6 +89,7 @@ function titleOverlaySvg(scene) {
     .map((value, i) => '<text x="154" y="' + (760 + i*76) + '" class="title">' + xml(value) + '</text>').join("");
   const subtitle = lines(scene.subtitle || "", 58).slice(0, 2)
     .map((value, i) => '<text x="158" y="' + (930 + i*38) + '" class="sub">' + xml(value) + '</text>').join("");
+  if (!title && !subtitle) return '<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080"></svg>';
   return '<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080">' +
     '<path d="M112 690 V674 H1780 V1012 H112 V982 M112 690 H130 M1762 674 H1780 V692 M1762 1012 H1780 V994" fill="none" stroke="#A8794D" stroke-width="3" opacity=".9"/>' +
     '<path d="M112 710 V674 H380" fill="none" stroke="#F0EDE5" stroke-width="5"/>' + title + subtitle +
@@ -339,100 +340,241 @@ async function piperTTS(text, output) {
   return duration;
 }
 
+function splitNarrationIntoShots(narration, maxWords = 16) {
+  const sentences = String(narration || "").match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [];
+  const units = [];
+  for (const sentence of sentences) {
+    const words = sentence.trim().split(/\s+/).filter(Boolean);
+    for (let i = 0; i < words.length; i += maxWords) units.push(words.slice(i, i + maxWords).join(" "));
+  }
+  const shots = [];
+  let current = [];
+  for (const unit of units) {
+    const words = unit.split(/\s+/).length;
+    if (current.length && current.join(" ").split(/\s+/).length + words > maxWords) {
+      shots.push(current.join(" ")); current = [];
+    }
+    current.push(unit);
+  }
+  if (current.length) shots.push(current.join(" "));
+  return shots.filter(Boolean);
+}
+
 async function main() {
   const script = JSON.parse(await readFile(path.join(ROOT, "script.json"), "utf8"));
   if (!Array.isArray(script.scenes) || !script.scenes.length) throw new Error("script.json has no scenes.");
   await rm(OUT, { recursive: true, force: true });
   await mkdir(OUT, { recursive: true });
-  const clips = [], credits = [], narrationDurations = [];
-  for (let i=0; i<script.scenes.length; i++) {
-    const scene = script.scenes[i];
-    const stem = "scene-" + String(i+1).padStart(2,"0");
-    const svg = path.join(OUT, stem + ".svg");
-    const titleSvg = path.join(OUT, stem + "-title.svg");
-    const clip = path.join(OUT, stem + "-visual.mp4");
-    const audio = path.join(OUT, stem + ".wav");
-    const rendered = path.join(OUT, stem + ".mp4");
-    if (!scene.narration?.trim()) throw new Error("Scene " + (i+1) + " has no narration.");
-    narrationDurations.push(await piperTTS(scene.narration, audio));
-    await writeFile(svg, overlaySvg(scene, i, script.scenes.length));
-    await writeFile(titleSvg, titleOverlaySvg(scene));
-    const query = scene.visual_query || [scene.title, scene.subtitle].filter(Boolean).join(" ");
-    console.log("Pexels key configured: " + Boolean(PEXELS_API_KEY));
-    console.log("Searching visual asset for scene " + (i+1) + ": " + query);
-    let asset = null;
-    let still = null;
-    const tryProvider = async (name, search) => {
-      try { return await search(); }
-      catch (error) {
-        console.warn(name + " unavailable for scene " + (i+1) + "; continuing: " + error.message);
-        return null;
-      }
-    };
-    asset = await tryProvider("Pixabay video", () => findPixabayVideo(query));
-    if (!asset) asset = await tryProvider("NASA video", () => findNasaMedia(query, "video"));
-    if (!asset) still = await tryProvider("Pixabay photo", () => findPixabayImage(query));
-    if (!asset && !still) still = await tryProvider("Wikimedia Commons", () => findCommonsImage(query));
-    if (!asset && !still) still = await tryProvider("Openverse", () => findOpenverseImage(query));
-    if (!asset && !still) still = await tryProvider("NASA photo", () => findNasaMedia(query, "image"));
-    if (asset) {
-      USED_ASSET_PAGES.add(asset.nasaId ? "NASA:"+asset.nasaId : asset.page);
+  const clips = [], credits = [], narrationDurations = [], shotReport = [];
+  let totalShots = 0;
 
-      await download(asset.url, clip);
-      credits.push({ scene:i+1, query, provider:asset.provider || "Pexels video", page:asset.page, creator:asset.creator, creatorUrl:asset.creatorUrl, usage:"Illustrative footage; not proof of a named event or entity." });
-      await run("ffmpeg", ["-y","-stream_loop","-1","-i",clip,"-loop","1","-i",svg,"-loop","1","-i",titleSvg,"-i",audio,
-        "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,eq=contrast=1.12:saturation=0.78,drawbox=x=0:y=0:w=iw:h=ih:color=#08090b@0.18:t=fill[bg];[bg][1:v]overlay=0:0[base];[2:v]format=rgba,fade=t=in:st=0:d=0.7:alpha=1,fade=t=out:st=3.6:d=0.65:alpha=1[title];[base][title]overlay=x='120-90*max(0,1-t/0.7)+90*max(0,min(1,(t-3.6)/0.65))':y=0:format=auto,format=yuv420p[v]",
-        "-map","[v]","-map","3:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-t",String(narrationDurations[i]),"-movflags","+faststart",rendered]);
-    } else if (still) {
-      USED_ASSET_PAGES.add(still.nasaId ? "NASA:"+still.nasaId : still.page);
-      const imagePath=clip.replace(/\.mp4$/,".jpg");
-      await download(still.url, imagePath);
-      credits.push({ scene:i+1, query, provider:still.provider || (still.license ? "Wikimedia Commons photo" : "Pexels photo"), page:still.page, creator:still.creator, creatorUrl:still.creatorUrl || "", license:still.license || (still.provider === "Pixabay photo" ? "Pixabay Content License" : still.provider === "Pexels photo" ? "Pexels License" : "See source page"), licenseUrl:still.licenseUrl || "", usage:"Illustrative still; not proof of a named event or entity." });
-      await run("ffmpeg", ["-y","-loop","1","-framerate","25","-i",imagePath,"-loop","1","-i",svg,"-loop","1","-i",titleSvg,"-i",audio,
-        "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,zoompan=z='min(zoom+0.0003,1.07)':d=1:s=1920x1080:fps=25,eq=contrast=1.08:saturation=0.82[bg];[bg][1:v]overlay=0:0[base];[2:v]format=rgba,fade=t=in:st=0:d=0.7:alpha=1,fade=t=out:st=3.6:d=0.65:alpha=1[title];[base][title]overlay=x='120-90*max(0,1-t/0.7)+90*max(0,min(1,(t-3.6)/0.65))':y=0:format=auto,format=yuv420p[v]",
-        "-map","[v]","-map","3:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-t",String(narrationDurations[i]),"-movflags","+faststart",rendered]);
-    } else {
-      credits.push({ scene:i+1, query, provider:"Original motion graphic", note:"No matching licensed stock asset was returned; generated a branded motion graphic instead." });
-      await run("ffmpeg", ["-y","-f","lavfi","-i","color=c=#101113:s=1920x1080:r=25:d=3600","-loop","1","-i",svg,"-loop","1","-i",titleSvg,"-i",audio,
-        "-filter_complex","[0:v]format=yuv420p[bg];[bg][1:v]overlay=0:0[base];[2:v]format=rgba,fade=t=in:st=0:d=0.7:alpha=1,fade=t=out:st=3.6:d=0.65:alpha=1[title];[base][title]overlay=x='120-90*max(0,1-t/0.7)+90*max(0,min(1,(t-3.6)/0.65))':y=0:format=auto,format=yuv420p[v]",
-        "-map","[v]","-map","3:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-t",String(narrationDurations[i]),"-movflags","+faststart",rendered]);
+  for (let i = 0; i < script.scenes.length; i++) {
+    const scene = script.scenes[i];
+    if (!scene.narration?.trim()) throw new Error("Scene " + (i + 1) + " has no narration.");
+    const shotTexts = splitNarrationIntoShots(scene.narration, 16);
+    if (!shotTexts.length) throw new Error("Scene " + (i + 1) + " produced no visual shots.");
+    console.log("Scene " + (i + 1) + ": splitting narration into " + shotTexts.length + " shots.");
+
+    for (let j = 0; j < shotTexts.length; j++) {
+      totalShots++;
+      const shotText = shotTexts[j];
+      const stem = "scene-" + String(i + 1).padStart(2, "0") + "-shot-" + String(j + 1).padStart(2, "0");
+      const svg = path.join(OUT, stem + ".svg");
+      const titleSvg = path.join(OUT, stem + "-title.svg");
+      const visualFile = path.join(OUT, stem + "-visual.mp4");
+      const audio = path.join(OUT, stem + ".wav");
+      const rendered = path.join(OUT, stem + ".mp4");
+      const shotScene = { ...scene, visual: j === 0 ? scene.visual : null };
+      const titleScene = j === 0 ? scene : { title: "", subtitle: "" };
+      const narrationDuration = await piperTTS(shotText, audio);
+      narrationDurations.push(narrationDuration);
+      await writeFile(svg, overlaySvg(shotScene, i, script.scenes.length));
+      await writeFile(titleSvg, titleOverlaySvg(titleScene));
+
+      // Pixabay rejects search queries longer than its documented q limit.
+      // Use the curated scene visual query first; never append full narration paragraphs.
+      const rawQuery = String(scene.visual_query || scene.title || shotText || "")
+        .replace(/[^a-zA-Z0-9\s-]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+      const query = rawQuery.split(" ").slice(0, 10).join(" ").slice(0, 90);
+      console.log("Searching unique visual for " + stem + ": " + query);
+      let asset = null;
+      let still = null;
+      const tryProvider = async (name, search) => {
+        try { return await search(); }
+        catch (error) {
+          console.warn(name + " unavailable for " + stem + "; continuing: " + error.message);
+          return null;
+        }
+      };
+      asset = await tryProvider("Pixabay video", () => findPixabayVideo(query));
+      if (!asset) asset = await tryProvider("Pexels video", () => findPexelsVideo(query));
+      if (!asset) asset = await tryProvider("NASA video", () => findNasaMedia(query, "video"));
+      if (!asset) still = await tryProvider("Pixabay photo", () => findPixabayImage(query));
+      if (!asset && !still) still = await tryProvider("Wikimedia Commons", () => findCommonsImage(query));
+      if (!asset && !still) still = await tryProvider("Openverse", () => findOpenverseImage(query));
+      if (!asset && !still) still = await tryProvider("NASA photo", () => findNasaMedia(query, "image"));
+
+      let visualInput;
+      let filter;
+      let audioInputIndex;
+      if (asset) {
+        USED_ASSET_PAGES.add(asset.nasaId ? "NASA:" + asset.nasaId : asset.page);
+        await download(asset.url, visualFile);
+        credits.push({
+          scene: i + 1, shot: j + 1, narration: shotText, query,
+          provider: asset.provider || "Pixabay video", page: asset.page,
+          creator: asset.creator, creatorUrl: asset.creatorUrl,
+          usage: "Illustrative footage; not proof of a named event or entity."
+        });
+        visualInput = ["-stream_loop", "-1", "-i", visualFile];
+        filter = "[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,eq=contrast=1.12:saturation=0.78,drawbox=x=0:y=0:w=iw:h=ih:color=#08090b@0.18:t=fill[bg]";
+      } else if (still) {
+        USED_ASSET_PAGES.add(still.nasaId ? "NASA:" + still.nasaId : still.page);
+        const imagePath = visualFile.replace(/\.mp4$/, ".jpg");
+        await download(still.url, imagePath);
+        credits.push({
+          scene: i + 1, shot: j + 1, narration: shotText, query,
+          provider: still.provider || "Licensed photo", page: still.page,
+          creator: still.creator, creatorUrl: still.creatorUrl || "",
+          license: still.license || "See source page", licenseUrl: still.licenseUrl || "",
+          usage: "Illustrative still; not proof of a named event or entity."
+        });
+        visualInput = ["-loop", "1", "-framerate", "25", "-i", imagePath];
+        filter = "[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,zoompan=z='min(zoom+0.0003,1.07)':d=1:s=1920x1080:fps=25,eq=contrast=1.08:saturation=0.82[bg]";
+      } else {
+        credits.push({
+          scene: i + 1, shot: j + 1, narration: shotText, query,
+          provider: "Original motion graphic",
+          note: "No sufficiently relevant unused licensed asset was found for this shot."
+        });
+        visualInput = ["-f", "lavfi", "-i", "color=c=#101113:s=1920x1080:r=25:d=3600"];
+        filter = "[0:v]format=yuv420p[bg]";
+      }
+
+      const hasTitle = j === 0 && Boolean(scene.title || scene.subtitle);
+      const args = ["-y", ...visualInput, "-loop", "1", "-i", svg];
+      if (hasTitle) args.push("-loop", "1", "-i", titleSvg);
+      args.push("-i", audio);
+      const overlayIndex = 1;
+      if (hasTitle) {
+        filter += ";[bg][" + overlayIndex + ":v]overlay=0:0[base];[" + (overlayIndex + 1) + ":v]format=rgba,fade=t=in:st=0:d=0.7:alpha=1,fade=t=out:st=3.6:d=0.65:alpha=1[title];[base][title]overlay=x='120-90*max(0,1-t/0.7)+90*max(0,min(1,(t-3.6)/0.65))':y=0:format=auto,tpad=stop_mode=clone:stop_duration=" + narrationDuration + ",trim=duration=" + narrationDuration + ",setpts=PTS-STARTPTS[v]";
+        audioInputIndex = 3;
+      } else {
+        filter += ";[bg][" + overlayIndex + ":v]overlay=0:0,tpad=stop_mode=clone:stop_duration=" + narrationDuration + ",trim=duration=" + narrationDuration + ",setpts=PTS-STARTPTS,format=yuv420p[v]";
+        audioInputIndex = 2;
+      }
+      args.push(
+        "-filter_complex", filter,
+        "-map", "[v]", "-map", audioInputIndex + ":a",
+        "-c:v", "libx264", "-preset", "veryfast", "-crf", "21",
+        "-c:a", "aac", "-b:a", "192k",
+        "-t", String(narrationDuration), "-movflags", "+faststart", rendered
+      );
+      await run("ffmpeg", args);
+      const clipProbe = await capture("ffprobe", [
+        "-v", "error", "-show_entries", "format=duration",
+        "-of", "default=noprint_wrappers=1:nokey=1", rendered
+      ]);
+      const actualClipDuration = Number(clipProbe.stdout.trim());
+      if (!Number.isFinite(actualClipDuration) || Math.abs(actualClipDuration - narrationDuration) > 0.35) {
+        throw new Error("Shot duration mismatch for " + stem + ": rendered " +
+          actualClipDuration.toFixed(2) + "s vs narration " + narrationDuration.toFixed(2) + "s.");
+      }
+      clips.push(rendered);
+      shotReport.push({
+        scene: i + 1, shot: j + 1, words: shotText.trim().split(/\s+/).length,
+        narrationDuration: Number(narrationDuration.toFixed(3)),
+        visualType: asset ? "video" : still ? "image" : "motion-graphic",
+        provider: asset?.provider || still?.provider || "Original motion graphic"
+      });
+      console.log("Rendered " + stem + " (" + narrationDuration.toFixed(1) + "s).");
     }
-    clips.push(rendered);
-    console.log("Rendered narrated scene " + (i+1) + "/" + script.scenes.length + ".");
   }
-  const stockScenes = credits.filter(item => ["Pixabay video","Pixabay photo","Pexels video","Pexels photo","Wikimedia Commons photo","Openverse photo","NASA video","NASA photo"].includes(item.provider)).length;
-  console.log("Visual assets: " + stockScenes + "/" + script.scenes.length + " scenes use licensed photo/video; remaining scenes use original motion graphics.");
-  const list = path.join(OUT,"concat.txt");
-  await writeFile(list, clips.map(f=>"file '"+path.basename(f)+"'").join("\n")+"\n");
-  const output = path.join(OUT,"the-hidden-engine-documentary.mp4");
-  await run("ffmpeg",["-y","-fflags","+genpts","-f","concat","-safe","0","-i",list,"-vf","setpts=PTS-STARTPTS,fps=25","-af","aresample=48000:async=1:first_pts=0,asetpts=N/SR/TB","-t",String(narrationDurations.reduce((sum,duration)=>sum+duration,0)),"-shortest","-c:v","libx264","-preset","veryfast","-crf","21","-r","25","-pix_fmt","yuv420p","-c:a","aac","-b:a","192k","-ar","48000","-movflags","+faststart",output]);
-  await writeFile(path.join(OUT,"visual-credits.json"),JSON.stringify(credits,null,2)+"\n");
-  await writeFile(path.join(OUT,"CREDITS.md"),[
-    "# Visual credits","",
+
+  const stockShots = credits.filter(item => [
+    "Pixabay video", "Pixabay photo", "Pexels video", "Pexels photo",
+    "Wikimedia Commons photo", "Openverse photo", "NASA video", "NASA photo"
+  ].includes(item.provider)).length;
+  console.log("Visual assets: " + stockShots + "/" + totalShots + " shots use distinct licensed photo/video; other shots use original motion graphics.");
+  const output = path.join(OUT, "the-hidden-engine-documentary.mp4");
+  const concatInputs = [];
+  const concatFilters = [];
+  for (let index = 0; index < clips.length; index++) {
+    concatInputs.push("-i", clips[index]);
+    concatFilters.push(
+      "[" + index + ":v:0]setpts=PTS-STARTPTS,fps=25,scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2,setsar=1,format=yuv420p[v" + index + "];" +
+      "[" + index + ":a:0]aresample=48000,asetpts=PTS-STARTPTS[a" + index + "]"
+    );
+  }
+  const concatLabels = clips.map((_, index) => "[v" + index + "][a" + index + "]").join("");
+  const concatFilter = concatFilters.join(";") + ";" + concatLabels +
+    "concat=n=" + clips.length + ":v=1:a=1[v][a]";
+  await run("ffmpeg", [
+    "-y", ...concatInputs,
+    "-filter_complex", concatFilter,
+    "-map", "[v]", "-map", "[a]",
+    "-c:v", "libx264", "-preset", "veryfast", "-crf", "21",
+    "-r", "25", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k",
+    "-ar", "48000", "-movflags", "+faststart", output
+  ]);
+  await writeFile(path.join(OUT, "visual-credits.json"), JSON.stringify(credits, null, 2) + "\n");
+  await writeFile(path.join(OUT, "shot-breakdown.json"), JSON.stringify(shotReport, null, 2) + "\n");
+  await writeFile(path.join(OUT, "CREDITS.md"), [
+    "# Visual credits", "",
     "Stock photos/videos are sourced from Pixabay, Pexels, Wikimedia Commons, Openverse, or NASA. Review each linked asset page and its applicable usage guidance before publication.",
     "All stock footage is illustrative material and must not be presented as actual footage of a specific company, person, product, or event unless independently verified.",
     "",
-    ...credits.map(c=>c.page
-      ? "- Scene "+c.scene+": ["+c.provider+"]("+c.page+") — "+c.creator+" — "+(c.license||"Pexels License")+(c.licenseUrl?" ("+c.licenseUrl+")":"")
-      : "- Scene "+c.scene+": "+c.provider+" — "+c.note)
-  ].join("\n")+"\n");
-  await writeFile(path.join(OUT,"README.txt"),[
-    "The Hidden Engine visual-only documentary render",
-    "Audio: Piper TTS narration (configurable voice model and speaking rate); no music.",
-    "Visuals: relevance-filtered Pixabay video and photos, NASA media, Wikimedia Commons/Openverse images; otherwise original branded motion graphics.",
-    "Narration: generated locally by Piper TTS. No music; only narration audio.",
+    ...credits.map(c => c.page
+      ? "- Scene " + c.scene + ", shot " + c.shot + ": [" + c.provider + "](" + c.page + ") — " + c.creator + " — " + (c.license || "See source page") + (c.licenseUrl ? " (" + c.licenseUrl + ")" : "")
+      : "- Scene " + c.scene + ", shot " + c.shot + ": " + c.provider + " — " + c.note)
+  ].join("\n") + "\n");
+  await writeFile(path.join(OUT, "README.txt"), [
+    "The Hidden Engine multi-shot documentary render",
+    "Audio: Piper TTS narration regenerated per short visual beat; no music.",
+    "Visuals: a new relevance-filtered asset is searched for each narration beat, with no adjacent asset reuse; otherwise an original branded motion graphic is used.",
     "Identity: charcoal/black, ivory typography, restrained copper accents, documentary-investigative overlays.",
     "Review visual relevance, licenses, and credits before publication.",
     "No automatic YouTube upload."
-  ].join("\n")+"\n");
-  const qa = await new Promise((resolve,reject) => { const p=spawn("ffprobe",["-v","error","-show_entries","format=duration:stream=codec_type,width,height","-of","json",output]); let data=""; p.stdout.on("data",d=>data+=d); p.on("error",reject); p.on("close",code=>code===0?resolve(JSON.parse(data)):reject(new Error("ffprobe failed"))); });
-  if (!qa.streams.some(x=>x.codec_type==="video" && x.width===1920 && x.height===1080) || !qa.streams.some(x=>x.codec_type==="audio")) throw new Error("Final MP4 failed 1080p video/audio QA.");
+  ].join("\n") + "\n");
+
+  const qa = await new Promise((resolve, reject) => {
+    const probe = spawn("ffprobe", ["-v", "error", "-show_entries", "format=duration:stream=codec_type,width,height", "-of", "json", output]);
+    let data = "";
+    probe.stdout.on("data", chunk => data += chunk);
+    probe.on("error", reject);
+    probe.on("close", code => code === 0 ? resolve(JSON.parse(data)) : reject(new Error("ffprobe failed")));
+  });
+  if (!qa.streams.some(stream => stream.codec_type === "video" && stream.width === 1920 && stream.height === 1080) ||
+      !qa.streams.some(stream => stream.codec_type === "audio")) {
+    throw new Error("Final MP4 failed 1080p video/audio QA.");
+  }
   const finalDuration = Number(qa.format.duration);
-  const expectedNarrationDuration = narrationDurations.reduce((sum, duration) => sum + duration, 0);
-  const averageSceneDuration = finalDuration / clips.length;
-  const durationTolerance = Math.max(3, clips.length * 0.5);
-  if (clips.length < 5 || Math.abs(finalDuration - expectedNarrationDuration) > durationTolerance) throw new Error("Final pacing QA failed: " + clips.length + " scenes; rendered " + finalDuration.toFixed(2) + "s vs narration " + expectedNarrationDuration.toFixed(2) + "s.");
-  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:Number(qa.format.duration),audio:true,audioDesign:"Piper TTS narration; no music",scenes:clips.length,averageSceneDuration,visualProviders:[...new Set(credits.map(c=>c.provider))],licensedAssetScenes:stockScenes},null,2)+"\n");
-  console.log("Rendered and passed 1080p video/audio pacing QA: "+output);
+  const expectedDuration = narrationDurations.reduce((sum, duration) => sum + duration, 0);
+  const averageShotDuration = finalDuration / totalShots;
+  const durationTolerance = Math.max(3, totalShots * 0.5);
+  const longestShot = Math.max(...narrationDurations);
+  const minimumLicensedCoverage = Math.ceil(totalShots * 0.5);
+  if (stockShots < minimumLicensedCoverage) {
+    throw new Error("Visual coverage QA failed: only " + stockShots + "/" + totalShots +
+      " shots contain licensed visual assets; minimum required is " + minimumLicensedCoverage +
+      ". Refusing to publish a mostly blank or placeholder documentary.");
+  }
+  if (totalShots < script.scenes.length || averageShotDuration > 9.5 || longestShot > 13 ||
+      Math.abs(finalDuration - expectedDuration) > durationTolerance) {
+    throw new Error("Multi-shot pacing QA failed: " + totalShots + " shots, average " +
+      averageShotDuration.toFixed(2) + "s, longest " + longestShot.toFixed(2) +
+      "s; rendered " + finalDuration.toFixed(2) + "s vs narration " + expectedDuration.toFixed(2) + "s.");
+  }
+  await writeFile(path.join(OUT, "QA-REPORT.json"), JSON.stringify({
+    file: path.basename(output), width: 1920, height: 1080,
+    duration: finalDuration, audio: true, audioDesign: "Piper TTS narration; no music",
+    scenes: script.scenes.length, shots: totalShots,
+    averageShotDuration, longestShotDuration: longestShot,
+    visualProviders: [...new Set(credits.map(item => item.provider))],
+    licensedAssetShots: stockShots, shotBreakdown: shotReport
+  }, null, 2) + "\n");
+  console.log("Rendered and passed multi-shot 1080p video/audio pacing QA: " + output);
 }
 main().catch(error=>{console.error("Render failed:",error);process.exit(1);});
