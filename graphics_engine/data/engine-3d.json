@@ -1,4 +1,138 @@
 {
   "type": "engine3d",
-  "title": "Inside a Four-Cylinder Engine"
+  "title": "Inside a Four-Cylinder Engine — Concept",
+  "components": [
+    {
+      "id": "glass",
+      "label": "DISPLAY GLASS",
+      "detail": "Cover glass · touch surface",
+      "shape": "box",
+      "size": [
+        2.1,
+        0.12,
+        4.4
+      ],
+      "position": [
+        0,
+        2.4,
+        0
+      ],
+      "color": "#8eb7c9",
+      "explode": [
+        0,
+        0.65,
+        0
+      ]
+    },
+    {
+      "id": "screen",
+      "label": "OLED DISPLAY",
+      "detail": "Pixel panel · illumination",
+      "shape": "box",
+      "size": [
+        2,
+        0.12,
+        4.3
+      ],
+      "position": [
+        0,
+        1.55,
+        0
+      ],
+      "color": "#477b9c",
+      "explode": [
+        0,
+        0.4,
+        0
+      ]
+    },
+    {
+      "id": "board",
+      "label": "MAINBOARD",
+      "detail": "Processor · memory · controllers",
+      "shape": "box",
+      "size": [
+        1.65,
+        0.16,
+        2.1
+      ],
+      "position": [
+        0,
+        0.55,
+        0
+      ],
+      "color": "#658b72",
+      "explode": [
+        0,
+        0.15,
+        0
+      ]
+    },
+    {
+      "id": "battery",
+      "label": "BATTERY",
+      "detail": "Rechargeable lithium-ion cell",
+      "shape": "box",
+      "size": [
+        1.65,
+        0.28,
+        2.25
+      ],
+      "position": [
+        0,
+        -0.5,
+        0
+      ],
+      "color": "#394956",
+      "explode": [
+        0,
+        -0.1,
+        0
+      ]
+    },
+    {
+      "id": "frame",
+      "label": "MIDFRAME",
+      "detail": "Internal structural chassis",
+      "shape": "box",
+      "size": [
+        2.15,
+        0.18,
+        4.45
+      ],
+      "position": [
+        0,
+        -1.45,
+        0
+      ],
+      "color": "#c6d0d8",
+      "explode": [
+        0,
+        -0.4,
+        0
+      ]
+    },
+    {
+      "id": "back",
+      "label": "REAR COVER",
+      "detail": "External protective panel",
+      "shape": "box",
+      "size": [
+        2.1,
+        0.12,
+        4.4
+      ],
+      "position": [
+        0,
+        -2.3,
+        0
+      ],
+      "color": "#d6a36b",
+      "explode": [
+        0,
+        -0.7,
+        0
+      ]
+    }
+  ]
 }
