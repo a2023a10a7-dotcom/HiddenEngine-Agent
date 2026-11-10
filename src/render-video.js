@@ -369,9 +369,19 @@ async function main() {
         return null;
       }
     };
-    asset = await tryProvider("Pixabay video", () => findPixabayVideo(query));
-    if (!asset) asset = await tryProvider("NASA video", () => findNasaMedia(query, "video"));
-    if (!asset) still = await tryProvider("Pixabay photo", () => findPixabayImage(query));
+    const words = String(query).toLowerCase().match(/[a-z0-9]{3,}/g) || [];
+const variants = [...new Set([query, words.slice(0,3).join(" "), words.slice(0,2).join(" "), words.slice(0,1).join(" ")])].filter(Boolean);
+for (const q of variants) {
+  asset = await tryProvider("Pixabay video", () => findPixabayVideo(q));
+  if (asset) break;
+}
+if (!asset) asset = await tryProvider("NASA video", () => findNasaMedia(query, "video"));
+if (!asset) {
+  for (const q of variants) {
+    still = await tryProvider("Pixabay photo", () => findPixabayImage(q));
+    if (still) break;
+  }
+}
     if (!asset && !still) still = await tryProvider("Wikimedia Commons", () => findCommonsImage(query));
     if (!asset && !still) still = await tryProvider("Openverse", () => findOpenverseImage(query));
     if (!asset && !still) still = await tryProvider("NASA photo", () => findNasaMedia(query, "image"));
