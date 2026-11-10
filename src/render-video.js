@@ -122,8 +122,8 @@ function relevanceScore(query, tags) {
   const tagSet = new Set(String(tags || "").toLowerCase().split(/[,; ]+/).filter(Boolean));
   if (!terms.length) return 0;
   const matched = terms.filter(term => [...tagSet].some(tag => tag === term || (term.length >= 5 && tag.includes(term)) || (tag.length >= 5 && term.includes(tag))));
-  const needed = terms.length >= 4 ? 2 : 1;
-  return matched.length >= needed ? matched.length / terms.length : 0;
+  const needed = 1;
+return matched.length >= needed ? Math.max(0.5, matched.length / terms.length) : 0;
 }
 
 async function findPixabayVideo(query) {
