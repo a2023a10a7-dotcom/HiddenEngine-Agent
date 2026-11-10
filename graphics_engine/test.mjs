@@ -20,6 +20,7 @@ const timeline = load("timeline.json");
 check("timeline", timeline);
 check("bar", load("bar.json"));
 check("architecture", load("architecture.json"));
+check("exploded", load("exploded.json"));
 check("timeline-1-event", { ...timeline, events: timeline.events.slice(0, 1) });
 check("timeline-8-events", {
   ...timeline,
