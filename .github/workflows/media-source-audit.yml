@@ -1,0 +1,35 @@
+name: HiddenEngine Media Source Audit
+
+on:
+  push:
+    branches:
+      - feature/documentary-renderer-v2
+    paths:
+      - "scripts/test-media-sources.js"
+      - ".github/workflows/media-source-audit.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Test each media provider independently
+        env:
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+        run: node scripts/test-media-sources.js
+      - name: Upload independent provider results and downloaded samples
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: media-source-audit
+          path: dist/source-tests/
+          if-no-files-found: warn
+          retention-days: 14
