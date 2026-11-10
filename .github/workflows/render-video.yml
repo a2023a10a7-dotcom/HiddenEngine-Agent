@@ -3,7 +3,7 @@ name: HiddenEngine Cinematic Documentary Render
 on:
   push:
     branches:
-      - feature/documentary-renderer-v2
+      - feature/piper-tts-integration
     paths:
       - "src/render-video.js"
       - ".github/workflows/render-video.yml"
@@ -13,6 +13,16 @@ on:
       project_id:
         description: "Production project folder ID"
         required: true
+        type: string
+      voice_model:
+        description: "Piper voice model (for example en_US-lessac-medium or ar_JO-kareem-medium)"
+        required: true
+        default: "en_US-lessac-medium"
+        type: string
+      speaking_rate:
+        description: "Piper length scale: lower is faster, higher is slower"
+        required: true
+        default: "1.0"
         type: string
 
 permissions:
@@ -37,9 +47,30 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ffmpeg fonts-dejavu-core
 
+      - name: Install Piper TTS and download selected voice
+        env:
+          PIPER_VOICE: ${{ inputs.voice_model || 'en_US-lessac-medium' }}
+        run: |
+          python3 -m venv .venv-piper
+          .venv-piper/bin/pip install --upgrade pip
+          .venv-piper/bin/pip install piper-tts
+          lang="${PIPER_VOICE%%_*}"
+          locale_and_rest="${PIPER_VOICE#*_}"
+          locale="${locale_and_rest%%-*}"
+          speaker_and_quality="${locale_and_rest#*-}"
+          speaker="${speaker_and_quality%-*}"
+          quality="${speaker_and_quality##*-}"
+          mkdir -p models
+          base="https://huggingface.co/rhasspy/piper-voices/resolve/main/${lang}/${lang}_${locale}/${speaker}/${quality}/${PIPER_VOICE}"
+          curl -fL "$base.onnx" -o "models/${PIPER_VOICE}.onnx"
+          curl -fL "$base.onnx.json" -o "models/${PIPER_VOICE}.onnx.json"
+          echo "PIPER_MODEL=models/${PIPER_VOICE}.onnx" >> "$GITHUB_ENV"
+          echo "PIPER_EXECUTABLE=$GITHUB_WORKSPACE/.venv-piper/bin/piper" >> "$GITHUB_ENV"
+
       - name: Render cinematic documentary
         env:
           PROJECT_ID: ${{ inputs.project_id || '2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re' }}
+          PIPER_LENGTH_SCALE: ${{ inputs.speaking_rate || '1.0' }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
         run: node src/render-video.js
