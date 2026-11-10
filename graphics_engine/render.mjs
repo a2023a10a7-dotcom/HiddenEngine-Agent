@@ -3,7 +3,8 @@ import { Resvg } from "@resvg/resvg-js";
 import {
   createBarChart,
   createTimeline,
-  createArchitectureDiagram
+  createArchitectureDiagram,
+  createExplodedDiagram
 } from "./graphics.mjs";
 
 const OUTPUT_SCALE = 4; // 8K PNG (7680x4320) from a 1920x1080 vector layout.
@@ -11,7 +12,8 @@ const OUTPUT_SCALE = 4; // 8K PNG (7680x4320) from a 1920x1080 vector layout.
 const makers = {
   bar: createBarChart,
   timeline: createTimeline,
-  architecture: createArchitectureDiagram
+  architecture: createArchitectureDiagram,
+  exploded: createExplodedDiagram
 };
 
 export function renderSpec(spec) {
