@@ -454,17 +454,17 @@ async function main() {
       args.push("-i", audio);
       const overlayIndex = 1;
       if (hasTitle) {
-        filter += ";[bg][" + overlayIndex + ":v]overlay=0:0[base];[" + (overlayIndex + 1) + ":v]format=rgba,fade=t=in:st=0:d=0.7:alpha=1,fade=t=out:st=3.6:d=0.65:alpha=1[title];[base][title]overlay=x='120-90*max(0,1-t/0.7)+90*max(0,min(1,(t-3.6)/0.65))':y=0:format=auto,format=yuv420p[v]";
+        filter += ";[bg][" + overlayIndex + ":v]overlay=0:0[base];[" + (overlayIndex + 1) + ":v]format=rgba,fade=t=in:st=0:d=0.7:alpha=1,fade=t=out:st=3.6:d=0.65:alpha=1[title];[base][title]overlay=x='120-90*max(0,1-t/0.7)+90*max(0,min(1,(t-3.6)/0.65))':y=0:format=auto,tpad=stop_mode=clone:stop_duration=" + narrationDuration + ",trim=duration=" + narrationDuration + ",setpts=PTS-STARTPTS[v]";
         audioInputIndex = 3;
       } else {
-        filter += ";[bg][" + overlayIndex + ":v]overlay=0:0,format=yuv420p[v]";
+        filter += ";[bg][" + overlayIndex + ":v]overlay=0:0,tpad=stop_mode=clone:stop_duration=" + narrationDuration + ",trim=duration=" + narrationDuration + ",setpts=PTS-STARTPTS,format=yuv420p[v]";
         audioInputIndex = 2;
       }
       args.push(
         "-filter_complex", filter,
         "-map", "[v]", "-map", audioInputIndex + ":a",
         "-c:v", "libx264", "-preset", "veryfast", "-crf", "21",
-        "-c:a", "aac", "-b:a", "192k", "-shortest",
+        "-c:a", "aac", "-b:a", "192k",
         "-t", String(narrationDuration), "-movflags", "+faststart", rendered
       );
       await run("ffmpeg", args);
