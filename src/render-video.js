@@ -468,6 +468,15 @@ async function main() {
         "-t", String(narrationDuration), "-movflags", "+faststart", rendered
       );
       await run("ffmpeg", args);
+      const clipProbe = await capture("ffprobe", [
+        "-v", "error", "-show_entries", "format=duration",
+        "-of", "default=noprint_wrappers=1:nokey=1", rendered
+      ]);
+      const actualClipDuration = Number(clipProbe.stdout.trim());
+      if (!Number.isFinite(actualClipDuration) || Math.abs(actualClipDuration - narrationDuration) > 0.35) {
+        throw new Error("Shot duration mismatch for " + stem + ": rendered " +
+          actualClipDuration.toFixed(2) + "s vs narration " + narrationDuration.toFixed(2) + "s.");
+      }
       clips.push(rendered);
       shotReport.push({
         scene: i + 1, shot: j + 1, words: shotText.trim().split(/\s+/).length,
@@ -484,15 +493,24 @@ async function main() {
     "Wikimedia Commons photo", "Openverse photo", "NASA video", "NASA photo"
   ].includes(item.provider)).length;
   console.log("Visual assets: " + stockShots + "/" + totalShots + " shots use distinct licensed photo/video; other shots use original motion graphics.");
-  const list = path.join(OUT, "concat.txt");
-  await writeFile(list, clips.map(file => "file '" + path.basename(file) + "'").join("\n") + "\n");
   const output = path.join(OUT, "the-hidden-engine-documentary.mp4");
+  const concatInputs = [];
+  const concatFilters = [];
+  for (let index = 0; index < clips.length; index++) {
+    concatInputs.push("-i", clips[index]);
+    concatFilters.push(
+      "[" + index + ":v:0]setpts=PTS-STARTPTS,fps=25,format=yuv420p[v" + index + "];" +
+      "[" + index + ":a:0]aresample=48000,asetpts=PTS-STARTPTS[a" + index + "]"
+    );
+  }
+  const concatLabels = clips.map((_, index) => "[v" + index + "][a" + index + "]").join("");
+  const concatFilter = concatFilters.join(";") + ";" + concatLabels +
+    "concat=n=" + clips.length + ":v=1:a=1[v][a]";
   await run("ffmpeg", [
-    "-y", "-fflags", "+genpts", "-f", "concat", "-safe", "0", "-i", list,
-    "-vf", "setpts=PTS-STARTPTS,fps=25",
-    "-af", "aresample=48000:async=1:first_pts=0,asetpts=N/SR/TB",
-    "-t", String(narrationDurations.reduce((sum, duration) => sum + duration, 0)),
-    "-shortest", "-c:v", "libx264", "-preset", "veryfast", "-crf", "21",
+    "-y", ...concatInputs,
+    "-filter_complex", concatFilter,
+    "-map", "[v]", "-map", "[a]",
+    "-c:v", "libx264", "-preset", "veryfast", "-crf", "21",
     "-r", "25", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k",
     "-ar", "48000", "-movflags", "+faststart", output
   ]);
