@@ -391,8 +391,13 @@ async function main() {
       await writeFile(svg, overlaySvg(shotScene, i, script.scenes.length));
       await writeFile(titleSvg, titleOverlaySvg(titleScene));
 
-      const queryParts = [scene.visual_query, scene.title, shotText].filter(Boolean);
-      const query = queryParts.join(" ").slice(0, 240);
+      // Pixabay rejects search queries longer than its documented q limit.
+      // Use the curated scene visual query first; never append full narration paragraphs.
+      const rawQuery = String(scene.visual_query || scene.title || shotText || "")
+        .replace(/[^a-zA-Z0-9\s-]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+      const query = rawQuery.split(" ").slice(0, 10).join(" ").slice(0, 90);
       console.log("Searching unique visual for " + stem + ": " + query);
       let asset = null;
       let still = null;
@@ -550,6 +555,12 @@ async function main() {
   const averageShotDuration = finalDuration / totalShots;
   const durationTolerance = Math.max(3, totalShots * 0.5);
   const longestShot = Math.max(...narrationDurations);
+  const minimumLicensedCoverage = Math.ceil(totalShots * 0.5);
+  if (stockShots < minimumLicensedCoverage) {
+    throw new Error("Visual coverage QA failed: only " + stockShots + "/" + totalShots +
+      " shots contain licensed visual assets; minimum required is " + minimumLicensedCoverage +
+      ". Refusing to publish a mostly blank or placeholder documentary.");
+  }
   if (totalShots < script.scenes.length || averageShotDuration > 9.5 || longestShot > 13 ||
       Math.abs(finalDuration - expectedDuration) > durationTolerance) {
     throw new Error("Multi-shot pacing QA failed: " + totalShots + " shots, average " +
