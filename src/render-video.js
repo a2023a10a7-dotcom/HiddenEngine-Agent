@@ -344,14 +344,14 @@ function splitNarrationIntoShots(narration, maxWords = 16) {
   const sentences = String(narration || "").match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [];
   const units = [];
   for (const sentence of sentences) {
-    const words = sentence.trim().split(/\\s+/).filter(Boolean);
+    const words = sentence.trim().split(/\s+/).filter(Boolean);
     for (let i = 0; i < words.length; i += maxWords) units.push(words.slice(i, i + maxWords).join(" "));
   }
   const shots = [];
   let current = [];
   for (const unit of units) {
-    const words = unit.split(/\\s+/).length;
-    if (current.length && current.join(" ").split(/\\s+/).length + words > maxWords) {
+    const words = unit.split(/\s+/).length;
+    if (current.length && current.join(" ").split(/\s+/).length + words > maxWords) {
       shots.push(current.join(" ")); current = [];
     }
     current.push(unit);
