@@ -6,6 +6,8 @@ import {
   createArchitectureDiagram
 } from "./graphics.mjs";
 
+const OUTPUT_SCALE = 2; // 4K PNG from a 1920x1080 vector layout.
+
 const makers = {
   bar: createBarChart,
   timeline: createTimeline,
@@ -18,6 +20,7 @@ export function renderSpec(spec) {
 
   const svg = make(spec);
   const image = new Resvg(svg, {
+    fitTo: { mode: "zoom", value: OUTPUT_SCALE },
     font: { loadSystemFonts: true, defaultFontFamily: "DejaVu Sans" }
   }).render();
 
