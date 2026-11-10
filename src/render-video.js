@@ -243,7 +243,7 @@ async function findPexelsVideo(query) {
   if (!PEXELS_API_KEY) return null;
   const searchQuery = String(query || "").trim();
   if (!searchQuery) return null;
-  const endpoint = "https://api.pexels.com/v1/videos/search?query=" + encodeURIComponent(searchQuery) + "&orientation=landscape&per_page=8";
+  const endpoint = "https://api.pexels.com/videos/search?query=" + encodeURIComponent(searchQuery) + "&orientation=landscape&per_page=8";
   const response = await fetchWithTimeout(endpoint, {
     headers: { Authorization: PEXELS_API_KEY }
   });
