@@ -59,4 +59,4 @@ assert.throws(
 
 console.log("All tests passed");
 
-assert.match(createThreeDEngine({title:"3D engine test"}), /ILLUSTRATIVE 3D ASSEMBLY/);
+assert.match(createThreeDEngine({title:"3D engine test"}), /SCHEMA-DRIVEN 3D COMPONENT VISUALIZATION/);
