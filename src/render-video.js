@@ -329,7 +329,9 @@ async function piperTTS(text, output) {
     child.stdin.end(String(text));
   });
   const probe = await capture("ffprobe", ["-v", "error", "-show_entries", "format=duration", "-of", "default=noprint_wrappers=1:nokey=1", output]);
-  if (!(Number(probe.stdout.trim()) > 0)) throw new Error("Piper produced an empty narration file.");
+  const duration = Number(probe.stdout.trim());
+  if (!(duration > 0)) throw new Error("Piper produced an empty narration file.");
+  return duration;
 }
 
 async function main() {
@@ -337,7 +339,7 @@ async function main() {
   if (!Array.isArray(script.scenes) || !script.scenes.length) throw new Error("script.json has no scenes.");
   await rm(OUT, { recursive: true, force: true });
   await mkdir(OUT, { recursive: true });
-  const clips = [], credits = [];
+  const clips = [], credits = [], narrationDurations = [];
   for (let i=0; i<script.scenes.length; i++) {
     const scene = script.scenes[i];
     const stem = "scene-" + String(i+1).padStart(2,"0");
@@ -346,7 +348,7 @@ async function main() {
     const audio = path.join(OUT, stem + ".wav");
     const rendered = path.join(OUT, stem + ".mp4");
     if (!scene.narration?.trim()) throw new Error("Scene " + (i+1) + " has no narration.");
-    await piperTTS(scene.narration, audio);
+    narrationDurations.push(await piperTTS(scene.narration, audio));
     await writeFile(svg, overlaySvg(scene, i, script.scenes.length));
     const query = scene.visual_query || [scene.title, scene.subtitle].filter(Boolean).join(" ");
     console.log("Pexels key configured: " + Boolean(PEXELS_API_KEY));
@@ -389,14 +391,14 @@ async function main() {
         "-map","[v]","-map","2:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
     }
     clips.push(rendered);
-    console.log("Rendered silent visual scene " + (i+1) + "/" + script.scenes.length + ".");
+    console.log("Rendered narrated scene " + (i+1) + "/" + script.scenes.length + ".");
   }
   const stockScenes = credits.filter(item => ["Pixabay video","Pixabay photo","Pexels video","Pexels photo","Wikimedia Commons photo","Openverse photo","NASA video","NASA photo"].includes(item.provider)).length;
   console.log("Visual assets: " + stockScenes + "/" + script.scenes.length + " scenes use licensed photo/video; remaining scenes use original motion graphics.");
   const list = path.join(OUT,"concat.txt");
   await writeFile(list, clips.map(f=>"file '"+path.basename(f)+"'").join("\n")+"\n");
   const output = path.join(OUT,"the-hidden-engine-documentary.mp4");
-  await run("ffmpeg",["-y","-f","concat","-safe","0","-i",list,"-c","copy","-movflags","+faststart",output]);
+  await run("ffmpeg",["-y","-fflags","+genpts","-f","concat","-safe","0","-i",list,"-avoid_negative_ts","make_zero","-c:v","libx264","-preset","veryfast","-crf","21","-r","25","-pix_fmt","yuv420p","-c:a","aac","-b:a","192k","-ar","48000","-movflags","+faststart",output]);
   await writeFile(path.join(OUT,"visual-credits.json"),JSON.stringify(credits,null,2)+"\n");
   await writeFile(path.join(OUT,"CREDITS.md"),[
     "# Visual credits","",
@@ -417,10 +419,13 @@ async function main() {
     "No automatic YouTube upload."
   ].join("\n")+"\n");
   const qa = await new Promise((resolve,reject) => { const p=spawn("ffprobe",["-v","error","-show_entries","format=duration:stream=codec_type,width,height","-of","json",output]); let data=""; p.stdout.on("data",d=>data+=d); p.on("error",reject); p.on("close",code=>code===0?resolve(JSON.parse(data)):reject(new Error("ffprobe failed"))); });
-  if (!qa.streams.some(x=>x.codec_type==="video" && x.width===1920 && x.height===1080) || !qa.streams.some(x=>x.codec_type==="audio")) throw new Error("Final MP4 failed silent 1080p QA.");
-  const averageSceneDuration = Number(qa.format.duration) / clips.length;
-  if (clips.length < 5 || averageSceneDuration > 10.5) throw new Error("Final pacing QA failed: " + clips.length + " scenes, average " + averageSceneDuration.toFixed(2) + " seconds.");
+  if (!qa.streams.some(x=>x.codec_type==="video" && x.width===1920 && x.height===1080) || !qa.streams.some(x=>x.codec_type==="audio")) throw new Error("Final MP4 failed 1080p video/audio QA.");
+  const finalDuration = Number(qa.format.duration);
+  const expectedNarrationDuration = narrationDurations.reduce((sum, duration) => sum + duration, 0);
+  const averageSceneDuration = finalDuration / clips.length;
+  const durationTolerance = Math.max(3, clips.length * 0.5);
+  if (clips.length < 5 || Math.abs(finalDuration - expectedNarrationDuration) > durationTolerance) throw new Error("Final pacing QA failed: " + clips.length + " scenes; rendered " + finalDuration.toFixed(2) + "s vs narration " + expectedNarrationDuration.toFixed(2) + "s.");
   await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:Number(qa.format.duration),audio:true,audioDesign:"Piper TTS narration; no music",scenes:clips.length,averageSceneDuration,visualProviders:[...new Set(credits.map(c=>c.provider))],licensedAssetScenes:stockScenes},null,2)+"\n");
-  console.log("Rendered and passed silent visual QA: "+output);
+  console.log("Rendered and passed 1080p video/audio pacing QA: "+output);
 }
 main().catch(error=>{console.error("Render failed:",error);process.exit(1);});
