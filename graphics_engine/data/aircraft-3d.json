@@ -1,0 +1,106 @@
+{
+  "type": "technical3d",
+  "title": "Aircraft — Major Systems",
+  "camera": [
+    10,
+    7,
+    12
+  ],
+  "components": [
+    {
+      "id": "fuselage",
+      "label": "FUSELAGE",
+      "detail": "Main cabin and structural body",
+      "shape": "cylinder",
+      "radius": 0.48,
+      "height": 6,
+      "rotation": [
+        1.5707963267948966,
+        0,
+        0
+      ],
+      "color": "#8797a5"
+    },
+    {
+      "id": "wing",
+      "label": "MAIN WING",
+      "detail": "Lift-generating wing assembly",
+      "shape": "box",
+      "size": [
+        7,
+        0.18,
+        1.25
+      ],
+      "color": "#c6d0d8"
+    },
+    {
+      "id": "tail",
+      "label": "TAILPLANE",
+      "detail": "Pitch stability and control",
+      "shape": "box",
+      "size": [
+        3,
+        0.13,
+        0.65
+      ],
+      "position": [
+        0,
+        0,
+        2.4
+      ],
+      "color": "#477b9c"
+    },
+    {
+      "id": "engineL",
+      "label": "LEFT ENGINE",
+      "detail": "Turbofan propulsion unit",
+      "shape": "cylinder",
+      "radius": 0.52,
+      "height": 1.2,
+      "rotation": [
+        1.5707963267948966,
+        0,
+        0
+      ],
+      "position": [
+        -1.6,
+        -0.5,
+        -0.5
+      ],
+      "color": "#d6a36b"
+    },
+    {
+      "id": "engineR",
+      "label": "RIGHT ENGINE",
+      "detail": "Turbofan propulsion unit",
+      "shape": "cylinder",
+      "radius": 0.52,
+      "height": 1.2,
+      "rotation": [
+        1.5707963267948966,
+        0,
+        0
+      ],
+      "position": [
+        1.6,
+        -0.5,
+        -0.5
+      ],
+      "color": "#d6a36b"
+    },
+    {
+      "id": "gear",
+      "label": "LANDING GEAR",
+      "detail": "Ground support assemblies",
+      "shape": "cylinder",
+      "radius": 0.16,
+      "height": 1.3,
+      "position": [
+        0,
+        -1,
+        0
+      ],
+      "color": "#394956"
+    }
+  ]
+}
