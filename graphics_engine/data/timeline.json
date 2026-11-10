@@ -1,0 +1,12 @@
+{
+  "type": "timeline",
+  "title": "BlackBerry: Rise and Fall",
+  "note": "Dates and milestones require source verification before publication.",
+  "events": [
+    { "date": "1999", "label": "First BlackBerry" },
+    { "date": "2007", "label": "iPhone launches" },
+    { "date": "2008", "label": "First Android phone" },
+    { "date": "2013", "label": "BlackBerry 10" },
+    { "date": "2016", "label": "Hardware design ends" }
+  ]
+}
