@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - feature/piper-tts-integration
+      - feature/multishot-documentary-edit
     paths:
       - "src/render-video.js"
       - ".github/workflows/render-video.yml"
