@@ -48,7 +48,7 @@ function validate(spec){
 export function createThreeDScene(spec){
  validate(spec);
  const scene=new THREE.Scene(),camera=new THREE.OrthographicCamera(-5,5,2.82,-2.82,.1,100);
- camera.position.set(...(spec.camera??[9,8,12]));camera.lookAt(0,0,0);
+ camera.position.set(...(spec.camera??[9,8,12]));camera.lookAt(0,0,0);camera.updateProjectionMatrix();camera.updateMatrixWorld(true);
  const light=new THREE.Vector3(-.4,.8,.6).normalize(),meshes=[],labels=[];
  for(const part of spec.components){
   const group=new THREE.Group(),mesh=buildComponent(part);
