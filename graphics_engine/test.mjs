@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import assert from "node:assert/strict";
 import { renderSpec } from "./render.mjs";
 import { createTimeline } from "./graphics.mjs";
+import { createThreeDEngine } from "./three-dimensional.mjs";
 
 const load = file =>
   JSON.parse(readFileSync(new URL(`./data/${file}`, import.meta.url), "utf8"));
@@ -21,6 +22,7 @@ check("timeline", timeline);
 check("bar", load("bar.json"));
 check("architecture", load("architecture.json"));
 check("exploded", load("exploded.json"));
+check("engine-3d", load("engine-3d.json"));
 check("timeline-1-event", { ...timeline, events: timeline.events.slice(0, 1) });
 check("timeline-8-events", {
   ...timeline,
@@ -53,3 +55,5 @@ assert.throws(
 );
 
 console.log("All tests passed");
+
+assert.match(createThreeDEngine({title:"3D engine test"}), /ILLUSTRATIVE 3D ASSEMBLY/);
