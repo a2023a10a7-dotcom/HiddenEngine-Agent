@@ -111,6 +111,7 @@ function overlaySvg(scene, index, total) {
   </style></svg>`;
 }
 const PIXABAY_API_KEY = process.env.PIXABAY_API_KEY;
+const USED_ASSET_PAGES = new Set();
 
 function relevanceScore(query, tags) {
   const stop = new Set(["with","from","that","this","into","over","under","about","computer","image","video","photo"]);
@@ -130,7 +131,7 @@ async function findPixabayVideo(query) {
   if (!response.ok) throw new Error("Pixabay video search failed (" + response.status + ").");
   const data = await response.json();
   const hits = (data.hits || []).map(hit => ({hit, score: relevanceScore(query, hit.tags)}))
-    .filter(item => item.score >= 0.25 && item.hit.videos);
+    .filter(item => item.score >= 0.25 && item.hit.videos && !USED_ASSET_PAGES.has(item.hit.pageURL));
   hits.sort((a,b) => b.score-a.score || (b.hit.videos.large?.width || 0) - (a.hit.videos.large?.width || 0));
   for (const {hit} of hits) {
     const files = Object.values(hit.videos || {}).filter(v => v && v.url && v.width >= 960).sort((a,b) => b.width-a.width);
@@ -150,7 +151,7 @@ async function findPixabayImage(query) {
   if (!response.ok) throw new Error("Pixabay image search failed (" + response.status + ").");
   const data = await response.json();
   const hits = (data.hits || []).map(hit => ({hit, score: relevanceScore(query, hit.tags)}))
-    .filter(item => item.score >= 0.25 && item.hit.largeImageURL);
+    .filter(item => item.score >= 0.25 && item.hit.largeImageURL && !USED_ASSET_PAGES.has(item.hit.pageURL));
   hits.sort((a,b) => b.score-a.score || (b.hit.imageWidth*b.hit.imageHeight)-(a.hit.imageWidth*a.hit.imageHeight));
   const best = hits[0]?.hit;
   if (!best) {
@@ -166,7 +167,7 @@ async function findPexelsImage(query) {
   const response = await fetchWithTimeout(endpoint,{headers:{Authorization:PEXELS_API_KEY}});
   if (!response.ok) throw new Error("Pexels photo search failed ("+response.status+"): "+(await response.text()).slice(0,300));
   const data=await response.json();
-  const photos=(data.photos||[]).filter(p=>p.src && (p.src.landscape||p.src.large2x||p.src.large));
+  const photos=(data.photos||[]).filter(p=>p.src && (p.src.landscape||p.src.large2x||p.src.large) && !USED_ASSET_PAGES.has(p.url));
   photos.sort((a,b)=>(b.width*b.height)-(a.width*a.height));
   const p=photos[0];
   return p ? {url:p.src.landscape||p.src.large2x||p.src.large,page:p.url,creator:p.photographer||"Unknown creator",creatorUrl:p.photographer_url||"",provider:"Pexels photo"} : null;
@@ -242,14 +243,14 @@ async function findPexelsVideo(query) {
   if (!PEXELS_API_KEY) return null;
   const searchQuery = String(query || "").trim();
   if (!searchQuery) return null;
-  const endpoint = "https://api.pexels.com/videos/search?query=" + encodeURIComponent(searchQuery) + "&orientation=landscape&per_page=8";
+  const endpoint = "https://api.pexels.com/v1/videos/search?query=" + encodeURIComponent(searchQuery) + "&orientation=landscape&per_page=8";
   const response = await fetchWithTimeout(endpoint, {
     headers: { Authorization: PEXELS_API_KEY }
   });
   if (!response.ok) throw new Error("Pexels search failed (" + response.status + "): " + (await response.text()).slice(0, 500));
   const data = await response.json();
   const videos = (data.videos || []).filter(video =>
-    video.url && video.video_files?.some(file => file.link && /mp4/i.test(file.file_type || ""))
+    video.url && !USED_ASSET_PAGES.has(video.url) && video.video_files?.some(file => file.link && /mp4/i.test(file.file_type || ""))
   );
   videos.sort((a,b) => (b.width*b.height) - (a.width*a.height));
   for (const video of videos) {
@@ -264,6 +265,33 @@ async function findPexelsVideo(query) {
   }
   return null;
 }
+
+async function findNasaMedia(query, mediaType) {
+  const q=String(query||"").trim(); if(!q) return null;
+  const response=await fetchWithTimeout("https://images-api.nasa.gov/search?q="+encodeURIComponent(q)+"&media_type="+mediaType+"&page_size=20",{},20000);
+  if(!response.ok) throw new Error("NASA media search failed ("+response.status+").");
+  const data=await response.json();
+  for(const item of data.collection?.items||[]) {
+    const meta=item.data?.[0]||{}, id=meta.nasa_id;
+    if(!id || USED_ASSET_PAGES.has("NASA:"+id)) continue;
+    if(mediaType==="video") {
+      const mr=await fetchWithTimeout("https://images-api.nasa.gov/asset/"+encodeURIComponent(id),{},20000);
+      if(!mr.ok) continue;
+      const manifest=await mr.json();
+      const entries=Array.isArray(manifest)?manifest:(manifest.collection?.items||[]);
+      const media=entries.find(x=>typeof x==="string" && /\.mp4(?:$|\?)/i.test(x)) ||
+        entries.find(x=>typeof x?.href==="string" && /\.mp4(?:$|\?)/i.test(x.href))?.href;
+      if(!media) continue;
+      return {url:media,page:"https://images.nasa.gov/details/"+encodeURIComponent(id),creator:meta.center||"NASA",creatorUrl:"https://images.nasa.gov/",provider:"NASA video",license:"NASA media usage guidelines",licenseUrl:"https://www.nasa.gov/nasa-brand-center/images-and-media/",nasaId:id};
+    }
+    const preview=item.links?.find(x=>x.rel==="preview"&&x.href)?.href;
+    if(!preview || !/\.(jpg|jpeg|png|webp)(?:$|\?)/i.test(preview)) continue;
+    return {url:preview,page:"https://images.nasa.gov/details/"+encodeURIComponent(id),creator:meta.center||"NASA",creatorUrl:"https://images.nasa.gov/",provider:"NASA photo",license:"NASA media usage guidelines",licenseUrl:"https://www.nasa.gov/nasa-brand-center/images-and-media/",nasaId:id};
+  }
+  console.log("NASA "+mediaType+" search returned no unused media for: "+q);
+  return null;
+}
+
 async function download(url, dest) {
   const response = await fetchWithTimeout(url, {}, 20000);
   if (!response.ok) throw new Error("Asset download failed (" + response.status + ").");
@@ -296,20 +324,25 @@ async function main() {
     };
     asset = await tryProvider("Pixabay video", () => findPixabayVideo(query));
     if (!asset) asset = await tryProvider("Pexels video", () => findPexelsVideo(query));
+    if (!asset) asset = await tryProvider("NASA video", () => findNasaMedia(query, "video"));
     if (!asset) still = await tryProvider("Pixabay photo", () => findPixabayImage(query));
     if (!asset && !still) still = await tryProvider("Pexels photo", () => findPexelsImage(query));
     if (!asset && !still) still = await tryProvider("Wikimedia Commons", () => findCommonsImage(query));
     if (!asset && !still) still = await tryProvider("Openverse", () => findOpenverseImage(query));
+    if (!asset && !still) still = await tryProvider("NASA photo", () => findNasaMedia(query, "image"));
     if (asset) {
+      USED_ASSET_PAGES.add(asset.nasaId ? "NASA:"+asset.nasaId : asset.page);
+
       await download(asset.url, clip);
       credits.push({ scene:i+1, query, provider:asset.provider || "Pexels video", page:asset.page, creator:asset.creator, creatorUrl:asset.creatorUrl, usage:"Illustrative footage; not proof of a named event or entity." });
       await run("ffmpeg", ["-y","-stream_loop","-1","-i",clip,"-loop","1","-i",svg,
         "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,eq=contrast=1.12:saturation=0.78,drawbox=x=0:y=0:w=iw:h=ih:color=#08090b@0.18:t=fill[bg];[bg][1:v]overlay=0:0,format=yuv420p[v]",
         "-map","[v]","-t",String(SCENE_DURATION_SECONDS),"-an","-c:v","libx264","-preset","veryfast","-crf","21","-movflags","+faststart",rendered]);
     } else if (still) {
+      USED_ASSET_PAGES.add(still.nasaId ? "NASA:"+still.nasaId : still.page);
       const imagePath=clip.replace(/\.mp4$/,".jpg");
       await download(still.url, imagePath);
-      credits.push({ scene:i+1, query, provider:still.provider || (still.license ? "Wikimedia Commons photo" : "Pexels photo"), page:still.page, creator:still.creator, creatorUrl:still.creatorUrl || "", license:still.license || "Pexels License", licenseUrl:still.licenseUrl || "", usage:"Illustrative still; not proof of a named event or entity." });
+      credits.push({ scene:i+1, query, provider:still.provider || (still.license ? "Wikimedia Commons photo" : "Pexels photo"), page:still.page, creator:still.creator, creatorUrl:still.creatorUrl || "", license:still.license || (still.provider === "Pixabay photo" ? "Pixabay Content License" : still.provider === "Pexels photo" ? "Pexels License" : "See source page"), licenseUrl:still.licenseUrl || "", usage:"Illustrative still; not proof of a named event or entity." });
       await run("ffmpeg", ["-y","-loop","1","-framerate","25","-i",imagePath,"-loop","1","-i",svg,
         "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,zoompan=z='min(zoom+0.0003,1.07)':d=1:s=1920x1080:fps=25,eq=contrast=1.08:saturation=0.82[bg];[bg][1:v]overlay=0:0,format=yuv420p[v]",
         "-map","[v]","-t",String(SCENE_DURATION_SECONDS),"-an","-c:v","libx264","-preset","veryfast","-crf","21","-movflags","+faststart",rendered]);
@@ -322,7 +355,7 @@ async function main() {
     clips.push(rendered);
     console.log("Rendered silent visual scene " + (i+1) + "/" + script.scenes.length + ".");
   }
-  const stockScenes = credits.filter(item => ["Pixabay video","Pixabay photo","Pexels video","Pexels photo","Wikimedia Commons photo","Openverse photo"].includes(item.provider)).length;
+  const stockScenes = credits.filter(item => ["Pixabay video","Pixabay photo","Pexels video","Pexels photo","Wikimedia Commons photo","Openverse photo","NASA video","NASA photo"].includes(item.provider)).length;
   console.log("Visual assets: " + stockScenes + "/" + script.scenes.length + " scenes use licensed photo/video; remaining scenes use original motion graphics.");
   const list = path.join(OUT,"concat.txt");
   await writeFile(list, clips.map(f=>"file '"+path.basename(f)+"'").join("\n")+"\n");
@@ -331,7 +364,7 @@ async function main() {
   await writeFile(path.join(OUT,"visual-credits.json"),JSON.stringify(credits,null,2)+"\n");
   await writeFile(path.join(OUT,"CREDITS.md"),[
     "# Visual credits","",
-    "Stock photos/videos are sourced from Pexels, Wikimedia Commons, or Openverse. Review each linked asset page and license before publication.",
+    "Stock photos/videos are sourced from Pixabay, Pexels, Wikimedia Commons, Openverse, or NASA. Review each linked asset page and its applicable usage guidance before publication.",
     "Pexels footage is illustrative material and must not be presented as actual footage of a specific company, person, product, or event unless independently verified.",
     "",
     ...credits.map(c=>c.page
@@ -341,7 +374,7 @@ async function main() {
   await writeFile(path.join(OUT,"README.txt"),[
     "The Hidden Engine visual-only documentary render",
     "Audio: intentionally omitted; this render is for visual scene inspection only.",
-    "Visuals: relevance-filtered Pixabay or Pexels stock video/photos, then Wikimedia Commons/Openverse; otherwise original branded motion graphics.",
+    "Visuals: relevance-filtered Pixabay/Pexels video and photos, NASA media, Wikimedia Commons/Openverse images; otherwise original branded motion graphics.",
     "No narration, music, or sound effects.",
     "Identity: charcoal/black, ivory typography, restrained copper accents, documentary-investigative overlays.",
     "Review visual relevance, licenses, and credits before publication.",
