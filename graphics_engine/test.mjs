@@ -1,9 +1,7 @@
 import { readFileSync } from "node:fs";
 import assert from "node:assert/strict";
-import {
-  createTimeline,
-  renderSpec
-} from "./render.mjs";
+import { renderSpec } from "./render.mjs";
+import { createTimeline } from "./graphics.mjs";
 
 const load = file =>
   JSON.parse(readFileSync(new URL(`./data/${file}`, import.meta.url), "utf8"));
