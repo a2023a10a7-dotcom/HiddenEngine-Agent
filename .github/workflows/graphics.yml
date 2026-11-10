@@ -1,0 +1,46 @@
+name: Graphics Test
+
+on:
+  push:
+    branches: [feature/graphics-svg-png]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  graphics:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-dejavu-core
+          fc-list | grep -i "DejaVu Sans"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run graphics tests
+        run: npm run test:graphics
+
+      - name: Render sample graphics
+        run: |
+          node graphics_engine/render.mjs graphics_engine/data/timeline.json timeline
+          node graphics_engine/render.mjs graphics_engine/data/bar.json bar
+          node graphics_engine/render.mjs graphics_engine/data/architecture.json architecture
+
+      - name: Upload graphics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: graphics-output
+          path: output/
+          if-no-files-found: warn
