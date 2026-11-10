@@ -5,7 +5,7 @@
     { "id": "script", "label": "Scene Script", "detail": "Narration text" },
     { "id": "analyzer", "label": "Scene Analyzer", "detail": "Detects graphic type" },
     { "id": "maker", "label": "Graphics Maker", "detail": "SVG templates" },
-    { "id": "renderer", "label": "PNG Renderer", "detail": "resvg 1920x1080" },
+    { "id": "renderer", "label": "PNG Renderer", "detail": "PNG 7680x4320 (8K)" },
     { "id": "publish", "label": "Publish", "detail": "After approval" },
     { "id": "review", "label": "Human Review", "detail": "Facts and visuals" },
     { "id": "assembly", "label": "Video Assembly", "detail": "FFmpeg" },
