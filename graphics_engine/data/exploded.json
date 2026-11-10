@@ -1,0 +1,26 @@
+{
+  "type": "exploded",
+  "title": "Exploded Assembly — Concept",
+  "components": [
+    {
+      "label": "Outer Housing",
+      "detail": "Protective shell"
+    },
+    {
+      "label": "Control Module",
+      "detail": "Processing unit"
+    },
+    {
+      "label": "Power Assembly",
+      "detail": "Energy supply"
+    },
+    {
+      "label": "Drive Mechanism",
+      "detail": "Moving parts"
+    },
+    {
+      "label": "Base Frame",
+      "detail": "Structural support"
+    }
+  ]
+}
