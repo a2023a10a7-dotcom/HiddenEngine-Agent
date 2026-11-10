@@ -1,0 +1,35 @@
+name: HiddenEngine Visual Relevance Audit
+
+on:
+  push:
+    branches:
+      - feature/documentary-renderer-v2
+    paths:
+      - "scripts/test-visual-relevance.js"
+      - ".github/workflows/visual-relevance-audit.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Test relevance, diversity, and sample downloads per provider
+        env:
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+        run: node scripts/test-visual-relevance.js
+      - name: Upload visual relevance report and samples
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-relevance-audit
+          path: dist/visual-relevance-audit/
+          if-no-files-found: warn
+          retention-days: 14
