@@ -1,0 +1,39 @@
+import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { Resvg } from "@resvg/resvg-js";
+import {
+  createBarChart,
+  createTimeline,
+  createArchitectureDiagram
+} from "./graphics.mjs";
+
+const makers = {
+  bar: createBarChart,
+  timeline: createTimeline,
+  architecture: createArchitectureDiagram
+};
+
+export function renderSpec(spec) {
+  const make = makers[spec.type];
+  if (!make) throw new Error("Unknown type: " + spec.type);
+
+  const svg = make(spec);
+  const image = new Resvg(svg, {
+    font: { loadSystemFonts: true, defaultFontFamily: "DejaVu Sans" }
+  }).render();
+
+  return { svg, png: image.asPng(), width: image.width, height: image.height };
+}
+
+const [, , input, name] = process.argv;
+
+if (input) {
+  if (!name || !/^[a-z0-9_-]+$/i.test(name)) {
+    throw new Error("Usage: node render.mjs <input.json> <safe-name>");
+  }
+  const spec = JSON.parse(readFileSync(input, "utf8"));
+  const { svg, png, width, height } = renderSpec(spec);
+  mkdirSync("output", { recursive: true });
+  writeFileSync(`output/${name}.svg`, svg);
+  writeFileSync(`output/${name}.png`, png);
+  console.log(`${name}.png ${width}x${height}`);
+}
