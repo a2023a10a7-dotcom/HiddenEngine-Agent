@@ -38,6 +38,8 @@ jobs:
           node graphics_engine/render.mjs graphics_engine/data/exploded.json exploded
           node graphics_engine/render.mjs graphics_engine/data/engine-3d.json engine-3d
           node graphics_engine/render.mjs graphics_engine/data/phone-3d.json phone-3d
+          node graphics_engine/render.mjs graphics_engine/data/aircraft-3d.json aircraft-3d
+          node graphics_engine/render.mjs graphics_engine/data/ship-3d.json ship-3d
 
       - name: Upload graphics
         if: always()
