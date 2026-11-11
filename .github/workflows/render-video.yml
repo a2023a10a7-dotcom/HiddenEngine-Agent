@@ -2,7 +2,7 @@ name: HiddenEngine Cinematic Documentary Render
 
 concurrency:
   group: hiddenengine-gemini-render-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 on:
   push:
