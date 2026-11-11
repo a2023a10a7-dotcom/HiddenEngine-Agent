@@ -118,6 +118,53 @@ function overlaySvg(scene, index, total) {
 const PIXABAY_API_KEY = process.env.PIXABAY_API_KEY;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-3.8-flash";
+const GEMINI_MAX_REQUESTS_PER_RUN = Math.max(1, Math.min(12, Number.parseInt(process.env.GEMINI_MAX_REQUESTS_PER_RUN || "6", 10) || 6));
+let GEMINI_REQUESTS_USED = 0;
+let GEMINI_BLOCKED = false;
+async function geminiFetch(endpoint, options, timeoutMs = 45000) {
+  if (GEMINI_BLOCKED) throw new Error("Gemini calls blocked after quota/API failure.");
+  let lastError;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    if (GEMINI_REQUESTS_USED >= GEMINI_MAX_REQUESTS_PER_RUN) {
+      GEMINI_BLOCKED = true;
+      throw new Error("Gemini request budget exhausted (" + GEMINI_MAX_REQUESTS_PER_RUN + ").");
+    }
+    GEMINI_REQUESTS_USED++;
+    let response;
+    try {
+      response = await fetchWithTimeout(endpoint, options, timeoutMs);
+    } catch (error) {
+      lastError = error;
+      if (attempt < 2 && GEMINI_REQUESTS_USED < GEMINI_MAX_REQUESTS_PER_RUN) {
+        const delay = 1500 * (2 ** attempt);
+        console.warn("Gemini network failure; retrying in " + delay + "ms.");
+        await new Promise(resolve => setTimeout(resolve, delay));
+        continue;
+      }
+      GEMINI_BLOCKED = true;
+      throw new Error("Gemini network failure; calls disabled for this render: " + error.message);
+    }
+    if (response.ok) return response;
+    const body = await response.text();
+    if (response.status === 429 || /RESOURCE_EXHAUSTED|quota exceeded|rate.?limit/i.test(body)) {
+      GEMINI_BLOCKED = true;
+      throw new Error("Gemini quota/rate limit reached (" + response.status + "); no further Gemini calls will be sent. " + body.slice(0, 500));
+    }
+    if ([500, 502, 503, 504].includes(response.status) && attempt < 2 && GEMINI_REQUESTS_USED < GEMINI_MAX_REQUESTS_PER_RUN) {
+      const retryAfter = Number(response.headers.get("retry-after"));
+      const delay = Number.isFinite(retryAfter) && retryAfter > 0 ? Math.min(30000, retryAfter * 1000) : 2000 * (2 ** attempt);
+      console.warn("Gemini transient HTTP " + response.status + "; retrying in " + delay + "ms.");
+      await new Promise(resolve => setTimeout(resolve, delay));
+      lastError = new Error("Gemini HTTP " + response.status);
+      continue;
+    }
+    GEMINI_BLOCKED = true;
+    throw new Error("Gemini API failed (" + response.status + "); calls disabled for this render. " + body.slice(0, 700));
+  }
+  GEMINI_BLOCKED = true;
+  throw lastError || new Error("Gemini request failed.");
+}
+
 const PIPER_EXECUTABLE = process.env.PIPER_EXECUTABLE || "piper";
 const PIPER_MODEL = process.env.PIPER_MODEL || "models/piper-voice.onnx";
 const PIPER_LENGTH_SCALE = Number(process.env.PIPER_LENGTH_SCALE || "1.0");
@@ -137,7 +184,7 @@ async function findPixabayVideo(query) {
   if (!PIXABAY_API_KEY || !String(query || "").trim()) return null;
   const endpoint = "https://pixabay.com/api/videos/?key=" + encodeURIComponent(PIXABAY_API_KEY) +
     "&q=" + encodeURIComponent(query) + "&safesearch=true&per_page=20";
-  const response = await fetchWithTimeout(endpoint, {}, 15000);
+  const response = await geminiFetch(endpoint, {}, 15000);
   if (!response.ok) throw new Error("Pixabay video search failed (" + response.status + ").");
   const data = await response.json();
   const hits = (data.hits || []).map(hit => ({hit, score: relevanceScore(query, hit.tags)}))
@@ -256,7 +303,7 @@ async function planSceneVisualsWithGemini(scenes) {
     "Scenes: " + JSON.stringify(scenes.map((s,i)=>({scene:i+1,title:s.title||"",subtitle:s.subtitle||"",narration:s.narration||""})))
   ].join("\n");
   const endpoint = "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(GEMINI_MODEL) + ":generateContent?key=" + encodeURIComponent(GEMINI_API_KEY);
-  const response = await fetchWithTimeout(endpoint, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({contents:[{role:"user",parts:[{text:prompt}]}],generationConfig:{temperature:0,responseMimeType:"application/json"}}) }, 45000);
+  const response = await geminiFetch(endpoint, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({contents:[{role:"user",parts:[{text:prompt}]}],generationConfig:{temperature:0,responseMimeType:"application/json"}}) }, 45000);
   if (!response.ok) throw new Error("Gemini batch planning failed ("+response.status+"): "+(await response.text()).slice(0,700));
   const payload=await response.json();
   const answer=((payload.candidates && payload.candidates[0] && payload.candidates[0].content && payload.candidates[0].content.parts)||[]).map(p=>p.text||"").join("").trim();
