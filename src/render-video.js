@@ -395,7 +395,8 @@ const shots = [path.join(OUT, stem + "-shot-0.mp4")];
 await download(asset.url, shots[0]);
 for (let s = 1; s < shotCount; s++) {
   let extra = null;
-  for (const q of variants) {
+  //for (const q of variants) {
+  for (const q of [shotQueries[s], ...variants].filter(Boolean)) {
     extra = await tryProvider("Pixabay video", () => findPixabayVideo(q));
     if (extra) break;
   }
