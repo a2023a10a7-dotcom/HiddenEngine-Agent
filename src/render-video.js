@@ -357,7 +357,9 @@ async function main() {
     narrationDurations.push(await piperTTS(scene.narration, audio));
     await writeFile(svg, overlaySvg(scene, i, script.scenes.length));
     await writeFile(titleSvg, titleOverlaySvg(scene));
-    const query = scene.visual_query || [scene.title, scene.subtitle].filter(Boolean).join(" ");
+    //const query = scene.visual_query || [scene.title, scene.subtitle].filter(Boolean).join(" ");
+    const shotQueries = Array.isArray(scene.visual_queries) ? scene.visual_queries.map(x => String(x).trim()).filter(Boolean) : [];
+const query = shotQueries[0] || scene.visual_query || [scene.title, scene.subtitle].filter(Boolean).join(" ");
     console.log("Pexels key configured: " + Boolean(PEXELS_API_KEY));
     console.log("Searching visual asset for scene " + (i+1) + ": " + query);
     let asset = null;
