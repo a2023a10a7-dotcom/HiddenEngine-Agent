@@ -488,23 +488,23 @@ const query = shotQueries[0] || scene.visual_query || [scene.title, scene.subtit
     };
     const words = String(query).toLowerCase().match(/[a-z0-9]{3,}/g) || [];
 const variants = [...new Set([query, words.slice(0,3).join(" "), words.slice(0,2).join(" "), words.slice(0,1).join(" ")])].filter(Boolean);
-for (const q of variants) {
-  asset = await tryProvider("Pixabay video", () => findPixabayVideo(q));
-  if (asset) break;
+if (GEMINI_API_KEY) {
+  for (const q of variants) {
+    const candidates = await tryProvider("Pixabay image candidates", () => findPixabayImageCandidates(q, 8));
+    if (!candidates || !candidates.length) continue;
+    still = await tryProvider("Gemini visual relevance selection", () => selectImageWithGemini(scene.narration, scene.title, scene.subtitle, q, candidates));
+    if (still) break;
+  }
+} else {
+  console.warn("GEMINI_API_KEY is not configured; semantic image selection is unavailable.");
 }
-if (!asset) asset = await tryProvider("NASA video", () => findNasaMedia(query, "video"));
-if (!asset) {
-      if (!GEMINI_API_KEY) {
-        console.warn("GEMINI_API_KEY is not configured; refusing unverified stock photos and using original motion graphics.");
-      } else {
-        for (const q of variants) {
-          const candidates = await tryProvider("Pixabay image candidates", () => findPixabayImageCandidates(q, 8));
-          if (!candidates || !candidates.length) continue;
-          still = await tryProvider("Gemini visual relevance selection", () => selectImageWithGemini(scene.narration, scene.title, scene.subtitle, q, candidates));
-          if (still) break;
-        }
-      }
-    }
+if (!still) {
+  for (const q of variants) {
+    asset = await tryProvider("Pixabay video", () => findPixabayVideo(q));
+    if (asset) break;
+  }
+  if (!asset) asset = await tryProvider("NASA video", () => findNasaMedia(query, "video"));
+}
     if (asset) {
       USED_ASSET_PAGES.add(asset.nasaId ? "NASA:"+asset.nasaId : asset.page);
 
