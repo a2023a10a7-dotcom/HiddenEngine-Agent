@@ -242,6 +242,46 @@ async function selectImageWithGemini(narration, sceneTitle, sceneSubtitle, query
   console.log("Gemini selected Pixabay image " + choice + " (confidence " + confidence + ", relevance " + relevance + "): " + String(decision.reason || ""));
   return Object.assign({}, selected.candidate, { semanticConfidence: confidence, semanticRelevance: relevance, semanticReason: String(decision.reason || "") });
 }
+async function selectSceneVisualWithGemini(scene, sceneNumber) {
+  if (!GEMINI_API_KEY) return scene.visual || null;
+  const prompt = [
+    "Act as a senior documentary visual editor and motion-graphics director.",
+    "Decide whether this narration segment needs a graphic, chart, timeline, comparison, or schematic map, and at which scene it belongs.",
+    "Return one JSON object only, matching this schema: {\"type\":\"none|metric|comparison|timeline|map\",\"source_label\":\"short label\",\"value\":\"...\",\"detail\":\"...\",\"items\":[{\"label\":\"...\",\"percent\":0,\"value\":\"...\"}],\"events\":[{\"date\":\"...\",\"label\":\"...\"}],\"points\":[{\"x\":0,\"y\":0,\"label\":\"...\"}],\"reason\":\"...\"}.",
+    "Choose none for ordinary narration, abstract claims, or when a graphic would add no clear understanding. Do not force a graphic into every scene.",
+    "Use metric only for a single explicit numeric finding; comparison only for two or more explicit comparable values; timeline only for two or more explicit dated/ordered events; map only when the narration explicitly concerns at least two named geographic places, movement, borders, routes, or spatial relationships.",
+    "Never invent numbers, percentages, dates, events, geographic places, or causal claims. Use only facts explicitly present in narration, subtitle, or existing visual data supplied below.",
+    "If the facts are insufficient to populate a visual accurately, choose none.",
+    "For map points, x and y are schematic layout positions from 0 to 100, not geographic coordinates. Label only explicitly named places. A schematic map must not imply precise geography.",
+    "Keep labels concise and readable. Avoid repeating the narration. source_label must identify the source or say DOCUMENTARY EXPLANATION when no external source is supplied.",
+    "Scene number: " + sceneNumber,
+    "Title: " + String(scene.title || ""),
+    "Subtitle: " + String(scene.subtitle || ""),
+    "Narration: " + String(scene.narration || ""),
+    "Existing visual data (may be retained only if factually supported): " + JSON.stringify(scene.visual || null)
+  ].join("\n");
+  const endpoint = "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(GEMINI_MODEL) + ":generateContent?key=" + encodeURIComponent(GEMINI_API_KEY);
+  const response = await fetchWithTimeout(endpoint, {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }], generationConfig: { temperature: 0, responseMimeType: "application/json" } })
+  }, 35000);
+  if (!response.ok) throw new Error("Gemini visual-planning request failed (" + response.status + "): " + (await response.text()).slice(0, 500));
+  const payload = await response.json();
+  const answer = (payload.candidates && payload.candidates[0] && payload.candidates[0].content && payload.candidates[0].content.parts || []).map(part => part.text || "").join("").trim();
+  if (!answer) throw new Error("Gemini returned an empty visual-planning response for scene " + sceneNumber);
+  let visual;
+  try { visual = JSON.parse(answer.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "")); }
+  catch { throw new Error("Gemini returned invalid visual JSON for scene " + sceneNumber + ": " + answer.slice(0, 300)); }
+  const allowed = new Set(["none", "metric", "comparison", "timeline", "map"]);
+  if (!allowed.has(visual.type)) throw new Error("Gemini returned unsupported visual type for scene " + sceneNumber);
+  if (visual.type === "metric" && (!String(visual.value || "").trim() || !String(visual.detail || "").trim())) visual.type = "none";
+  if (visual.type === "comparison" && (!Array.isArray(visual.items) || visual.items.length < 2)) visual.type = "none";
+  if (visual.type === "timeline" && (!Array.isArray(visual.events) || visual.events.length < 2)) visual.type = "none";
+  if (visual.type === "map" && (!Array.isArray(visual.points) || visual.points.length < 2 || visual.points.some(p => !Number.isFinite(Number(p.x)) || !Number.isFinite(Number(p.y)) || !String(p.label || "").trim()))) visual.type = "none";
+  if (visual.type === "none") { console.log("Gemini chose no graphic for scene " + sceneNumber + ": " + String(visual.reason || "No useful factual visual.")); return null; }
+  console.log("Gemini planned " + visual.type + " graphic for scene " + sceneNumber + ": " + String(visual.reason || ""));
+  return visual;
+}
 async function findPexelsImage(query) {
   if (!PEXELS_API_KEY || !String(query || "").trim()) return null;
   const endpoint = "https://api.pexels.com/v1/search?query=" + encodeURIComponent(query) + "&orientation=landscape&per_page=8";
@@ -420,6 +460,8 @@ async function main() {
   const clips = [], credits = [], narrationDurations = [];
   for (let i=0; i<script.scenes.length; i++) {
     const scene = script.scenes[i];
+    try { scene.visual = await selectSceneVisualWithGemini(scene, i + 1); }
+    catch (error) { console.warn("Gemini visual planning failed for scene " + (i + 1) + "; retaining supplied visual only: " + error.message); }
     const stem = "scene-" + String(i+1).padStart(2,"0");
     const svg = path.join(OUT, stem + ".svg");
     const titleSvg = path.join(OUT, stem + "-title.svg");
@@ -546,7 +588,7 @@ await run("ffmpeg", ["-y","-f","concat","-safe","0","-i",shotList,"-c","copy",cl
   const averageSceneDuration = finalDuration / clips.length;
   const durationTolerance = Math.max(3, clips.length * 0.5);
   if (clips.length < 5 || Math.abs(finalDuration - expectedNarrationDuration) > durationTolerance) throw new Error("Final pacing QA failed: " + clips.length + " scenes; rendered " + finalDuration.toFixed(2) + "s vs narration " + expectedNarrationDuration.toFixed(2) + "s.");
-  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:Number(qa.format.duration),audio:true,audioDesign:"Piper TTS narration; no music",scenes:clips.length,averageSceneDuration,visualProviders:[...new Set(credits.map(c=>c.provider))],semanticImageSelector:GEMINI_API_KEY?"Gemini multimodal":"disabled",semanticImageScenes:credits.filter(c=>c.semanticConfidence>=85).length,licensedAssetScenes:stockScenes},null,2)+"\n");
+  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:Number(qa.format.duration),audio:true,audioDesign:"Piper TTS narration; no music",scenes:clips.length,averageSceneDuration,visualProviders:[...new Set(credits.map(c=>c.provider))],semanticImageSelector:GEMINI_API_KEY?"Gemini multimodal":"disabled",semanticImageScenes:credits.filter(c=>c.semanticConfidence>=85).length,geminiPlannedGraphics:script.scenes.filter(s=>s.visual&&s.visual.type).length,geminiGraphicTypes:[...new Set(script.scenes.filter(s=>s.visual&&s.visual.type).map(s=>s.visual.type))],licensedAssetScenes:stockScenes},null,2)+"\n");
   console.log("Rendered and passed 1080p video/audio pacing QA: "+output);
 }
 main().catch(error=>{console.error("Render failed:",error);process.exit(1);});
