@@ -290,7 +290,7 @@ async function selectImageWithGemini(narration, sceneTitle, sceneSubtitle, query
   return Object.assign({}, selected.candidate, { semanticConfidence: confidence, semanticRelevance: relevance, semanticReason: String(decision.reason || "") });
 }
 async function planSceneVisualsWithGemini(scenes) {
-  if (!GEMINI_API_KEY) throw new Error("GEMINI_API_KEY is required for director planning.");
+  if (!GEMINI_API_KEY) { console.warn("Gemini key missing; skipping AI graphic direction without API calls."); return scenes.map(() => null); }
   const prompt = [
     "You are a senior factual documentary visual editor and motion-graphics director.",
     "Analyze all scenes together as one documentary and choose only scenes that genuinely benefit from graphics.",
@@ -383,7 +383,11 @@ async function main() {
   await rm(OUT, { recursive: true, force: true });
   await mkdir(OUT, { recursive: true });
   const clips = [], credits = [], narrationDurations = [];
-  const plannedVisuals = await planSceneVisualsWithGemini(script.scenes);
+  let plannedVisuals = script.scenes.map(() => null);
+  if (GEMINI_API_KEY) {
+    try { plannedVisuals = await planSceneVisualsWithGemini(script.scenes); }
+    catch (error) { GEMINI_BLOCKED = true; console.warn("Gemini director unavailable; disabling all further Gemini calls and using non-AI visual fallbacks: " + error.message); }
+  }
   script.scenes.forEach((scene,index) => { scene.visual = plannedVisuals[index]; });
   for (let i=0; i<script.scenes.length; i++) {
     const scene = script.scenes[i];
