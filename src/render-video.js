@@ -388,7 +388,32 @@ if (!asset) {
     if (asset) {
       USED_ASSET_PAGES.add(asset.nasaId ? "NASA:"+asset.nasaId : asset.page);
 
-      await download(asset.url, clip);
+      const shotCount = Math.min(4, Math.max(1, Math.round(narrationDurations[i] / SCENE_DURATION_SECONDS)));
+const shots = [path.join(OUT, stem + "-shot-0.mp4")];
+await download(asset.url, shots[0]);
+for (let s = 1; s < shotCount; s++) {
+  let extra = null;
+  for (const q of variants) {
+    extra = await tryProvider("Pixabay video", () => findPixabayVideo(q));
+    if (extra) break;
+  }
+  if (!extra) break;
+  USED_ASSET_PAGES.add(extra.page);
+  const extraClip = path.join(OUT, stem + "-shot-" + s + ".mp4");
+  await download(extra.url, extraClip);
+  shots.push(extraClip);
+  credits.push({ scene:i+1, query, provider:extra.provider, page:extra.page, creator:extra.creator, creatorUrl:extra.creatorUrl, usage:"Illustrative footage; not proof of a named event or entity." });
+}
+const segment = (narrationDurations[i] / shots.length).toFixed(3);
+const normalized = [];
+for (let s = 0; s < shots.length; s++) {
+  const normPath = path.join(OUT, stem + "-norm-" + s + ".mp4");
+  await run("ffmpeg", ["-y","-stream_loop","-1","-i",shots[s],"-t",segment,"-an","-vf","scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,fps=25,format=yuv420p","-c:v","libx264","-preset","veryfast","-crf","21",normPath]);
+  normalized.push(normPath);
+}
+const shotList = path.join(OUT, stem + "-shots.txt");
+await writeFile(shotList, normalized.map(f => "file '" + path.basename(f) + "'").join("\n") + "\n");
+await run("ffmpeg", ["-y","-f","concat","-safe","0","-i",shotList,"-c","copy",clip]);
       credits.push({ scene:i+1, query, provider:asset.provider || "Pexels video", page:asset.page, creator:asset.creator, creatorUrl:asset.creatorUrl, usage:"Illustrative footage; not proof of a named event or entity." });
       await run("ffmpeg", ["-y","-stream_loop","-1","-i",clip,"-loop","1","-i",svg,"-loop","1","-i",titleSvg,"-i",audio,
         "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,eq=contrast=1.12:saturation=0.78,drawbox=x=0:y=0:w=iw:h=ih:color=#08090b@0.18:t=fill[bg];[bg][1:v]overlay=0:0[base];[2:v]format=rgba,fade=t=in:st=0:d=0.7:alpha=1,fade=t=out:st=3.6:d=0.65:alpha=1[title];[base][title]overlay=x='120-90*max(0,1-t/0.7)+90*max(0,min(1,(t-3.6)/0.65))':y=0:format=auto,format=yuv420p[v]",
