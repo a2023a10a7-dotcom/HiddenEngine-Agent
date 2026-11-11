@@ -184,15 +184,18 @@ async function findPixabayVideo(query) {
   if (!PIXABAY_API_KEY || !String(query || "").trim()) return null;
   const endpoint = "https://pixabay.com/api/videos/?key=" + encodeURIComponent(PIXABAY_API_KEY) +
     "&q=" + encodeURIComponent(query) + "&safesearch=true&per_page=20";
-  const response = await geminiFetch(endpoint, {}, 15000);
+  const response = await fetchWithTimeout(endpoint, {}, 15000);
   if (!response.ok) throw new Error("Pixabay video search failed (" + response.status + ").");
   const data = await response.json();
   const hits = (data.hits || []).map(hit => ({hit, score: relevanceScore(query, hit.tags)}))
     .filter(item => item.score >= 0.5 && item.hit.videos && !USED_ASSET_PAGES.has(item.hit.pageURL));
   hits.sort((a,b) => b.score-a.score || (b.hit.videos.large?.width || 0) - (a.hit.videos.large?.width || 0));
   for (const {hit} of hits) {
-    const files = Object.values(hit.videos || {}).filter(v => v && v.url && v.width >= 960).sort((a,b) => b.width-a.width);
-    const video = files[0] || Object.values(hit.videos || {}).find(v => v?.url);
+    // Prefer a moderate-resolution file to avoid multi-gigabyte stock downloads.
+    const files = Object.values(hit.videos || {}).filter(v => v && v.url && v.width >= 960 && v.width <= 1920)
+      .sort((a,b) => (a.size || Number.MAX_SAFE_INTEGER) - (b.size || Number.MAX_SAFE_INTEGER) || a.width - b.width);
+    const video = files[0] || Object.values(hit.videos || {}).filter(v => v?.url)
+      .sort((a,b) => (a.size || Number.MAX_SAFE_INTEGER) - (b.size || Number.MAX_SAFE_INTEGER) || a.width - b.width)[0];
     if (!video) continue;
     return {url:video.url,page:hit.pageURL,creator:hit.user||"Pixabay contributor",creatorUrl:"",duration:hit.duration,provider:"Pixabay video",tags:hit.tags};
   }
@@ -460,7 +463,7 @@ if (!still) {
     asset = await tryProvider("Pixabay video", () => findPixabayVideo(q));
     if (asset) break;
   }
-  if (!asset) asset = await tryProvider("NASA video", () => findNasaMedia(query, "video"));
+  if (!asset) still = await tryProvider("NASA photo", () => findNasaMedia(query, "image"));
 }
     if (asset) {
       USED_ASSET_PAGES.add(asset.nasaId ? "NASA:"+asset.nasaId : asset.page);
