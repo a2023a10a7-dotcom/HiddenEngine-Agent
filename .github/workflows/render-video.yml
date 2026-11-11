@@ -75,10 +75,27 @@ jobs:
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
         run: node src/render-video.js
 
-      - name: Upload MP4 and production assets
+      - name: Generate final video contact sheet
+        env:
+          PROJECT_ID: ${{ inputs.project_id || '2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re' }}
+        run: |
+          output="dist/${PROJECT_ID}"
+          test -s "$output/the-hidden-engine-documentary.mp4"
+          test -s "$output/CREDITS.md"
+          test -s "$output/QA-REPORT.json"
+          ffmpeg -y -i "$output/the-hidden-engine-documentary.mp4" \
+            -vf "fps=1/15,scale=320:-1,tile=4x4:padding=8:margin=8:color=black" \
+            -frames:v 1 "$output/contact-sheet.jpg"
+          test -s "$output/contact-sheet.jpg"
+
+      - name: Upload only the four final deliverables
         uses: actions/upload-artifact@v4
         with:
-          name: hiddenengine-cinematic-${{ inputs.project_id || 'visual-inspection' }}
-          path: dist/${{ inputs.project_id || '2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re' }}/
+          name: hiddenengine-cinematic-${{ inputs.project_id || '2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re' }}
+          path: |
+            dist/${{ inputs.project_id || '2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re' }}/the-hidden-engine-documentary.mp4
+            dist/${{ inputs.project_id || '2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re' }}/CREDITS.md
+            dist/${{ inputs.project_id || '2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re' }}/QA-REPORT.json
+            dist/${{ inputs.project_id || '2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re' }}/contact-sheet.jpg
           if-no-files-found: error
           retention-days: 14
