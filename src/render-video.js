@@ -116,6 +116,8 @@ function overlaySvg(scene, index, total) {
   </style></svg>`;
 }
 const PIXABAY_API_KEY = process.env.PIXABAY_API_KEY;
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash";
 const PIPER_EXECUTABLE = process.env.PIPER_EXECUTABLE || "piper";
 const PIPER_MODEL = process.env.PIPER_MODEL || "models/piper-voice.onnx";
 const PIPER_LENGTH_SCALE = Number(process.env.PIPER_LENGTH_SCALE || "1.0");
@@ -169,6 +171,77 @@ async function findPixabayImage(query) {
   return {url:best.largeImageURL,page:best.pageURL,creator:best.user||"Pixabay contributor",creatorUrl:"",provider:"Pixabay photo",license:"Pixabay Content License",tags:best.tags};
 }
 
+async function findPixabayImageCandidates(query, limit = 8) {
+  if (!PIXABAY_API_KEY || !String(query || "").trim()) return [];
+  const endpoint = "https://pixabay.com/api/?key=" + encodeURIComponent(PIXABAY_API_KEY) +
+    "&q=" + encodeURIComponent(query) + "&image_type=photo&orientation=horizontal&safesearch=true&per_page=" + limit;
+  const response = await fetchWithTimeout(endpoint, {}, 15000);
+  if (!response.ok) throw new Error("Pixabay image search failed (" + response.status + ").");
+  const data = await response.json();
+  return (data.hits || []).filter(hit => hit.webformatURL && hit.largeImageURL && !USED_ASSET_PAGES.has(hit.pageURL)).slice(0, limit).map(hit => ({
+    url: hit.largeImageURL, previewUrl: hit.webformatURL, page: hit.pageURL,
+    creator: hit.user || "Pixabay contributor", provider: "Pixabay photo",
+    license: "Pixabay Content License", tags: hit.tags || "", width: hit.imageWidth || 0, height: hit.imageHeight || 0
+  }));
+}
+
+async function selectImageWithGemini(narration, sceneTitle, sceneSubtitle, query, candidates) {
+  if (!GEMINI_API_KEY || !Array.isArray(candidates) || !candidates.length) return null;
+  const prepared = [];
+  for (let i = 0; i < candidates.length; i++) {
+    try {
+      const response = await fetchWithTimeout(candidates[i].previewUrl, {}, 12000);
+      if (!response.ok) continue;
+      const mimeType = (response.headers.get("content-type") || "image/jpeg").split(";")[0];
+      if (!/^image\/(jpeg|png|webp)$/i.test(mimeType)) continue;
+      const bytes = Buffer.from(await response.arrayBuffer());
+      if (!bytes.length || bytes.length > 5 * 1024 * 1024) continue;
+      prepared.push({ index: i + 1, candidate: candidates[i], mimeType, data: bytes.toString("base64") });
+    } catch (error) { console.warn("Could not prepare Gemini candidate " + (i + 1) + ": " + error.message); }
+  }
+  if (!prepared.length) return null;
+  const prompt = [
+    "You are the visual editor of a high-quality factual documentary.",
+    "Inspect the actual image pixels and choose the image that most accurately illustrates the narration.",
+    "Do not choose based only on tags, filenames, or search query. Prefer specific concrete visual relevance.",
+    "Reject generic technology imagery, unrelated stock photos, misleading historical imagery, and broad thematic matches.",
+    "Stock imagery is illustrative, never proof of a named person, company, or real event.",
+    "If no image is genuinely relevant, return choice 0.",
+    "Return ONLY JSON: {\"choice\": integer, \"confidence\": integer, \"relevance_score\": integer, \"reason\": \"short explanation\"}.",
+    "A choice is acceptable only when confidence and relevance_score are both at least 85.",
+    "Scene title: " + String(sceneTitle || ""),
+    "Scene subtitle: " + String(sceneSubtitle || ""),
+    "Search phrase (context only): " + String(query || ""),
+    "Narration: " + String(narration || ""),
+    "Candidate numbers match attached images in this order: " + prepared.map(x => x.index).join(", ")
+  ].join("\n");
+  const parts = [{ text: prompt }];
+  for (const item of prepared) {
+    parts.push({ text: "Candidate " + item.index });
+    parts.push({ inline_data: { mime_type: item.mimeType, data: item.data } });
+  }
+  const endpoint = "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(GEMINI_MODEL) + ":generateContent?key=" + encodeURIComponent(GEMINI_API_KEY);
+  const response = await fetchWithTimeout(endpoint, {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ contents: [{ role: "user", parts }], generationConfig: { temperature: 0, responseMimeType: "application/json" } })
+  }, 45000);
+  if (!response.ok) throw new Error("Gemini image selection failed (" + response.status + "): " + (await response.text()).slice(0, 700));
+  const payload = await response.json();
+  const answer = (payload.candidates && payload.candidates[0] && payload.candidates[0].content && payload.candidates[0].content.parts || []).map(part => part.text || "").join("").trim();
+  if (!answer) throw new Error("Gemini returned an empty image-selection response.");
+  let decision;
+  try { decision = JSON.parse(answer.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "")); }
+  catch { throw new Error("Gemini returned invalid JSON: " + answer.slice(0, 300)); }
+  const choice = Number(decision.choice), confidence = Number(decision.confidence), relevance = Number(decision.relevance_score);
+  if (!Number.isInteger(choice) || choice < 1 || choice > prepared.length || confidence < 85 || relevance < 85) {
+    console.log("Gemini rejected all image candidates: " + String(decision.reason || "No sufficiently relevant image."));
+    return null;
+  }
+  const selected = prepared.find(item => item.index === choice);
+  if (!selected) return null;
+  console.log("Gemini selected Pixabay image " + choice + " (confidence " + confidence + ", relevance " + relevance + "): " + String(decision.reason || ""));
+  return Object.assign({}, selected.candidate, { semanticConfidence: confidence, semanticRelevance: relevance, semanticReason: String(decision.reason || "") });
+}
 async function findPexelsImage(query) {
   if (!PEXELS_API_KEY || !String(query || "").trim()) return null;
   const endpoint = "https://api.pexels.com/v1/search?query=" + encodeURIComponent(query) + "&orientation=landscape&per_page=8";
@@ -379,14 +452,17 @@ for (const q of variants) {
 }
 if (!asset) asset = await tryProvider("NASA video", () => findNasaMedia(query, "video"));
 if (!asset) {
-  for (const q of variants) {
-    still = await tryProvider("Pixabay photo", () => findPixabayImage(q));
-    if (still) break;
-  }
-}
-    if (!asset && !still) still = await tryProvider("Wikimedia Commons", () => findCommonsImage(query));
-    if (!asset && !still) still = await tryProvider("Openverse", () => findOpenverseImage(query));
-    if (!asset && !still) still = await tryProvider("NASA photo", () => findNasaMedia(query, "image"));
+      if (!GEMINI_API_KEY) {
+        console.warn("GEMINI_API_KEY is not configured; refusing unverified stock photos and using original motion graphics.");
+      } else {
+        for (const q of variants) {
+          const candidates = await tryProvider("Pixabay image candidates", () => findPixabayImageCandidates(q, 8));
+          if (!candidates || !candidates.length) continue;
+          still = await tryProvider("Gemini visual relevance selection", () => selectImageWithGemini(scene.narration, scene.title, scene.subtitle, q, candidates));
+          if (still) break;
+        }
+      }
+    }
     if (asset) {
       USED_ASSET_PAGES.add(asset.nasaId ? "NASA:"+asset.nasaId : asset.page);
 
@@ -470,7 +546,7 @@ await run("ffmpeg", ["-y","-f","concat","-safe","0","-i",shotList,"-c","copy",cl
   const averageSceneDuration = finalDuration / clips.length;
   const durationTolerance = Math.max(3, clips.length * 0.5);
   if (clips.length < 5 || Math.abs(finalDuration - expectedNarrationDuration) > durationTolerance) throw new Error("Final pacing QA failed: " + clips.length + " scenes; rendered " + finalDuration.toFixed(2) + "s vs narration " + expectedNarrationDuration.toFixed(2) + "s.");
-  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:Number(qa.format.duration),audio:true,audioDesign:"Piper TTS narration; no music",scenes:clips.length,averageSceneDuration,visualProviders:[...new Set(credits.map(c=>c.provider))],licensedAssetScenes:stockScenes},null,2)+"\n");
+  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:Number(qa.format.duration),audio:true,audioDesign:"Piper TTS narration; no music",scenes:clips.length,averageSceneDuration,visualProviders:[...new Set(credits.map(c=>c.provider))],semanticImageSelector:GEMINI_API_KEY?"Gemini multimodal":"disabled",semanticImageScenes:credits.filter(c=>c.semanticConfidence>=85).length,licensedAssetScenes:stockScenes},null,2)+"\n");
   console.log("Rendered and passed 1080p video/audio pacing QA: "+output);
 }
 main().catch(error=>{console.error("Render failed:",error);process.exit(1);});
