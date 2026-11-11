@@ -117,7 +117,7 @@ function overlaySvg(scene, index, total) {
 }
 const PIXABAY_API_KEY = process.env.PIXABAY_API_KEY;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-3.8-flash";
 const PIPER_EXECUTABLE = process.env.PIPER_EXECUTABLE || "piper";
 const PIPER_MODEL = process.env.PIPER_MODEL || "models/piper-voice.onnx";
 const PIPER_LENGTH_SCALE = Number(process.env.PIPER_LENGTH_SCALE || "1.0");
