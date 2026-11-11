@@ -242,160 +242,38 @@ async function selectImageWithGemini(narration, sceneTitle, sceneSubtitle, query
   console.log("Gemini selected Pixabay image " + choice + " (confidence " + confidence + ", relevance " + relevance + "): " + String(decision.reason || ""));
   return Object.assign({}, selected.candidate, { semanticConfidence: confidence, semanticRelevance: relevance, semanticReason: String(decision.reason || "") });
 }
-async function selectSceneVisualWithGemini(scene, sceneNumber) {
-  if (!GEMINI_API_KEY) return scene.visual || null;
+async function planSceneVisualsWithGemini(scenes) {
+  if (!GEMINI_API_KEY) throw new Error("GEMINI_API_KEY is required for director planning.");
   const prompt = [
-    "Act as a senior documentary visual editor and motion-graphics director.",
-    "Decide whether this narration segment needs a graphic, chart, timeline, comparison, or schematic map, and at which scene it belongs.",
-    "Return one JSON object only, matching this schema: {\"type\":\"none|metric|comparison|timeline|map\",\"source_label\":\"short label\",\"value\":\"...\",\"detail\":\"...\",\"items\":[{\"label\":\"...\",\"percent\":0,\"value\":\"...\"}],\"events\":[{\"date\":\"...\",\"label\":\"...\"}],\"points\":[{\"x\":0,\"y\":0,\"label\":\"...\"}],\"reason\":\"...\"}.",
-    "Choose none for ordinary narration, abstract claims, or when a graphic would add no clear understanding. Do not force a graphic into every scene.",
-    "Use metric only for a single explicit numeric finding; comparison only for two or more explicit comparable values; timeline only for two or more explicit dated/ordered events; map only when the narration explicitly concerns at least two named geographic places, movement, borders, routes, or spatial relationships.",
-    "Never invent numbers, percentages, dates, events, geographic places, or causal claims. Use only facts explicitly present in narration, subtitle, or existing visual data supplied below.",
-    "If the facts are insufficient to populate a visual accurately, choose none.",
-    "For map points, x and y are schematic layout positions from 0 to 100, not geographic coordinates. Label only explicitly named places. A schematic map must not imply precise geography.",
-    "Keep labels concise and readable. Avoid repeating the narration. source_label must identify the source or say DOCUMENTARY EXPLANATION when no external source is supplied.",
-    "Scene number: " + sceneNumber,
-    "Title: " + String(scene.title || ""),
-    "Subtitle: " + String(scene.subtitle || ""),
-    "Narration: " + String(scene.narration || ""),
-    "Existing visual data (may be retained only if factually supported): " + JSON.stringify(scene.visual || null)
+    "You are a senior factual documentary visual editor and motion-graphics director.",
+    "Analyze all scenes together as one documentary and choose only scenes that genuinely benefit from graphics.",
+    "Return ONLY JSON: {\"scenes\":[{\"scene\":1,\"type\":\"none|metric|comparison|timeline|map\",\"source_label\":\"...\",\"value\":\"...\",\"detail\":\"...\",\"items\":[],\"events\":[],\"points\":[],\"reason\":\"...\"}]}",
+    "Return exactly one decision per input scene, in order, with 1-based scene numbers.",
+    "Choose none for ordinary narration. metric requires an explicit numeric finding; comparison requires 2+ explicit comparable values; timeline requires 2+ explicit dated/ordered events; map requires 2+ explicitly named geographic places with a spatial relationship.",
+    "Never invent facts, numbers, dates, events, places, sources or causal claims. Use only supplied narration. If unsure choose none.",
+    "Map x/y are schematic positions from 0 to 100, not real coordinates. Do not imply geographic precision.",
+    "Keep labels concise. source_label must be an explicit source in the narration or DOCUMENTARY EXPLANATION.",
+    "Scenes: " + JSON.stringify(scenes.map((s,i)=>({scene:i+1,title:s.title||"",subtitle:s.subtitle||"",narration:s.narration||""})))
   ].join("\n");
   const endpoint = "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(GEMINI_MODEL) + ":generateContent?key=" + encodeURIComponent(GEMINI_API_KEY);
-  const response = await fetchWithTimeout(endpoint, {
-    method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }], generationConfig: { temperature: 0, responseMimeType: "application/json" } })
-  }, 35000);
-  if (!response.ok) throw new Error("Gemini visual-planning request failed (" + response.status + "): " + (await response.text()).slice(0, 500));
-  const payload = await response.json();
-  const answer = (payload.candidates && payload.candidates[0] && payload.candidates[0].content && payload.candidates[0].content.parts || []).map(part => part.text || "").join("").trim();
-  if (!answer) throw new Error("Gemini returned an empty visual-planning response for scene " + sceneNumber);
-  let visual;
-  try { visual = JSON.parse(answer.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "")); }
-  catch { throw new Error("Gemini returned invalid visual JSON for scene " + sceneNumber + ": " + answer.slice(0, 300)); }
-  const allowed = new Set(["none", "metric", "comparison", "timeline", "map"]);
-  if (!allowed.has(visual.type)) throw new Error("Gemini returned unsupported visual type for scene " + sceneNumber);
-  if (visual.type === "metric" && (!String(visual.value || "").trim() || !String(visual.detail || "").trim())) visual.type = "none";
-  if (visual.type === "comparison" && (!Array.isArray(visual.items) || visual.items.length < 2)) visual.type = "none";
-  if (visual.type === "timeline" && (!Array.isArray(visual.events) || visual.events.length < 2)) visual.type = "none";
-  if (visual.type === "map" && (!Array.isArray(visual.points) || visual.points.length < 2 || visual.points.some(p => !Number.isFinite(Number(p.x)) || !Number.isFinite(Number(p.y)) || !String(p.label || "").trim()))) visual.type = "none";
-  if (visual.type === "none") { console.log("Gemini chose no graphic for scene " + sceneNumber + ": " + String(visual.reason || "No useful factual visual.")); return null; }
-  console.log("Gemini planned " + visual.type + " graphic for scene " + sceneNumber + ": " + String(visual.reason || ""));
-  return visual;
-}
-async function findPexelsImage(query) {
-  if (!PEXELS_API_KEY || !String(query || "").trim()) return null;
-  const endpoint = "https://api.pexels.com/v1/search?query=" + encodeURIComponent(query) + "&orientation=landscape&per_page=8";
-  const response = await fetchWithTimeout(endpoint,{headers:{Authorization:PEXELS_API_KEY}});
-  if (!response.ok) throw new Error("Pexels photo search failed ("+response.status+"): "+(await response.text()).slice(0,300));
-  const data=await response.json();
-  const photos=(data.photos||[]).filter(p=>p.src && (p.src.landscape||p.src.large2x||p.src.large) && !USED_ASSET_PAGES.has(p.url));
-  photos.sort((a,b)=>(b.width*b.height)-(a.width*a.height));
-  const p=photos[0];
-  return p ? {url:p.src.landscape||p.src.large2x||p.src.large,page:p.url,creator:p.photographer||"Unknown creator",creatorUrl:p.photographer_url||"",provider:"Pexels photo"} : null;
-}
-async function findCommonsImage(query) {
-  const raw = String(query || "").trim();
-  if (!raw) return null;
-  const allowed = /^(CC0|Public domain|CC BY(?:-SA)? \d)/i;
-  const clean = value => String(value || "").replace(/<[^>]*>/g,"").replace(/&nbsp;/g," ").trim();
-  const endpoint = "https://commons.wikimedia.org/w/api.php?action=query&list=search&srnamespace=6&srlimit=30&srsearch=" +
-    encodeURIComponent(raw) + "&format=json";
-  const response = await fetchWithTimeout(endpoint, {
-    headers: { "User-Agent": "HiddenEngineDocumentaryBot/1.0 (asset attribution and license verification)" }
+  const response = await fetchWithTimeout(endpoint, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({contents:[{role:"user",parts:[{text:prompt}]}],generationConfig:{temperature:0,responseMimeType:"application/json"}}) }, 45000);
+  if (!response.ok) throw new Error("Gemini batch planning failed ("+response.status+"): "+(await response.text()).slice(0,700));
+  const payload=await response.json();
+  const answer=((payload.candidates && payload.candidates[0] && payload.candidates[0].content && payload.candidates[0].content.parts)||[]).map(p=>p.text||"").join("").trim();
+  if (!answer) throw new Error("Gemini returned empty batch plan.");
+  let parsed;
+  try { parsed=JSON.parse(answer.replace(/^\`\`\`(?:json)?\s*/i,"").replace(/\s*\`\`\`$/,"")); }
+  catch { throw new Error("Gemini returned invalid batch plan: "+answer.slice(0,300)); }
+  if (!Array.isArray(parsed.scenes)||parsed.scenes.length!==scenes.length) throw new Error("Gemini did not return exactly one decision per scene.");
+  return parsed.scenes.map((v,i)=>{
+    if (Number(v.scene)!==i+1||!["none","metric","comparison","timeline","map"].includes(v.type)) throw new Error("Invalid Gemini visual decision for scene "+(i+1));
+    if (v.type==="metric"&&(!String(v.value||"").trim()||!String(v.detail||"").trim())) v.type="none";
+    if (v.type==="comparison"&&(!Array.isArray(v.items)||v.items.length<2)) v.type="none";
+    if (v.type==="timeline"&&(!Array.isArray(v.events)||v.events.length<2)) v.type="none";
+    if (v.type==="map"&&(!Array.isArray(v.points)||v.points.length<2||v.points.some(p=>!Number.isFinite(Number(p.x))||!Number.isFinite(Number(p.y))||!String(p.label||"").trim()))) v.type="none";
+    console.log("Gemini "+(v.type==="none"?"skipped":"planned "+v.type+" for")+" scene "+(i+1)+": "+String(v.reason||""));
+    return v.type==="none"?null:v;
   });
-  if (!response.ok) throw new Error("Wikimedia Commons search failed ("+response.status+").");
-  const data = await response.json();
-  const titles = (data.query?.search || []).map(item => item.title).filter(Boolean);
-  if (!titles.length) return null;
-  const detailsUrl = "https://commons.wikimedia.org/w/api.php?action=query&titles=" +
-    encodeURIComponent(titles.join("|")) + "&prop=imageinfo&iiprop=url|mime|extmetadata&iiurlwidth=1920&format=json";
-  const detailsResponse = await fetchWithTimeout(detailsUrl, {
-    headers: { "User-Agent": "HiddenEngineDocumentaryBot/1.0 (asset attribution and license verification)" }
-  });
-  if (!detailsResponse.ok) throw new Error("Wikimedia Commons image details failed ("+detailsResponse.status+").");
-  const details = await detailsResponse.json();
-  const candidates = Object.values(details.query?.pages || {}).map(page => {
-    const info = page.imageinfo?.[0];
-    if (!info || !/^image\/(jpeg|png|webp)$/i.test(info.mime || "")) return null;
-    const meta = info.extmetadata || {};
-    const license = clean(meta.LicenseShortName?.value);
-    if (!allowed.test(license)) return null;
-    const tags = page.title + " " + clean(meta.ImageDescription?.value);
-    return {page,info,meta,license,score:relevanceScore(raw,tags)};
-  }).filter(item => item && item.score >= 0.5 && !USED_ASSET_PAGES.has(item.info.descriptionurl));
-  candidates.sort((a,b)=>b.score-a.score);
-  const best = candidates[0];
-  if (!best) return null;
-  return {
-    url: best.info.thumburl || best.info.url,
-    page: best.info.descriptionurl || ("https://commons.wikimedia.org/wiki/" + encodeURIComponent(best.page.title.replace(/ /g,"_"))),
-    creator: clean(best.meta.Artist?.value || "Unknown creator"),
-    license: best.license,
-    licenseUrl: clean(best.meta.LicenseUrl?.value || ""),
-    attribution: clean(best.meta.AttributionRequired?.value || ""),
-    provider: "Wikimedia Commons photo",
-    relevance: best.score
-  };
-}
-async function findOpenverseImage(query) {
-  const q = String(query || "").trim();
-  if (!q) return null;
-  const endpoint = "https://api.openverse.org/v1/images/?q=" + encodeURIComponent(q) +
-    "&license=cc0,pdm,by,by-sa&aspect_ratio=wide&page_size=30";
-  const response = await fetchWithTimeout(endpoint, {
-    headers: { "User-Agent": "HiddenEngineDocumentaryBot/1.0 (licensed visual discovery)" }
-  });
-  if (!response.ok) throw new Error("Openverse image search failed ("+response.status+").");
-  const data = await response.json();
-  const candidates = (data.results || []).filter(item =>
-    item.url && item.license && /^(cc0|pdm|by|by-sa)$/i.test(item.license) &&
-    !USED_ASSET_PAGES.has(item.foreign_landing_url || item.detail_url)
-  ).map(item => ({item,score:relevanceScore(q,[item.title,item.tags?.map(tag=>tag.name).join(" "),item.description].join(" "))}))
-    .filter(candidate => candidate.score >= 0.5);
-  candidates.sort((a,b)=>b.score-a.score);
-  const best = candidates[0];
-  if (!best) {
-    console.log("Openverse returned no sufficiently relevant licensed image for: " + q);
-    return null;
-  }
-  const item=best.item;
-  return {
-    url: item.thumbnail || item.url,
-    page: item.foreign_landing_url || item.detail_url || item.url,
-    creator: item.creator || "Unknown creator",
-    provider: "Openverse photo",
-    license: String(item.license).toUpperCase(),
-    licenseUrl: item.license_url || "",
-    creatorUrl: item.creator_url || "",
-    relevance: best.score
-  };
-}
-async function findPexelsVideo(query) {
-  // Pexels footage is illustrative only; never label it as evidence of a specific company or event.
-  if (!PEXELS_API_KEY) return null;
-  const searchQuery = String(query || "").trim();
-  if (!searchQuery) return null;
-  const endpoint = "https://api.pexels.com/videos/search?query=" + encodeURIComponent(searchQuery) + "&orientation=landscape&per_page=8";
-  const response = await fetchWithTimeout(endpoint, {
-    headers: { Authorization: PEXELS_API_KEY }
-  });
-  if (!response.ok) throw new Error("Pexels search failed (" + response.status + "): " + (await response.text()).slice(0, 500));
-  const data = await response.json();
-  const videos = (data.videos || []).filter(video =>
-    video.url && !USED_ASSET_PAGES.has(video.url) && video.video_files?.some(file => file.link && /mp4/i.test(file.file_type || ""))
-  );
-  videos.sort((a,b) => (b.width*b.height) - (a.width*a.height));
-  for (const video of videos) {
-    const files = video.video_files.filter(file => file.link && /mp4/i.test(file.file_type || ""));
-    files.sort((a,b) => (b.width*b.height) - (a.width*a.height));
-    const file = files.find(item => item.width >= 1280) || files[0];
-    if (!file) continue;
-    return {
-      url: file.link, page: video.url, creator: video.user?.name || "Unknown creator",
-      creatorUrl: video.user?.url || "", duration: video.duration, provider: "Pexels video"
-    };
-  }
-  return null;
 }
 
 async function findNasaMedia(query, mediaType) {
@@ -458,10 +336,10 @@ async function main() {
   await rm(OUT, { recursive: true, force: true });
   await mkdir(OUT, { recursive: true });
   const clips = [], credits = [], narrationDurations = [];
+  const plannedVisuals = await planSceneVisualsWithGemini(script.scenes);
+  script.scenes.forEach((scene,index) => { scene.visual = plannedVisuals[index]; });
   for (let i=0; i<script.scenes.length; i++) {
     const scene = script.scenes[i];
-    try { scene.visual = await selectSceneVisualWithGemini(scene, i + 1); }
-    catch (error) { console.warn("Gemini visual planning failed for scene " + (i + 1) + "; retaining supplied visual only: " + error.message); }
     const stem = "scene-" + String(i+1).padStart(2,"0");
     const svg = path.join(OUT, stem + ".svg");
     const titleSvg = path.join(OUT, stem + "-title.svg");
@@ -487,7 +365,7 @@ const query = shotQueries[0] || scene.visual_query || [scene.title, scene.subtit
       }
     };
     const words = String(query).toLowerCase().match(/[a-z0-9]{3,}/g) || [];
-const variants = [...new Set([query, words.slice(0,3).join(" "), words.slice(0,2).join(" "), words.slice(0,1).join(" ")])].filter(Boolean);
+const variants = [query].filter(Boolean); // One visual search per scene to protect free-tier quota.
 if (GEMINI_API_KEY) {
   for (const q of variants) {
     const candidates = await tryProvider("Pixabay image candidates", () => findPixabayImageCandidates(q, 8));
