@@ -43,9 +43,17 @@ jobs:
           node-version: 20
 
       - name: Install rendering tools and fonts
+        timeout-minutes: 18
         run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg fonts-dejavu-core
+          set -euo pipefail
+          sudo timeout --signal=TERM --kill-after=30s 8m apt-get update \
+            -o Acquire::Retries=2 \
+            -o Acquire::http::Timeout=30 \
+            -o Acquire::https::Timeout=30
+          sudo timeout --signal=TERM --kill-after=30s 8m apt-get install -y ffmpeg fonts-dejavu-core \
+            -o Acquire::Retries=2 \
+            -o Acquire::http::Timeout=30 \
+            -o Acquire::https::Timeout=30
 
       - name: Install Piper TTS and download selected voice
         env:
