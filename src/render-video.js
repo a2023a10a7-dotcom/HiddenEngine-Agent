@@ -1,4 +1,4 @@
-import { access, mkdir, readFile, writeFile, rm } from "node:fs/promises";
+import { access, mkdir, readFile, writeFile, rm, open } from "node:fs/promises";
 import { spawn } from "node:child_process";
 import path from "node:path";
 
@@ -354,9 +354,37 @@ async function findNasaMedia(query, mediaType) {
 }
 
 async function download(url, dest) {
-  const response = await fetchWithTimeout(url, {}, 20000);
-  if (!response.ok) throw new Error("Asset download failed (" + response.status + ").");
-  await writeFile(dest, Buffer.from(await response.arrayBuffer()));
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 120000);
+  let file;
+  try {
+    const response = await fetch(url, { signal: controller.signal });
+    if (!response.ok) throw new Error("Asset download failed (" + response.status + ").");
+    const declaredSize = Number(response.headers.get("content-length") || 0);
+    const maxBytes = 512 * 1024 * 1024;
+    if (declaredSize > maxBytes) throw new Error("Asset exceeds the 512 MiB download limit.");
+    if (!response.body) throw new Error("Asset response has no readable body.");
+    file = await open(dest, "w");
+    const reader = response.body.getReader();
+    let total = 0;
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      total += value.byteLength;
+      if (total > maxBytes) {
+        await reader.cancel("Asset exceeds the 512 MiB download limit.");
+        throw new Error("Asset exceeds the 512 MiB download limit.");
+      }
+      await file.write(value);
+    }
+    if (total === 0) throw new Error("Asset download returned an empty file.");
+  } catch (error) {
+    await rm(dest, { force: true });
+    throw error;
+  } finally {
+    clearTimeout(timer);
+    if (file) await file.close();
+  }
 }
 async function piperTTS(text, output) {
   if (!Number.isFinite(PIPER_LENGTH_SCALE) || PIPER_LENGTH_SCALE <= 0) throw new Error("PIPER_LENGTH_SCALE must be a positive number.");
