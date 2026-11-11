@@ -1,5 +1,9 @@
 name: HiddenEngine Cinematic Documentary Render
 
+concurrency:
+  group: hiddenengine-gemini-render-${{ github.ref }}
+  cancel-in-progress: false
+
 on:
   push:
     branches:
@@ -81,6 +85,7 @@ jobs:
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: gemini-3.8-flash
+          GEMINI_MAX_REQUESTS_PER_RUN: "6"
         run: node src/render-video.js
 
       - name: Generate final video contact sheet
