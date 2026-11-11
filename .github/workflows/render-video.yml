@@ -42,18 +42,22 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install rendering tools and fonts
-        timeout-minutes: 18
+      - name: Verify preinstalled rendering tools and fonts
         run: |
           set -euo pipefail
-          sudo timeout --signal=TERM --kill-after=30s 8m apt-get update \
-            -o Acquire::Retries=2 \
-            -o Acquire::http::Timeout=30 \
-            -o Acquire::https::Timeout=30
-          sudo timeout --signal=TERM --kill-after=30s 8m apt-get install -y ffmpeg fonts-dejavu-core \
-            -o Acquire::Retries=2 \
-            -o Acquire::http::Timeout=30 \
-            -o Acquire::https::Timeout=30
+          command -v ffmpeg
+          ffmpeg -version | head -n 2
+          command -v ffprobe
+          if command -v fc-match >/dev/null 2>&1; then
+            fc-match "DejaVu Sans" | head -n 1
+          else
+            echo "::error::fontconfig is missing; runner image does not include the expected font tooling."
+            exit 1
+          fi
+          if ! fc-match "DejaVu Sans" | grep -qi "DejaVu"; then
+            echo "::error::DejaVu Sans is unavailable on this runner image."
+            exit 1
+          fi
 
       - name: Install Piper TTS and download selected voice
         env:
