@@ -42,22 +42,13 @@ jobs:
         with:
           node-version: 20
 
-      - name: Verify preinstalled rendering tools and fonts
+      - name: Install rendering tools and fonts
         run: |
           set -euo pipefail
+          sudo apt-get install -y ffmpeg fonts-dejavu-core fontconfig
           command -v ffmpeg
-          ffmpeg -version | head -n 2
           command -v ffprobe
-          if command -v fc-match >/dev/null 2>&1; then
-            fc-match "DejaVu Sans" | head -n 1
-          else
-            echo "::error::fontconfig is missing; runner image does not include the expected font tooling."
-            exit 1
-          fi
-          if ! fc-match "DejaVu Sans" | grep -qi "DejaVu"; then
-            echo "::error::DejaVu Sans is unavailable on this runner image."
-            exit 1
-          fi
+          fc-match "DejaVu Sans"
 
       - name: Install Piper TTS and download selected voice
         env:
