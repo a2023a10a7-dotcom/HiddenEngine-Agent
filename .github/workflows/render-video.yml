@@ -23,9 +23,9 @@ on:
         default: "en_US-lessac-medium"
         type: string
       speaking_rate:
-        description: "Piper length scale: lower is faster, higher is slower"
+        description: "Piper length scale: higher is slower; calibrated for a 15-minute narration"
         required: true
-        default: "1.0"
+        default: "4.5"
         type: string
 
 permissions:
@@ -78,7 +78,7 @@ jobs:
       - name: Render cinematic documentary
         env:
           PROJECT_ID: ${{ inputs.project_id || '2026-11-12-chinas-technology-rise' }}
-          PIPER_LENGTH_SCALE: ${{ inputs.speaking_rate || '1.0' }}
+          PIPER_LENGTH_SCALE: ${{ inputs.speaking_rate || '4.5' }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
         run: node src/render-video.js
 
