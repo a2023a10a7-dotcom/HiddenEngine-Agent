@@ -1,0 +1,56 @@
+name: HiddenEngine Visual Review Package
+
+on:
+  workflow_dispatch:
+    inputs:
+      project_id:
+        description: "Production project folder ID"
+        required: true
+        type: string
+        default: "2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re"
+
+permissions:
+  contents: read
+
+jobs:
+  visual-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install FFmpeg
+        uses: AnimMouse/setup-ffmpeg@v1.2.5
+      - name: Build visual review package
+        env:
+          PROJECT_ID: \${{ inputs.project_id }}
+          PIXABAY_API_KEY: \${{ secrets.PIXABAY_API_KEY }}
+          CANDIDATES_PER_SCENE: "8"
+          MAX_CANDIDATES: "60"
+        run: node src/build-visual-review.js
+      - name: Validate review package
+        env:
+          PROJECT_ID: \${{ inputs.project_id }}
+        run: |
+          set -euo pipefail
+          out="dist/\${PROJECT_ID}/visual-review"
+          test -s "$out/visual-candidates.json"
+          test -s "$out/selection-template.json"
+          test -s "$out/SCRIPT-FOR-AI.md"
+          count=$(find "$out" -maxdepth 1 -name 'CONTACT-SHEET-*.jpg' | wc -l)
+          test "$count" -ge 1
+          echo "Contact sheets: $count"
+          node -e "const x=require('./$out/visual-candidates.json'); if(!x.candidates.length) process.exit(1); console.log('Candidates:',x.candidates.length)"
+      - name: Upload visual review package
+        uses: actions/upload-artifact@v4
+        with:
+          name: hiddenengine-visual-review-\${{ inputs.project_id }}
+          path: |
+            dist/\${{ inputs.project_id }}/visual-review/CONTACT-SHEET-*.jpg
+            dist/\${{ inputs.project_id }}/visual-review/visual-candidates.json
+            dist/\${{ inputs.project_id }}/visual-review/selection-template.json
+            dist/\${{ inputs.project_id }}/visual-review/SCRIPT-FOR-AI.md
+          if-no-files-found: error
+          retention-days: 14

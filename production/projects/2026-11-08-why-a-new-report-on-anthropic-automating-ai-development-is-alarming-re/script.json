@@ -6,12 +6,13 @@
     {
       "title": "THE FEEDBACK LOOP",
       "subtitle": "When AI helps build the next generation of AI",
-      "narration": "Imagine a research team trying to build a more capable artificial intelligence system. Now imagine the tools helping that team write code, run experiments, analyze results, and solve technical problems are AI systems themselves. Each generation could help researchers build the next one faster. But how much of this is already happening? And are we approaching a point where AI development accelerates beyond the pace people can comfortably understand? A new assessment inside Anthropic offers an unusually close look, with important caveats.",
-      "visual_query": "artificial intelligence research laboratory computer servers"
+      "visual_queries": ["artificial intelligence", "programmer coding", "data center", "neural network"],
+      "narration": "Imagine a research team trying to build a more capable artificial intelligence system. Now imagine the tools helping that team write code, run experiments, analyze results, and solve technical problems are AI systems themselves. Each generation could help researchers build the next one faster. But how much of this is already happening? And are we approaching a point where AI development accelerates beyond the pace people can comfortably understand? A new assessment inside Anthropic offers an unusually close look, with important caveats."
     },
     {
       "title": "INSIDE THE INVESTIGATION",
       "subtitle": "METR assessment | 12 August – 29 October 2026",
+      "visual_queries": ["scientist laboratory", "office documents", "data analysis", "business meeting"],
       "narration": "The nonprofit research organization METR conducted an eleven week assessment of Anthropic's artificial intelligence research and development. Researchers examined internal measurements covering model training, reinforcement learning, computing resources, and benchmark performance. They also interviewed staff and reviewed analyses of how AI tools were affecting research. This matters because the public usually sees the finished model. The experiments, failed approaches, and engineering decisions that produce it are mostly hidden inside the laboratory. METR received unusual access, but much of the evidence it considered most informative was redacted before publication.",
       "visual": {
         "type": "timeline",
@@ -30,30 +31,30 @@
             "label": "END"
           }
         ]
-      },
-      "visual_query": "AI research team computer lab server racks"
+      }
     },
     {
       "title": "WHAT DOES TWICE AS FAST MEAN?",
       "subtitle": "METR estimate: 1.9x | 95% confidence interval: 1.5–2.8x",
+      "visual_queries": ["growth chart", "data visualization", "stopwatch", "analytics dashboard"],
       "narration": "METR's headline result was striking. Its analysis estimated that Anthropic's models were improving on a set of well specified tasks at roughly twice the earlier rate. One benchmark trend showed an estimated acceleration of one point nine times, with a ninety five percent confidence interval from one point five to two point eight. This does not mean every AI capability has doubled, or that every real world task is solved twice as quickly. The measurement concerns a defined set of tasks and a particular benchmark methodology. It is an estimate, not a universal law.",
       "visual": {
         "type": "metric",
         "source_label": "METR ESTIMATE • BENCHMARK TREND",
         "value": "1.9×",
         "detail": "95% confidence interval: 1.5×–2.8×"
-      },
-      "visual_query": "computer processor semiconductor microchip close up"
+      }
     },
     {
       "title": "THE MECHANISM",
       "subtitle": "AI assistance can accelerate human research",
-      "narration": "So what might be driving the acceleration? METR investigated several possible factors, including computing power, hiring, data, and algorithmic improvements. It said the acceleration was not explained by faster growth in training compute. Its best judgment was that AI assistance likely accounts for a majority of the current acceleration. METR described a figure around eighty percent, but emphasized that this was a subjective estimate with substantial uncertainty. AI does not need to design an entire new model independently to change the speed of research. It can help people write code, run experiments, and analyze results. That is a human led process increasingly amplified by machines.",
-      "visual_query": "software engineer coding multiple computer screens"
+      "visual_queries": ["typing keyboard", "code screen", "engineers teamwork", "circuit board"],
+      "narration": "So what might be driving the acceleration? METR investigated several possible factors, including computing power, hiring, data, and algorithmic improvements. It said the acceleration was not explained by faster growth in training compute. Its best judgment was that AI assistance likely accounts for a majority of the current acceleration. METR described a figure around eighty percent, but emphasized that this was a subjective estimate with substantial uncertainty. AI does not need to design an entire new model independently to change the speed of research. It can help people write code, run experiments, and analyze results. That is a human led process increasingly amplified by machines."
     },
     {
       "title": "HOW AUTONOMOUS IS IT?",
       "subtitle": "Anthropic disclosure | August 2026",
+      "visual_queries": ["human robot", "robot hand", "control room", "automation factory"],
       "narration": "Anthropic has also described how it measures Claude's role in its own research and development. The company said that, as of August twenty twenty six, Claude was leading twenty six percent of the measured AI research and development work. More than ninety percent involved AI at least as a collaborator. But Anthropic also said Claude was not operating fully autonomously in any measured subset of that work. So the evidence does not show an AI system taking over the creation of its successor. It points to something more gradual: AI systems taking on larger portions of research tasks, while people still direct and supervise important parts of the process.",
       "visual": {
         "type": "comparison",
@@ -70,20 +71,19 @@
             "value": ">90%"
           }
         ]
-      },
-      "visual_query": "artificial intelligence automation robotics laboratory"
+      }
     },
     {
       "title": "THE TRANSPARENCY PROBLEM",
       "subtitle": "Access is not the same as public verification",
-      "narration": "The difficult question is how confidently outsiders can judge these findings. METR says Anthropic redacted a majority of the evidence it found most informative. The company argued that revealing exact details could expose confidential information and help competitors. This creates a genuine tension. Companies have reasons to protect sensitive research. But when the pace of AI development has consequences for public safety, independent researchers and policymakers need enough information to evaluate what is happening. METR itself cautions that its conclusions contain uncertainty. The benchmark trend may not capture every real world capability, and other bottlenecks or explanations may remain.",
-      "visual_query": "AI data center server racks"
+      "visual_queries": ["padlock security", "confidential documents", "magnifying glass", "government building"],
+      "narration": "The difficult question is how confidently outsiders can judge these findings. METR says Anthropic redacted a majority of the evidence it found most informative. The company argued that revealing exact details could expose confidential information and help competitors. This creates a genuine tension. Companies have reasons to protect sensitive research. But when the pace of AI development has consequences for public safety, independent researchers and policymakers need enough information to evaluate what is happening. METR itself cautions that its conclusions contain uncertainty. The benchmark trend may not capture every real world capability, and other bottlenecks or explanations may remain."
     },
     {
       "title": "WHAT HAPPENS NEXT?",
       "subtitle": "Measure the feedback loop. Preserve human oversight.",
-      "narration": "The significance of this report is not that machines have already begun independently building a new generation of themselves. It is that the research process itself is changing. When AI tools help researchers develop more capable AI, the speed of progress may become partly dependent on the systems being developed. That feedback loop deserves careful measurement, independent oversight, and greater transparency. The central question is no longer simply how powerful the next model will be. It is how much of the work required to create it will be done by AI, and whether human oversight can keep pace.",
-      "visual_query": "artificial intelligence neural network computer visualization"
+      "visual_queries": ["futuristic technology", "digital network", "city skyline night", "sunrise horizon"],
+      "narration": "The significance of this report is not that machines have already begun independently building a new generation of themselves. It is that the research process itself is changing. When AI tools help researchers develop more capable AI, the speed of progress may become partly dependent on the systems being developed. That feedback loop deserves careful measurement, independent oversight, and greater transparency. The central question is no longer simply how powerful the next model will be. It is how much of the work required to create it will be done by AI, and whether human oversight can keep pace."
     }
   ]
 }

@@ -1,0 +1,29 @@
+name: Visual Review Builder Validation
+
+on:
+  pull_request:
+    branches:
+      - feature/piper-tts-integration
+    paths:
+      - "src/build-visual-review.js"
+      - ".github/workflows/visual-review.yml"
+      - ".github/workflows/visual-review-validation.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check JavaScript syntax
+        run: node --check src/build-visual-review.js
+      - name: Check workflow and project inputs
+        run: |
+          test -s .github/workflows/visual-review.yml
+          test -s production/projects/2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re/script.json
+          node -e "const s=require('./production/projects/2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re/script.json'); if(!Array.isArray(s.scenes)||!s.scenes.length) process.exit(1); console.log('Scenes:',s.scenes.length)"
