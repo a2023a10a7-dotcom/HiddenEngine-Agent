@@ -8,6 +8,11 @@ on:
         required: true
         type: string
         default: "2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re"
+      review_round:
+        description: "Separate visual review batch (keeps the first selections intact)"
+        required: true
+        type: string
+        default: "round-2"
 
 permissions:
   contents: read
@@ -27,15 +32,17 @@ jobs:
         env:
           PROJECT_ID: ${{ inputs.project_id }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          VISUAL_REVIEW_ROUND: ${{ inputs.review_round }}
           CANDIDATES_PER_SCENE: "8"
           MAX_CANDIDATES: "60"
         run: node src/build-visual-review.js
       - name: Validate review package
         env:
           PROJECT_ID: ${{ inputs.project_id }}
+          VISUAL_REVIEW_ROUND: ${{ inputs.review_round }}
         run: |
           set -euo pipefail
-          out="dist/${PROJECT_ID}/visual-review"
+          out="dist/${PROJECT_ID}/visual-review-${VISUAL_REVIEW_ROUND}"
           test -s "$out/visual-candidates.json"
           test -s "$out/selection-template.json"
           test -s "$out/SCRIPT-FOR-AI.md"
@@ -46,9 +53,9 @@ jobs:
       - name: Upload visual review package
         uses: actions/upload-artifact@v4
         with:
-          name: hiddenengine-visual-review-${{ inputs.project_id }}
+          name: hiddenengine-visual-review-${{ inputs.project_id }}-${{ inputs.review_round }}
           path: |
-            dist/${{ inputs.project_id }}/visual-review/CONTACT-SHEET-*.jpg
+            dist/${{ inputs.project_id }}/visual-review-${{ inputs.review_round }}/CONTACT-SHEET-*.jpg
             dist/${{ inputs.project_id }}/visual-review/visual-candidates.json
             dist/${{ inputs.project_id }}/visual-review/selection-template.json
             dist/${{ inputs.project_id }}/visual-review/SCRIPT-FOR-AI.md
