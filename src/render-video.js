@@ -98,30 +98,30 @@ function srtTimestamp(seconds) {
   return hh + ":" + mm + ":" + ss + "," + String(ms % 1000).padStart(3, "0");
 }
 function captionLines(sentence, max = 42) {
-  const words = sentence.trim().split(/\\s+/);
+  const words = sentence.trim().split(/\s+/);
   const result = []; let line = "";
   for (const word of words) {
     if (line && (line + " " + word).length > max) { result.push(line); line = word; }
     else line = line ? line + " " + word : word;
   }
   if (line) result.push(line);
-  if (result.length <= 2) return result.join("\\n");
+  if (result.length <= 2) return result.join("\n");
   const first = result.slice(0, -1).join(" ");
-  return [first.slice(0, max), first.slice(max).trim() + " " + result[result.length - 1]].filter(Boolean).slice(0,2).join("\\n");
+  return [first.slice(0, max), first.slice(max).trim() + " " + result[result.length - 1]].filter(Boolean).slice(0,2).join("\n");
 }
 async function writeNarrationSubtitles(narration, duration, output) {
-  const normalized = String(narration).replace(/\\s+/g, " ").trim();
+  const normalized = String(narration).replace(/\s+/g, " ").trim();
   const sentences = (normalized.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [normalized]).map(s => s.trim()).filter(Boolean);
-  const weights = sentences.map(s => s.split(/\\s+/).length);
+  const weights = sentences.map(s => s.split(/\s+/).length);
   const total = weights.reduce((a,b)=>a+b,0) || 1;
   let cursor = 0;
   const entries = sentences.map((sentence, i) => {
     const start = cursor;
     const end = i === sentences.length - 1 ? duration : cursor + duration * weights[i] / total;
     cursor = end;
-    return (i+1) + "\\n" + srtTimestamp(start) + " --> " + srtTimestamp(end) + "\\n" + captionLines(sentence) + "\\n";
+    return (i+1) + "\n" + srtTimestamp(start) + " --> " + srtTimestamp(end) + "\n" + captionLines(sentence) + "\n";
   });
-  await writeFile(output, entries.join("\\n") + "\\n");
+  await writeFile(output, entries.join("\n") + "\n");
 }
 
 async function piperTTS(text, output) {
