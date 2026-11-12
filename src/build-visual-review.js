@@ -97,19 +97,22 @@ async function main() {
   const perSheet = 20, sheetCount = Math.ceil(candidates.length / perSheet);
   for (let page = 0; page < sheetCount; page++) {
     const group = candidates.slice(page * perSheet, (page+1) * perSheet);
-    const inputs = [];
-    for (const item of group) {
-      const file = path.join(out, item.previewFile);
-      const thumb = path.join(out, item.id + "-thumb.jpg");
-      await run("ffmpeg", ["-y","-i",file,"-vf",
-        "scale=320:180:force_original_aspect_ratio=decrease,pad=320:180:(ow-iw)/2:(oh-ih)/2,drawbox=x=0:y=0:w=iw:h=34:color=black@0.82:t=fill,drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:text='" + item.id + "  |  SCENE " + item.scene + "':x=10:y=8:fontsize=18:fontcolor=white",
-        "-frames:v","1",thumb]);
-      inputs.push(thumb);
+    const cellW = 320, cellH = 180, labelH = 34, cols = 4, rows = 5, gap = 8, margin = 8;
+    const width = margin*2 + cols*cellW + (cols-1)*gap;
+    const height = margin*2 + rows*(cellH+labelH) + (rows-1)*gap;
+    const cells = [];
+    for (let i = 0; i < group.length; i++) {
+      const item = group[i], x = margin+(i%cols)*(cellW+gap), y = margin+Math.floor(i/cols)*(cellH+labelH+gap);
+      const bytes = await readFile(path.join(out,item.previewFile));
+      const encoded = bytes.toString("base64");
+      cells.push('<rect x="'+x+'" y="'+y+'" width="'+cellW+'" height="'+(cellH+labelH)+'" fill="#171717"/>');
+      cells.push('<image x="'+x+'" y="'+y+'" width="'+cellW+'" height="'+cellH+'" preserveAspectRatio="xMidYMid meet" href="data:image/jpeg;base64,'+encoded+'"/>');
+      cells.push('<text x="'+(x+10)+'" y="'+(y+cellH+24)+'" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="bold">'+item.id+'  |  SCENE '+item.scene+'</text>');
     }
-    const list = path.join(out, "sheet-" + (page+1) + ".txt");
-    await writeFile(list, inputs.map(f => "file '" + path.basename(f) + "'").join("\n") + "\n");
-    await run("ffmpeg", ["-y","-f","concat","-safe","0","-i",list,"-vf","scale=320:180,tile=4x5:padding=8:margin=8:color=black",
-      "-frames:v","1",path.join(out, "CONTACT-SHEET-" + (page+1) + ".jpg")]);
+    const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="'+width+'" height="'+height+'" viewBox="0 0 '+width+' '+height+'"><rect width="100%" height="100%" fill="#08090b"/>'+cells.join("")+'</svg>';
+    const svgPath = path.join(out,"CONTACT-SHEET-"+(page+1)+".svg");
+    await writeFile(svgPath,svg);
+    await run("ffmpeg",["-y","-i",svgPath,"-frames:v","1","-q:v","2",path.join(out,"CONTACT-SHEET-"+(page+1)+".jpg")]);
   }
   console.log("Visual review package ready: " + candidates.length + " images across " + sheetCount + " contact sheets.");
 }
