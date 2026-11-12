@@ -11,7 +11,7 @@ const out=path.join("dist",projectId);
 const stop=new Set(["with","from","that","this","into","over","under","china","modern","technology"]);
 const rules={
  1:{groups:[["factory","assembly","automotive","industrial","manufacturing","robotic"],["car","vehicle","conveyor","welding"]],ban:["scanner","laser","temple","package","cardboard","warehouse","logistics"]},
- 2:{groups:[["electric"],["car","vehicle","automobile"]],ban:["sign","symbol","pavement","wallpaper","road marking","logo","illustration"]},
+ 2:{groups:[["electric"],["car","vehicle","automobile"]],ban:["sign","symbol","pavement","wallpaper","road marking","logo","illustration","charging station"]},
  3:{groups:[["battery","lithium","cell"],["factory","manufacturing","production","electrode","assembly"]],ban:["car","charging station","mobility","sign","pavement"]},
  4:{groups:[["robot","robotic","automation"],["arm","industrial","factory","welding","manufacturing"]],ban:["toy","dice","book","animation","simulation","game","illustration"]},
  5:{groups:[["solar"],["panel","photovoltaic","farm","module","wafer"]],ban:["logo","sign","illustration","wallpaper"]},
@@ -62,6 +62,7 @@ async function main(){
   for(const c of candidates){
    if(chosen.length>=2) break;
    if(c.score<12) continue;
+   if(chosen.some(x=>x.hit.user===c.hit.user)) continue;
    seen.add(c.hit.id);chosen.push(c);
   }
   if(chosen.length<2) throw new Error("Only "+chosen.length+" strictly matched high-resolution images found for scene "+(i+1)+" ("+scene.title+"). Refusing to render weak or generic visuals.");
