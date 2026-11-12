@@ -9,6 +9,7 @@ const OUT = path.join("dist", PROJECT_ID);
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
 const ELEVENLABS_VOICE_ID = process.env.ELEVENLABS_VOICE_ID;
 const PEXELS_API_KEY = process.env.PEXELS_API_KEY;
+const PIXABAY_API_KEY = process.env.PIXABAY_API_KEY;
 const PIPER_EXECUTABLE = process.env.PIPER_EXECUTABLE || "piper";
 const PIPER_MODEL = process.env.PIPER_MODEL || "models/piper-voice.onnx";
 const PIPER_LENGTH_SCALE = Number(process.env.PIPER_LENGTH_SCALE || "1.0");
@@ -142,13 +143,20 @@ async function probeDuration(file) {
   });
 }
 async function pixabayImageUrl(pageUrl) {
-  const response = await fetch(pageUrl, { headers: { "User-Agent": "HiddenEngineDocumentaryRenderer/1.0" } });
-  if (!response.ok) throw new Error("Pixabay page fetch failed (" + response.status + ")");
-  const html = await response.text();
-  const meta = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i) ||
-    html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
-  if (!meta?.[1]) throw new Error("Could not find the source image on " + pageUrl);
-  return meta[1].replace(/&amp;/g, "&");
+  if (!PIXABAY_API_KEY) throw new Error("PIXABAY_API_KEY is required to retrieve approved image assets.");
+  const match = String(pageUrl).match(/-(\\d+)\\/?(?:\\?.*)?$/);
+  if (!match) throw new Error("Could not extract Pixabay image ID from " + pageUrl);
+  const api = new URL("https://pixabay.com/api/");
+  api.searchParams.set("key", PIXABAY_API_KEY);
+  api.searchParams.set("id", match[1]);
+  api.searchParams.set("safesearch", "true");
+  const response = await fetch(api);
+  if (!response.ok) throw new Error("Pixabay API failed (" + response.status + ") for image " + match[1]);
+  const data = await response.json();
+  const hit = data.hits?.find(item => String(item.id) === match[1]);
+  const imageUrl = hit?.largeImageURL || hit?.webformatURL;
+  if (!imageUrl) throw new Error("Pixabay API returned no downloadable image for ID " + match[1]);
+  return imageUrl;
 }
 async function download(url, dest) {
   const response = await fetch(url);
