@@ -97,33 +97,55 @@ function srtTimestamp(seconds) {
   const ss = String(Math.floor((ms % 60000) / 1000)).padStart(2, "0");
   return hh + ":" + mm + ":" + ss + "," + String(ms % 1000).padStart(3, "0");
 }
-function captionLines(sentence, max = 42) {
-  const words = sentence.trim().split(/\s+/);
-  const result = []; let line = "";
+function captionLines(sentence, max = 38) {
+  const words = String(sentence).trim().split(/\s+/).filter(Boolean);
+  const rows = [];
+  let line = "";
   for (const word of words) {
-    if (line && (line + " " + word).length > max) { result.push(line); line = word; }
-    else line = line ? line + " " + word : word;
+    if (line && (line + " " + word).length > max) {
+      rows.push(line);
+      line = word;
+    } else {
+      line = line ? line + " " + word : word;
+    }
   }
-  if (line) result.push(line);
-  if (result.length <= 2) return result.join("\n");
-  const first = result.slice(0, -1).join(" ");
-  return [first.slice(0, max), first.slice(max).trim() + " " + result[result.length - 1]].filter(Boolean).slice(0,2).join("\n");
+  if (line) rows.push(line);
+  return rows;
 }
 async function writeNarrationSubtitles(narration, duration, output) {
-  const normalized = String(narration).replace(/\s+/g, " ").trim();
-  const sentences = (normalized.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [normalized]).map(s => s.trim()).filter(Boolean);
-  const weights = sentences.map(s => s.split(/\s+/).length);
-  const total = weights.reduce((a,b)=>a+b,0) || 1;
+  const words = String(narration).replace(/\s+/g, " ").trim().split(" ").filter(Boolean);
+  const cues = [];
+  let group = [];
+  let rows = [];
+  let line = "";
+  for (const word of words) {
+    const candidate = line ? line + " " + word : word;
+    if (line && candidate.length > 38) {
+      rows.push(line);
+      line = word;
+    } else {
+      line = candidate;
+    }
+    if (rows.length === 2) {
+      cues.push({ words: group, text: rows.join("\\N") });
+      group = [];
+      rows = [];
+      line = "";
+    }
+    group.push(word);
+  }
+  if (line) rows.push(line);
+  if (rows.length) cues.push({ words: group, text: rows.join("\\N") });
+  const totalWords = words.length || 1;
   let cursor = 0;
-  const entries = sentences.map((sentence, i) => {
+  const entries = cues.map((cue, i) => {
     const start = cursor;
-    const end = i === sentences.length - 1 ? duration : cursor + duration * weights[i] / total;
+    const end = i === cues.length - 1 ? duration : cursor + duration * cue.words.length / totalWords;
     cursor = end;
-    return (i+1) + "\n" + srtTimestamp(start) + " --> " + srtTimestamp(end) + "\n" + captionLines(sentence) + "\n";
+    return (i + 1) + "\n" + srtTimestamp(start) + " --> " + srtTimestamp(end) + "\n" + cue.text + "\n";
   });
   await writeFile(output, entries.join("\n") + "\n");
 }
-
 async function piperTTS(text, output) {
   if (!Number.isFinite(PIPER_LENGTH_SCALE) || PIPER_LENGTH_SCALE <= 0) throw new Error("PIPER_LENGTH_SCALE must be a positive number.");
   await access(PIPER_MODEL).catch(() => { throw new Error("Piper voice model not found: " + PIPER_MODEL); });
@@ -297,7 +319,7 @@ async function main() {
     }
     filters.push("["+baseLabel+"]["+svgIndex+":v]overlay=0:0:shortest=1[withsvgbase]");
     const subtitlePath = subtitles.replace(/\\\\/g, "/").replace(/:/g, "\\\\:");
-    filters.push("[withsvgbase]subtitles=filename='" + subtitlePath + "':force_style='FontName=DejaVu Sans,FontSize=25,PrimaryColour=&H00FFFFFF,OutlineColour=&HCC000000,BackColour=&H80000000,Bold=0,BorderStyle=3,Outline=1,Shadow=0,Alignment=2,MarginV=64,MarginL=120,MarginR=120',format=yuv420p[withsvg]");
+    filters.push("[withsvgbase]subtitles=filename='" + subtitlePath + "':force_style='FontName=DejaVu Sans,FontSize=18,PrimaryColour=&H00FFFFFF,OutlineColour=&HCC000000,BackColour=&H80000000,Bold=0,BorderStyle=3,Outline=1,Shadow=0,Alignment=2,MarginV=42,MarginL=180,MarginR=180',format=yuv420p[withsvg]");
     let finalVideoLabel = "withsvg";
     if (scene.visual?.type === "comparison" && Array.isArray(scene.visual.items)) {
       scene.visual.items.slice(0,3).forEach((item,idx) => {
