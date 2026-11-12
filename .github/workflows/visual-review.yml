@@ -21,8 +21,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Install FFmpeg
-        uses: AnimMouse/setup-ffmpeg@v1.2.5
+      - name: Install rendering dependencies
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg librsvg2-bin
       - name: Build visual review package
         env:
           PROJECT_ID: ${{ inputs.project_id }}
@@ -35,7 +35,7 @@ jobs:
           PROJECT_ID: ${{ inputs.project_id }}
         run: |
           set -euo pipefail
-          out="dist/\${PROJECT_ID}/visual-review"
+          out="dist/${PROJECT_ID}/visual-review"
           test -s "$out/visual-candidates.json"
           test -s "$out/selection-template.json"
           test -s "$out/SCRIPT-FOR-AI.md"
