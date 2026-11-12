@@ -156,9 +156,7 @@ async function download(url, dest) {
   await writeFile(dest, Buffer.from(await response.arrayBuffer()));
 }
 async function main() {
-  if (!ELEVENLABS_API_KEY || !ELEVENLABS_VOICE_ID) {
-    throw new Error("Natural narration requires ELEVENLABS_API_KEY and ELEVENLABS_VOICE_ID in GitHub Actions Secrets/Variables. No robotic fallback voice will be generated.");
-  }
+  if (!PIPER_EXECUTABLE || !PIPER_MODEL) throw new Error("Piper TTS is not configured.");
   const script = JSON.parse(await readFile(path.join(ROOT, "script.json"), "utf8"));
   if (!Array.isArray(script.scenes) || !script.scenes.length) throw new Error("script.json has no scenes.");
   await mkdir(OUT, { recursive: true });
