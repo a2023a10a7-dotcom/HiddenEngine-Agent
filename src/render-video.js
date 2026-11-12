@@ -279,7 +279,7 @@ async function main() {
       finalVideoLabel = "keyterms";
     }
     if (i===0) {
-      filters.push("["+finalVideoLabel+"]drawtext=text='THE HIDDEN ENGINE':fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:fontsize=40:fontcolor=white:box=1:boxcolor=black@0.72:boxborderw=24:x=(w-text_w)/2:y=(h-text_h)/2:alpha='if(lt(t,0.25),t/0.25,if(lt(t,17),1,if(lt(t,17.5),(17.5-t)/0.5,0)))':enable='between(t,15,17.5)'[logo]";
+      filters.push("["+finalVideoLabel+"]drawtext=text='THE HIDDEN ENGINE':fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:fontsize=40:fontcolor=white:box=1:boxcolor=black@0.72:boxborderw=24:x=(w-text_w)/2:y=(h-text_h)/2:alpha='if(lt(t,0.25),t/0.25,if(lt(t,17),1,if(lt(t,17.5),(17.5-t)/0.5,0)))':enable='between(t,15,17.5)'[logo]");
       finalVideoLabel = "logo";
     }
     filters.push("["+finalVideoLabel+"]format=yuv420p[v]");
