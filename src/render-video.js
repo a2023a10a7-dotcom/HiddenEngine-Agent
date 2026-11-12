@@ -146,7 +146,7 @@ async function piperTTS(text, output) {
   }
 
   const concatList = path.join(directory, stem + ".parts.txt");
-  await writeFile(concatList, parts.map(file => "file '" + path.basename(file).replace(/'/g, "'\\''") + "'").join("\\n") + "\\n");
+  await writeFile(concatList, parts.map(file => "file '" + path.basename(file).replace(/'/g, "'\\''") + "'").join("\n") + "\n");
   await run("ffmpeg", ["-y", "-f", "concat", "-safe", "0", "-i", concatList, "-c", "copy", output]);
   const probe = await capture("ffprobe", ["-v","error","-show_entries","format=duration","-of","default=noprint_wrappers=1:nokey=1",output]);
   const duration = Number(probe.stdout.trim());
