@@ -7,13 +7,15 @@ on:
       - "src/render-video.js"
       - "production/projects/2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re/visual-selection.json"
       - "production/projects/2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re/visual-assets.json"
+      - "production/projects/2026-11-12-chinas-technology-rise/script.json"
+      - "src/prepare-project-assets.js"
       - ".github/workflows/render-video.yml"
   workflow_dispatch:
     inputs:
       project_id:
         description: "Production project folder ID"
         required: true
-        default: "2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re"
+        default: "2026-11-12-chinas-technology-rise"
         type: string
       voice_model:
         description: "Piper voice model"
@@ -45,7 +47,7 @@ jobs:
       - name: Install rendering tools and fonts
         run: |
           sudo apt-get update
-          sudo apt-get install -y ffmpeg fonts-dejavu-core
+          sudo apt-get install -y ffmpeg fonts-dejavu-core librsvg2-bin
 
       - name: Install Piper TTS and download selected voice
         env:
@@ -67,9 +69,15 @@ jobs:
           curl -fL "$base.onnx.json" -o "models/${PIPER_VOICE}.onnx.json"
           echo "PIPER_MODEL=models/${PIPER_VOICE}.onnx" >> "$GITHUB_ENV"
           echo "PIPER_EXECUTABLE=$GITHUB_WORKSPACE/.venv-piper/bin/piper" >> "$GITHUB_ENV"
+      - name: Prepare scene-matched visuals and contact sheet
+        env:
+          PROJECT_ID: ${{ inputs.project_id || '2026-11-12-chinas-technology-rise' }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+        run: node src/prepare-project-assets.js
+
       - name: Render cinematic documentary
         env:
-          PROJECT_ID: ${{ inputs.project_id || '2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re' }}
+          PROJECT_ID: ${{ inputs.project_id || '2026-11-12-chinas-technology-rise' }}
           PIPER_LENGTH_SCALE: ${{ inputs.speaking_rate || '1.0' }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
         run: node src/render-video.js
@@ -77,7 +85,7 @@ jobs:
       - name: Upload MP4 and production assets
         uses: actions/upload-artifact@v4
         with:
-          name: hiddenengine-cinematic-${{ inputs.project_id || '2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re' }}
-          path: dist/${{ inputs.project_id }}/
+          name: hiddenengine-cinematic-${{ inputs.project_id || '2026-11-12-chinas-technology-rise' }}
+          path: dist/${{ inputs.project_id || '2026-11-12-chinas-technology-rise' }}/
           if-no-files-found: error
           retention-days: 14
