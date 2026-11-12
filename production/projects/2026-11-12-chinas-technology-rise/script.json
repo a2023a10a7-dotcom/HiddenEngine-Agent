@@ -10,24 +10,29 @@
       "subtitle": "The power to turn an idea into millions of products",
       "narration": "In a lights-out factory, robots can keep assembling products long after the human shift ends. It is an arresting image, but the real story is even bigger: technological power is not just inventing a machine. It is building the suppliers, skills, energy systems and logistics that allow millions of machines and products to work reliably. China’s rise is therefore not simply a story about clever engineers or government subsidies. It is a story about factories, logistics, skills, finance, infrastructure, foreign partnerships and a huge home market working together. The country has become formidable in industries such as electric vehicles, batteries and solar equipment, while remaining dependent on overseas suppliers in some advanced semiconductor technologies. Those contrasts matter. They show that technological leadership is not one trophy that a country either wins or loses. It is a collection of capabilities, each built through different institutions, supply chains and decades of accumulated experience. To understand China’s position, we need to examine the system behind the products.",
       "visual_queries": [
-        "China Shenzhen skyline technology district aerial",
-        "Chinese industrial manufacturing assembly line wide",
-        "container port Shanghai automated cranes aerial",
-        "electronics manufacturing workers factory"
+        "lights out factory robotic assembly line dark industrial",
+        "automated robotic arms car manufacturing factory",
+        "robotic manufacturing factory interior night",
+        "industrial automation robot arms assembly production"
       ],
       "visual_requirements": [
         [
-          "Shenzhen",
-          "China",
-          "industrial",
-          "factory"
+          "robot",
+          "robotic",
+          "automation"
         ],
         [
-          "manufacturing",
+          "factory",
+          "industrial",
           "assembly",
-          "production",
-          "electronics"
+          "manufacturing"
         ]
+      ],
+      "keywords": [
+        "DIFFERENT",
+        "KIND",
+        "TECHNOLOGY",
+        "STORY"
       ]
     },
     {
@@ -52,6 +57,11 @@
           "shipping",
           "freight"
         ]
+      ],
+      "keywords": [
+        "INDUSTRIAL",
+        "BASE",
+        "BUILT"
       ]
     },
     {
@@ -76,6 +86,10 @@
           "factory",
           "manufacturing"
         ]
+      ],
+      "keywords": [
+        "CLUSTER",
+        "EFFECT"
       ]
     },
     {
@@ -100,6 +114,27 @@
           "production",
           "robot"
         ]
+      ],
+      "visual": {
+        "type": "comparison",
+        "source_label": "IEA • Global EV Outlook 2025",
+        "items": [
+          {
+            "label": "CHINA",
+            "value": "12.4M",
+            "percent": 100
+          },
+          {
+            "label": "UNITED STATES",
+            "value": "1.1M",
+            "percent": 8.9
+          }
+        ]
+      },
+      "keywords": [
+        "CHINA 12.4M",
+        "UNITED STATES 1.1M",
+        "EV PRODUCTION • 2024"
       ]
     },
     {
@@ -125,6 +160,12 @@
           "production",
           "assembly"
         ]
+      ],
+      "keywords": [
+        "BATTERY",
+        "REAL",
+        "INDUSTRIAL",
+        "BATTLE"
       ]
     },
     {
@@ -150,6 +191,12 @@
           "production",
           "panel"
         ]
+      ],
+      "keywords": [
+        "SOLAR",
+        "POWER",
+        "INDUSTRIAL",
+        "SCALE"
       ]
     },
     {
@@ -174,6 +221,17 @@
           "welding",
           "assembly"
         ]
+      ],
+      "visual": {
+        "type": "metric",
+        "source_label": "INTERNATIONAL FEDERATION OF ROBOTICS",
+        "value": "295,000",
+        "detail": "Industrial robot installations • 2024"
+      },
+      "keywords": [
+        "ROBOTS",
+        "AUTOMATED",
+        "FACTORY"
       ]
     },
     {
@@ -199,6 +257,12 @@
           "station",
           "track"
         ]
+      ],
+      "keywords": [
+        "HIGH-SPEED",
+        "RAIL",
+        "ENGINEERING",
+        "NATIONAL"
       ]
     },
     {
@@ -223,6 +287,12 @@
           "factory",
           "industrial"
         ]
+      ],
+      "keywords": [
+        "DRONES,",
+        "CAMERAS",
+        "LOW-ALTITUDE",
+        "ECONOMY"
       ]
     },
     {
@@ -248,6 +318,11 @@
           "silicon",
           "fabrication"
         ]
+      ],
+      "keywords": [
+        "SEMICONDUCTORS",
+        "HARD",
+        "FRONTIER"
       ]
     },
     {
@@ -273,6 +348,12 @@
           "robotics",
           "prototype"
         ]
+      ],
+      "keywords": [
+        "RESEARCH,",
+        "UNIVERSITIES",
+        "TALENT",
+        "PIPELINE"
       ]
     },
     {
@@ -298,6 +379,10 @@
           "workers",
           "pollution"
         ]
+      ],
+      "keywords": [
+        "PRICE",
+        "SCALE"
       ]
     },
     {
@@ -323,6 +408,10 @@
           "semiconductor",
           "automotive"
         ]
+      ],
+      "keywords": [
+        "GLOBAL",
+        "REACTION"
       ]
     },
     {
@@ -348,6 +437,12 @@
           "electric vehicle",
           "logistics"
         ]
+      ],
+      "keywords": [
+        "WHAT",
+        "CHINA",
+        "WHAT",
+        "STILL"
       ]
     },
     {
@@ -373,6 +468,12 @@
           "laboratory",
           "rail"
         ]
+      ],
+      "keywords": [
+        "NEXT",
+        "DECADE",
+        "BUILDS",
+        "FUTURE?"
       ]
     }
   ],
