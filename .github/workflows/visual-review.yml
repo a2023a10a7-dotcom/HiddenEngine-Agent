@@ -25,14 +25,14 @@ jobs:
         uses: AnimMouse/setup-ffmpeg@v1.2.5
       - name: Build visual review package
         env:
-          PROJECT_ID: \${{ inputs.project_id }}
-          PIXABAY_API_KEY: \${{ secrets.PIXABAY_API_KEY }}
+          PROJECT_ID: ${{ inputs.project_id }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
           CANDIDATES_PER_SCENE: "8"
           MAX_CANDIDATES: "60"
         run: node src/build-visual-review.js
       - name: Validate review package
         env:
-          PROJECT_ID: \${{ inputs.project_id }}
+          PROJECT_ID: ${{ inputs.project_id }}
         run: |
           set -euo pipefail
           out="dist/\${PROJECT_ID}/visual-review"
@@ -46,11 +46,11 @@ jobs:
       - name: Upload visual review package
         uses: actions/upload-artifact@v4
         with:
-          name: hiddenengine-visual-review-\${{ inputs.project_id }}
+          name: hiddenengine-visual-review-${{ inputs.project_id }}
           path: |
-            dist/\${{ inputs.project_id }}/visual-review/CONTACT-SHEET-*.jpg
-            dist/\${{ inputs.project_id }}/visual-review/visual-candidates.json
-            dist/\${{ inputs.project_id }}/visual-review/selection-template.json
-            dist/\${{ inputs.project_id }}/visual-review/SCRIPT-FOR-AI.md
+            dist/${{ inputs.project_id }}/visual-review/CONTACT-SHEET-*.jpg
+            dist/${{ inputs.project_id }}/visual-review/visual-candidates.json
+            dist/${{ inputs.project_id }}/visual-review/selection-template.json
+            dist/${{ inputs.project_id }}/visual-review/SCRIPT-FOR-AI.md
           if-no-files-found: error
           retention-days: 14
