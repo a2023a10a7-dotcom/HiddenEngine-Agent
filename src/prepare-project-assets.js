@@ -29,12 +29,26 @@ async function fetchJson(url){
  }
  throw new Error("Pixabay API retry loop exhausted.");
 }
+let lastImageDownload=0;
 async function download(url,file){
- const r=await fetch(url,{signal:AbortSignal.timeout(30000)});
- if(!r.ok) throw new Error("Preview download failed ("+r.status+")");
- const b=Buffer.from(await r.arrayBuffer());
- if(b.length<10000||b.length>12*1024*1024) throw new Error("Preview image size is invalid");
- await writeFile(file,b);
+ for(let attempt=0;attempt<5;attempt++){
+  const pause=Math.max(0,350-(Date.now()-lastImageDownload));
+  if(pause) await sleep(pause);
+  lastImageDownload=Date.now();
+  const r=await fetch(url,{signal:AbortSignal.timeout(30000)});
+  if(r.ok){
+   const b=Buffer.from(await r.arrayBuffer());
+   if(b.length<10000||b.length>12*1024*1024) throw new Error("Preview image size is invalid");
+   await writeFile(file,b);return;
+  }
+  const detail=await r.text();
+  if(r.status!==429&&r.status<500) throw new Error("Preview download failed ("+r.status+"): "+detail.slice(0,200));
+  if(attempt===4) throw new Error("Preview download failed after retries ("+r.status+"): "+detail.slice(0,200));
+  const retryAfter=Number(r.headers.get("retry-after"))*1000;
+  const backoff=Number.isFinite(retryAfter)&&retryAfter>0?retryAfter:Math.min(20000,1500*Math.pow(2,attempt));
+  console.warn("Pixabay image download rate limited ("+r.status+"); retrying in "+backoff+"ms.");
+  await sleep(backoff);
+ }
 }
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&apos;"}[c]));}
 async function main(){
