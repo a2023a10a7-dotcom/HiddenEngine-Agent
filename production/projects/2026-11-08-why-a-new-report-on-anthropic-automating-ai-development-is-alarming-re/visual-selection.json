@@ -1,21 +1,21 @@
 {
   "projectId": "2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re",
   "title": "When AI Starts Building Better AI",
-  "source": "Human-reviewed selections supplied by the user from the Visual Review contact sheets",
+  "source": "Updated human-reviewed selections supplied by the user",
   "scenes": [
     {
       "scene": 1,
       "title": "THE FEEDBACK LOOP",
       "selectedImageIds": [
-        "I001",
-        "I005"
+        "I005",
+        "I007"
       ]
     },
     {
       "scene": 2,
       "title": "INSIDE THE INVESTIGATION",
       "selectedImageIds": [
-        "I010",
+        "I011",
         "I016"
       ]
     },
@@ -23,7 +23,7 @@
       "scene": 3,
       "title": "WHAT DOES TWICE AS FAST MEAN?",
       "selectedImageIds": [
-        "I018",
+        "I021",
         "I022"
       ]
     },
@@ -32,13 +32,16 @@
       "title": "THE MECHANISM",
       "selectedImageIds": [
         "I025",
-        "I026"
+        "I028"
       ]
     },
     {
       "scene": 5,
       "title": "HOW AUTONOMOUS IS IT?",
-      "selectedImageIds": []
+      "selectedImageIds": [
+        "I034",
+        "I035"
+      ]
     },
     {
       "scene": 6,
