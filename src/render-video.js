@@ -98,18 +98,60 @@ async function piperTTS(text, output) {
   if (!Number.isFinite(PIPER_LENGTH_SCALE) || PIPER_LENGTH_SCALE <= 0) throw new Error("PIPER_LENGTH_SCALE must be a positive number.");
   await access(PIPER_MODEL).catch(() => { throw new Error("Piper voice model not found: " + PIPER_MODEL); });
   await access(PIPER_MODEL + ".json").catch(() => { throw new Error("Piper voice config not found: " + PIPER_MODEL + ".json"); });
-  await new Promise((resolve, reject) => {
-    const child = spawn(PIPER_EXECUTABLE, ["--model", PIPER_MODEL, "--output_file", output, "--length_scale", String(PIPER_LENGTH_SCALE)], { stdio: ["pipe", "ignore", "pipe"] });
-    let stderr = "";
-    child.stderr.on("data", chunk => stderr += chunk);
-    child.on("error", reject);
-    child.on("close", code => code === 0 ? resolve() : reject(new Error("Piper TTS exited with code " + code + ": " + stderr.slice(-1200))));
-    child.stdin.on("error", reject);
-    child.stdin.end(String(text));
-  });
+
+  // Piper's CLI treats newline-delimited input as separate utterances. Passing a
+  // multi-paragraph scene to one --output_file can leave only the last utterance
+  // in the WAV. Synthesize bounded, single-line chunks and concatenate every part.
+  const normalized = String(text).replace(/\\s+/g, " ").trim();
+  if (!normalized) throw new Error("Narration text is empty.");
+  const sentences = normalized.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [normalized];
+  const chunks = [];
+  let chunk = [];
+  let count = 0;
+  for (const sentence of sentences) {
+    const words = sentence.trim().split(/\\s+/).filter(Boolean);
+    let offset = 0;
+    while (offset < words.length) {
+      const room = Math.max(1, 55 - count);
+      const take = words.slice(offset, offset + room);
+      chunk.push(take.join(" "));
+      count += take.length;
+      offset += take.length;
+      if (count >= 55) {
+        chunks.push(chunk.join(" "));
+        chunk = [];
+        count = 0;
+      }
+    }
+  }
+  if (chunk.length) chunks.push(chunk.join(" "));
+
+  const directory = path.dirname(output);
+  const stem = path.basename(output, path.extname(output));
+  const parts = [];
+  for (let i = 0; i < chunks.length; i++) {
+    const part = path.join(directory, stem + ".part-" + String(i + 1).padStart(3, "0") + ".wav");
+    await new Promise((resolve, reject) => {
+      const child = spawn(PIPER_EXECUTABLE, ["--model", PIPER_MODEL, "--output_file", part, "--length_scale", String(PIPER_LENGTH_SCALE)], { stdio: ["pipe", "ignore", "pipe"] });
+      let stderr = "";
+      child.stderr.on("data", value => stderr += value);
+      child.on("error", reject);
+      child.on("close", code => code === 0 ? resolve() : reject(new Error("Piper TTS chunk " + (i + 1) + "/" + chunks.length + " exited with code " + code + ": " + stderr.slice(-1200))));
+      child.stdin.on("error", reject);
+      child.stdin.end(chunks[i]);
+    });
+    const duration = await probeDuration(part);
+    if (!(duration > 0)) throw new Error("Piper produced an empty narration chunk " + (i + 1) + ".");
+    parts.push(part);
+  }
+
+  const concatList = path.join(directory, stem + ".parts.txt");
+  await writeFile(concatList, parts.map(file => "file '" + path.basename(file).replace(/'/g, "'\\''") + "'").join("\\n") + "\\n");
+  await run("ffmpeg", ["-y", "-f", "concat", "-safe", "0", "-i", concatList, "-c", "copy", output]);
   const probe = await capture("ffprobe", ["-v","error","-show_entries","format=duration","-of","default=noprint_wrappers=1:nokey=1",output]);
   const duration = Number(probe.stdout.trim());
   if (!(duration > 0)) throw new Error("Piper produced an empty narration file.");
+  console.log("Synthesized complete narration: " + chunks.length + " chunks, " + duration.toFixed(1) + " seconds, length scale " + PIPER_LENGTH_SCALE + ".");
   return duration;
 }
 async function findPexelsVideo(query) {
