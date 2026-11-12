@@ -129,7 +129,8 @@
             "value": "1.1M",
             "percent": 8.9
           }
-        ]
+        ],
+        "source_url": "https://www.iea.org/reports/global-ev-outlook-2025/trends-in-the-electric-car-industry-3"
       },
       "keywords": [
         "CHINA 12.4M",
@@ -223,15 +224,26 @@
         ]
       ],
       "visual": {
-        "type": "metric",
-        "source_label": "INTERNATIONAL FEDERATION OF ROBOTICS",
-        "value": "295,000",
-        "detail": "Industrial robot installations • 2024"
+        "type": "comparison",
+        "source_label": "IFR • World Robotics 2025",
+        "source_url": "https://ifr.org/downloads/press_docs/2025-09-25-IFR_press_release_Americas_in_English.pdf",
+        "items": [
+          {
+            "label": "CHINA",
+            "value": "295,000",
+            "percent": 100
+          },
+          {
+            "label": "UNITED STATES",
+            "value": "34,200",
+            "percent": 11.6
+          }
+        ]
       },
       "keywords": [
-        "ROBOTS",
-        "AUTOMATED",
-        "FACTORY"
+        "CHINA 295,000",
+        "UNITED STATES 34,200",
+        "NEW ROBOTS INSTALLED • 2024"
       ]
     },
     {
