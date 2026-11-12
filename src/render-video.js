@@ -315,7 +315,7 @@ async function main() {
     "-af","volume='if(lt(mod(t,18),0.10),0.07,0)',afade=t=in:st=0:d=0.1",click]);
   const mixed = path.join(OUT,"mixed-final.mp4");
   await run("ffmpeg",["-y","-i",output,"-i",music,"-i",whoosh,"-i",click,
-    "-filter_complex","[0:a]volume=1[voice];[1:a]volume=0.07[musicin];[musicin][0:a]sidechaincompress=threshold=0.025:ratio=5:attack=80:release=500[music];[2:a]volume=0.65[whoosh];[3:a]volume=0.55[click];[voice][music][whoosh][click]amix=inputs=4:duration=first:dropout_transition=3[a]",
+    "-filter_complex","[0:a]volume=1[voice];[1:a]volume=0.07[musicin];[musicin][0:a]sidechaincompress=threshold=0.025:ratio=5:attack=80:release=500[music];[2:a]volume=0.65[whoosh];[3:a]volume=0.55[click];[voice][music][whoosh][click]amix=inputs=4:duration=first:dropout_transition=3,loudnorm=I=-14:TP=-1.5:LRA=7[a]",
     "-map","0:v","-map","[a]","-c:v","copy","-c:a","aac","-b:a","192k","-movflags","+faststart",mixed]);
   await run("ffmpeg",["-y","-i",mixed,"-c","copy",output+".tmp.mp4"]);
   await writeFile(path.join(OUT,"visual-credits.json"),JSON.stringify(credits,null,2)+"\n");
