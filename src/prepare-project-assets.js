@@ -10,10 +10,24 @@ const root=path.join("production","projects",projectId);
 const out=path.join("dist",projectId);
 const stop=new Set(["with","from","that","this","into","over","under","china","modern","technology"]);
 function terms(s){return String(s||"").toLowerCase().split(/[^a-z0-9]+/).filter(x=>x.length>2&&!stop.has(x));}
+const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+let lastPixabayRequest=0;
 async function fetchJson(url){
- const r=await fetch(url,{signal:AbortSignal.timeout(25000)});
- if(!r.ok) throw new Error("Pixabay API failed ("+r.status+")");
- return r.json();
+ for(let attempt=0;attempt<5;attempt++){
+  const pause=Math.max(0,1400-(Date.now()-lastPixabayRequest));
+  if(pause) await sleep(pause);
+  lastPixabayRequest=Date.now();
+  const r=await fetch(url,{signal:AbortSignal.timeout(25000)});
+  if(r.ok) return r.json();
+  const detail=await r.text();
+  if(r.status!==429&&r.status<500) throw new Error("Pixabay API failed ("+r.status+"): "+detail.slice(0,300));
+  if(attempt===4) throw new Error("Pixabay API failed after retries ("+r.status+"): "+detail.slice(0,300));
+  const retryAfter=Number(r.headers.get("retry-after"))*1000;
+  const backoff=Number.isFinite(retryAfter)&&retryAfter>0?retryAfter:Math.min(30000,2000*Math.pow(2,attempt));
+  console.warn("Pixabay API rate limited or unavailable ("+r.status+"); retrying in "+backoff+"ms.");
+  await sleep(backoff);
+ }
+ throw new Error("Pixabay API retry loop exhausted.");
 }
 async function download(url,file){
  const r=await fetch(url,{signal:AbortSignal.timeout(30000)});
