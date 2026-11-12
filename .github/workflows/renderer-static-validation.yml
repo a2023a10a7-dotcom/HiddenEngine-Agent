@@ -24,23 +24,17 @@ jobs:
           node-version: 20
       - name: Validate renderer syntax
         run: node --check src/render-video.js
-      - name: Validate selected visual assets
-        env:
-          PROJECT_ID: 2026-11-12-chinas-technology-rise
+      - name: Validate 15-minute documentary script
         run: |
           node --input-type=module <<'NODE'
           import { readFile } from 'node:fs/promises';
-          const root = 'production/projects/' + process.env.PROJECT_ID + '/';
-          const selection = JSON.parse(await readFile(root + 'visual-selection.json', 'utf8'));
-          const manifest = JSON.parse(await readFile(root + 'visual-assets.json', 'utf8'));
-          const assets = new Map(manifest.assets.map(x => [x.id, x]));
-          const selected = selection.scenes.flatMap(s => s.selectedImageIds.map(id => ({scene:s.scene,id})));
-          if (selected.length !== selection.scenes.length * 5) throw new Error('Expected five selected images per scene; found ' + selected.length);
-          for (const item of selected) {
-            const asset = assets.get(item.id);
-            if (!asset || asset.scene !== item.scene) throw new Error('Missing or misassigned image ' + item.id);
-            if (!asset.sourcePage.startsWith('https://pixabay.com/')) throw new Error('Untrusted source page for ' + item.id);
+          const script = JSON.parse(await readFile('production/projects/2026-11-12-chinas-technology-rise/script.json', 'utf8'));
+          if (script.scenes.length < 14) throw new Error('Documentary must contain at least 14 chapters.');
+          const words = script.scenes.reduce((n, scene) => n + scene.narration.trim().split(/\\s+/).length, 0);
+          if (words < 2100) throw new Error('Narration is too short for a 15-minute documentary: ' + words + ' words.');
+          for (const [i, scene] of script.scenes.entries()) {
+            if (!scene.visual_queries || scene.visual_queries.length < 4) throw new Error('Scene ' + (i + 1) + ' needs at least four visual search queries.');
+            if (!scene.visual_requirements || scene.visual_requirements.length < 2) throw new Error('Scene ' + (i + 1) + ' needs specific visual matching requirements.');
           }
-          if (manifest.assets.length !== selection.scenes.length * 5) throw new Error('Expected five asset records per scene');
-          console.log('Validated ' + selected.length + ' selected images across ' + selection.scenes.length + ' scenes.');
+          console.log('Validated ' + words + ' narration words across ' + script.scenes.length + ' scenes.');
           NODE
