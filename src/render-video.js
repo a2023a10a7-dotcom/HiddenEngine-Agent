@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile, stat } from "node:fs/promises";
+import { access, mkdir, readFile, writeFile, stat } from "node:fs/promises";
 import { spawn } from "node:child_process";
 import path from "node:path";
 
@@ -9,6 +9,9 @@ const OUT = path.join("dist", PROJECT_ID);
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
 const ELEVENLABS_VOICE_ID = process.env.ELEVENLABS_VOICE_ID;
 const PEXELS_API_KEY = process.env.PEXELS_API_KEY;
+const PIPER_EXECUTABLE = process.env.PIPER_EXECUTABLE || "piper";
+const PIPER_MODEL = process.env.PIPER_MODEL || "models/piper-voice.onnx";
+const PIPER_LENGTH_SCALE = Number(process.env.PIPER_LENGTH_SCALE || "1.0");
 
 function run(command, args) {
   return new Promise((resolve, reject) => {
@@ -80,17 +83,33 @@ function overlaySvg(scene, index, total) {
   .page{font:400 20px 'DejaVu Sans';fill:#D5D1C8}
   </style></svg>`;
 }
-async function elevenLabs(text, output) {
-  const response = await fetch("https://api.elevenlabs.io/v1/text-to-speech/" + encodeURIComponent(ELEVENLABS_VOICE_ID), {
-    method: "POST",
-    headers: { "xi-api-key": ELEVENLABS_API_KEY, "Content-Type": "application/json", "Accept": "audio/mpeg" },
-    body: JSON.stringify({
-      text, model_id: "eleven_multilingual_v2",
-      voice_settings: { stability: 0.48, similarity_boost: 0.78, style: 0.18, use_speaker_boost: true }
-    })
+async function capture(command, args) {
+  return await new Promise((resolve, reject) => {
+    const child = spawn(command, args, { stdio: ["ignore", "pipe", "pipe"] });
+    let stdout = "", stderr = "";
+    child.stdout.on("data", d => stdout += d);
+    child.stderr.on("data", d => stderr += d);
+    child.on("error", reject);
+    child.on("close", code => code === 0 ? resolve({stdout,stderr}) : reject(new Error(command + " exited with code " + code + ": " + stderr.slice(-1200))));
   });
-  if (!response.ok) throw new Error("ElevenLabs TTS failed (" + response.status + "): " + (await response.text()).slice(0, 500));
-  await writeFile(output, Buffer.from(await response.arrayBuffer()));
+}
+async function piperTTS(text, output) {
+  if (!Number.isFinite(PIPER_LENGTH_SCALE) || PIPER_LENGTH_SCALE <= 0) throw new Error("PIPER_LENGTH_SCALE must be a positive number.");
+  await access(PIPER_MODEL).catch(() => { throw new Error("Piper voice model not found: " + PIPER_MODEL); });
+  await access(PIPER_MODEL + ".json").catch(() => { throw new Error("Piper voice config not found: " + PIPER_MODEL + ".json"); });
+  await new Promise((resolve, reject) => {
+    const child = spawn(PIPER_EXECUTABLE, ["--model", PIPER_MODEL, "--output_file", output, "--length_scale", String(PIPER_LENGTH_SCALE)], { stdio: ["pipe", "ignore", "pipe"] });
+    let stderr = "";
+    child.stderr.on("data", chunk => stderr += chunk);
+    child.on("error", reject);
+    child.on("close", code => code === 0 ? resolve() : reject(new Error("Piper TTS exited with code " + code + ": " + stderr.slice(-1200))));
+    child.stdin.on("error", reject);
+    child.stdin.end(String(text));
+  });
+  const probe = await capture("ffprobe", ["-v","error","-show_entries","format=duration","-of","default=noprint_wrappers=1:nokey=1",output]);
+  const duration = Number(probe.stdout.trim());
+  if (!(duration > 0)) throw new Error("Piper produced an empty narration file.");
+  return duration;
 }
 async function findPexelsVideo(query) {
   // Do not pass generic stock footage off as company-specific evidence.
@@ -153,10 +172,10 @@ async function main() {
     const scene = script.scenes[i];
     if (!scene.narration?.trim()) throw new Error("Scene " + (i+1) + " has no narration.");
     const stem = "scene-" + String(i+1).padStart(2,"0");
-    const audio = path.join(OUT, stem + ".mp3");
+    const audio = path.join(OUT, stem + ".wav");
     const svg = path.join(OUT, stem + ".svg");
     const rendered = path.join(OUT, stem + ".mp4");
-    await elevenLabs(scene.narration, audio);
+    await piperTTS(scene.narration, audio);
     await writeFile(svg, overlaySvg(scene, i, script.scenes.length));
     const selected = selection.scenes.find(item => item.scene === i+1)?.selectedImageIds || [];
     if (!selected.length) throw new Error("Scene " + (i+1) + " has no approved visual selections.");
@@ -219,7 +238,7 @@ async function main() {
   ].join("\n")+"\n");
   await writeFile(path.join(OUT,"README.txt"),[
     "The Hidden Engine documentary render",
-    "Narration: ElevenLabs API (natural AI voice; selected voice configured by repository secret/variable).",
+    "Narration: Local Piper neural TTS (no paid API quota required).",
     "Visuals: user-selected Pixabay stills with animated camera movement, crossfades, and original data overlays.",
     "Identity: charcoal/black, ivory typography, restrained copper accents, documentary-investigative overlays.",
     "Review all claims, pronunciations, visual relevance, licenses, and credits before publication.",
