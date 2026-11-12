@@ -41,9 +41,9 @@
       "subtitle": "From materials and cells to complete battery packs",
       "narration": "The advantage runs deeper than the vehicle itself. Batteries depend on processed materials, chemical production, precision equipment and enormous manufacturing investment. The IEA estimates that China accounted for more than eighty percent of global battery-cell production in 2025. It also held around eighty-five percent of cathode active-material production and more than ninety percent of anode active-material production. These are not interchangeable measures, and they do not mean every mineral is mined in China. They show how much of the value chain is concentrated there — creating efficiency, but also strategic dependence for other economies.",
       "visual_queries": [
-        "lithium ion battery cell manufacturing factory production",
-        "electric vehicle battery pack assembly industrial line",
-        "battery cell electrode coating manufacturing clean factory"
+        "lithium battery factory",
+        "battery production line",
+        "battery cell manufacturing"
       ],
       "visual": {
         "type": "comparison",
