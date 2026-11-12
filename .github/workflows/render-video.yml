@@ -15,6 +15,16 @@ on:
         required: true
         default: "2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re"
         type: string
+      voice_model:
+        description: "Piper voice model"
+        required: true
+        default: "en_US-lessac-medium"
+        type: string
+      speaking_rate:
+        description: "Piper length scale: lower is faster, higher is slower"
+        required: true
+        default: "1.0"
+        type: string
 
 permissions:
   contents: read
@@ -37,20 +47,30 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ffmpeg fonts-dejavu-core
 
-      - name: Check required voice configuration
+      - name: Install Piper TTS and download selected voice
         env:
-          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
-          ELEVENLABS_VOICE_ID: ${{ vars.ELEVENLABS_VOICE_ID }}
+          PIPER_VOICE: ${{ inputs.voice_model || 'en_US-lessac-medium' }}
         run: |
-          test -n "$ELEVENLABS_API_KEY" || (echo "::error::Add ELEVENLABS_API_KEY to GitHub Actions Secrets."; exit 1)
-          test -n "$ELEVENLABS_VOICE_ID" || (echo "::error::Add ELEVENLABS_VOICE_ID to GitHub Actions Variables."; exit 1)
-
+          set -euo pipefail
+          python3 -m venv .venv-piper
+          .venv-piper/bin/pip install --upgrade pip
+          .venv-piper/bin/pip install piper-tts
+          lang="${PIPER_VOICE%%_*}"
+          locale_and_rest="${PIPER_VOICE#*_}"
+          locale="${locale_and_rest%%-*}"
+          speaker_and_quality="${locale_and_rest#*-}"
+          speaker="${speaker_and_quality%-*}"
+          quality="${speaker_and_quality##*-}"
+          mkdir -p models
+          base="https://huggingface.co/rhasspy/piper-voices/resolve/main/${lang}/${lang}_${locale}/${speaker}/${quality}/${PIPER_VOICE}"
+          curl -fL "$base.onnx" -o "models/${PIPER_VOICE}.onnx"
+          curl -fL "$base.onnx.json" -o "models/${PIPER_VOICE}.onnx.json"
+          echo "PIPER_MODEL=models/${PIPER_VOICE}.onnx" >> "$GITHUB_ENV"
+          echo "PIPER_EXECUTABLE=$GITHUB_WORKSPACE/.venv-piper/bin/piper" >> "$GITHUB_ENV"
       - name: Render cinematic documentary
         env:
           PROJECT_ID: ${{ inputs.project_id || '2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re' }}
-          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
-          ELEVENLABS_VOICE_ID: ${{ vars.ELEVENLABS_VOICE_ID }}
-          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          PIPER_LENGTH_SCALE: ${{ inputs.speaking_rate || '1.0' }}
         run: node src/render-video.js
 
       - name: Upload MP4 and production assets
