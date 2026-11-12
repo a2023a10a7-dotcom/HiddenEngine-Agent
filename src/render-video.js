@@ -39,12 +39,12 @@ function visualMarkup(scene) {
   if (!v || !v.type) return "";
   const label = xml(v.source_label || "SOURCE NOT VERIFIED");
   if (v.type === "metric") {
-    return '<g transform="translate(1220 360)"><rect width="560" height="260" rx="8" fill="#111315" stroke="#A8794D" stroke-width="2"/><text x="36" y="54" class="visual-label">' + label + '</text><text x="36" y="166" class="visual-value">' + xml(v.value) + '</text><text x="36" y="218" class="visual-detail">' + xml(v.detail || "") + '</text></g>';
+    return '<g transform="translate(1220 360)"><rect width="560" height="260" rx="8" fill="#111315" stroke="#A8794D" stroke-width="2"/><text x="36" y="54" class="visual-label">' + label + '</text><text x="36" y="218" class="visual-detail">' + xml(v.detail || "") + '</text></g>';
   }
   if (v.type === "comparison" && Array.isArray(v.items)) {
     const rows = v.items.slice(0,3).map((item,i) => {
-      const y=92+i*72, width=Math.max(0,Math.min(100,Number(item.percent)||0))*3.8;
-      return '<text x="32" y="'+y+'" class="visual-detail">'+xml(item.label)+'</text><rect x="32" y="'+(y+14)+'" width="380" height="16" fill="#292b2d"/><rect x="32" y="'+(y+14)+'" width="'+width+'" height="16" fill="#A8794D"/><text x="430" y="'+(y+29)+'" class="visual-detail">'+xml(item.value)+'</text>';
+      const y=92+i*72;
+      return '<text x="32" y="'+y+'" class="visual-detail">'+xml(item.label)+'</text><rect x="32" y="'+(y+14)+'" width="380" height="16" fill="#292b2d"/><text x="430" y="'+(y+29)+'" class="visual-detail">'+xml(item.value)+'</text>';
     }).join("");
     return '<g transform="translate(1190 330)"><rect width="590" height="330" rx="8" fill="#111315" stroke="#A8794D" stroke-width="2"/><text x="32" y="52" class="visual-label">'+label+'</text>'+rows+'</g>';
   }
@@ -67,7 +67,7 @@ function overlaySvg(scene, index, total) {
   <defs><linearGradient id="shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#08090b" stop-opacity=".25"/><stop offset=".48" stop-color="#08090b" stop-opacity=".05"/><stop offset="1" stop-color="#08090b" stop-opacity=".92"/></linearGradient></defs>
   <rect width="1920" height="1080" fill="url(#shade)"/>
   <text x="120" y="710" class="eyebrow">THE INVESTIGATION / ${String(index+1).padStart(2,"0")}</text>
-  ${index===0 ? '<g opacity=".96"><rect x="660" y="390" width="600" height="150" rx="10" fill="#090b0e" fill-opacity=".82" stroke="#C08A58" stroke-width="2"/><text x="960" y="455" text-anchor="middle" class="brand">THE HIDDEN ENGINE</text><text x="960" y="500" text-anchor="middle" class="kicker">BUSINESS • STRATEGY • TECHNOLOGY</text></g>' : ''}
+
   ${title}${subtitle}
   ${visualMarkup(scene)}\n  <text x="1795" y="1010" text-anchor="end" class="page">${String(index+1).padStart(2,"0")} / ${total}</text>
   <style>
@@ -258,7 +258,31 @@ async function main() {
       filters.push("["+baseLabel+"][v"+n+"]xfade=transition=fade:duration="+transition+":offset="+offset.toFixed(3)+"["+nextLabel+"]");
       baseLabel = nextLabel;
     }
-    filters.push("["+baseLabel+"]["+svgIndex+":v]overlay=0:0:shortest=1,format=yuv420p[v]");
+    filters.push("["+baseLabel+"]["+svgIndex+":v]overlay=0:0:shortest=1,format=yuv420p[withsvg]");
+    let finalVideoLabel = "withsvg";
+    if (scene.visual?.type === "comparison" && Array.isArray(scene.visual.items)) {
+      scene.visual.items.slice(0,3).forEach((item,idx) => {
+        const y = 436 + idx*72;
+        const width = Math.max(1,Math.min(100,Number(item.percent)||0))*3.8;
+        const next = "bar"+idx;
+        filters.push("["+finalVideoLabel+"]drawbox=x=1222:y="+y+":w='max(1,"+width.toFixed(1)+"*min(t/1.25,1))':h=16:color=0xA8794D:t=fill["+next+"]");
+        finalVideoLabel = next;
+      });
+    }
+    if (scene.visual?.type === "metric" && scene.visual.value) {
+      filters.push("["+finalVideoLabel+"]drawtext=text='"+String(scene.visual.value).replace(/'/g,"\\\\'")+"':fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:fontsize=78:fontcolor=white:x=1256:y=440:alpha='if(lt(t,0.7),t/0.7,if(lt(t,3.2,1),1,0))':enable='between(t,0,3.5)'[metric]");
+      finalVideoLabel = "metric";
+    }
+    const keywords = (scene.keywords || []).slice(0,4).join("  •  ").replace(/:/g,"\\\\:");
+    if (keywords) {
+      filters.push("["+finalVideoLabel+"]drawtext=text='"+keywords.replace(/'/g,"\\\\'")+"':fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:fontsize=27:fontcolor=0xC08A58:x=(w-text_w)/2:y=610:alpha='if(lt(t,0.45),t/0.45,if(lt(t,4.0),1,0))':enable='between(t,0,4.2)'[keyterms]");
+      finalVideoLabel = "keyterms";
+    }
+    if (i===0) {
+      filters.push("["+finalVideoLabel+"]drawtext=text='THE HIDDEN ENGINE':fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:fontsize=40:fontcolor=white:box=1:boxcolor=black@0.72:boxborderw=24:x=(w-text_w)/2:y=(h-text_h)/2:alpha='if(lt(t,0.25),t/0.25,if(lt(t,17),1,if(lt(t,17.5),(17.5-t)/0.5,0)))':enable='between(t,15,17.5)'[logo]";
+      finalVideoLabel = "logo";
+    }
+    filters.push("["+finalVideoLabel+"]format=yuv420p[v]");
     args.push("-filter_complex",filters.join(";"),"-map","[v]","-map",audioIndex+":a",
       "-c:v","libx264","-preset","veryfast","-crf","20","-c:a","aac","-b:a","192k",
       "-t",audioDuration.toFixed(3),"-shortest","-movflags","+faststart",rendered);
