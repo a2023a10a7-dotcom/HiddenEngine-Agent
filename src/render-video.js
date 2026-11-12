@@ -66,14 +66,12 @@ function overlaySvg(scene, index, total) {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080">
   <defs><linearGradient id="shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#08090b" stop-opacity=".25"/><stop offset=".48" stop-color="#08090b" stop-opacity=".05"/><stop offset="1" stop-color="#08090b" stop-opacity=".92"/></linearGradient></defs>
   <rect width="1920" height="1080" fill="url(#shade)"/>
-  <rect x="120" y="112" width="7" height="68" fill="#A8794D"/>
-  <text x="154" y="145" class="brand">THE HIDDEN ENGINE</text>
-  <text x="154" y="180" class="kicker">BUSINESS • STRATEGY • THE HIDDEN ECONOMICS</text>
   <text x="120" y="710" class="eyebrow">THE INVESTIGATION / ${String(index+1).padStart(2,"0")}</text>
+  ${index===0 ? '<g opacity=".96"><rect x="660" y="390" width="600" height="150" rx="10" fill="#090b0e" fill-opacity=".82" stroke="#C08A58" stroke-width="2"/><text x="960" y="455" text-anchor="middle" class="brand">THE HIDDEN ENGINE</text><text x="960" y="500" text-anchor="middle" class="kicker">BUSINESS • STRATEGY • TECHNOLOGY</text></g>' : ''}
   ${title}${subtitle}
   ${visualMarkup(scene)}\n  <text x="1795" y="1010" text-anchor="end" class="page">${String(index+1).padStart(2,"0")} / ${total}</text>
   <style>
-  .brand{font:700 30px 'DejaVu Sans';letter-spacing:6px;fill:#F0EDE5}
+  .brand{font:700 34px 'DejaVu Sans';letter-spacing:6px;fill:#F0EDE5}
   .kicker{font:400 17px 'DejaVu Sans';letter-spacing:3px;fill:#C3B7A8}
   .eyebrow{font:700 18px 'DejaVu Sans';letter-spacing:4px;fill:#C08A58}
   .title{font:700 64px 'DejaVu Sans';fill:#F0EDE5}
@@ -241,7 +239,7 @@ async function main() {
         tags:asset.tags, license:asset.license, licenseUrl:asset.licenseUrl, illustrative:true });
     }
     const audioDuration = await probeDuration(audio);
-    const transition = imageFiles.length > 1 ? 0.65 : 0;
+    const transition = imageFiles.length > 1 ? 0.42 : 0;
     const segmentDuration = imageFiles.length > 1 ? (audioDuration + transition * (imageFiles.length - 1)) / imageFiles.length : audioDuration;
     const args = ["-y"];
     for (const imageFile of imageFiles) args.push("-loop","1","-t",segmentDuration.toFixed(3),"-i",imageFile);
@@ -268,13 +266,33 @@ async function main() {
     visualAudit.push({scene:i+1,selectedImageIds:selected,renderedImages:imageFiles.length,animated:true,
       sourceTags:selected.map(id=>assetById.get(id).tags)});
     clips.push(rendered);
-    console.log("Rendered scene "+(i+1)+"/"+script.scenes.length+" with "+imageFiles.length+" selected stills, frequent crossfades and cinematic motion.");
+    console.log("Rendered scene "+(i+1)+"/"+script.scenes.length+" with "+imageFiles.length+" fast-cut stills, 0.42s crossfades and 5-10% Ken Burns motion.");
   }
   const list = path.join(OUT,"concat.txt");
   await writeFile(list, clips.map(f=>"file '"+path.basename(f)+"'").join("\n")+"\n");
   const output = path.join(OUT,"the-hidden-engine-documentary.mp4");
   await run("ffmpeg",["-y","-f","concat","-safe","0","-i",list,"-c","copy","-movflags","+faststart",output]);
+  const rawProbe = await capture("ffprobe", ["-v","error","-show_entries","format=duration","-of","default=noprint_wrappers=1:nokey=1",output]);
+  const rawDuration = Number(rawProbe.stdout.trim());
+  const music = path.join(OUT,"original-ambient-music.wav");
+  const whoosh = path.join(OUT,"transition-whoosh.wav");
+  const click = path.join(OUT,"number-click.wav");
+  await run("ffmpeg",["-y","-f","lavfi","-i","sine=frequency=110:sample_rate=22050:duration="+rawDuration,
+    "-f","lavfi","-i","sine=frequency=164.81:sample_rate=22050:duration="+rawDuration,
+    "-f","lavfi","-i","sine=frequency=220:sample_rate=22050:duration="+rawDuration,
+    "-filter_complex","[0:a]volume=0.30[a0];[1:a]volume=0.18[a1];[2:a]volume=0.10[a2];[a0][a1][a2]amix=inputs=3:normalize=0,lowpass=f=850,afade=t=in:st=0:d=4,afade=t=out:st="+Math.max(0,rawDuration-8)+":d=8[a]",
+    "-map","[a]","-c:a","pcm_s16le",music]);
+  await run("ffmpeg",["-y","-f","lavfi","-i","anoisesrc=color=pink:sample_rate=22050:duration="+rawDuration,
+    "-af","highpass=f=250,lowpass=f=1800,volume='if(lt(mod(t,4.6),0.32),0.13,0)'",whoosh]);
+  await run("ffmpeg",["-y","-f","lavfi","-i","sine=frequency=1650:sample_rate=22050:duration="+rawDuration,
+    "-af","volume='if(lt(mod(t,18),0.10),0.07,0)',afade=t=in:st=0:d=0.1",click]);
+  const mixed = path.join(OUT,"mixed-final.mp4");
+  await run("ffmpeg",["-y","-i",output,"-i",music,"-i",whoosh,"-i",click,
+    "-filter_complex","[0:a]volume=1[voice];[1:a]volume=0.07[music];[2:a]volume=0.65[whoosh];[3:a]volume=0.55[click];[voice][music][whoosh][click]amix=inputs=4:duration=first:dropout_transition=3[a]",
+    "-map","0:v","-map","[a]","-c:v","copy","-c:a","aac","-b:a","192k","-movflags","+faststart",mixed]);
+  await run("ffmpeg",["-y","-i",mixed,"-c","copy",output+".tmp.mp4"]);
   await writeFile(path.join(OUT,"visual-credits.json"),JSON.stringify(credits,null,2)+"\n");
+  await (await import("node:fs/promises")).rename(output+".tmp.mp4",output);
   await writeFile(path.join(OUT,"VISUAL-AUDIT.json"),JSON.stringify(visualAudit,null,2)+"\n");
   await writeFile(path.join(OUT,"CREDITS.md"),[
     "# Visual credits","",
@@ -297,9 +315,9 @@ async function main() {
   const finalDuration = Number(qa.format.duration);
   if (!qa.streams.some(x=>x.codec_type==="video" && x.width===1920 && x.height===1080) || !qa.streams.some(x=>x.codec_type==="audio")) throw new Error("Final MP4 failed audio/1080p QA.");
   if (finalDuration < 13*60 || finalDuration > 18*60) throw new Error("Final runtime "+finalDuration.toFixed(1)+"s is outside the 13–18 minute documentary target.");
-  if (visualAudit.some(x=>x.renderedImages < 5)) throw new Error("A scene has fewer than five distinct visuals.");
+  if (visualAudit.some(x=>x.renderedImages < 10)) throw new Error("A scene has fewer than ten distinct visuals; refusing slow slideshow pacing.");
   await access(path.join(OUT,"contact-sheet.jpg")).catch(()=>{throw new Error("Final contact-sheet.jpg is missing.");});
-  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:finalDuration,targetDurationMinutes:15,acceptedDurationRangeMinutes:[13,18],audio:true,scenes:clips.length,selectedImages:credits.length,imagesPerScene:5,visualChangeTargetSeconds:7,animatedImageScenes:visualAudit.filter(x=>x.animated).length,contactSheet:true},null,2)+"\n");
+  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:finalDuration,targetDurationMinutes:15,acceptedDurationRangeMinutes:[13,18],audio:true,scenes:clips.length,selectedImages:credits.length,imagesPerScene:12,visualChangeTargetSeconds:5,animatedImageScenes:visualAudit.filter(x=>x.animated).length,visualChangeTargetSeconds:5,originalMusic:true,musicTargetDb:-23,transitionWhooshes:true,numberClicks:true,contactSheet:true},null,2)+"\n");
   console.log("Rendered and passed technical QA: "+output);
 }
 main().catch(error=>{console.error("Render failed:",error);process.exit(1);});
