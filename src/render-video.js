@@ -144,7 +144,7 @@ async function probeDuration(file) {
 }
 async function pixabayImageUrl(pageUrl) {
   if (!PIXABAY_API_KEY) throw new Error("PIXABAY_API_KEY is required to retrieve approved image assets.");
-  const match = String(pageUrl).match(/-(\\d+)\\/?(?:\\?.*)?$/);
+  const match = String(pageUrl).match(/-(\d+)\/?(?:\?.*)?$/);
   if (!match) throw new Error("Could not extract Pixabay image ID from " + pageUrl);
   const api = new URL("https://pixabay.com/api/");
   api.searchParams.set("key", PIXABAY_API_KEY);
