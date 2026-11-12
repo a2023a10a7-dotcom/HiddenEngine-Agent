@@ -38,7 +38,7 @@ async function download(url,file){
   const r=await fetch(url,{signal:AbortSignal.timeout(30000)});
   if(r.ok){
    const b=Buffer.from(await r.arrayBuffer());
-   if(b.length<10000||b.length>12*1024*1024) throw new Error("Preview image size is invalid");
+   if(b.length<4096||b.length>25*1024*1024) throw new Error("Preview image size is invalid ("+b.length+" bytes)");
    await writeFile(file,b);return;
   }
   const detail=await r.text();
