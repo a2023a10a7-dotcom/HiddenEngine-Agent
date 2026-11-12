@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile, stat } from "node:fs/promises";
 import { spawn } from "node:child_process";
 import path from "node:path";
 
@@ -165,7 +165,7 @@ async function main() {
       const asset = assetById.get(id);
       if (!asset || asset.scene !== i+1) throw new Error("Selected image " + id + " is missing or assigned to the wrong scene.");
       const imageFile = path.join(OUT, id + ".jpg");
-      if (!await import("node:fs/promises").then(fs => fs.stat(imageFile).then(()=>true).catch(()=>false))) {
+      if (!await stat(imageFile).then(()=>true).catch(()=>false)) {
         const imageUrl = await pixabayImageUrl(asset.sourcePage);
         await download(imageUrl, imageFile);
       }
@@ -176,7 +176,6 @@ async function main() {
     const audioDuration = await probeDuration(audio);
     const transition = imageFiles.length > 1 ? 0.75 : 0;
     const segmentDuration = imageFiles.length > 1 ? (audioDuration + transition) / 2 : audioDuration;
-    const frameCount = Math.max(1, Math.ceil(segmentDuration * 25));
     const args = ["-y"];
     for (const imageFile of imageFiles) args.push("-loop","1","-t",segmentDuration.toFixed(3),"-i",imageFile);
     const audioIndex = imageFiles.length;
@@ -185,7 +184,7 @@ async function main() {
     const filters = [];
     for (let n=0;n<imageFiles.length;n++) {
       const zoom = n % 2 === 0 ? "min(zoom+0.00045,1.12)" : "min(zoom+0.00038,1.10)";
-      filters.push("["+n+":v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,zoompan=z='"+zoom+"':d="+frameCount+":s=1920x1080:fps=25,setsar=1,format=yuv420p[v"+n+"]");
+      filters.push("["+n+":v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,zoompan=z='"+zoom+"':d=1:s=1920x1080:fps=25,setsar=1,format=yuv420p[v"+n+"]");
     }
     let baseLabel = "v0";
     if (imageFiles.length > 1) {
@@ -208,10 +207,11 @@ async function main() {
   const output = path.join(OUT,"the-hidden-engine-documentary.mp4");
   await run("ffmpeg",["-y","-f","concat","-safe","0","-i",list,"-c","copy","-movflags","+faststart",output]);
   await writeFile(path.join(OUT,"visual-credits.json"),JSON.stringify(credits,null,2)+"\n");
+  await writeFile(path.join(OUT,"VISUAL-AUDIT.json"),JSON.stringify(visualAudit,null,2)+"\n");
   await writeFile(path.join(OUT,"CREDITS.md"),[
     "# Visual credits","",
-    "Stock footage is sourced from Pexels. Review the linked asset page and applicable license before publication.",
-    "Pexels footage is used as illustrative material and must not be presented as actual footage of a specific company, person, product, or event unless independently verified.",
+    "Selected still images are sourced from Pixabay. Review each linked asset page and applicable license before publication.",
+    "All selected stills are illustrative stock imagery, not evidence of a specific company, person, product, or event unless independently verified.",
     "",
     ...credits.map(c=>"imageId" in c
       ? "- Scene "+c.scene+" ("+c.imageId+"): [Pixabay image]("+c.page+") — "+c.creator+"; illustrative stock image. License: [Pixabay Content License]("+c.licenseUrl+")"
