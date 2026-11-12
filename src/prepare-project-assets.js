@@ -9,15 +9,6 @@ if(!apiKey) throw new Error("PIXABAY_API_KEY is required");
 const root=path.join("production","projects",projectId);
 const out=path.join("dist",projectId);
 const stop=new Set(["with","from","that","this","into","over","under","china","modern","technology"]);
-const rules={
- 1:{groups:[["factory","assembly","automotive","industrial","manufacturing","robotic"],["car","vehicle","conveyor","welding"]],ban:["scanner","laser","temple","package","cardboard","warehouse","logistics"]},
- 2:{groups:[["electric"],["car","vehicle","automobile"]],ban:["sign","symbol","pavement","wallpaper","road marking","logo","illustration","charging station"]},
- 3:{groups:[["battery","lithium","cell"],["factory","manufacturing","production","electrode","assembly"]],ban:["car","charging station","mobility","sign","pavement"]},
- 4:{groups:[["robot","robotic","automation"],["arm","industrial","factory","welding","manufacturing"]],ban:["toy","dice","book","animation","simulation","game","illustration"]},
- 5:{groups:[["solar"],["panel","photovoltaic","farm","module","wafer"]],ban:["logo","sign","illustration","wallpaper"]},
- 6:{groups:[["chip","microchip","semiconductor","wafer"],["circuit","processor","silicon","electronics"]],ban:["logo","sign","illustration","wallpaper"]},
- 7:{groups:[["port","ship","container","cargo","crane"],["harbor","shipping","freight","terminal","vessel"]],ban:["logo","sign","illustration","wallpaper"]}
-};
 function terms(s){return String(s||"").toLowerCase().split(/[^a-z0-9]+/).filter(x=>x.length>2&&!stop.has(x));}
 async function fetchJson(url){
  const r=await fetch(url,{signal:AbortSignal.timeout(25000)});
@@ -37,7 +28,7 @@ async function main(){
  await mkdir(out,{recursive:true});
  const assets=[],selection=[],seen=new Set(),sheetItems=[];
  for(let i=0;i<script.scenes.length;i++){
-  const scene=script.scenes[i],queries=(scene.visual_queries||[]).slice(0,3);
+  const scene=script.scenes[i],queries=(scene.visual_queries||[]).slice(0,5),requirements=scene.visual_requirements||[];
   const candidates=[];
   for(const query of queries){
    const u=new URL("https://pixabay.com/api/");
@@ -48,11 +39,9 @@ async function main(){
     if(!hit.largeImageURL||!hit.webformatURL||!hit.pageURL||seen.has(hit.id)) continue;
     if((hit.imageWidth||0)<1280||(hit.imageHeight||0)<720) continue;
     const tags=String(hit.tags||"").toLowerCase(),tokens=terms(query);
-    const rule=rules[i+1];
-    const banned=rule.ban.some(term=>tags.includes(term));
-    const groupHits=rule.groups.map(group=>group.filter(term=>tags.includes(term)).length);
-    if(banned||groupHits.some(n=>n===0)) continue;
-    const score=tokens.reduce((n,t)=>n+(tags.includes(t)?(t.length>5?3:1):0),0)+groupHits.reduce((a,b)=>a+b,0)*4;
+    const groupHits=requirements.map(group=>group.filter(term=>tags.includes(term.toLowerCase())).length);
+    if(groupHits.some(n=>n===0)) continue;
+    const score=tokens.reduce((n,t)=>n+(tags.includes(t)?(t.length>5?3:1):0),0)+groupHits.reduce((a,b)=>a+b,0)*6;
     if(score<12) continue;
     candidates.push({hit,query,score});
    }
@@ -60,12 +49,12 @@ async function main(){
   candidates.sort((a,b)=>b.score-a.score || (b.hit.imageWidth*b.hit.imageHeight)-(a.hit.imageWidth*a.hit.imageHeight));
   const chosen=[];
   for(const c of candidates){
-   if(chosen.length>=2) break;
+   if(chosen.length>=5) break;
    if(c.score<12) continue;
    if(chosen.some(x=>x.hit.user===c.hit.user)) continue;
    seen.add(c.hit.id);chosen.push(c);
   }
-  if(chosen.length<2) throw new Error("Only "+chosen.length+" strictly matched high-resolution images found for scene "+(i+1)+" ("+scene.title+"). Refusing to render weak or generic visuals.");
+  if(chosen.length<5) throw new Error("Only "+chosen.length+" strictly matched high-resolution images found for scene "+(i+1)+" ("+scene.title+"). Refusing to render weak or generic visuals.");
   const ids=[];
   for(let n=0;n<chosen.length;n++){
    const c=chosen[n],h=c.hit,id="S"+String(i+1).padStart(2,"0")+"-I"+(n+1);
@@ -79,7 +68,7 @@ async function main(){
   selection.push({scene:i+1,title:scene.title,selectedImageIds:ids});
   console.log("Scene "+(i+1)+": selected "+ids.join(", ")+"; matched terms and minimum 1280x720.");
  }
- await writeFile(path.join(root,"visual-selection.json"),JSON.stringify({projectId,title:script.title,source:"Automated semantic match against Pixabay tags; two high-resolution images per scene",scenes:selection},null,2)+"\n");
+ await writeFile(path.join(root,"visual-selection.json"),JSON.stringify({projectId,title:script.title,source:"Automated semantic match against Pixabay tags; five high-resolution images per scene",scenes:selection},null,2)+"\n");
  await writeFile(path.join(root,"visual-assets.json"),JSON.stringify({projectId,source:"Pixabay API search; relevance-scored against scene-specific queries",assetCount:assets.length,assets},null,2)+"\n");
  const cols=4,cellW=400,cellH=225,labelH=56,gap=12,margin=12,rows=Math.ceil(sheetItems.length/cols);
  const parts=['<svg xmlns="http://www.w3.org/2000/svg" width="'+(margin*2+cols*cellW+(cols-1)*gap)+'" height="'+(margin*2+rows*(cellH+labelH)+(rows-1)*gap)+'">','<rect width="100%" height="100%" fill="#090b0e"/>'];
