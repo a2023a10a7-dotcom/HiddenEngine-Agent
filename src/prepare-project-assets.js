@@ -8,7 +8,16 @@ if(!projectId||!/^[a-z0-9-]+$/.test(projectId)) throw new Error("PROJECT_ID miss
 if(!apiKey) throw new Error("PIXABAY_API_KEY is required");
 const root=path.join("production","projects",projectId);
 const out=path.join("dist",projectId);
-const stop=new Set(["with","from","that","this","into","over","under","china","factory","industrial","production","manufacturing","line","modern","technology","technology"]);
+const stop=new Set(["with","from","that","this","into","over","under","china","modern","technology"]);
+const rules={
+ 1:{groups:[["factory","assembly","automotive","industrial","manufacturing","robotic"],["car","vehicle","conveyor","welding"]],ban:["scanner","laser","temple","package","cardboard","warehouse","logistics"]},
+ 2:{groups:[["electric"],["car","vehicle","automobile"]],ban:["sign","symbol","pavement","wallpaper","road marking","logo","illustration"]},
+ 3:{groups:[["battery","lithium","cell"],["factory","manufacturing","production","electrode","assembly"]],ban:["car","charging station","mobility","sign","pavement"]},
+ 4:{groups:[["robot","robotic","automation"],["arm","industrial","factory","welding","manufacturing"]],ban:["toy","dice","book","animation","simulation","game","illustration"]},
+ 5:{groups:[["solar"],["panel","photovoltaic","farm","module","wafer"]],ban:["logo","sign","illustration","wallpaper"]},
+ 6:{groups:[["chip","microchip","semiconductor","wafer"],["circuit","processor","silicon","electronics"]],ban:["logo","sign","illustration","wallpaper"]},
+ 7:{groups:[["port","ship","container","cargo","crane"],["harbor","shipping","freight","terminal","vessel"]],ban:["logo","sign","illustration","wallpaper"]}
+};
 function terms(s){return String(s||"").toLowerCase().split(/[^a-z0-9]+/).filter(x=>x.length>2&&!stop.has(x));}
 async function fetchJson(url){
  const r=await fetch(url,{signal:AbortSignal.timeout(25000)});
@@ -39,7 +48,12 @@ async function main(){
     if(!hit.largeImageURL||!hit.webformatURL||!hit.pageURL||seen.has(hit.id)) continue;
     if((hit.imageWidth||0)<1280||(hit.imageHeight||0)<720) continue;
     const tags=String(hit.tags||"").toLowerCase(),tokens=terms(query);
-    const score=tokens.reduce((n,t)=>n+(tags.includes(t)?(t.length>5?3:1):0),0);
+    const rule=rules[i+1];
+    const banned=rule.ban.some(term=>tags.includes(term));
+    const groupHits=rule.groups.map(group=>group.filter(term=>tags.includes(term)).length);
+    if(banned||groupHits.some(n=>n===0)) continue;
+    const score=tokens.reduce((n,t)=>n+(tags.includes(t)?(t.length>5?3:1):0),0)+groupHits.reduce((a,b)=>a+b,0)*4;
+    if(score<12) continue;
     candidates.push({hit,query,score});
    }
   }
@@ -47,10 +61,10 @@ async function main(){
   const chosen=[];
   for(const c of candidates){
    if(chosen.length>=2) break;
-   if(c.score<3) continue;
+   if(c.score<12) continue;
    seen.add(c.hit.id);chosen.push(c);
   }
-  if(chosen.length<2) throw new Error("Only "+chosen.length+" relevant high-resolution images found for scene "+(i+1)+" ("+scene.title+"). Refusing to render weak or generic visuals.");
+  if(chosen.length<2) throw new Error("Only "+chosen.length+" strictly matched high-resolution images found for scene "+(i+1)+" ("+scene.title+"). Refusing to render weak or generic visuals.");
   const ids=[];
   for(let n=0;n<chosen.length;n++){
    const c=chosen[n],h=c.hit,id="S"+String(i+1).padStart(2,"0")+"-I"+(n+1);
