@@ -112,7 +112,9 @@ async function main() {
     const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="'+width+'" height="'+height+'" viewBox="0 0 '+width+' '+height+'"><rect width="100%" height="100%" fill="#08090b"/>'+cells.join("")+'</svg>';
     const svgPath = path.join(out,"CONTACT-SHEET-"+(page+1)+".svg");
     await writeFile(svgPath,svg);
-    await run("ffmpeg",["-y","-i",svgPath,"-frames:v","1","-q:v","2",path.join(out,"CONTACT-SHEET-"+(page+1)+".jpg")]);
+    const pngPath = path.join(out,"CONTACT-SHEET-"+(page+1)+".png");
+    await run("rsvg-convert",["-f","png","-o",pngPath,svgPath]);
+    await run("ffmpeg",["-y","-i",pngPath,"-frames:v","1","-q:v","2",path.join(out,"CONTACT-SHEET-"+(page+1)+".jpg")]);
   }
   console.log("Visual review package ready: " + candidates.length + " images across " + sheetCount + " contact sheets.");
 }
