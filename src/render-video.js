@@ -61,14 +61,12 @@ function visualMarkup(scene) {
 function overlaySvg(scene, index, total) {
   const title = lines((scene.title || "").toUpperCase(), 28).slice(0, 2)
     .map((s,i) => '<text x="120" y="' + (760 + i*76) + '" class="title">' + xml(s) + '</text>').join("");
-  const subtitle = lines(scene.subtitle || "", 58).slice(0, 2)
-    .map((s,i) => '<text x="124" y="' + (930 + i*38) + '" class="sub">' + xml(s) + '</text>').join("");
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080">
   <defs><linearGradient id="shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#08090b" stop-opacity=".25"/><stop offset=".48" stop-color="#08090b" stop-opacity=".05"/><stop offset="1" stop-color="#08090b" stop-opacity=".92"/></linearGradient></defs>
   <rect width="1920" height="1080" fill="url(#shade)"/>
   <text x="120" y="710" class="eyebrow">THE INVESTIGATION / ${String(index+1).padStart(2,"0")}</text>
 
-  ${title}${subtitle}
+  ${title}
   ${visualMarkup(scene)}\n  <text x="1795" y="1010" text-anchor="end" class="page">${String(index+1).padStart(2,"0")} / ${total}</text>
   <style>
   .brand{font:700 34px 'DejaVu Sans';letter-spacing:6px;fill:#F0EDE5}
