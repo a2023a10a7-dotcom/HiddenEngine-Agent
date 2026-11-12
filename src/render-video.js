@@ -256,7 +256,7 @@ async function main() {
     let baseLabel = "v0";
     for (let n=1;n<imageFiles.length;n++) {
       const nextLabel = "mix"+n;
-      const offset = Math.max(0, (n+1)*segmentDuration - n*transition - transition);
+      const offset = Math.max(0, n * (segmentDuration - transition));
       filters.push("["+baseLabel+"][v"+n+"]xfade=transition=fade:duration="+transition+":offset="+offset.toFixed(3)+"["+nextLabel+"]");
       baseLabel = nextLabel;
     }
