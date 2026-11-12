@@ -199,8 +199,8 @@ async function main() {
         tags:asset.tags, license:asset.license, licenseUrl:asset.licenseUrl, illustrative:true });
     }
     const audioDuration = await probeDuration(audio);
-    const transition = imageFiles.length > 1 ? 0.75 : 0;
-    const segmentDuration = imageFiles.length > 1 ? (audioDuration + transition) / 2 : audioDuration;
+    const transition = imageFiles.length > 1 ? 0.65 : 0;
+    const segmentDuration = imageFiles.length > 1 ? (audioDuration + transition * (imageFiles.length - 1)) / imageFiles.length : audioDuration;
     const args = ["-y"];
     for (const imageFile of imageFiles) args.push("-loop","1","-t",segmentDuration.toFixed(3),"-i",imageFile);
     const audioIndex = imageFiles.length;
@@ -212,10 +212,11 @@ async function main() {
       filters.push("["+n+":v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,zoompan=z='"+zoom+"':d=1:s=1920x1080:fps=25,setsar=1,format=yuv420p[v"+n+"]");
     }
     let baseLabel = "v0";
-    if (imageFiles.length > 1) {
-      const offset = Math.max(0, segmentDuration-transition);
-      filters.push("[v0][v1]xfade=transition=fade:duration="+transition+":offset="+offset.toFixed(3)+"[base]");
-      baseLabel = "base";
+    for (let n=1;n<imageFiles.length;n++) {
+      const nextLabel = "mix"+n;
+      const offset = Math.max(0, (n+1)*segmentDuration - n*transition - transition);
+      filters.push("["+baseLabel+"][v"+n+"]xfade=transition=fade:duration="+transition+":offset="+offset.toFixed(3)+"["+nextLabel+"]");
+      baseLabel = nextLabel;
     }
     filters.push("["+baseLabel+"]["+svgIndex+":v]overlay=0:0:shortest=1,format=yuv420p[v]");
     args.push("-filter_complex",filters.join(";"),"-map","[v]","-map",audioIndex+":a",
@@ -225,7 +226,7 @@ async function main() {
     visualAudit.push({scene:i+1,selectedImageIds:selected,renderedImages:imageFiles.length,animated:true,
       sourceTags:selected.map(id=>assetById.get(id).tags)});
     clips.push(rendered);
-    console.log("Rendered scene "+(i+1)+"/"+script.scenes.length+" with "+imageFiles.length+" selected stills, cinematic motion and transitions.");
+    console.log("Rendered scene "+(i+1)+"/"+script.scenes.length+" with "+imageFiles.length+" selected stills, frequent crossfades and cinematic motion.");
   }
   const list = path.join(OUT,"concat.txt");
   await writeFile(list, clips.map(f=>"file '"+path.basename(f)+"'").join("\n")+"\n");
