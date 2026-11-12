@@ -270,7 +270,7 @@ async function main() {
       });
     }
     if (scene.visual?.type === "metric" && scene.visual.value) {
-      filters.push("["+finalVideoLabel+"]drawtext=text='"+String(scene.visual.value).replace(/'/g,"\\\\'")+"':fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:fontsize=78:fontcolor=white:x=1256:y=440:alpha='if(lt(t,0.7),t/0.7,if(lt(t,3.2,1),1,0))':enable='between(t,0,3.5)'[metric]");
+      filters.push("["+finalVideoLabel+"]drawtext=text='"+String(scene.visual.value).replace(/'/g,"\\\\'")+"':fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:fontsize=78:fontcolor=white:x=1256:y=440:alpha='if(lt(t,0.7),t/0.7,if(lt(t,3.2),1,0))':enable='between(t,0,3.5)'[metric]");
       finalVideoLabel = "metric";
     }
     const keywords = (scene.keywords || []).slice(0,4).join("  •  ").replace(/:/g,"\\\\:");
@@ -312,7 +312,7 @@ async function main() {
     "-af","volume='if(lt(mod(t,18),0.10),0.07,0)',afade=t=in:st=0:d=0.1",click]);
   const mixed = path.join(OUT,"mixed-final.mp4");
   await run("ffmpeg",["-y","-i",output,"-i",music,"-i",whoosh,"-i",click,
-    "-filter_complex","[0:a]volume=1[voice];[1:a]volume=0.07[music];[2:a]volume=0.65[whoosh];[3:a]volume=0.55[click];[voice][music][whoosh][click]amix=inputs=4:duration=first:dropout_transition=3[a]",
+    "-filter_complex","[0:a]volume=1[voice];[1:a]volume=0.07[musicin];[musicin][0:a]sidechaincompress=threshold=0.025:ratio=5:attack=80:release=500[music];[2:a]volume=0.65[whoosh];[3:a]volume=0.55[click];[voice][music][whoosh][click]amix=inputs=4:duration=first:dropout_transition=3[a]",
     "-map","0:v","-map","[a]","-c:v","copy","-c:a","aac","-b:a","192k","-movflags","+faststart",mixed]);
   await run("ffmpeg",["-y","-i",mixed,"-c","copy",output+".tmp.mp4"]);
   await writeFile(path.join(OUT,"visual-credits.json"),JSON.stringify(credits,null,2)+"\n");
@@ -323,6 +323,7 @@ async function main() {
     "Selected still images are sourced from Pixabay. Review each linked asset page and applicable license before publication.",
     "All selected stills are illustrative stock imagery, not evidence of a specific company, person, product, or event unless independently verified.",
     "",
+    ...script.scenes.filter(scene=>scene.visual?.source_url).map(scene=>"- Scene "+(script.scenes.indexOf(scene)+1)+" data graphic: "+(scene.visual.source_label||"Source")+": "+scene.visual.source_url),
     ...credits.map(c=>"imageId" in c
       ? "- Scene "+c.scene+" ("+c.imageId+"): [Pixabay image]("+c.page+") — "+c.creator+"; illustrative stock image. License: [Pixabay Content License]("+c.licenseUrl+")"
       : "- Scene "+c.scene+": "+c.provider+" — "+c.note)
