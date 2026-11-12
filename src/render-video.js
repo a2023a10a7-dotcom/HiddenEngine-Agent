@@ -102,14 +102,14 @@ async function piperTTS(text, output) {
   // Piper's CLI treats newline-delimited input as separate utterances. Passing a
   // multi-paragraph scene to one --output_file can leave only the last utterance
   // in the WAV. Synthesize bounded, single-line chunks and concatenate every part.
-  const normalized = String(text).replace(/\\s+/g, " ").trim();
+  const normalized = String(text).replace(/\s+/g, " ").trim();
   if (!normalized) throw new Error("Narration text is empty.");
   const sentences = normalized.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [normalized];
   const chunks = [];
   let chunk = [];
   let count = 0;
   for (const sentence of sentences) {
-    const words = sentence.trim().split(/\\s+/).filter(Boolean);
+    const words = sentence.trim().split(/\s+/).filter(Boolean);
     let offset = 0;
     while (offset < words.length) {
       const room = Math.max(1, 55 - count);
