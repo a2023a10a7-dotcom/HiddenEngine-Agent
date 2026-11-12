@@ -86,6 +86,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: hiddenengine-cinematic-${{ inputs.project_id || '2026-11-12-chinas-technology-rise' }}
-          path: dist/${{ inputs.project_id || '2026-11-12-chinas-technology-rise' }}/
+          path: |
+            dist/${{ inputs.project_id || '2026-11-12-chinas-technology-rise' }}/the-hidden-engine-documentary.mp4
+            dist/${{ inputs.project_id || '2026-11-12-chinas-technology-rise' }}/CREDITS.md
+            dist/${{ inputs.project_id || '2026-11-12-chinas-technology-rise' }}/QA-REPORT.json
+            dist/${{ inputs.project_id || '2026-11-12-chinas-technology-rise' }}/contact-sheet.jpg
           if-no-files-found: error
           retention-days: 14
