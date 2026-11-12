@@ -54,9 +54,9 @@ async function main(){
     if((hit.imageWidth||0)<1280||(hit.imageHeight||0)<720) continue;
     const tags=String(hit.tags||"").toLowerCase(),tokens=terms(query);
     const groupHits=requirements.map(group=>group.filter(term=>tags.includes(term.toLowerCase())).length);
-    if(requirements.length && groupHits.some(n=>n===0)) continue;
+    if(requirements.length && !groupHits.some(n=>n>0)) continue;
     const score=tokens.reduce((n,t)=>n+(tags.includes(t)?(t.length>5?3:1):0),0)+groupHits.reduce((a,b)=>a+b,0)*6;
-    if(score<14) continue;
+    if(score<8) continue;
     candidates.push({hit,query,score});
    }
   }
