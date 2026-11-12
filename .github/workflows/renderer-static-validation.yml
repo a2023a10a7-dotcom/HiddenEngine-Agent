@@ -30,7 +30,7 @@ jobs:
           import { readFile } from 'node:fs/promises';
           const script = JSON.parse(await readFile('production/projects/2026-11-12-chinas-technology-rise/script.json', 'utf8'));
           if (script.scenes.length < 14) throw new Error('Documentary must contain at least 14 chapters.');
-          const words = script.scenes.reduce((n, scene) => n + scene.narration.trim().split(/\\s+/).length, 0);
+          const words = script.scenes.reduce((n, scene) => n + scene.narration.trim().split(/\s+/).length, 0);
           if (words < 2100) throw new Error('Narration is too short for a 15-minute documentary: ' + words + ' words.');
           for (const [i, scene] of script.scenes.entries()) {
             if (!scene.visual_queries || scene.visual_queries.length < 4) throw new Error('Scene ' + (i + 1) + ' needs at least four visual search queries.');
