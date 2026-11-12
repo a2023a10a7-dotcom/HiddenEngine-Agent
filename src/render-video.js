@@ -113,6 +113,24 @@ async function findPexelsVideo(query) {
     creatorUrl: video.user?.url || "", duration: video.duration
   };
 }
+async function probeDuration(file) {
+  return await new Promise((resolve, reject) => {
+    const p = spawn("ffprobe", ["-v","error","-show_entries","format=duration","-of","default=noprint_wrappers=1:nokey=1",file]);
+    let data = "";
+    p.stdout.on("data", d => data += d);
+    p.on("error", reject);
+    p.on("close", code => code === 0 && Number.isFinite(Number(data.trim())) ? resolve(Number(data.trim())) : reject(new Error("Could not read audio duration")));
+  });
+}
+async function pixabayImageUrl(pageUrl) {
+  const response = await fetch(pageUrl, { headers: { "User-Agent": "HiddenEngineDocumentaryRenderer/1.0" } });
+  if (!response.ok) throw new Error("Pixabay page fetch failed (" + response.status + ")");
+  const html = await response.text();
+  const meta = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i) ||
+    html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
+  if (!meta?.[1]) throw new Error("Could not find the source image on " + pageUrl);
+  return meta[1].replace(/&amp;/g, "&");
+}
 async function download(url, dest) {
   const response = await fetch(url);
   if (!response.ok) throw new Error("Asset download failed (" + response.status + ").");
@@ -125,33 +143,65 @@ async function main() {
   const script = JSON.parse(await readFile(path.join(ROOT, "script.json"), "utf8"));
   if (!Array.isArray(script.scenes) || !script.scenes.length) throw new Error("script.json has no scenes.");
   await mkdir(OUT, { recursive: true });
-  const clips = [], credits = [];
+  const selectionPath = path.join(ROOT, "visual-selection.json");
+  const assetsPath = path.join(ROOT, "visual-assets.json");
+  const selection = JSON.parse(await readFile(selectionPath, "utf8"));
+  const assetsManifest = JSON.parse(await readFile(assetsPath, "utf8"));
+  const assetById = new Map((assetsManifest.assets || []).map(asset => [asset.id, asset]));
+  const clips = [], credits = [], visualAudit = [];
   for (let i=0; i<script.scenes.length; i++) {
     const scene = script.scenes[i];
     if (!scene.narration?.trim()) throw new Error("Scene " + (i+1) + " has no narration.");
     const stem = "scene-" + String(i+1).padStart(2,"0");
     const audio = path.join(OUT, stem + ".mp3");
     const svg = path.join(OUT, stem + ".svg");
-    const clip = path.join(OUT, stem + "-visual.mp4");
     const rendered = path.join(OUT, stem + ".mp4");
     await elevenLabs(scene.narration, audio);
     await writeFile(svg, overlaySvg(scene, i, script.scenes.length));
-    const query = scene.visual_query || [scene.title, scene.subtitle].filter(Boolean).join(" ");
-    const asset = await findPexelsVideo(query);
-    if (asset) {
-      await download(asset.url, clip);
-      credits.push({ scene: i+1, query, provider:"Pexels", page:asset.page, creator:asset.creator, creatorUrl:asset.creatorUrl });
-      await run("ffmpeg", ["-y","-stream_loop","-1","-i",clip,"-i",audio,"-loop","1","-i",svg,
-        "-filter_complex","[0:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,eq=contrast=1.12:saturation=0.78,drawbox=x=0:y=0:w=iw:h=ih:color=#08090b@0.18:t=fill[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
-        "-map","[v]","-map","1:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
-    } else {
-      credits.push({ scene:i+1, query, provider:"Original motion graphic", note:"No matching Pexels video was returned; generated a branded animated graphic instead." });
-      await run("ffmpeg", ["-y","-f","lavfi","-i","color=c=#101113:s=1920x1080:r=25","-i",audio,"-loop","1","-i",svg,
-        "-filter_complex","[0:v]zoompan=z='min(zoom+0.00035,1.08)':d=125:s=1920x1080:fps=25,format=yuv420p[bg];[bg][2:v]overlay=0:0,format=yuv420p[v]",
-        "-map","[v]","-map","1:a","-c:v","libx264","-preset","veryfast","-crf","21","-c:a","aac","-b:a","192k","-shortest","-movflags","+faststart",rendered]);
+    const selected = selection.scenes.find(item => item.scene === i+1)?.selectedImageIds || [];
+    if (!selected.length) throw new Error("Scene " + (i+1) + " has no approved visual selections.");
+    const imageFiles = [];
+    for (const id of selected) {
+      const asset = assetById.get(id);
+      if (!asset || asset.scene !== i+1) throw new Error("Selected image " + id + " is missing or assigned to the wrong scene.");
+      const imageFile = path.join(OUT, id + ".jpg");
+      if (!await import("node:fs/promises").then(fs => fs.stat(imageFile).then(()=>true).catch(()=>false))) {
+        const imageUrl = await pixabayImageUrl(asset.sourcePage);
+        await download(imageUrl, imageFile);
+      }
+      imageFiles.push(imageFile);
+      credits.push({ scene:i+1, imageId:id, provider:"Pixabay", page:asset.sourcePage, creator:asset.creator,
+        tags:asset.tags, license:asset.license, licenseUrl:asset.licenseUrl, illustrative:true });
     }
+    const audioDuration = await probeDuration(audio);
+    const transition = imageFiles.length > 1 ? 0.75 : 0;
+    const segmentDuration = imageFiles.length > 1 ? (audioDuration + transition) / 2 : audioDuration;
+    const frameCount = Math.max(1, Math.ceil(segmentDuration * 25));
+    const args = ["-y"];
+    for (const imageFile of imageFiles) args.push("-loop","1","-t",segmentDuration.toFixed(3),"-i",imageFile);
+    const audioIndex = imageFiles.length;
+    const svgIndex = imageFiles.length + 1;
+    args.push("-i",audio,"-loop","1","-i",svg);
+    const filters = [];
+    for (let n=0;n<imageFiles.length;n++) {
+      const zoom = n % 2 === 0 ? "min(zoom+0.00045,1.12)" : "min(zoom+0.00038,1.10)";
+      filters.push("["+n+":v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,zoompan=z='"+zoom+"':d="+frameCount+":s=1920x1080:fps=25,setsar=1,format=yuv420p[v"+n+"]");
+    }
+    let baseLabel = "v0";
+    if (imageFiles.length > 1) {
+      const offset = Math.max(0, segmentDuration-transition);
+      filters.push("[v0][v1]xfade=transition=fade:duration="+transition+":offset="+offset.toFixed(3)+"[base]");
+      baseLabel = "base";
+    }
+    filters.push("["+baseLabel+"]["+svgIndex+":v]overlay=0:0:shortest=1,format=yuv420p[v]");
+    args.push("-filter_complex",filters.join(";"),"-map","[v]","-map",audioIndex+":a",
+      "-c:v","libx264","-preset","veryfast","-crf","20","-c:a","aac","-b:a","192k",
+      "-t",audioDuration.toFixed(3),"-shortest","-movflags","+faststart",rendered);
+    await run("ffmpeg",args);
+    visualAudit.push({scene:i+1,selectedImageIds:selected,renderedImages:imageFiles.length,animated:true,
+      sourceTags:selected.map(id=>assetById.get(id).tags)});
     clips.push(rendered);
-    console.log("Rendered scene " + (i+1) + "/" + script.scenes.length + (asset ? " with licensed stock footage." : " with branded motion graphics."));
+    console.log("Rendered scene "+(i+1)+"/"+script.scenes.length+" with "+imageFiles.length+" selected stills, cinematic motion and transitions.");
   }
   const list = path.join(OUT,"concat.txt");
   await writeFile(list, clips.map(f=>"file '"+path.basename(f)+"'").join("\n")+"\n");
@@ -163,21 +213,21 @@ async function main() {
     "Stock footage is sourced from Pexels. Review the linked asset page and applicable license before publication.",
     "Pexels footage is used as illustrative material and must not be presented as actual footage of a specific company, person, product, or event unless independently verified.",
     "",
-    ...credits.map(c=>c.provider==="Pexels"
-      ? "- Scene "+c.scene+": [Pexels video]("+c.page+") — "+c.creator+(c.creatorUrl?" ([creator]("+c.creatorUrl+"))":"")
+    ...credits.map(c=>"imageId" in c
+      ? "- Scene "+c.scene+" ("+c.imageId+"): [Pixabay image]("+c.page+") — "+c.creator+"; illustrative stock image. License: [Pixabay Content License]("+c.licenseUrl+")"
       : "- Scene "+c.scene+": "+c.provider+" — "+c.note)
   ].join("\n")+"\n");
   await writeFile(path.join(OUT,"README.txt"),[
     "The Hidden Engine documentary render",
     "Narration: ElevenLabs API (natural AI voice; selected voice configured by repository secret/variable).",
-    "Visuals: Pexels stock footage where relevant; otherwise original branded motion graphics.",
+    "Visuals: user-selected Pixabay stills with animated camera movement, crossfades, and original data overlays.",
     "Identity: charcoal/black, ivory typography, restrained copper accents, documentary-investigative overlays.",
     "Review all claims, pronunciations, visual relevance, licenses, and credits before publication.",
     "No automatic YouTube upload."
   ].join("\n")+"\n");
   const qa = await new Promise((resolve,reject) => { const p=spawn("ffprobe",["-v","error","-show_entries","format=duration:stream=codec_type,width,height","-of","json",output]); let data=""; p.stdout.on("data",d=>data+=d); p.on("error",reject); p.on("close",code=>code===0?resolve(JSON.parse(data)):reject(new Error("ffprobe failed"))); });
   if (!qa.streams.some(x=>x.codec_type==="video" && x.width===1920 && x.height===1080) || !qa.streams.some(x=>x.codec_type==="audio")) throw new Error("Final MP4 failed audio/1080p QA.");
-  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:Number(qa.format.duration),audio:true,scenes:clips.length},null,2)+"\n");
+  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:Number(qa.format.duration),audio:true,scenes:clips.length,selectedImages:credits.length,animatedImageScenes:visualAudit.filter(x=>x.animated).length},null,2)+"\n");
   console.log("Rendered and passed technical QA: "+output);
 }
 main().catch(error=>{console.error("Render failed:",error);process.exit(1);});
