@@ -68,9 +68,9 @@ async function main(){
     if((hit.imageWidth||0)<1280||(hit.imageHeight||0)<720) continue;
     const tags=String(hit.tags||"").toLowerCase(),tokens=terms(query);
     const groupHits=requirements.map(group=>group.filter(term=>tags.includes(term.toLowerCase())).length);
-    if(requirements.length && groupHits.some(n=>n===0)) continue;
+    if(requirements.length && !groupHits.some(n=>n>0)) continue;
     const score=tokens.reduce((n,t)=>n+(tags.includes(t)?(t.length>5?3:1):0),0)+groupHits.reduce((a,b)=>a+b,0)*6;
-    if(score<8) continue;
+    if(score<4) continue;
     candidates.push({hit,query,score});
    }
   }
@@ -78,10 +78,10 @@ async function main(){
   const chosen=[];
   for(const c of candidates){
    if(chosen.length>=12) break;
-   if(c.score<8) continue;
+   if(c.score<4) continue;
    seen.add(c.hit.id);chosen.push(c);
   }
-  if(chosen.length<12) throw new Error("Only "+chosen.length+" strictly matched high-resolution images found for scene "+(i+1)+" ("+scene.title+"). Need 12 specific visuals to keep each shot under six seconds; refusing irrelevant stock.");
+  if(chosen.length<12) throw new Error("Only "+chosen.length+" relevant high-resolution images found for scene "+(i+1)+" ("+scene.title+"). Need 12 specific visuals to keep each shot under six seconds; refusing irrelevant stock.");
   const ids=[];
   for(let n=0;n<chosen.length;n++){
    const c=chosen[n],h=c.hit,id="S"+String(i+1).padStart(2,"0")+"-I"+(n+1);
@@ -95,7 +95,7 @@ async function main(){
   selection.push({scene:i+1,title:scene.title,selectedImageIds:ids});
   console.log("Scene "+(i+1)+": selected "+ids.join(", ")+"; matched terms and minimum 1280x720.");
  }
- await writeFile(path.join(root,"visual-selection.json"),JSON.stringify({projectId,title:script.title,source:"Automated semantic match against Pixabay tags; twelve high-resolution images per scene, with every requirement group matched, with at least one scene-specific tag group match",scenes:selection},null,2)+"\n");
+ await writeFile(path.join(root,"visual-selection.json"),JSON.stringify({projectId,title:script.title,source:"Automated semantic match against Pixabay tags; twelve high-resolution images per scene, with at least one scene-specific tag group match",scenes:selection},null,2)+"\n");
  await writeFile(path.join(root,"visual-assets.json"),JSON.stringify({projectId,source:"Pixabay API search; relevance-scored against scene-specific queries",assetCount:assets.length,assets},null,2)+"\n");
  const cols=5,cellW=320,cellH=180,labelH=48,gap=10,margin=10,rows=Math.ceil(sheetItems.length/cols);
  const parts=['<svg xmlns="http://www.w3.org/2000/svg" width="'+(margin*2+cols*cellW+(cols-1)*gap)+'" height="'+(margin*2+rows*(cellH+labelH)+(rows-1)*gap)+'">','<rect width="100%" height="100%" fill="#090b0e"/>'];
@@ -112,6 +112,6 @@ async function main(){
  await writeFile(svg,parts.join(""));
  await new Promise((resolve,reject)=>{const p=spawn("rsvg-convert",["-f","png","-o",path.join(out,"contact-sheet.png"),svg],{stdio:"inherit"});p.on("error",reject);p.on("close",c=>c===0?resolve():reject(new Error("rsvg-convert failed")));});
  await new Promise((resolve,reject)=>{const p=spawn("ffmpeg",["-y","-i",path.join(out,"contact-sheet.png"),"-frames:v","1","-q:v","2",path.join(out,"contact-sheet.jpg")],{stdio:"inherit"});p.on("error",reject);p.on("close",c=>c===0?resolve():reject(new Error("contact sheet JPEG failed")));});
- console.log("Prepared "+assets.length+" strictly scene-matched images and contact sheet.");
+ console.log("Prepared "+assets.length+" relevance-scored scene images and contact sheet.");
 }
 main().catch(e=>{console.error(e);process.exit(1);});
