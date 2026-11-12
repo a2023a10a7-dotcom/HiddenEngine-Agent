@@ -225,17 +225,20 @@ async function main() {
     await writeFile(svg, overlaySvg(scene, i, script.scenes.length));
     const selected = selection.scenes.find(item => item.scene === i+1)?.selectedImageIds || [];
     if (!selected.length) throw new Error("Scene " + (i+1) + " has no approved visual selections.");
+    const hookIds = i===0 ? (selection.scenes.find(item => item.scene === 7)?.selectedImageIds || []).slice(0,4) : [];
+    const renderIds = [...hookIds,...selected];
     const imageFiles = [];
-    for (const id of selected) {
+    for (const id of renderIds) {
       const asset = assetById.get(id);
-      if (!asset || asset.scene !== i+1) throw new Error("Selected image " + id + " is missing or assigned to the wrong scene.");
+      const isHookRobotVisual = i===0 && hookIds.includes(id) && asset?.scene===7;
+      if (!asset || (asset.scene !== i+1 && !isHookRobotVisual)) throw new Error("Selected image " + id + " is missing or assigned to the wrong scene.");
       const imageFile = path.join(OUT, id + ".jpg");
       if (!await stat(imageFile).then(()=>true).catch(()=>false)) {
         const imageUrl = await pixabayImageUrl(asset.sourcePage);
         await download(imageUrl, imageFile);
       }
       imageFiles.push(imageFile);
-      credits.push({ scene:i+1, imageId:id, provider:"Pixabay", page:asset.sourcePage, creator:asset.creator,
+      credits.push({ scene:i+1, sourceScene:asset.scene, imageId:id, provider:"Pixabay", page:asset.sourcePage, creator:asset.creator,
         tags:asset.tags, license:asset.license, licenseUrl:asset.licenseUrl, illustrative:true });
     }
     const audioDuration = await probeDuration(audio);
@@ -287,7 +290,7 @@ async function main() {
       "-c:v","libx264","-preset","veryfast","-crf","20","-c:a","aac","-b:a","192k",
       "-t",audioDuration.toFixed(3),"-shortest","-movflags","+faststart",rendered);
     await run("ffmpeg",args);
-    visualAudit.push({scene:i+1,selectedImageIds:selected,renderedImages:imageFiles.length,animated:true,
+    visualAudit.push({scene:i+1,selectedImageIds:renderIds,renderedImages:imageFiles.length,animated:true,
       sourceTags:selected.map(id=>assetById.get(id).tags)});
     clips.push(rendered);
     console.log("Rendered scene "+(i+1)+"/"+script.scenes.length+" with "+imageFiles.length+" fast-cut stills, 0.42s crossfades and 5-10% Ken Burns motion.");
