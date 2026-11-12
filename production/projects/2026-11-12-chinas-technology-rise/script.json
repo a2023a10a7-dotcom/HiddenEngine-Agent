@@ -10,10 +10,10 @@
       "subtitle": "The power to turn an idea into millions of products",
       "narration": "In a lights-out factory, robots can keep assembling products long after the human shift ends. It is an arresting image, but the real story is even bigger: technological power is not just inventing a machine. It is building the suppliers, skills, energy systems and logistics that allow millions of machines and products to work reliably. China’s rise is therefore not simply a story about clever engineers or government subsidies. It is a story about factories, logistics, skills, finance, infrastructure, foreign partnerships and a huge home market working together. The country has become formidable in industries such as electric vehicles, batteries and solar equipment, while remaining dependent on overseas suppliers in some advanced semiconductor technologies. Those contrasts matter. They show that technological leadership is not one trophy that a country either wins or loses. It is a collection of capabilities, each built through different institutions, supply chains and decades of accumulated experience. To understand China’s position, we need to examine the system behind the products.",
       "visual_queries": [
-        "lights out factory robotic assembly line dark industrial",
-        "automated robotic arms car manufacturing factory",
-        "robotic manufacturing factory interior night",
-        "industrial automation robot arms assembly production"
+        "modern Chinese automated lights out factory robotic assembly line",
+        "China smart factory industrial robot arms production",
+        "Chinese automotive factory automated assembly robots",
+        "Shenzhen China advanced manufacturing factory interior"
       ],
       "visual_requirements": [
         [
@@ -26,6 +26,11 @@
           "industrial",
           "assembly",
           "manufacturing"
+        ],
+        [
+          "China",
+          "Chinese",
+          "Shenzhen"
         ]
       ],
       "keywords": [
@@ -93,25 +98,31 @@
     },
     {
       "title": "THE ELECTRIC CAR TURNING POINT",
-      "subtitle": "China produced about 16 million electric cars in 2025",
+      "subtitle": "China produced 12.4 million electric cars in 2024",
       "narration": "Electric vehicles reveal how industrial policy and market competition can reinforce each other. China’s government supported charging infrastructure, public procurement and early manufacturers, while major cities created incentives for cleaner transport. At the same time, intense competition among domestic brands pushed firms to improve design, software, batteries and production costs. Companies such as BYD developed capabilities across several parts of the vehicle supply chain, while other manufacturers focused on software, premium features or low-cost models. A large domestic market gave companies room to test products and build factories at scale before expanding abroad. Yet the sector is not invulnerable. Price wars squeeze profits, weaker companies may disappear, and trade disputes can limit access to foreign markets. The important point is not that every Chinese electric-car maker will succeed. It is that a large, competitive ecosystem can accelerate learning and make new technologies affordable at remarkable speed.",
       "visual_queries": [
-        "China electric vehicle car assembly factory production",
-        "BYD electric car factory assembly robots",
-        "Chinese electric vehicle export port car carrier",
-        "electric car battery vehicle testing proving ground"
+        "BYD electric vehicle factory China assembly line",
+        "NIO electric car production factory China",
+        "Chinese electric vehicles BYD NIO XPeng lineup China",
+        "China electric car manufacturing production line workers"
       ],
       "visual_requirements": [
         [
           "electric vehicle",
           "electric car",
-          "automotive"
+          "EV"
         ],
         [
-          "assembly",
+          "BYD",
+          "NIO",
+          "XPeng",
+          "Chinese"
+        ],
+        [
           "factory",
+          "assembly",
           "production",
-          "robot"
+          "manufacturing"
         ]
       ],
       "visual": {
@@ -142,10 +153,10 @@
       "subtitle": "Cells, chemistry and a concentrated supply chain",
       "narration": "Batteries are central to the electric-vehicle transition and to energy storage. Their cost and performance depend on chemistry, mineral processing, cell design, manufacturing precision and recycling. Chinese firms built strength across much of this chain, from refining materials to producing battery cells and assembling packs. CATL and BYD became major global suppliers, while factories developed the ability to increase output and improve consistency. Different chemistries serve different purposes: lithium iron phosphate can offer lower cost and strong durability, while nickel-rich chemistries can provide higher energy density. No single chemistry wins every application. Battery leadership also creates strategic exposure because supply chains rely on minerals mined and processed in several countries. Recycling, alternative chemistries and safer manufacturing will shape the next phase. The competitive advantage is therefore not just access to raw materials; it is the ability to turn materials into reliable cells at industrial scale.",
       "visual_queries": [
-        "lithium ion battery cell manufacturing production line",
-        "battery electrode coating machine factory",
-        "electric vehicle battery pack assembly industrial",
-        "lithium battery testing laboratory engineers"
+        "CATL lithium ion battery cell manufacturing China factory",
+        "BYD blade battery production line China",
+        "Chinese EV battery pack assembly factory",
+        "lithium iron phosphate battery manufacturing China"
       ],
       "visual_requirements": [
         [
@@ -153,6 +164,12 @@
           "lithium",
           "cell",
           "electrode"
+        ],
+        [
+          "CATL",
+          "BYD",
+          "China",
+          "Chinese"
         ],
         [
           "factory",
@@ -250,23 +267,27 @@
       "subtitle": "From imported know-how to a vast domestic system",
       "narration": "High-speed rail is one of the most visible examples of China’s ability to build complex infrastructure at national scale. The network connects major cities, supports regional mobility and creates demand for signalling, power systems, track construction and rolling stock. China initially imported technology and worked with foreign partners, then developed domestic engineering and manufacturing capabilities. Building a network across varied terrain required coordination between central planners, local authorities, construction firms and equipment suppliers. The result is impressive, but it also carries costs. Large infrastructure projects require substantial capital, ongoing maintenance and enough passenger demand to justify their operation. Some routes are more commercially attractive than others, and debt must be considered alongside wider economic benefits. High-speed rail is therefore not a simple story of engineering triumph. It shows how procurement, technology transfer, industrial learning and state coordination can create capabilities that would be difficult for individual companies to develop alone.",
       "visual_queries": [
-        "China high speed train CR400 Fuxing railway",
-        "China high speed rail viaduct aerial",
-        "China bullet train interior station platform",
-        "high speed rail track construction engineering"
+        "China CR400 Fuxing high speed train railway",
+        "Chinese Fuxing bullet train high speed rail viaduct",
+        "China high speed railway station Fuxing train",
+        "CR400AF China high speed train platform"
       ],
       "visual_requirements": [
         [
-          "high speed rail",
+          "CR400",
+          "Fuxing",
           "bullet train",
-          "railway",
-          "train"
+          "high speed rail"
         ],
         [
           "China",
-          "viaduct",
+          "Chinese"
+        ],
+        [
+          "train",
+          "railway",
           "station",
-          "track"
+          "viaduct"
         ]
       ],
       "keywords": [
@@ -281,22 +302,28 @@
       "subtitle": "A consumer device becomes an industrial platform",
       "narration": "Drones show how a relatively small device can become an entire industrial ecosystem. Civilian drones combine cameras, motors, batteries, flight controllers, sensors and software. Their uses range from filmmaking and surveying to agriculture, infrastructure inspection and emergency response. Chinese manufacturers benefited from electronics supply chains and the ability to iterate hardware quickly. DJI became a leading global brand by combining reliable products with accessible software and a broad range of models. Yet the industry is shaped by regulation and geopolitics as much as engineering. Governments assess data security, component origins and the risks of using foreign-made equipment around sensitive sites. Export restrictions and procurement rules can change market access rapidly. The wider lesson is that a product’s success depends on more than its technical specifications. It also depends on trust, software support, service networks and the rules that determine where it can be sold and operated.",
       "visual_queries": [
-        "civilian camera drone aerial photography landscape",
-        "drone manufacturing assembly factory electronics",
-        "agricultural spraying drone flying over field",
-        "drone inspection industrial infrastructure"
+        "DJI drone China product aerial camera quadcopter",
+        "DJI drone manufacturing Shenzhen China",
+        "Chinese drone agriculture industrial inspection",
+        "DJI enterprise drone surveying China"
       ],
       "visual_requirements": [
         [
           "drone",
           "quadcopter",
-          "unmanned aerial"
+          "UAV"
+        ],
+        [
+          "DJI",
+          "China",
+          "Chinese"
         ],
         [
           "camera",
           "agriculture",
           "factory",
-          "industrial"
+          "industrial",
+          "surveying"
         ]
       ],
       "keywords": [
@@ -365,7 +392,14 @@
         "UNIVERSITIES",
         "TALENT",
         "PIPELINE"
-      ]
+      ],
+      "visual": {
+        "type": "metric",
+        "source_label": "NATIONAL BUREAU OF STATISTICS OF CHINA • 2025",
+        "value": "3.93 TRILLION YUAN",
+        "detail": "National R&D expenditure • 2025",
+        "source_url": "https://www.stats.gov.cn/english/PressRelease/202610/t20261019_1965621.html"
+      }
     },
     {
       "title": "THE PRICE OF SCALE",
@@ -401,23 +435,29 @@
       "subtitle": "Tariffs, supply-chain diversification and industrial policy",
       "narration": "China’s industrial rise has changed the choices facing other economies. Consumers benefit from lower-cost products, and companies gain access to large supplier networks. At the same time, governments worry about dependence on concentrated sources for batteries, solar panels, medicines, electronics and other strategic goods. The United States and European Union have introduced policies to support domestic production, screen investment and reduce selected supply-chain risks. Other countries are trying to attract factories by offering incentives, infrastructure and access to new markets. This response does not mean global trade is ending. It means governments increasingly treat some technologies as matters of economic security. The result may be more regional manufacturing and duplicated capacity, which can improve resilience but raise costs. China’s position will depend partly on whether it can remain competitive while navigating tariffs, export controls and changing political relationships.",
       "visual_queries": [
-        "global cargo container shipping port cranes",
-        "electric vehicle factory Europe production",
-        "semiconductor factory construction cleanroom",
-        "international trade cargo port containers customs"
+        "China BYD NIO XPeng electric cars lineup Chinese city",
+        "Chinese electric vehicle charging station BYD China",
+        "China modern EV factory electric car production",
+        "China modern high tech city electric vehicles traffic"
       ],
       "visual_requirements": [
         [
-          "port",
-          "shipping",
-          "container",
-          "cargo"
+          "electric vehicle",
+          "electric car",
+          "EV"
+        ],
+        [
+          "BYD",
+          "NIO",
+          "XPeng",
+          "China",
+          "Chinese"
         ],
         [
           "factory",
-          "trade",
-          "semiconductor",
-          "automotive"
+          "charging",
+          "city",
+          "production"
         ]
       ],
       "keywords": [
@@ -430,23 +470,29 @@
       "subtitle": "A nuanced scorecard beyond headlines",
       "narration": "China has built formidable strengths: large manufacturing clusters, capable suppliers, infrastructure, engineering talent and companies that can bring products to market at scale. But it has not achieved equal leadership in every technology. Advanced semiconductor equipment remains a vulnerability, some industries depend on imported resources, and demographic change may make labour and public finances more difficult. Productivity growth, consumer confidence and the financial health of local governments will influence future investment. Other countries also retain important advantages in software, scientific instruments, chip equipment, aerospace and specialised materials. Technology leadership is therefore distributed across a global network, even when production is concentrated in particular regions. China’s future will depend on whether it can convert manufacturing scale into original innovation, strengthen weak links and manage the costs created by rapid expansion. Its achievements are substantial, but they are neither automatic nor irreversible.",
       "visual_queries": [
-        "China modern advanced manufacturing engineer inspection",
-        "semiconductor cleanroom chip wafer closeup",
-        "electric vehicle battery manufacturing industrial",
-        "global shipping port aerial logistics"
+        "China BYD electric vehicle modern factory assembly line",
+        "NIO electric vehicles China showroom factory",
+        "Chinese modern smart factory robots industrial production",
+        "Shenzhen China modern technology skyline night"
       ],
       "visual_requirements": [
         [
           "China",
-          "advanced manufacturing",
-          "engineer",
-          "factory"
+          "Chinese",
+          "BYD",
+          "NIO"
         ],
         [
-          "semiconductor",
-          "battery",
           "electric vehicle",
-          "logistics"
+          "factory",
+          "robot",
+          "manufacturing"
+        ],
+        [
+          "modern",
+          "advanced",
+          "technology",
+          "industrial"
         ]
       ],
       "keywords": [
@@ -461,23 +507,29 @@
       "subtitle": "The contest shifts from scale to frontier capability",
       "narration": "The next decade will test whether China’s industrial model can keep adapting. Electric vehicles, energy storage, robotics, artificial intelligence and advanced materials may create new opportunities, but each requires more than building factories. Companies must develop trusted software, protect intellectual property, attract skilled researchers and deliver products that customers want. Governments must balance strategic support with competition, avoid wasteful duplication and allow unsuccessful firms to restructure. Other economies face their own task: building resilient supply chains without cutting themselves off from global knowledge and trade. The central lesson is that technological power is built through connected capabilities. Invention matters, but so do manufacturing, standards, finance, education, infrastructure and the ability to learn from failure. China’s rise shows what sustained industrial coordination can achieve—and why the next contest will be about the quality of innovation, not simply the number of products leaving a factory.",
       "visual_queries": [
-        "humanoid industrial robot factory demonstration China",
-        "grid scale battery energy storage installation",
-        "advanced semiconductor chip packaging laboratory",
-        "China high speed rail futuristic station night"
+        "China modern smart factory robotic production line",
+        "Shenzhen China futuristic technology skyline night",
+        "Chinese industrial robotics advanced manufacturing factory",
+        "China high speed rail modern Fuxing train city"
       ],
       "visual_requirements": [
         [
-          "robot",
-          "battery",
-          "energy storage",
-          "semiconductor"
+          "China",
+          "Chinese",
+          "Shenzhen",
+          "Fuxing"
         ],
         [
-          "advanced",
           "factory",
-          "laboratory",
-          "rail"
+          "robot",
+          "rail",
+          "manufacturing"
+        ],
+        [
+          "modern",
+          "advanced",
+          "technology",
+          "industrial"
         ]
       ],
       "keywords": [
