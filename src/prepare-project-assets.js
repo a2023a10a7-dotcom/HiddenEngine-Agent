@@ -31,24 +31,28 @@ async function fetchJson(url){
 }
 let lastImageDownload=0;
 async function download(url,file){
- for(let attempt=0;attempt<5;attempt++){
-  const pause=Math.max(0,350-(Date.now()-lastImageDownload));
+ let lastError;
+ for(let attempt=0;attempt<7;attempt++){
+  const pause=Math.max(0,1200-(Date.now()-lastImageDownload));
   if(pause) await sleep(pause);
   lastImageDownload=Date.now();
-  const r=await fetch(url,{signal:AbortSignal.timeout(30000)});
-  if(r.ok){
-   const b=Buffer.from(await r.arrayBuffer());
-   if(b.length<4096||b.length>25*1024*1024) throw new Error("Preview image size is invalid ("+b.length+" bytes)");
-   await writeFile(file,b);return;
-  }
-  const detail=await r.text();
-  if(r.status!==429&&r.status<500) throw new Error("Preview download failed ("+r.status+"): "+detail.slice(0,200));
-  if(attempt===4) throw new Error("Preview download failed after retries ("+r.status+"): "+detail.slice(0,200));
-  const retryAfter=Number(r.headers.get("retry-after"))*1000;
-  const backoff=Number.isFinite(retryAfter)&&retryAfter>0?retryAfter:Math.min(20000,1500*Math.pow(2,attempt));
-  console.warn("Pixabay image download rate limited ("+r.status+"); retrying in "+backoff+"ms.");
-  await sleep(backoff);
+  try{
+   const r=await fetch(url,{signal:AbortSignal.timeout(45000)});
+   if(r.ok){
+    const b=Buffer.from(await r.arrayBuffer());
+    if(b.length<4096||b.length>25*1024*1024) throw new Error("Preview image size is invalid ("+b.length+" bytes)");
+    await writeFile(file,b);return;
+   }
+   const detail=await r.text();
+   if(r.status!==429&&r.status<500) throw new Error("Preview download failed ("+r.status+"): "+detail.slice(0,200));
+   lastError=new Error("HTTP "+r.status+": "+detail.slice(0,120));
+   const retryAfter=Number(r.headers.get("retry-after"))*1000;
+   const backoff=Number.isFinite(retryAfter)&&retryAfter>0?retryAfter:Math.min(60000,5000*Math.pow(2,attempt));
+   console.warn("Pixabay image download rate limited ("+r.status+"); retrying in "+backoff+"ms.");
+   await sleep(backoff);
+  }catch(e){lastError=e;if(attempt===6)break;await sleep(Math.min(30000,3000*Math.pow(2,attempt)));}
  }
+ throw new Error("Preview download failed after extended retries: "+(lastError?.message||"unknown error"));
 }
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&apos;"}[c]));}
 async function main(){
@@ -76,24 +80,23 @@ async function main(){
   }
   candidates.sort((a,b)=>b.score-a.score || (b.hit.imageWidth*b.hit.imageHeight)-(a.hit.imageWidth*a.hit.imageHeight));
   const chosen=[];
-  for(const c of candidates){
-   if(chosen.length>=12) break;
-   if(c.score<4) continue;
-   seen.add(c.hit.id);chosen.push(c);
-  }
+  for(const c of candidates){if(chosen.length>=12) break;if(c.score<4) continue;seen.add(c.hit.id);chosen.push(c);}
   if(chosen.length<12) throw new Error("Only "+chosen.length+" relevant high-resolution images found for scene "+(i+1)+" ("+scene.title+"). Need 12 specific visuals to keep each shot under six seconds; refusing irrelevant stock.");
   const ids=[];
   for(let n=0;n<chosen.length;n++){
    const c=chosen[n],h=c.hit,id="S"+String(i+1).padStart(2,"0")+"-I"+(n+1);
    const preview=path.join(out,id+".jpg");
-   await download(h.webformatURL,preview);
+   try{await download(h.webformatURL,preview);}catch(primaryError){
+    console.warn(id+": web preview throttled; trying original image URL. "+primaryError.message);
+    await download(h.largeImageURL,preview);
+   }
    const item={id,scene:i+1,creator:h.user||"Pixabay contributor",tags:h.tags||"",width:h.imageWidth,height:h.imageHeight,
     sourcePage:h.pageURL,previewFile:id+".jpg",largeImageURL:h.largeImageURL,license:"Pixabay Content License",
     licenseUrl:"https://pixabay.com/service/license-summary/",searchQuery:c.query,relevanceScore:c.score};
    assets.push(item);ids.push(id);sheetItems.push({id,scene:i+1,tags:item.tags,file:preview});
   }
   selection.push({scene:i+1,title:scene.title,selectedImageIds:ids});
-  console.log("Scene "+(i+1)+": selected "+ids.join(", ")+"; matched terms and minimum 1280x720.");
+  console.log("Scene "+(i+1)+": selected "+ids.join(", ")+ "; matched terms and minimum 1280x720.");
  }
  await writeFile(path.join(root,"visual-selection.json"),JSON.stringify({projectId,title:script.title,source:"Automated semantic match against Pixabay tags; twelve high-resolution images per scene, with at least one scene-specific tag group match",scenes:selection},null,2)+"\n");
  await writeFile(path.join(root,"visual-assets.json"),JSON.stringify({projectId,source:"Pixabay API search; relevance-scored against scene-specific queries",assetCount:assets.length,assets},null,2)+"\n");
