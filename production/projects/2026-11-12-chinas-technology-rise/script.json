@@ -274,12 +274,6 @@
       ],
       "visual_requirements": [
         [
-          "CR400",
-          "Fuxing",
-          "bullet train",
-          "high speed rail"
-        ],
-        [
           "China",
           "Chinese"
         ],
@@ -295,7 +289,8 @@
         "RAIL",
         "ENGINEERING",
         "NATIONAL"
-      ]
+      ],
+      "requireAllVisualGroups": true
     },
     {
       "title": "DRONES, CAMERAS AND THE LOW-ALTITUDE ECONOMY",
