@@ -1,0 +1,55 @@
+name: Script Gate
+
+on:
+  push:
+    paths:
+      - "production/projects/*/script.json"
+      - "production/projects/*/project.json"
+      - "src/script-gate.js"
+  workflow_dispatch:
+    inputs:
+      project_id:
+        description: "Production project folder name"
+        required: true
+        default: "2026-11-12-chinas-technology-rise"
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check changed projects
+        env:
+          INPUT_PROJECT: ${{ inputs.project_id }}
+          BEFORE: ${{ github.event.before }}
+        run: |
+          set -uo pipefail
+          ALL="production/projects/*/script.json production/projects/*/project.json"
+          if [ -n "${INPUT_PROJECT:-}" ]; then
+            list="production/projects/$INPUT_PROJECT/script.json"
+          else
+            if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+              list=$(git ls-files $ALL)
+            else
+              list=$(git diff --name-only --diff-filter=d "$BEFORE" "$GITHUB_SHA" -- $ALL src/script-gate.js)
+              if echo "$list" | grep -q '^src/script-gate.js$'; then list=$(git ls-files $ALL); fi
+            fi
+          fi
+          projects=$(echo "$list" | grep '^production/projects/' | cut -d/ -f3 | sort -u)
+          if [ -z "$projects" ]; then echo "No project files changed."; exit 0; fi
+          status=0
+          for p in $projects; do
+            echo "=== Gate: $p"
+            PROJECT_ID="$p" node src/script-gate.js || status=1
+          done
+          exit $status
