@@ -112,40 +112,30 @@ function captionLines(sentence, max = 38) {
   if (line) rows.push(line);
   return rows;
 }
+function assTimestamp(seconds) {
+  const cs = Math.max(0, Math.round(seconds * 100));
+  return String(Math.floor(cs / 360000)) + ":" + String(Math.floor((cs % 360000) / 6000)).padStart(2, "0") + ":" + String(Math.floor((cs % 6000) / 100)).padStart(2, "0") + "." + String(cs % 100).padStart(2, "0");
+}
 async function writeNarrationSubtitles(narration, duration, output) {
   const words = String(narration).replace(/\s+/g, " ").trim().split(" ").filter(Boolean);
-  const maxChars = 90;
-  const maxLines = 3;
-  const cues = [];
-  let group = [];
-  let rows = [];
-  let line = "";
+  const cues = []; let group = []; let rows = []; let line = "";
   for (const word of words) {
     const candidate = line ? line + " " + word : word;
-    if (line && candidate.length > maxChars) {
-      rows.push(line);
-      line = word;
-    } else {
-      line = candidate;
-    }
-    if (rows.length === maxLines) {
-      cues.push({ words: group, text: rows.join("\n") });
-      group = [];
-      rows = [];
-    }
+    if (line && candidate.length > 66) { rows.push(line); line = word; } else line = candidate;
+    if (rows.length === 2) { cues.push({words:group,text:rows.join("\\N")}); group=[]; rows=[]; }
     group.push(word);
   }
   if (line) rows.push(line);
-  if (rows.length) cues.push({ words: group, text: rows.join("\n") });
-  const totalWords = words.length || 1;
-  let cursor = 0;
-  const entries = cues.map((cue, i) => {
+  if (rows.length) cues.push({words:group,text:rows.join("\\N")});
+  const total = words.length || 1; let cursor = 0;
+  const events = cues.map((cue,i) => {
     const start = cursor;
-    const end = i === cues.length - 1 ? duration : cursor + duration * cue.words.length / totalWords;
+    const end = i === cues.length - 1 ? duration : cursor + duration * cue.words.length / total;
     cursor = end;
-    return (i + 1) + "\n" + srtTimestamp(start) + " --> " + srtTimestamp(end) + "\n" + cue.text + "\n";
+    return "Dialogue: 0," + assTimestamp(start) + "," + assTimestamp(end) + ",Default,,0,0,0,," + cue.text.replace(/[{}]/g, "");
   });
-  await writeFile(output, entries.join("\n") + "\n");
+  const header = ["[Script Info]","ScriptType: v4.00+","PlayResX: 1920","PlayResY: 1080","ScaledBorderAndShadow: yes","WrapStyle: 2","","[V4+ Styles]","Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding","Style: Default,DejaVu Sans,34,&H00FFFFFF,&H000000FF,&H80000000,&H80000000,0,0,3,0,0,2,144,144,92,1","","[Events]","Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"];
+  await writeFile(output, header.concat(events).join("\n") + "\n");
 }
 async function piperTTS(text, output) {
   if (!Number.isFinite(PIPER_LENGTH_SCALE) || PIPER_LENGTH_SCALE <= 0) throw new Error("PIPER_LENGTH_SCALE must be a positive number.");
@@ -275,7 +265,7 @@ async function main() {
     const stem = "scene-" + String(i+1).padStart(2,"0");
     const audio = path.join(OUT, stem + ".wav");
     const svg = path.join(OUT, stem + ".svg");
-    const subtitles = path.join(OUT, stem + ".srt");
+    const subtitles = path.join(OUT, stem + ".ass");
     const rendered = path.join(OUT, stem + ".mp4");
     await piperTTS(scene.narration, audio);
     const audioDuration = await probeDuration(audio);
@@ -320,7 +310,7 @@ async function main() {
     }
     filters.push("["+baseLabel+"]["+svgIndex+":v]overlay=0:0:shortest=1[withsvgbase]");
     const subtitlePath = subtitles.replace(/\\\\/g, "/").replace(/:/g, "\\\\:");
-    filters.push("[withsvgbase]subtitles=filename='" + subtitlePath + "':force_style='FontName=DejaVu Sans,FontSize=22,PrimaryColour=&H00FFFFFF,OutlineColour=&H99000000,BackColour=&H80000000,Bold=0,BorderStyle=3,Outline=0,Shadow=0,Alignment=2,MarginV=80,MarginL=144,MarginR=144',format=yuv420p[withsvg]");
+    filters.push("[withsvgbase]subtitles=filename=" + subtitlePath + ",format=yuv420p[withsvg]");
     let finalVideoLabel = "withsvg";
     if (scene.visual?.type === "comparison" && Array.isArray(scene.visual.items)) {
       scene.visual.items.slice(0,3).forEach((item,idx) => {
