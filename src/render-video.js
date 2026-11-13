@@ -59,12 +59,12 @@ function visualMarkup(scene) {
 }
 
 function overlaySvg(scene, index, total) {
-  const title = lines((scene.title || "").toUpperCase(), 28).slice(0, 2)
-    .map((s,i) => '<text x="120" y="' + (760 + i*76) + '" class="title">' + xml(s) + '</text>').join("");
+  const title = lines((scene.title || "").toUpperCase(), 42).slice(0, 2)
+    .map((s,i) => '<text x="120" y="' + (190 + i*76) + '" class="title">' + xml(s) + '</text>').join("");
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080">
   <defs><linearGradient id="shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#08090b" stop-opacity=".25"/><stop offset=".48" stop-color="#08090b" stop-opacity=".05"/><stop offset="1" stop-color="#08090b" stop-opacity=".92"/></linearGradient></defs>
   <rect width="1920" height="1080" fill="url(#shade)"/>
-  <text x="120" y="710" class="eyebrow">THE INVESTIGATION / ${String(index+1).padStart(2,"0")}</text>
+  <text x="120" y="112" class="eyebrow">THE INVESTIGATION / ${String(index+1).padStart(2,"0")}</text>
 
   ${title}
   ${visualMarkup(scene)}\n  <text x="1795" y="1010" text-anchor="end" class="page">${String(index+1).padStart(2,"0")} / ${total}</text>
@@ -114,28 +114,29 @@ function captionLines(sentence, max = 38) {
 }
 async function writeNarrationSubtitles(narration, duration, output) {
   const words = String(narration).replace(/\s+/g, " ").trim().split(" ").filter(Boolean);
+  const maxChars = 76;
+  const maxLines = 3;
   const cues = [];
   let group = [];
   let rows = [];
   let line = "";
   for (const word of words) {
     const candidate = line ? line + " " + word : word;
-    if (line && candidate.length > 38) {
+    if (line && candidate.length > maxChars) {
       rows.push(line);
       line = word;
     } else {
       line = candidate;
     }
-    if (rows.length === 2) {
-      cues.push({ words: group, text: rows.join("\\N") });
+    if (rows.length === maxLines) {
+      cues.push({ words: group, text: rows.join("\n") });
       group = [];
       rows = [];
-      line = "";
     }
     group.push(word);
   }
   if (line) rows.push(line);
-  if (rows.length) cues.push({ words: group, text: rows.join("\\N") });
+  if (rows.length) cues.push({ words: group, text: rows.join("\n") });
   const totalWords = words.length || 1;
   let cursor = 0;
   const entries = cues.map((cue, i) => {
@@ -319,7 +320,7 @@ async function main() {
     }
     filters.push("["+baseLabel+"]["+svgIndex+":v]overlay=0:0:shortest=1[withsvgbase]");
     const subtitlePath = subtitles.replace(/\\\\/g, "/").replace(/:/g, "\\\\:");
-    filters.push("[withsvgbase]subtitles=filename='" + subtitlePath + "':force_style='FontName=DejaVu Sans,FontSize=18,PrimaryColour=&H00FFFFFF,OutlineColour=&HCC000000,BackColour=&H80000000,Bold=0,BorderStyle=3,Outline=1,Shadow=0,Alignment=2,MarginV=42,MarginL=180,MarginR=180',format=yuv420p[withsvg]");
+    filters.push("[withsvgbase]subtitles=filename='" + subtitlePath + "':force_style='FontName=DejaVu Sans,FontSize=18,PrimaryColour=&H00FFFFFF,OutlineColour=&H99000000,BackColour=&H80000000,Bold=0,BorderStyle=3,Outline=0.5,Shadow=1,Alignment=2,MarginV=70,MarginL=144,MarginR=144',format=yuv420p[withsvg]");
     let finalVideoLabel = "withsvg";
     if (scene.visual?.type === "comparison" && Array.isArray(scene.visual.items)) {
       scene.visual.items.slice(0,3).forEach((item,idx) => {
