@@ -13,21 +13,30 @@ function terms(s){return String(s||"").toLowerCase().split(/[^a-z0-9]+/).filter(
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 let lastPixabayRequest=0;
 async function fetchJson(url){
- for(let attempt=0;attempt<5;attempt++){
+ let lastError;
+ for(let attempt=0;attempt<7;attempt++){
   const pause=Math.max(0,1400-(Date.now()-lastPixabayRequest));
   if(pause) await sleep(pause);
   lastPixabayRequest=Date.now();
-  const r=await fetch(url,{signal:AbortSignal.timeout(25000)});
-  if(r.ok) return r.json();
-  const detail=await r.text();
-  if(r.status!==429&&r.status<500) throw new Error("Pixabay API failed ("+r.status+"): "+detail.slice(0,300));
-  if(attempt===4) throw new Error("Pixabay API failed after retries ("+r.status+"): "+detail.slice(0,300));
-  const retryAfter=Number(r.headers.get("retry-after"))*1000;
-  const backoff=Number.isFinite(retryAfter)&&retryAfter>0?retryAfter:Math.min(30000,2000*Math.pow(2,attempt));
-  console.warn("Pixabay API rate limited or unavailable ("+r.status+"); retrying in "+backoff+"ms.");
-  await sleep(backoff);
+  try{
+   const r=await fetch(url,{signal:AbortSignal.timeout(60000)});
+   if(r.ok) return r.json();
+   const detail=await r.text();
+   if(r.status!==429&&r.status<500) throw new Error("Pixabay API failed ("+r.status+"): "+detail.slice(0,300));
+   lastError=new Error("Pixabay API HTTP "+r.status+": "+detail.slice(0,200));
+   const retryAfter=Number(r.headers.get("retry-after"))*1000;
+   const backoff=Number.isFinite(retryAfter)&&retryAfter>0?retryAfter:Math.min(60000,3000*Math.pow(2,attempt));
+   console.warn("Pixabay API rate limited or unavailable ("+r.status+"); retrying in "+backoff+"ms.");
+   await sleep(backoff);
+  }catch(error){
+   lastError=error;
+   if(attempt===6) break;
+   const backoff=Math.min(60000,3000*Math.pow(2,attempt));
+   console.warn("Pixabay API request failed: "+error.message+"; retrying in "+backoff+"ms.");
+   await sleep(backoff);
+  }
  }
- throw new Error("Pixabay API retry loop exhausted.");
+ throw new Error("Pixabay API request failed after extended retries: "+(lastError?.message||"unknown error"));
 }
 let lastImageDownload=0;
 async function download(url,file){
