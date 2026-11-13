@@ -114,7 +114,7 @@ function captionLines(sentence, max = 38) {
 }
 async function writeNarrationSubtitles(narration, duration, output) {
   const words = String(narration).replace(/\s+/g, " ").trim().split(" ").filter(Boolean);
-  const maxChars = 76;
+  const maxChars = 90;
   const maxLines = 3;
   const cues = [];
   let group = [];
@@ -320,7 +320,7 @@ async function main() {
     }
     filters.push("["+baseLabel+"]["+svgIndex+":v]overlay=0:0:shortest=1[withsvgbase]");
     const subtitlePath = subtitles.replace(/\\\\/g, "/").replace(/:/g, "\\\\:");
-    filters.push("[withsvgbase]subtitles=filename='" + subtitlePath + "':force_style='FontName=DejaVu Sans,FontSize=18,PrimaryColour=&H00FFFFFF,OutlineColour=&H99000000,BackColour=&H80000000,Bold=0,BorderStyle=3,Outline=0.5,Shadow=1,Alignment=2,MarginV=70,MarginL=144,MarginR=144',format=yuv420p[withsvg]");
+    filters.push("[withsvgbase]subtitles=filename='" + subtitlePath + "':force_style='FontName=DejaVu Sans,FontSize=22,PrimaryColour=&H00FFFFFF,OutlineColour=&H99000000,BackColour=&H80000000,Bold=0,BorderStyle=3,Outline=0,Shadow=0,Alignment=2,MarginV=80,MarginL=144,MarginR=144',format=yuv420p[withsvg]");
     let finalVideoLabel = "withsvg";
     if (scene.visual?.type === "comparison" && Array.isArray(scene.visual.items)) {
       scene.visual.items.slice(0,3).forEach((item,idx) => {
