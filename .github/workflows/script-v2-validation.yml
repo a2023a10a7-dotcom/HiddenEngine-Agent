@@ -5,6 +5,7 @@ on:
     paths:
       - "production/projects/**/script.v2.json"
       - "src/validate-script-v2.js"
+      - ".github/workflows/script-v2-validation.yml"
   workflow_dispatch:
     inputs:
       project_id:
@@ -22,10 +23,29 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Validate script
+      - name: Validate changed project scripts
         env:
           PROJECT_ID: ${{ inputs.project_id || '_template' }}
-        run: node src/validate-script-v2.js
+          BEFORE_SHA: ${{ github.event.before }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
+            project_ids="$PROJECT_ID"
+          else
+            project_ids="$(git diff --name-only "$BEFORE_SHA" "$GITHUB_SHA" -- 'production/projects/*/script.v2.json' | sed -n 's#^production/projects/\([a-z0-9_-]*\)/script.v2.json$#\1#p' | sort -u)"
+            if [[ -z "$project_ids" ]]; then
+              project_ids="_template"
+            fi
+          fi
+          while IFS= read -r id; do
+            [[ "$id" =~ ^[a-z0-9_-]+$ ]] || { echo "Invalid PROJECT_ID: $id"; exit 2; }
+            echo "::group::Validating $id"
+            PROJECT_ID="$id" node src/validate-script-v2.js
+            echo "::endgroup::"
+          done <<< "$project_ids"
