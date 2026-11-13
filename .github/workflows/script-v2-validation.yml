@@ -1,0 +1,31 @@
+name: Script v2 Validation
+
+on:
+  push:
+    paths:
+      - "production/projects/**/script.v2.json"
+      - "src/validate-script-v2.js"
+  workflow_dispatch:
+    inputs:
+      project_id:
+        description: "Production project folder name"
+        required: true
+        default: "_template"
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Validate script
+        env:
+          PROJECT_ID: ${{ inputs.project_id || '_template' }}
+        run: node src/validate-script-v2.js
