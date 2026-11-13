@@ -1,0 +1,28 @@
+{
+  "schema_version": 2,
+  "title": "TEMPLATE ONLY - FAKE DATA, DO NOT PUBLISH",
+  "language": "en",
+  "target_duration_minutes": 1,
+  "sources": [
+    { "id": "S1", "title": "Example annual report", "publisher": "Example Corp", "url": "https://example.com/report", "type": "primary", "accessed": "2026-11-13" }
+  ],
+  "claims": [
+    { "id": "C1", "type": "number", "text": "Example Corp shipped a fictional number of units.", "value": 1000, "unit": "units", "as_of": "2025", "source_ids": ["S1"] },
+    { "id": "C2", "type": "attributed", "text": "Example Corp says demand is rising.", "attributed_to": "Example Corp", "source_ids": ["S1"] },
+    { "id": "C3", "type": "analysis", "text": "Our reading: the shipments show a scale advantage." }
+  ],
+  "scenes": [
+    {
+      "id": "SC1",
+      "title": "Cold open",
+      "beats": [
+        { "id": "B1", "narration": "In 2025, Example Corp shipped 1,000 units.", "claim_ids": ["C1"],
+          "visual": { "type": "data_graphic", "data_claim_ids": ["C1"] }, "on_screen_text": "1,000 units, 2025" },
+        { "id": "B2", "kind": "transition", "narration": "So what does that tell us about the company?",
+          "visual": { "type": "kinetic_text" }, "on_screen_text": "What does it tell us?" },
+        { "id": "B3", "narration": "The company says demand is rising, which points to a scale advantage.", "claim_ids": ["C2", "C3"],
+          "visual": { "type": "diagram", "description": "Simple flow: demand rises, volume rises, unit cost falls." } }
+      ]
+    }
+  ]
+}
