@@ -103,7 +103,7 @@ b.narrationText,
 "## Production gate",
 "Do not generate voice until each factual statement has been checked against the original source, passage/page references are recorded, counter-evidence is addressed, and a human editor approves the script.",
 ""
-]).join("\n");
+].join("\n");
 await writeFile(path.join(dir,"SCRIPT-DRAFT.md"),md);
 console.log(JSON.stringify({projectId,status:script.status,scenes:scenes.length,narrationBlocks:total,issues,warnings,outputs:["SCRIPT-DRAFT.json","SCRIPT-DRAFT.md"]},null,2));
 if(issues.length) process.exitCode=1;
