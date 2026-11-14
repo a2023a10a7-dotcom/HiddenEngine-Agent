@@ -10,6 +10,7 @@ on:
         options:
           - new
           - research
+          - sources-import
           - ingest
           - claims-packet
           - claims-import
@@ -67,6 +68,7 @@ jobs:
               if [ -z "${TOPIC:-}" ]; then echo "topic is required for stage new"; exit 1; fi
               node src/documentary-engine.js --topic "$TOPIC" --language en --duration "${DURATION:-480}" ;;
             research)       node src/research-agent.js ;;
+            sources-import) node src/sources-import.js ;;
             ingest)         node src/source-ingest.js ;;
             claims-packet)  node src/claims-packet.js ;;
             claims-import)  node src/claims-import.js ;;
