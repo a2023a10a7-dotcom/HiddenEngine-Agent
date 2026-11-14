@@ -54,4 +54,7 @@ assert.equal(compiled.scenes[0].source_scene_id, "SC1");
 assert.equal(compiled.scenes[1].visual.type, "kinetic_text");
 assert.equal(compiled.scenes[2].visual.type, "timeline");
 assert.throws(() => compileScriptV2({ schema_version: 1, scenes: [] }), /schema_version: 2/);
+const nonNumericFixture = structuredClone(fixture);
+nonNumericFixture.claims[0].type = "fact";
+assert.throws(() => compileScriptV2(nonNumericFixture), /must link at least one numeric claim/);
 console.log("Beat Engine tests passed: beat mapping, evidence-linked data graphic, visual adapters, and schema guard.");
