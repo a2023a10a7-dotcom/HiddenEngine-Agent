@@ -3,8 +3,8 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 
-const valid = (value) => typeof value === "string" && value.trim().length > 0;
-const slug = (value) => String(value || "").replace(/[^a-zA-Z0-9_-]/g, "-");
+const valid = value => typeof value === "string" && value.trim().length > 0;
+const slug = value => String(value || "").replace(/[^a-zA-Z0-9_-]/g, "-");
 
 function visualForBeat(beat, claimsById) {
   const source = beat.visual || {};
@@ -39,11 +39,10 @@ export function compileScriptV2(doc) {
     if (!Array.isArray(scene.beats)) throw new Error("Scene " + (scene.id || sceneIndex + 1) + " has no beats array.");
     for (const [beatIndex, beat] of scene.beats.entries()) {
       if (!valid(beat.id) || !valid(beat.narration)) throw new Error("Beat " + (scene.id || sceneIndex + 1) + "/" + beatIndex + " is missing id or narration.");
-      const id = slug(beat.id);
       const visual = visualForBeat(beat, claims);
       const query = beat.visual_query || beat.visual?.query || [scene.title, beat.on_screen_text, beat.visual?.description].filter(Boolean).join(" ");
-      const compiled = {
-        id,
+      scenes.push({
+        id: slug(beat.id),
         source_scene_id: scene.id,
         source_beat_id: beat.id,
         title: scene.title || beat.id,
@@ -51,8 +50,7 @@ export function compileScriptV2(doc) {
         narration: beat.narration,
         visual,
         visual_query: query
-      };
-      scenes.push(compiled);
+      });
       manifest.push({
         render_scene: scenes.length,
         source_scene_id: scene.id,
@@ -60,7 +58,7 @@ export function compileScriptV2(doc) {
         kind: beat.kind || "claim",
         claim_ids: beat.claim_ids || [],
         visual_type: beat.visual?.type || "unknown",
-        narration_words: beat.narration.trim().split(/\\s+/).filter(Boolean).length
+        narration_words: beat.narration.trim().split(/\s+/).filter(Boolean).length
       });
     }
   }
@@ -84,13 +82,13 @@ async function main() {
   const doc = JSON.parse(await readFile(input, "utf8"));
   const compiled = compileScriptV2(doc);
   await mkdir(output, { recursive: true });
-  await writeFile(path.join(output, "render-script.json"), JSON.stringify(compiled, null, 2) + "\\n");
+  await writeFile(path.join(output, "render-script.json"), JSON.stringify(compiled, null, 2) + "\n");
   await writeFile(path.join(output, "BEAT-MANIFEST.json"), JSON.stringify({
     schema_version: 1,
     source: "script.v2.json",
     beat_count: compiled.scenes.length,
     beats: compiled.beat_manifest
-  }, null, 2) + "\\n");
+  }, null, 2) + "\n");
   console.log("Beat Engine compiled " + compiled.scenes.length + " beats into renderer-ready units.");
 }
 if (process.argv[1] && import.meta.url === new URL("file://" + path.resolve(process.argv[1])).href) {
