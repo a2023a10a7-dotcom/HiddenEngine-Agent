@@ -42,6 +42,18 @@ try {
   errors.push("Cannot read pipeline.yml: " + error.message);
 }
 
+try {
+  const pkg = JSON.parse(await readFile(path.join(root, "package.json"), "utf8"));
+  for (const [name, command] of Object.entries(pkg.scripts || {})) {
+    const match = String(command).match(/\bnode\s+(?:--watch\s+)?([^\s]+\.js)\b/);
+    if (!match) continue;
+    try { await access(path.join(root, match[1])); }
+    catch { errors.push("package.json script '" + name + "' references a missing file: " + match[1]); }
+  }
+} catch (error) {
+  errors.push("Cannot read or parse package.json: " + error.message);
+}
+
 if (errors.length) {
   console.error("Repository preflight FAILED (" + errors.length + " issue(s)):");
   for (const error of errors) console.error("- " + error);
