@@ -12,7 +12,8 @@ function visualForBeat(beat, claimsById) {
   const linked = (beat.claim_ids || []).map(id => claimsById.get(id)).filter(Boolean);
   if (type === "data_graphic") {
     const dataIds = source.data_claim_ids || [];
-    const claim = dataIds.map(id => claimsById.get(id)).find(Boolean) || linked.find(c => c.type === "number");
+    const claim = dataIds.map(id => claimsById.get(id)).find(c => c?.type === "number") || linked.find(c => c.type === "number");
+    if (!claim) throw new Error("data_graphic beat " + beat.id + " must link at least one numeric claim; refusing to render an unsupported figure.");
     return {
       type: "metric",
       source_label: "DOCUMENTED FIGURE" + (claim?.as_of ? " • " + claim.as_of : ""),
