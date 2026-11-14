@@ -4,88 +4,142 @@ on:
   workflow_dispatch:
     inputs:
       stage:
-        description: "Pipeline stage to run"
+        description: "Run one supported production stage"
         required: true
         type: choice
         options:
-          - new
           - research
-          - ingest
+          - prepare
           - claims-packet
           - claims-import
-          - evidence-audit
-          - script-plan
-          - write-script
-          - visual-plan
-          - compile
           - gate
+          - validate-v2
+          - render-preview
       project_id:
-        description: "Project folder name (not needed for stage: new)"
+        description: "Existing project folder ID (not needed for research or prepare)"
         required: false
         type: string
-      topic:
-        description: "Topic (only for stage: new)"
+      story_index:
+        description: "Research opportunity number (1-10; prepare stage only)"
         required: false
-        type: string
-      duration_seconds:
-        description: "Target duration in seconds (only for stage: new)"
-        required: false
-        default: "480"
+        default: "2"
         type: string
 
 permissions:
   contents: write
 
 concurrency:
-  group: hiddenengine-pipeline
+  group: hiddenengine-pipeline-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
   run:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Install dependencies
+
+      - name: Install project dependencies
         run: npm install --no-audit --no-fund
-      - name: Run stage
-        id: stage
-        continue-on-error: true
+
+      - name: Install FFmpeg for visual preview
+        if: inputs.stage == 'render-preview'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+
+      - name: Validate repository and stage inputs
         env:
           STAGE: ${{ inputs.stage }}
           PROJECT_ID: ${{ inputs.project_id }}
-          TOPIC: ${{ inputs.topic }}
-          DURATION: ${{ inputs.duration_seconds }}
+          STORY_INDEX: ${{ inputs.story_index }}
+        shell: bash
         run: |
           set -euo pipefail
-          if [ "$STAGE" != "new" ] && [ -z "${PROJECT_ID:-}" ]; then echo "project_id is required for stage $STAGE"; exit 1; fi
+          node scripts/validate-repository.js
           case "$STAGE" in
-            new)
-              if [ -z "${TOPIC:-}" ]; then echo "topic is required for stage new"; exit 1; fi
-              node src/documentary-engine.js --topic "$TOPIC" --language en --duration "${DURATION:-480}" ;;
-            research)       node src/research-agent.js ;;
-            ingest)         node src/source-ingest.js ;;
+            research)
+              ;;
+            prepare)
+              [[ "$STORY_INDEX" =~ ^([1-9]|10)$ ]] || { echo "story_index must be 1-10"; exit 2; }
+              test -f reports/research.json || { echo "Run research first; reports/research.json is missing."; exit 2; }
+              ;;
+            claims-packet|claims-import|gate|validate-v2|render-preview)
+              [[ "$PROJECT_ID" =~ ^[a-z0-9_-]+$ ]] || { echo "A valid project_id is required."; exit 2; }
+              ;;
+            *)
+              echo "Unsupported stage: $STAGE"
+              exit 2
+              ;;
+          esac
+          case "$STAGE" in
+            claims-packet|claims-import|gate)
+              test -d "production/projects/$PROJECT_ID" || { echo "Project folder not found."; exit 2; }
+              ;;
+            validate-v2)
+              test -f "production/projects/$PROJECT_ID/script.v2.json" || { echo "script.v2.json not found."; exit 2; }
+              ;;
+            render-preview)
+              test -f "production/projects/$PROJECT_ID/script.json" || { echo "script.json not found."; exit 2; }
+              ;;
+          esac
+
+      - name: Run selected stage
+        env:
+          STAGE: ${{ inputs.stage }}
+          PROJECT_ID: ${{ inputs.project_id }}
+          STORY_INDEX: ${{ inputs.story_index }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          case "$STAGE" in
+            research)       node src/research.js ;;
+            prepare)        STORY_INDEX="$STORY_INDEX" node src/production.js ;;
             claims-packet)  node src/claims-packet.js ;;
             claims-import)  node src/claims-import.js ;;
-            evidence-audit) node src/evidence-audit.js ;;
-            script-plan)    node src/script-architect.js ;;
-            write-script)   node src/script-writer.js ;;
-            visual-plan)    node src/visual-director.js ;;
-            compile)        node src/script-compile.js && node src/script-gate.js ;;
             gate)           node src/script-gate.js ;;
+            validate-v2)    node src/validate-script-v2.js ;;
+            render-preview) node src/render-video.js ;;
           esac
-      - name: Save outputs
+
+      - name: Save generated research and project data
+        if: success() && (inputs.stage == 'research' || inputs.stage == 'prepare' || inputs.stage == 'claims-import')
         run: |
+          set -euo pipefail
           git config user.name "HiddenEngine Agent"
           git config user.email "agent@users.noreply.github.com"
-          git add production/projects/
-          git diff --cached --quiet || git commit -m "Pipeline stage: ${{ inputs.stage }}"
-          git push
-      - name: Report stage result
-        if: steps.stage.outcome == 'failure'
-        run: |
-          echo "Stage ${{ inputs.stage }} reported problems. Partial outputs were saved. Open the 'Run stage' step log."
-          exit 1
+          git add reports/ production/projects/
+          if git diff --cached --quiet; then
+            echo "No repository data changed."
+          else
+            git commit -m "Pipeline stage: ${{ inputs.stage }}"
+            git push
+          fi
+
+      - name: Upload visual preview
+        if: always() && inputs.stage == 'render-preview'
+        uses: actions/upload-artifact@v4
+        with:
+          name: hiddenengine-visual-preview-${{ inputs.project_id }}
+          path: dist/${{ inputs.project_id }}/
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload fact-check sheet
+        if: always() && inputs.stage == 'gate'
+        uses: actions/upload-artifact@v4
+        with:
+          name: hiddenengine-fact-check-${{ inputs.project_id }}
+          path: dist/${{ inputs.project_id }}/FACT-CHECK-SHEET.md
+          if-no-files-found: warn
+          retention-days: 14
