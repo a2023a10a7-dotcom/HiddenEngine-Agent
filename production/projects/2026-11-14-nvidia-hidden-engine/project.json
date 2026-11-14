@@ -1,0 +1,181 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectId": "2026-11-14-nvidia-hidden-engine",
+  "createdAt": "2026-11-14T15:00:00.000Z",
+  "updatedAt": "2026-11-14T15:00:00.000Z",
+  "channel": "The Hidden Engine",
+  "topic": "NVIDIA: How It Became the Engine of the AI Infrastructure Boom",
+  "language": "en",
+  "targetDurationSeconds": 900,
+  "editorialPromise": "Reveal the documented economic and strategic mechanism behind NVIDIA's rise: the hardware, software, supply chain, customers, margins, and constraints behind the AI infrastructure boom.",
+  "status": "topic_received",
+  "thesis": {
+    "workingQuestion": "How did NVIDIA turn GPU acceleration and a developer software ecosystem into a central platform for the AI infrastructure buildout—and how durable is that position?",
+    "centralArgument": "",
+    "counterArgument": "",
+    "conclusion": ""
+  },
+  "story": {
+    "hook": "",
+    "audienceStakes": "",
+    "narrativeArc": [
+      "Cold open",
+      "The system",
+      "The hidden engine",
+      "The strategic bet",
+      "The turning point",
+      "Who wins and pays",
+      "What remains"
+    ]
+  },
+  "research": {
+    "status": "sources_pending_import",
+    "questions": [
+      "Which primary filings best explain NVIDIA's business model, segment economics, and customer concentration?",
+      "How much of recent growth comes from Data Center versus Gaming, Networking, and other platforms?",
+      "How do CUDA, libraries, systems, networking, and developer adoption reinforce the hardware business?",
+      "What does NVIDIA disclose about manufacturing partners, packaging, memory, supply constraints, and capital commitments?",
+      "Who are the direct customers, how concentrated are receivables, and how do their AI infrastructure economics work?",
+      "What are the strongest competitive alternatives from AMD, custom accelerators, and in-house silicon?",
+      "How do export controls and China exposure affect demand, product design, and forecasts?",
+      "Which parts of the AI infrastructure boom are durable workloads versus speculative capacity buildout?",
+      "What independent evidence challenges NVIDIA's own framing, and what remains unknown?"
+    ],
+    "claims": [],
+    "sources": [],
+    "contradictions": [],
+    "researchLog": []
+  },
+  "scenes": [
+    {
+      "id": "S01",
+      "act": "Cold open",
+      "purpose": "Open with a verified contradiction, consequence, or striking documented fact.",
+      "targetSeconds": 63,
+      "narration": "",
+      "claims": [],
+      "visuals": [],
+      "sound": {
+        "musicCue": "",
+        "soundEffects": []
+      },
+      "status": "blocked_pending_research"
+    },
+    {
+      "id": "S02",
+      "act": "The system",
+      "purpose": "Explain NVIDIA's business model, GPU platforms, customer groups, and ecosystem.",
+      "targetSeconds": 135,
+      "narration": "",
+      "claims": [],
+      "visuals": [],
+      "sound": {
+        "musicCue": "",
+        "soundEffects": []
+      },
+      "status": "blocked_pending_research"
+    },
+    {
+      "id": "S03",
+      "act": "The hidden engine",
+      "purpose": "Reveal revenue mechanics, margins, supply chain, software leverage, and infrastructure economics.",
+      "targetSeconds": 198,
+      "narration": "",
+      "claims": [],
+      "visuals": [],
+      "sound": {
+        "musicCue": "",
+        "soundEffects": []
+      },
+      "status": "blocked_pending_research"
+    },
+    {
+      "id": "S04",
+      "act": "The strategic bet",
+      "purpose": "Reconstruct documented bets on accelerated computing, CUDA, data centers, and platform transitions.",
+      "targetSeconds": 180,
+      "narration": "",
+      "claims": [],
+      "visuals": [],
+      "sound": {
+        "musicCue": "",
+        "soundEffects": []
+      },
+      "status": "blocked_pending_research"
+    },
+    {
+      "id": "S05",
+      "act": "The turning point",
+      "purpose": "Show what changed through dated primary evidence, from gaming GPUs to AI infrastructure.",
+      "targetSeconds": 162,
+      "narration": "",
+      "claims": [],
+      "visuals": [],
+      "sound": {
+        "musicCue": "",
+        "soundEffects": []
+      },
+      "status": "blocked_pending_research"
+    },
+    {
+      "id": "S06",
+      "act": "Who wins and pays",
+      "purpose": "Trace customer concentration, capex, energy, manufacturing dependencies, competition, and geopolitical exposure.",
+      "targetSeconds": 108,
+      "narration": "",
+      "claims": [],
+      "visuals": [],
+      "sound": {
+        "musicCue": "",
+        "soundEffects": []
+      },
+      "status": "blocked_pending_research"
+    },
+    {
+      "id": "S07",
+      "act": "What remains",
+      "purpose": "Close with a balanced view of durability, constraints, and unresolved questions.",
+      "targetSeconds": 54,
+      "narration": "",
+      "claims": [],
+      "visuals": [],
+      "sound": {
+        "musicCue": "",
+        "soundEffects": []
+      },
+      "status": "blocked_pending_research"
+    }
+  ],
+  "assetRegister": [],
+  "production": {
+    "voice": {
+      "provider": "Piper",
+      "voiceIdConfigured": false,
+      "status": "not_started"
+    },
+    "edit": {
+      "status": "not_started"
+    },
+    "music": {
+      "status": "not_started"
+    },
+    "captions": {
+      "status": "not_started"
+    }
+  },
+  "quality": {
+    "status": "not_run",
+    "blockingIssues": [],
+    "warnings": []
+  },
+  "approvals": {
+    "script": null,
+    "finalVideo": null,
+    "publication": null
+  },
+  "delivery": {
+    "video": null,
+    "sourceLog": null,
+    "qaReport": null
+  }
+}
