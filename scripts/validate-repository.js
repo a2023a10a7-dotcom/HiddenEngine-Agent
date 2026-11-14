@@ -32,7 +32,7 @@ for (const file of jsFiles) {
 const pipelinePath = path.join(root, ".github", "workflows", "pipeline.yml");
 try {
   const workflow = await readFile(pipelinePath, "utf8");
-  const refs = [...workflow.matchAll(/\\bnode\\s+((?:src|scripts)\\/[A-Za-z0-9_./-]+\\.js)\\b/g)].map(m => m[1]);
+  const refs = [...workflow.matchAll(/\bnode\s+((?:src|scripts)\/[A-Za-z0-9_./-]+\.js)\b/g)].map(m => m[1]);
   for (const ref of [...new Set(refs)]) {
     try { await access(path.join(root, ref)); }
     catch { errors.push("Pipeline references a missing script: " + ref); }
