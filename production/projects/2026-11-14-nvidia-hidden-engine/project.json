@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "projectId": "2026-11-14-nvidia-hidden-engine",
   "createdAt": "2026-11-14T15:00:00.000Z",
-  "updatedAt": "2026-11-14T23:51:49.326Z",
+  "updatedAt": "2026-11-14T23:56:15.346Z",
   "channel": "The Hidden Engine",
   "topic": "NVIDIA: How It Became the Engine of the AI Infrastructure Boom",
   "language": "en",
@@ -74,7 +74,11 @@
         "accessedAt": "2026-11-14T23:51:49.326Z",
         "type": "company_statement",
         "notes": "Company-reported earnings release; distinguish GAAP from non-GAAP and guidance from realized results.",
-        "addedBy": "sources-import"
+        "addedBy": "sources-import",
+        "canonicalUrl": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/",
+        "snapshotPath": "research/source-snapshots/SRC-003.json",
+        "ingestionStatus": "html_text_extracted",
+        "fetchedAt": "2026-11-14T23:56:14.424Z"
       },
       {
         "id": "SRC-004",
@@ -85,7 +89,11 @@
         "accessedAt": "2026-11-14T23:51:49.326Z",
         "type": "company_statement",
         "notes": "Annual FY2026 results and platform revenue context; reconcile against SEC Form 10-K.",
-        "addedBy": "sources-import"
+        "addedBy": "sources-import",
+        "canonicalUrl": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Fourth-Quarter-and-Fiscal-2026/",
+        "snapshotPath": "research/source-snapshots/SRC-004.json",
+        "ingestionStatus": "html_text_extracted",
+        "fetchedAt": "2026-11-14T23:56:14.676Z"
       },
       {
         "id": "SRC-005",
@@ -96,7 +104,11 @@
         "accessedAt": "2026-11-14T23:51:49.326Z",
         "type": "technical_paper",
         "notes": "Official technical documentation for CUDA's programming model and GPU execution model; not independent evidence of competitive advantage.",
-        "addedBy": "sources-import"
+        "addedBy": "sources-import",
+        "canonicalUrl": "https://docs.nvidia.com/cuda/cuda-programming-guide/",
+        "snapshotPath": "research/source-snapshots/SRC-005.json",
+        "ingestionStatus": "html_text_extracted",
+        "fetchedAt": "2026-11-14T23:56:14.927Z"
       },
       {
         "id": "SRC-006",
@@ -107,7 +119,11 @@
         "accessedAt": "2026-11-14T23:51:49.326Z",
         "type": "company_statement",
         "notes": "Company's own description of CUDA deployment and ecosystem; treat installed-base claims as attributed company statements.",
-        "addedBy": "sources-import"
+        "addedBy": "sources-import",
+        "canonicalUrl": "https://developer.nvidia.com/cuda/faq",
+        "snapshotPath": "research/source-snapshots/SRC-006.json",
+        "ingestionStatus": "html_text_extracted",
+        "fetchedAt": "2026-11-14T23:56:15.322Z"
       },
       {
         "id": "SRC-007",
@@ -129,8 +145,21 @@
         "received": 7,
         "accepted": 7,
         "rejected": 0
+      },
+      {
+        "at": "2026-11-14T23:56:15.346Z",
+        "action": "public_source_ingestion",
+        "attempted": 7,
+        "succeeded": 4,
+        "failed": 3
       }
-    ]
+    ],
+    "sourceIngestion": {
+      "at": "2026-11-14T23:56:15.346Z",
+      "attempted": 7,
+      "succeeded": 4,
+      "failed": 3
+    }
   },
   "scenes": [
     {

@@ -1,0 +1,46 @@
+{
+  "projectId": "2026-11-14-nvidia-hidden-engine",
+  "attempted": 7,
+  "results": [
+    {
+      "sourceId": "SRC-003",
+      "status": "html_text_extracted",
+      "canonicalUrl": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/"
+    },
+    {
+      "sourceId": "SRC-004",
+      "status": "html_text_extracted",
+      "canonicalUrl": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Fourth-Quarter-and-Fiscal-2026/"
+    },
+    {
+      "sourceId": "SRC-005",
+      "status": "html_text_extracted",
+      "canonicalUrl": "https://docs.nvidia.com/cuda/cuda-programming-guide/"
+    },
+    {
+      "sourceId": "SRC-006",
+      "status": "html_text_extracted",
+      "canonicalUrl": "https://developer.nvidia.com/cuda/faq"
+    }
+  ],
+  "errors": [
+    {
+      "sourceId": "SRC-001",
+      "error": "HTML body exceeds safety limit."
+    },
+    {
+      "sourceId": "SRC-002",
+      "error": "HTML body exceeds safety limit."
+    },
+    {
+      "sourceId": "SRC-007",
+      "error": "Response exceeds safety limit."
+    }
+  ],
+  "limitations": [
+    "No login, paywall bypass, or script execution.",
+    "PDFs are detected but not parsed.",
+    "Extracted text may omit tables, footnotes, charts, or dynamic content.",
+    "Extraction is not fact-checking; rights and quotation limits need separate review."
+  ]
+}
