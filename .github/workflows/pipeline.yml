@@ -111,8 +111,8 @@ jobs:
             claims-import)  node src/claims-import.js ;;
             gate)           node src/script-gate.js ;;
             validate-v2)    node src/validate-script-v2.js ;;
-            compile-beats)  node src/beat-engine.js ;;
-            render-preview) node src/render-video.js ;;
+            compile-beats)  node src/validate-script-v2.js && node src/beat-engine.js ;;
+            render-preview) node src/validate-script-v2.js && node src/render-video.js ;;
           esac
 
       - name: Save generated research and project data
