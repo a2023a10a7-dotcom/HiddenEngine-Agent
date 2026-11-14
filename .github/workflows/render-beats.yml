@@ -1,0 +1,90 @@
+name: HiddenEngine Beat Render
+
+on:
+  workflow_dispatch:
+    inputs:
+      project_id:
+        description: "Project folder name"
+        required: true
+        type: string
+      dry_run:
+        description: "Quick test with silent audio (not publishable)"
+        required: true
+        default: true
+        type: boolean
+      ambient_bed:
+        description: "Add a quiet original ambient music bed"
+        required: true
+        default: true
+        type: boolean
+      voice_model:
+        description: "Piper voice model"
+        required: true
+        default: "en_US-lessac-medium"
+        type: string
+      speaking_rate:
+        description: "Piper length scale: higher is slower"
+        required: true
+        default: "1.0"
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install rendering tools and fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-dejavu-core librsvg2-bin
+      - name: Install Piper TTS and voice
+        if: ${{ !inputs.dry_run }}
+        env:
+          PIPER_VOICE: ${{ inputs.voice_model }}
+        run: |
+          set -euo pipefail
+          python3 -m venv .venv-piper
+          .venv-piper/bin/pip install --upgrade pip
+          .venv-piper/bin/pip install piper-tts
+          lang="${PIPER_VOICE%%_*}"
+          locale_and_rest="${PIPER_VOICE#*_}"
+          locale="${locale_and_rest%%-*}"
+          speaker_and_quality="${locale_and_rest#*-}"
+          speaker="${speaker_and_quality%-*}"
+          quality="${speaker_and_quality##*-}"
+          mkdir -p models
+          base="https://huggingface.co/rhasspy/piper-voices/resolve/main/${lang}/${lang}_${locale}/${speaker}/${quality}/${PIPER_VOICE}"
+          curl -fL "$base.onnx" -o "models/${PIPER_VOICE}.onnx"
+          curl -fL "$base.onnx.json" -o "models/${PIPER_VOICE}.onnx.json"
+          echo "PIPER_MODEL=models/${PIPER_VOICE}.onnx" >> "$GITHUB_ENV"
+          echo "PIPER_EXECUTABLE=$GITHUB_WORKSPACE/.venv-piper/bin/piper" >> "$GITHUB_ENV"
+      - name: Script gate
+        env:
+          PROJECT_ID: ${{ inputs.project_id }}
+        run: node src/script-gate.js
+      - name: Render
+        env:
+          PROJECT_ID: ${{ inputs.project_id }}
+          PIPER_LENGTH_SCALE: ${{ inputs.speaking_rate }}
+          TTS_FAKE: ${{ inputs.dry_run && '1' || '0' }}
+          AMBIENT: ${{ inputs.ambient_bed && '1' || '0' }}
+        run: node src/render-beats.js
+      - name: Upload video and review files
+        uses: actions/upload-artifact@v4
+        with:
+          name: hiddenengine-${{ inputs.project_id }}${{ inputs.dry_run && '-DRYRUN' || '' }}
+          path: |
+            dist/${{ inputs.project_id }}/the-hidden-engine-documentary.mp4
+            dist/${{ inputs.project_id }}/CREDITS.md
+            dist/${{ inputs.project_id }}/QA-REPORT.json
+            dist/${{ inputs.project_id }}/contact-sheet.jpg
+            dist/${{ inputs.project_id }}/FACT-CHECK-SHEET.md
+          if-no-files-found: error
+          retention-days: 14
