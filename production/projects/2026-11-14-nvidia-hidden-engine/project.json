@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "projectId": "2026-11-14-nvidia-hidden-engine",
   "createdAt": "2026-11-14T15:00:00.000Z",
-  "updatedAt": "2026-11-14T15:00:00.000Z",
+  "updatedAt": "2026-11-14T23:51:49.326Z",
   "channel": "The Hidden Engine",
   "topic": "NVIDIA: How It Became the Engine of the AI Infrastructure Boom",
   "language": "en",
@@ -42,9 +42,95 @@
       "What independent evidence challenges NVIDIA's own framing, and what remains unknown?"
     ],
     "claims": [],
-    "sources": [],
+    "sources": [
+      {
+        "id": "SRC-001",
+        "publisher": "U.S. Securities and Exchange Commission",
+        "title": "NVIDIA Corporation Form 10-K for fiscal year ended January 25, 2026",
+        "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
+        "publishedAt": "2026-02-25",
+        "accessedAt": "2026-11-14T23:51:49.325Z",
+        "type": "primary_filing",
+        "notes": "Primary annual filing. Inspect business overview, risk factors, MD&A, segments, supply chain, customer concentration, and cash flows.",
+        "addedBy": "sources-import"
+      },
+      {
+        "id": "SRC-002",
+        "publisher": "U.S. Securities and Exchange Commission",
+        "title": "NVIDIA Corporation Form 10-Q for quarter ended July 26, 2026",
+        "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+        "publishedAt": "2026-08-26",
+        "accessedAt": "2026-11-14T23:51:49.326Z",
+        "type": "primary_filing",
+        "notes": "Primary quarterly filing. Inspect revenue by market platform, geographic customer headquarters, customer concentration, inventory, commitments, supply, and risk factors.",
+        "addedBy": "sources-import"
+      },
+      {
+        "id": "SRC-003",
+        "publisher": "NVIDIA Investor Relations",
+        "title": "NVIDIA Announces Financial Results for Second Quarter Fiscal 2027",
+        "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027",
+        "publishedAt": "2026-08-26",
+        "accessedAt": "2026-11-14T23:51:49.326Z",
+        "type": "company_statement",
+        "notes": "Company-reported earnings release; distinguish GAAP from non-GAAP and guidance from realized results.",
+        "addedBy": "sources-import"
+      },
+      {
+        "id": "SRC-004",
+        "publisher": "NVIDIA Investor Relations",
+        "title": "NVIDIA Announces Financial Results for Fourth Quarter and Fiscal 2026",
+        "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Fourth-Quarter-and-Fiscal-2026",
+        "publishedAt": "2026-02-25",
+        "accessedAt": "2026-11-14T23:51:49.326Z",
+        "type": "company_statement",
+        "notes": "Annual FY2026 results and platform revenue context; reconcile against SEC Form 10-K.",
+        "addedBy": "sources-import"
+      },
+      {
+        "id": "SRC-005",
+        "publisher": "NVIDIA Developer Documentation",
+        "title": "CUDA Programming Guide",
+        "url": "https://docs.nvidia.com/cuda/cuda-programming-guide",
+        "publishedAt": null,
+        "accessedAt": "2026-11-14T23:51:49.326Z",
+        "type": "technical_paper",
+        "notes": "Official technical documentation for CUDA's programming model and GPU execution model; not independent evidence of competitive advantage.",
+        "addedBy": "sources-import"
+      },
+      {
+        "id": "SRC-006",
+        "publisher": "NVIDIA Developer",
+        "title": "CUDA FAQ",
+        "url": "https://developer.nvidia.com/cuda/faq",
+        "publishedAt": null,
+        "accessedAt": "2026-11-14T23:51:49.326Z",
+        "type": "company_statement",
+        "notes": "Company's own description of CUDA deployment and ecosystem; treat installed-base claims as attributed company statements.",
+        "addedBy": "sources-import"
+      },
+      {
+        "id": "SRC-007",
+        "publisher": "U.S. Securities and Exchange Commission",
+        "title": "NVIDIA Corporation 2026 Annual Report to Security Holders (Form ARS)",
+        "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000038/a2026-annualxreportxwebxfi.pdf",
+        "publishedAt": "2026-05-12",
+        "accessedAt": "2026-11-14T23:51:49.326Z",
+        "type": "annual_report",
+        "notes": "PDF annual report. Importer will flag it for dedicated PDF extraction; current source-ingest stage does not extract PDF text.",
+        "addedBy": "sources-import"
+      }
+    ],
     "contradictions": [],
-    "researchLog": []
+    "researchLog": [
+      {
+        "at": "2026-11-14T23:51:49.326Z",
+        "action": "sources_import",
+        "received": 7,
+        "accepted": 7,
+        "rejected": 0
+      }
+    ]
   },
   "scenes": [
     {

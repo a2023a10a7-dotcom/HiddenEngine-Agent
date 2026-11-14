@@ -1,0 +1,19 @@
+{
+  "at": "2026-11-14T23:51:49.326Z",
+  "received": 7,
+  "accepted": [
+    "SRC-001",
+    "SRC-002",
+    "SRC-003",
+    "SRC-004",
+    "SRC-005",
+    "SRC-006",
+    "SRC-007"
+  ],
+  "rejected": [],
+  "notes": [
+    "SRC-005: no publishedAt; add it if known",
+    "SRC-006: no publishedAt; add it if known",
+    "SRC-007: PDF. The ingest stage cannot read PDFs; paste the needed text into research/manual-text/SRC-007.txt"
+  ]
+}
