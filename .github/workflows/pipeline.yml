@@ -14,6 +14,7 @@ on:
           - claims-import
           - gate
           - validate-v2
+          - compile-beats
           - render-preview
       project_id:
         description: "Existing project folder ID (not needed for research or prepare)"
@@ -65,6 +66,7 @@ jobs:
         run: |
           set -euo pipefail
           node scripts/validate-repository.js
+          node scripts/test-beat-engine.js
           case "$STAGE" in
             research)
               ;;
@@ -84,7 +86,7 @@ jobs:
             claims-packet|claims-import|gate)
               test -d "production/projects/$PROJECT_ID" || { echo "Project folder not found."; exit 2; }
               ;;
-            validate-v2)
+            validate-v2|compile-beats)
               test -f "production/projects/$PROJECT_ID/script.v2.json" || { echo "script.v2.json not found."; exit 2; }
               ;;
             render-preview)
@@ -109,6 +111,7 @@ jobs:
             claims-import)  node src/claims-import.js ;;
             gate)           node src/script-gate.js ;;
             validate-v2)    node src/validate-script-v2.js ;;
+            compile-beats)  node src/beat-engine.js ;;
             render-preview) node src/render-video.js ;;
           esac
 
@@ -132,6 +135,18 @@ jobs:
         with:
           name: hiddenengine-visual-preview-${{ inputs.project_id }}
           path: dist/${{ inputs.project_id }}/
+          if-no-files-found: error
+          retention-days: 14
+
+
+      - name: Upload Beat Engine outputs
+        if: always() && inputs.stage == 'compile-beats'
+        uses: actions/upload-artifact@v4
+        with:
+          name: hiddenengine-beat-engine-${{ inputs.project_id }}
+          path: |
+            dist/${{ inputs.project_id }}/render-script.json
+            dist/${{ inputs.project_id }}/BEAT-MANIFEST.json
           if-no-files-found: error
           retention-days: 14
 
