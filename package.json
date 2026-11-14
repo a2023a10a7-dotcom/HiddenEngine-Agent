@@ -6,8 +6,8 @@
   "description": "YouTube research and production agent for The Hidden Engine",
   "type": "module",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "node --watch src/server.js"
+    "start": "node src/src/server.js",
+    "dev": "node --watch src/src/server.js"
   },
   "dependencies": {
     "dotenv": "^16.4.7",
