@@ -1,0 +1,58 @@
+[
+  {
+    "publisher": "U.S. Securities and Exchange Commission",
+    "title": "NVIDIA Corporation Form 10-K for fiscal year ended January 25, 2026",
+    "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
+    "publishedAt": "2026-02-25",
+    "type": "primary_filing",
+    "notes": "Primary annual filing. Inspect business overview, risk factors, MD&A, segments, supply chain, customer concentration, and cash flows."
+  },
+  {
+    "publisher": "U.S. Securities and Exchange Commission",
+    "title": "NVIDIA Corporation Form 10-Q for quarter ended July 26, 2026",
+    "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+    "publishedAt": "2026-08-26",
+    "type": "primary_filing",
+    "notes": "Primary quarterly filing. Inspect revenue by market platform, geographic customer headquarters, customer concentration, inventory, commitments, supply, and risk factors."
+  },
+  {
+    "publisher": "NVIDIA Investor Relations",
+    "title": "NVIDIA Announces Financial Results for Second Quarter Fiscal 2027",
+    "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/",
+    "publishedAt": "2026-08-26",
+    "type": "company_statement",
+    "notes": "Company-reported earnings release; distinguish GAAP from non-GAAP and guidance from realized results."
+  },
+  {
+    "publisher": "NVIDIA Investor Relations",
+    "title": "NVIDIA Announces Financial Results for Fourth Quarter and Fiscal 2026",
+    "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Fourth-Quarter-and-Fiscal-2026/",
+    "publishedAt": "2026-02-25",
+    "type": "company_statement",
+    "notes": "Annual FY2026 results and platform revenue context; reconcile against SEC Form 10-K."
+  },
+  {
+    "publisher": "NVIDIA Developer Documentation",
+    "title": "CUDA Programming Guide",
+    "url": "https://docs.nvidia.com/cuda/cuda-programming-guide/",
+    "publishedAt": null,
+    "type": "technical_paper",
+    "notes": "Official technical documentation for CUDA's programming model and GPU execution model; not independent evidence of competitive advantage."
+  },
+  {
+    "publisher": "NVIDIA Developer",
+    "title": "CUDA FAQ",
+    "url": "https://developer.nvidia.com/cuda/faq",
+    "publishedAt": null,
+    "type": "company_statement",
+    "notes": "Company's own description of CUDA deployment and ecosystem; treat installed-base claims as attributed company statements."
+  },
+  {
+    "publisher": "U.S. Securities and Exchange Commission",
+    "title": "NVIDIA Corporation 2026 Annual Report to Security Holders (Form ARS)",
+    "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000038/a2026-annualxreportxwebxfi.pdf",
+    "publishedAt": "2026-05-12",
+    "type": "annual_report",
+    "notes": "PDF annual report. Importer will flag it for dedicated PDF extraction; current source-ingest stage does not extract PDF text."
+  }
+]
