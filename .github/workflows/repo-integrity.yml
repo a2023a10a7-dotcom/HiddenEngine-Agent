@@ -6,6 +6,7 @@ on:
       - feature/documentary-renderer-v2
     paths:
       - "src/**/*.js"
+      - "package.json"
       - "scripts/**/*.js"
       - ".github/workflows/pipeline.yml"
       - ".github/workflows/repo-integrity.yml"
