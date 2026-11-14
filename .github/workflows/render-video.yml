@@ -6,8 +6,11 @@ on:
       - feature/documentary-renderer-v2
     paths:
       - "src/render-video.js"
+      - "src/beat-engine.js"
+      - "src/validate-script-v2.js"
       - ".github/workflows/render-video.yml"
       - "production/projects/**/script.json"
+      - "production/projects/**/script.v2.json"
   workflow_dispatch:
     inputs:
       project_id:
@@ -36,6 +39,16 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y ffmpeg fonts-dejavu-core
+
+      - name: Validate project script
+        env:
+          PROJECT_ID: ${{ inputs.project_id || '2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re' }}
+        run: |
+          if [ -f "production/projects/$PROJECT_ID/script.v2.json" ]; then
+            node src/validate-script-v2.js
+          else
+            node src/script-gate.js
+          fi
 
       - name: Render silent visual preview
         env:
