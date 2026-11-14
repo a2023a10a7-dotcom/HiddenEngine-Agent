@@ -99,6 +99,8 @@ for (const sc of doc.scenes || []) {
       const d = v.data_claim_ids;
       if (!Array.isArray(d) || !d.length) err(w, v.type + " needs visual.data_claim_ids.");
       for (const id of d || []) if (!claims.has(id) || !["number", "fact"].includes(claims.get(id).type)) err(w, "data_claim_ids must reference number or fact claims: " + id);
+      if (v.type === "data_graphic" && !(d || []).some(id => claims.get(id)?.type === "number"))
+        err(w, "data_graphic needs at least one linked claim of type number so the rendered figure is evidence-backed.");
     }
     if (v.type === "diagram" && !str(v.description)) err(w, "diagram needs visual.description.");
     if (v.type === "kinetic_text" && !str(b.on_screen_text)) err(w, "kinetic_text needs on_screen_text.");
