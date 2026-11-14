@@ -74,7 +74,7 @@ jobs:
               [[ "$STORY_INDEX" =~ ^([1-9]|10)$ ]] || { echo "story_index must be 1-10"; exit 2; }
               test -f reports/research.json || { echo "Run research first; reports/research.json is missing."; exit 2; }
               ;;
-            claims-packet|claims-import|gate|validate-v2|render-preview)
+            claims-packet|claims-import|gate|validate-v2|compile-beats|render-preview)
               [[ "$PROJECT_ID" =~ ^[a-z0-9_-]+$ ]] || { echo "A valid project_id is required."; exit 2; }
               ;;
             *)
@@ -90,7 +90,7 @@ jobs:
               test -f "production/projects/$PROJECT_ID/script.v2.json" || { echo "script.v2.json not found."; exit 2; }
               ;;
             render-preview)
-              test -f "production/projects/$PROJECT_ID/script.json" || { echo "script.json not found."; exit 2; }
+              test -f "production/projects/$PROJECT_ID/script.v2.json" || test -f "production/projects/$PROJECT_ID/script.json" || { echo "Neither script.v2.json nor script.json was found."; exit 2; }
               ;;
           esac
 
@@ -112,7 +112,14 @@ jobs:
             gate)           node src/script-gate.js ;;
             validate-v2)    node src/validate-script-v2.js ;;
             compile-beats)  node src/validate-script-v2.js && node src/beat-engine.js ;;
-            render-preview) node src/validate-script-v2.js && node src/render-video.js ;;
+            render-preview)
+              if [[ -f "production/projects/$PROJECT_ID/script.v2.json" ]]; then
+                node src/validate-script-v2.js
+              else
+                node src/script-gate.js
+              fi
+              node src/render-video.js
+              ;;
           esac
 
       - name: Save generated research and project data
