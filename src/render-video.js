@@ -338,8 +338,10 @@ async function main() {
       }
     };
     asset = await tryProvider("Pixabay video", () => findPixabayVideo(query));
+    if (!asset) asset = await tryProvider("Pexels video", () => findPexelsVideo(query));
     if (!asset) asset = await tryProvider("NASA video", () => findNasaMedia(query, "video"));
     if (!asset) still = await tryProvider("Pixabay photo", () => findPixabayImage(query));
+    if (!asset && !still) still = await tryProvider("Pexels photo", () => findPexelsImage(query));
     if (!asset && !still) still = await tryProvider("Wikimedia Commons", () => findCommonsImage(query));
     if (!asset && !still) still = await tryProvider("Openverse", () => findOpenverseImage(query));
     if (!asset && !still) still = await tryProvider("NASA photo", () => findNasaMedia(query, "image"));
