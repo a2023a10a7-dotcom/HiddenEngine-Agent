@@ -1,4 +1,4 @@
-name: HiddenEngine Cinematic Documentary Render
+name: HiddenEngine Visual Preview Render (silent)
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
     inputs:
       project_id:
-        description: "Production project folder ID"
+        description: "Project folder ID; this render is silent visual inspection only"
         required: true
         type: string
 
@@ -37,7 +37,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ffmpeg fonts-dejavu-core
 
-      - name: Render cinematic documentary
+      - name: Render silent visual preview
         env:
           PROJECT_ID: ${{ inputs.project_id || '2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re' }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
@@ -47,7 +47,7 @@ jobs:
       - name: Upload MP4 and production assets
         uses: actions/upload-artifact@v4
         with:
-          name: hiddenengine-cinematic-${{ inputs.project_id || 'visual-inspection' }}
+          name: hiddenengine-visual-preview-${{ inputs.project_id || 'visual-inspection' }}
           path: dist/${{ inputs.project_id || '2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re' }}/
           if-no-files-found: error
           retention-days: 14
