@@ -1,6 +1,7 @@
 import { mkdir, readFile, writeFile, rm } from "node:fs/promises";
 import { spawn } from "node:child_process";
 import path from "node:path";
+import { compileScriptV2 } from "./beat-engine.js";
 
 const PROJECT_ID = process.env.PROJECT_ID;
 if (!PROJECT_ID || !/^[a-z0-9-]+$/.test(PROJECT_ID)) throw new Error("PROJECT_ID is missing or invalid.");
@@ -80,6 +81,15 @@ function visualMarkup(scene) {
       }).join("");
       return '<g transform="translate(1050 300)"><rect width="720" height="570" rx="8" fill="#111315" stroke="#A8794D" stroke-width="2"/><text x="34" y="48" class="visual-label">'+label+'</text><path d="M30 120 Q180 80 300 180 T690 250 M60 450 Q240 350 380 430 T680 500" fill="none" stroke="#34383A" stroke-width="5"/><polyline points="'+coords+'" fill="none" stroke="#C08A58" stroke-width="5" stroke-dasharray="12 10"/>'+pins+'</g>';
     }
+  }
+  if (v.type === "diagram" && v.description) {
+    const desc = lines(v.description, 42).slice(0, 7).map((line,i) =>
+      '<text x="34" y="'+(112+i*42)+'" class="visual-detail">'+xml(line)+'</text>'
+    ).join("");
+    return '<g transform="translate(1120 330)"><rect width="650" height="390" rx="8" fill="#111315" stroke="#A8794D" stroke-width="2"/><text x="34" y="58" class="visual-label">'+label+'</text>'+desc+'</g>';
+  }
+  if (v.type === "kinetic_text" && v.text) {
+    return '<g transform="translate(1120 390)"><rect width="650" height="250" rx="8" fill="#111315" fill-opacity=".94" stroke="#A8794D" stroke-width="2"/><text x="34" y="58" class="visual-label">KEY IDEA</text>'+lines(v.text,30).slice(0,4).map((line,i)=>'<text x="34" y="'+(118+i*48)+'" class="visual-detail">'+xml(line)+'</text>').join("")+'</g>';
   }
   return "";
 }
@@ -313,10 +323,25 @@ async function download(url, dest) {
   await writeFile(dest, Buffer.from(await response.arrayBuffer()));
 }
 async function main() {
-  const script = JSON.parse(await readFile(path.join(ROOT, "script.json"), "utf8"));
-  if (!Array.isArray(script.scenes) || !script.scenes.length) throw new Error("script.json has no scenes.");
+  let script;
+  let beatManifest = null;
+  try {
+    const scriptV2 = JSON.parse(await readFile(path.join(ROOT, "script.v2.json"), "utf8"));
+    script = compileScriptV2(scriptV2);
+    beatManifest = { schema_version: 1, source: "script.v2.json", beat_count: script.beat_manifest.length, beats: script.beat_manifest };
+    console.log("Beat Engine active: " + beatManifest.beat_count + " independently rendered beats.");
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+    script = JSON.parse(await readFile(path.join(ROOT, "script.json"), "utf8"));
+    console.log("No Script V2 found; using legacy scene script.");
+  }
+  if (!Array.isArray(script.scenes) || !script.scenes.length) throw new Error("Script has no scenes or beats.");
   await rm(OUT, { recursive: true, force: true });
   await mkdir(OUT, { recursive: true });
+  if (beatManifest) {
+    await writeFile(path.join(OUT, "BEAT-MANIFEST.json"), JSON.stringify(beatManifest, null, 2) + "\n");
+    await writeFile(path.join(OUT, "render-script.json"), JSON.stringify(script, null, 2) + "\n");
+  }
   const clips = [], credits = [];
   for (let i=0; i<script.scenes.length; i++) {
     const scene = script.scenes[i];
