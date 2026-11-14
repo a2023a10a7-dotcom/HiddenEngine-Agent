@@ -30,3 +30,5 @@ jobs:
           node-version: 20
       - name: Check JavaScript syntax and pipeline references
         run: node scripts/validate-repository.js
+      - name: Test Beat Engine compilation
+        run: node scripts/test-beat-engine.js
