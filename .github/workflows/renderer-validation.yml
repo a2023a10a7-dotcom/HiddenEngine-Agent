@@ -4,7 +4,10 @@ on:
   pull_request:
     paths:
       - "src/render-video.js"
+      - "src/beat-engine.js"
+      - "src/validate-script-v2.js"
       - "production/projects/**/script.json"
+      - "production/projects/**/script.v2.json"
       - ".github/workflows/renderer-validation.yml"
   push:
     branches:
@@ -26,7 +29,26 @@ jobs:
         with:
           node-version: 20
       - name: Check JavaScript syntax
-        run: node --check src/render-video.js
+        run: |
+          node --check src/render-video.js
+          node --check src/beat-engine.js
+          node --check src/validate-script-v2.js
+      - name: Test Beat Engine
+        run: node scripts/test-beat-engine.js
+      - name: Validate Script V2 projects
+        shell: bash
+        run: |
+          set -euo pipefail
+          found=0
+          for file in production/projects/*/script.v2.json; do
+            [[ -f "$file" ]] || continue
+            found=1
+            project_id="$(basename "$(dirname "$file")")"
+            PROJECT_ID="$project_id" node src/validate-script-v2.js
+          done
+          if [[ "$found" -eq 0 ]]; then
+            echo "No Script V2 project files found; Beat Engine unit tests still ran."
+          fi
       - name: Validate production scripts
         run: |
           node --input-type=module <<'NODE'
