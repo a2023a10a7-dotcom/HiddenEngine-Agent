@@ -18,8 +18,8 @@ await mkdir(outDir, { recursive: true });
 // SEC's FY2026 shareholder annual-report PDF is about 24.5 MB; retain a hard bounded cap above it.
 const MAX_RESPONSE_BYTES = 32 * 1024 * 1024;
 const MAX_HTML_BYTES = 12 * 1024 * 1024;
-const MAX_TEXT_CHARS = 200000;
-const MAX_PDF_PAGES = 120;
+const MAX_TEXT_CHARS = 750000;
+const MAX_PDF_PAGES = 200;
 const TIMEOUT_MS = 30000;
 
 const strip = value => String(value || "")
@@ -108,7 +108,7 @@ const extractPdfText = async bytes => {
     document = await loadingTask.promise;
     const pageLimit = Math.min(document.numPages, MAX_PDF_PAGES);
     const pages = [];
-    let pagesExtracted = 0, charLimitReached = false;
+    let pagesExtracted = 0, charLimitReached = false, extractedChars = 0;
     for (let pageNumber = 1; pageNumber <= pageLimit; pageNumber++) {
       const page = await document.getPage(pageNumber);
       const content = await page.getTextContent();
