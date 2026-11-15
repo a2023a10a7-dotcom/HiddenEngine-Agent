@@ -1,52 +1,13 @@
 {
-  "at": "2026-11-15T16:51:50.164Z",
-  "received": 14,
+  "at": "2026-11-15T17:01:24.463Z",
+  "received": 6,
   "accepted": [
-    "CLM-001",
-    "CLM-002",
-    "CLM-003",
-    "CLM-004",
-    "CLM-005",
-    "CLM-006",
-    "CLM-007",
-    "CLM-008"
+    "CLM-009",
+    "CLM-010",
+    "CLM-011",
+    "CLM-012",
+    "CLM-013",
+    "CLM-014"
   ],
-  "rejected": [
-    {
-      "index": 2,
-      "sourceId": "SRC-001",
-      "text": "For fiscal 2026, Compute & Networking revenue was $193,479 million and Graphics revenue was $22,459 million.",
-      "reason": "claim text has figures not in the quote: 2026, million, million"
-    },
-    {
-      "index": 3,
-      "sourceId": "SRC-001",
-      "text": "For fiscal 2026, Compute & Networking segment operating income was $130,141 million and Graphics segment operating income was $9,156 million.",
-      "reason": "claim text has figures not in the quote: 2026, million, million"
-    },
-    {
-      "index": 7,
-      "sourceId": "SRC-001",
-      "text": "NVIDIA reported fiscal-2026 revenue by direct-customer headquarters location of $149,617 million in the United States, $42,345 million in Taiwan, and $19,677 million in China including Hong Kong.",
-      "reason": "claim text has figures not in the quote: 2026, million, million, million"
-    },
-    {
-      "index": 10,
-      "sourceId": "SRC-003",
-      "text": "NVIDIA reported Q2 fiscal-2027 revenue of $96,221 million, up 106% year over year, and gross margin of 75.0%.",
-      "reason": "claim text has figures not in the quote: 2, 2027, million"
-    },
-    {
-      "index": 11,
-      "sourceId": "SRC-003",
-      "text": "NVIDIA forecast Q3 fiscal-2027 revenue of $108.0 billion, plus or minus 2%, and said its outlook assumed no Data Center compute revenue from China.",
-      "reason": "claim text has figures not in the quote: 3, 2027"
-    },
-    {
-      "index": 12,
-      "sourceId": "SRC-004",
-      "text": "NVIDIA announced Q4 fiscal-2026 Data Center revenue of $62.3 billion, up 75% year over year.",
-      "reason": "claim text has figures not in the quote: 4, 2026"
-    }
-  ]
+  "rejected": []
 }

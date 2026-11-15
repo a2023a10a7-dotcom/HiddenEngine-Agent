@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "projectId": "2026-11-14-nvidia-hidden-engine",
   "createdAt": "2026-11-14T15:00:00.000Z",
-  "updatedAt": "2026-11-15T16:51:50.164Z",
+  "updatedAt": "2026-11-15T17:01:24.463Z",
   "channel": "The Hidden Engine",
   "topic": "NVIDIA: How It Became the Engine of the AI Infrastructure Boom",
   "language": "en",
@@ -144,6 +144,79 @@
         "passageMatchedSourceId": "SRC-005",
         "attribution": "NVIDIA CUDA Programming Guide",
         "importedAt": "2026-11-15T16:51:50.164Z"
+      },
+      {
+        "id": "CLM-009",
+        "text": "For fiscal 2026, Compute & Networking revenue was $193,479 and Graphics revenue was $22,459.",
+        "classification": "verified",
+        "sourceIds": [
+          "SRC-001"
+        ],
+        "passageQuote": "Year Ended Jan 25, 2026 Jan 26, 2025 $ Change % Change ($ in millions) Compute & Networking $ 193,479 $ 116,193 $ 77,286 67 % Graphics 22,459 14,304 8,155 57 % Total $ 215,938 $ 130,497 $ 85,441 65 %",
+        "passageReference": "verbatim passage matched in SRC-001: “Year Ended Jan 25, 2026 Jan 26, 2025 $ Change % Change ($ in millions) Compute & Networking $ 193,479 $ 116,193 $ 77,286…”",
+        "passageMatchedSourceId": "SRC-001",
+        "importedAt": "2026-11-15T17:01:24.459Z"
+      },
+      {
+        "id": "CLM-010",
+        "text": "For fiscal 2026, Compute & Networking segment operating income was $130,141 and Graphics segment operating income was $9,156.",
+        "classification": "verified",
+        "sourceIds": [
+          "SRC-001"
+        ],
+        "passageQuote": "Operating Income by Reportable Segments Year Ended Jan 25, 2026 Jan 26, 2025 $ Change % Change ($ in millions) Compute & Networking $ 130,141 $ 82,875 $ 47,266 57 % Graphics 9,156 5,085 4,071 80 % Total $ 139,297 $ 87,960 $ 51,337 58 %",
+        "passageReference": "verbatim passage matched in SRC-001: “Operating Income by Reportable Segments Year Ended Jan 25, 2026 Jan 26, 2025 $ Change % Change ($ in millions) Compute &…”",
+        "passageMatchedSourceId": "SRC-001",
+        "importedAt": "2026-11-15T17:01:24.460Z"
+      },
+      {
+        "id": "CLM-011",
+        "text": "For fiscal 2026, NVIDIA reported revenue by direct-customer headquarters location of $149,617 in the United States, $42,345 in Taiwan, and $19,677 in China including Hong Kong.",
+        "classification": "verified",
+        "sourceIds": [
+          "SRC-001"
+        ],
+        "passageQuote": "Year Ended Jan 25, 2026 Jan 26, 2025 Jan 28, 2024 Geographic Revenue based upon Customer Headquarters Location (1): (In millions) United States $ 149,617 $ 77,482 $ 31,533 Taiwan (2) 42,345 23,600 14,912 China (including Hong Kong) 19,677 25,048 12,330 Other 4,299 4,367 2,147 Total revenue $ 215,938",
+        "passageReference": "verbatim passage matched in SRC-001: “Year Ended Jan 25, 2026 Jan 26, 2025 Jan 28, 2024 Geographic Revenue based upon Customer Headquarters Location (1): (In …”",
+        "passageMatchedSourceId": "SRC-001",
+        "importedAt": "2026-11-15T17:01:24.460Z"
+      },
+      {
+        "id": "CLM-012",
+        "text": "In Q2 FY27, NVIDIA revenue was $96,221, up 106% year over year, and gross margin was 75.0%.",
+        "classification": "verified",
+        "sourceIds": [
+          "SRC-003"
+        ],
+        "passageQuote": "Q2 FY27 Q1 FY27 Q2 FY26 Q/Q Y/Y Revenue $96,221 $81,615 $46,743 18 % 106 % Gross margin 75.0 % 74.9 % 72.4 % 0.1 pts 2.6 pts",
+        "passageReference": "verbatim passage matched in SRC-003: “Q2 FY27 Q1 FY27 Q2 FY26 Q/Q Y/Y Revenue $96,221 $81,615 $46,743 18 % 106 % Gross margin 75.0 % 74.9 % 72.4 % 0.1 pts 2.6…”",
+        "passageMatchedSourceId": "SRC-003",
+        "importedAt": "2026-11-15T17:01:24.462Z"
+      },
+      {
+        "id": "CLM-013",
+        "text": "For the third quarter of fiscal 2027, NVIDIA forecast revenue of $108.0 billion, plus or minus 2%, and assumed no Data Center compute revenue from China.",
+        "classification": "estimated",
+        "sourceIds": [
+          "SRC-003"
+        ],
+        "passageQuote": "NVIDIA’s outlook for the third quarter of fiscal 2027 is as follows: Revenue is expected to be $108.0 billion, plus or minus 2%. NVIDIA is not assuming any Data Center compute revenue from China in its outlook.",
+        "passageReference": "verbatim passage matched in SRC-003: “NVIDIA’s outlook for the third quarter of fiscal 2027 is as follows: Revenue is expected to be $108.0 billion, plus or m…”",
+        "passageMatchedSourceId": "SRC-003",
+        "caveat": "This is company guidance, not a realized result.",
+        "importedAt": "2026-11-15T17:01:24.462Z"
+      },
+      {
+        "id": "CLM-014",
+        "text": "NVIDIA reported quarterly Data Center revenue of $62.3 billion, up 75% year over year, for the fourth quarter ended January 25, 2026.",
+        "classification": "verified",
+        "sourceIds": [
+          "SRC-004"
+        ],
+        "passageQuote": "Record quarterly Data Center revenue of $62.3 billion, up 22% from Q3 and up 75% from a year ago Record full-year revenue of $215.9 billion, up 65% SANTA CLARA, Calif., Feb. 25, 2026 (GLOBE NEWSWIRE) -- NVIDIA (NASDAQ: NVDA) today reported record revenue for the fourth quarter ended January 25, 2026, of $68.1 billion",
+        "passageReference": "verbatim passage matched in SRC-004: “Record quarterly Data Center revenue of $62.3 billion, up 22% from Q3 and up 75% from a year ago Record full-year revenu…”",
+        "passageMatchedSourceId": "SRC-004",
+        "importedAt": "2026-11-15T17:01:24.463Z"
       }
     ],
     "sources": [
@@ -296,6 +369,13 @@
         "received": 14,
         "accepted": 8,
         "rejected": 6
+      },
+      {
+        "at": "2026-11-15T17:01:24.463Z",
+        "action": "claims_import",
+        "received": 6,
+        "accepted": 6,
+        "rejected": 0
       }
     ],
     "sourceIngestion": {
