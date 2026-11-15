@@ -35,7 +35,7 @@ const STYLE = `<style>
 const layerSvg = inner => OPEN + inner + STYLE + "</svg>";
 function baseSvg(act, idx, total) {
   return OPEN + `<defs><radialGradient id="g" cx="50%" cy="42%" r="80%"><stop offset="0" stop-color="#241a10"/><stop offset="1" stop-color="#0a0806"/></radialGradient></defs>
-<rect x="-96" y="-54" width="2112" height="1188" fill="url(#g)"/>
+<rect x="-96" y="-54" width="2112" height="1188" fill="#090806" fill-opacity="0.48"/>
 <rect x="120" y="92" width="64" height="4" fill="${C.gold}"/>
 <text x="120" y="140" class="eyebrow">${xml(act)}</text>
 <text x="1800" y="140" text-anchor="end" class="brand">THE HIDDEN ENGINE  ${pad(idx)} / ${pad(total)}</text>` + STYLE + "</svg>";
