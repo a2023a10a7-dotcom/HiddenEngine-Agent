@@ -127,6 +127,12 @@ jobs:
           echo "PIPER_MODEL=models/${PIPER_VOICE}.onnx" >> "$GITHUB_ENV"
           echo "PIPER_EXECUTABLE=$GITHUB_WORKSPACE/.venv-piper/bin/piper" >> "$GITHUB_ENV"
 
+      - name: Acquire scene-matched visual assets
+        env:
+          PROJECT_ID: ${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+        run: node src/prepare-project-assets.js
+
       - name: 7. Recheck script gate immediately before rendering
         env:
           PROJECT_ID: ${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}
