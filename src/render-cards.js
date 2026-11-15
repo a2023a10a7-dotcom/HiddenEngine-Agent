@@ -44,9 +44,15 @@ function baseSvg(act, idx, total) {
 const card = (parts, act, idx, total, step = 0.35) => ({ base: baseSvg(act, idx, total), layers: parts.map((p, i) => ({ svg: layerSvg(p), delay: 0.2 + i * step })) });
 
 export const figureOf = text => {
-  const m = [...String(text).matchAll(/(?:US\$|\$|\u20AC|\u00A3)?\d[\d,]*(?:\.\d+)?\s?(?:%|percent|trillion|billion|million|thousand)?/gi)].map(x => x[0].trim());
-  const notYear = m.filter(x => !/^(19|20)\d\d$/.test(x));
-  return (notYear[0] || m[0] || "").replace(/\s?percent$/i, "%");
+  // Prefer actual measures (currency, percentage, or scaled units) and ignore
+  // fiscal years, quarter numbers, and form identifiers such as "10-K".
+  const raw = String(text);
+  const matches = [
+    ...raw.matchAll(/(?:US\$|[$€£])\s?\d[\d,]*(?:\.\d+)?\s?(?:trillion|billion|million|thousand)?/gi),
+    ...raw.matchAll(/(?<![A-Za-z0-9])\d+(?:\.\d+)?\s?(?:%|percent|trillion|billion|million|thousand)\b/gi)
+  ].map(m => ({ value: m[0].trim(), index: m.index ?? 0 }));
+  matches.sort((a, b) => a.index - b.index);
+  return (matches[0]?.value || "").replace(/\s?percent$/i, "%");
 };
 function sourceOf(claim, sources) { return (claim.sourceIds || []).map(id => sources.get(id)).find(Boolean); }
 function sourceLine(claim, sources) {
