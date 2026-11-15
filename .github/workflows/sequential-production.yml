@@ -1,11 +1,21 @@
 name: HiddenEngine Sequential Production
 
 on:
+  push:
+    branches: [feature/beats-pipeline]
+    paths:
+      - "production/projects/2026-11-14-nvidia-hidden-engine/project.json"
+      - "src/script-architect.js"
+      - "src/script-writer.js"
+      - "src/script-compile.js"
+      - "src/script-gate.js"
+      - ".github/workflows/sequential-production.yml"
   workflow_dispatch:
     inputs:
       project_id:
         description: "Project folder name"
         required: true
+        default: "2026-11-14-nvidia-hidden-engine"
         type: string
       dry_run:
         description: "Render a silent test instead of final voice"
@@ -32,7 +42,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: hiddenengine-sequential-${{ inputs.project_id }}
+  group: hiddenengine-sequential-${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}
   cancel-in-progress: false
 
 jobs:
@@ -53,7 +63,7 @@ jobs:
 
       - name: Validate project input
         env:
-          PROJECT_ID: ${{ inputs.project_id }}
+          PROJECT_ID: ${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}
         run: |
           set -euo pipefail
           [[ "$PROJECT_ID" =~ ^[a-z0-9-]+$ ]]
@@ -61,33 +71,33 @@ jobs:
 
       - name: 1. Evidence audit
         env:
-          PROJECT_ID: ${{ inputs.project_id }}
+          PROJECT_ID: ${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}
         run: node src/evidence-audit.js
 
       - name: 2. Build script architecture
         env:
-          PROJECT_ID: ${{ inputs.project_id }}
+          PROJECT_ID: ${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}
         run: node src/script-architect.js
 
       - name: 3. Assemble evidence-linked script draft
         env:
-          PROJECT_ID: ${{ inputs.project_id }}
+          PROJECT_ID: ${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}
         run: node src/script-writer.js
 
       - name: 4. Build visual direction and asset register
         env:
-          PROJECT_ID: ${{ inputs.project_id }}
+          PROJECT_ID: ${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}
         run: node src/visual-director.js
 
       - name: 5. Compile beats into renderer script
         env:
-          PROJECT_ID: ${{ inputs.project_id }}
+          PROJECT_ID: ${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}
           FORCE: "1"
         run: node src/script-compile.js
 
       - name: 6. Script gate
         env:
-          PROJECT_ID: ${{ inputs.project_id }}
+          PROJECT_ID: ${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}
         run: node src/script-gate.js
 
       - name: Install rendering tools and fonts
@@ -96,9 +106,9 @@ jobs:
           sudo apt-get install -y ffmpeg fonts-dejavu-core librsvg2-bin
 
       - name: Install Piper TTS and voice
-        if: ${{ !inputs.dry_run }}
+        if: ${{ inputs.dry_run != true }}
         env:
-          PIPER_VOICE: ${{ inputs.voice_model }}
+          PIPER_VOICE: ${{ inputs.voice_model || 'en_US-lessac-medium' }}
         run: |
           set -euo pipefail
           python3 -m venv .venv-piper
@@ -119,27 +129,27 @@ jobs:
 
       - name: 7. Recheck script gate immediately before rendering
         env:
-          PROJECT_ID: ${{ inputs.project_id }}
+          PROJECT_ID: ${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}
         run: node src/script-gate.js
 
       - name: 8. Render documentary
         env:
-          PROJECT_ID: ${{ inputs.project_id }}
-          PIPER_LENGTH_SCALE: ${{ inputs.speaking_rate }}
-          TTS_FAKE: ${{ inputs.dry_run && '1' || '0' }}
-          AMBIENT: ${{ inputs.ambient_bed && '1' || '0' }}
+          PROJECT_ID: ${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}
+          PIPER_LENGTH_SCALE: ${{ inputs.speaking_rate || '1.0' }}
+          TTS_FAKE: ${{ inputs.dry_run == true && '1' || '0' }}
+          AMBIENT: ${{ inputs.ambient_bed == false && '0' || '1' }}
         run: node src/render-beats.js
 
       - name: Upload video and review files
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: hiddenengine-${{ inputs.project_id }}${{ inputs.dry_run && '-DRYRUN' || '' }}
+          name: hiddenengine-${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}${{ inputs.dry_run == true && '-DRYRUN' || '' }}
           path: |
-            dist/${{ inputs.project_id }}/the-hidden-engine-documentary.mp4
-            dist/${{ inputs.project_id }}/CREDITS.md
-            dist/${{ inputs.project_id }}/QA-REPORT.json
-            dist/${{ inputs.project_id }}/contact-sheet.jpg
-            dist/${{ inputs.project_id }}/FACT-CHECK-SHEET.md
+            dist/${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}/the-hidden-engine-documentary.mp4
+            dist/${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}/CREDITS.md
+            dist/${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}/QA-REPORT.json
+            dist/${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}/contact-sheet.jpg
+            dist/${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}/FACT-CHECK-SHEET.md
           if-no-files-found: error
           retention-days: 14
