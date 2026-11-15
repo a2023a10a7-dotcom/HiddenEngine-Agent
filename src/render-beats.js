@@ -1,4 +1,4 @@
-// Beat-based renderer: one voice clip and one original motion-graphic card per beat.
+// Beat-based renderer: scene-matched photography, motion-graphic overlays, and narration for every beat.
 // Reads production/projects/<id>/script.json (beats) and project.json (claims, sources).
 // Needs: ffmpeg (with libass and librsvg), Piper TTS. Usage: PROJECT_ID=<folder> node src/render-beats.js
 // Dry run without a voice model: TTS_FAKE=1 (silent audio with estimated length).
