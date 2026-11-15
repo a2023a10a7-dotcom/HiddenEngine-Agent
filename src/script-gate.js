@@ -29,12 +29,20 @@ const numTokens = s => norm(s).match(/\d+(?:\.\d+)?/g) || [];
 const numWords = s => norm(s).match(/\b(percent|million|billion|trillion|thousand)\b/g) || [];
 const cell = s => String(s ?? "").replace(/\|/g, "\\|").replace(/\n/g, " ");
 
+const requiredSceneIds = ["S01","S02","S03","S04","S05","S06","S07"];
+const sceneIds = new Set((script.scenes || []).map(s => s.id));
+for (const sid of requiredSceneIds) if (!sceneIds.has(sid)) err("structure", "required scene " + sid + " is missing.");
+if (!str(project.thesis?.centralArgument)) err("editorial", "project.thesis.centralArgument is missing.");
+if (!str(project.thesis?.counterArgument)) err("editorial", "project.thesis.counterArgument is missing.");
 const sources = new Map((project.research?.sources || []).map(s => [s.id, s]));
 const claims = new Map((project.research?.claims || []).map(c => [c.id, c]));
 if (!claims.size) err("ledger", "project.json has no research.claims. Complete the research stage first (documentary:research, then add sourced claims).");
 if (!sources.size) err("ledger", "project.json has no research.sources.");
 
 const used = new Set(), rows = [];
+const narrationFingerprints = new Map();
+const targetForMinimum = Number(script.target_duration_minutes) || (Number(project.targetDurationSeconds) / 60) || 0;
+const requiredMinimumWords = targetForMinimum ? Math.ceil(targetForMinimum * 120) : 0;
 let beatCount = 0, stockCount = 0, totalWords = 0;
 if (!Array.isArray(script.scenes) || !script.scenes.length) err("script", "script.json has no scenes.");
 for (const [si, sc] of (script.scenes || []).entries()) {
@@ -49,6 +57,9 @@ for (const [si, sc] of (script.scenes || []).entries()) {
     if (!str(b.id)) err(w, "beat has no id."); else if (seen.has(b.id)) err(w, "duplicate beat id."); else seen.add(b.id);
     if (!str(b.narration)) { err(w, "narration is missing."); continue; }
     const n = words(b.narration); totalWords += n;
+    const fingerprint = squash(b.narration).toLowerCase().replace(/[^a-z0-9 ]/g, "").replace(/\\s+/g, " ");
+    if (narrationFingerprints.has(fingerprint)) err(w, "duplicate narration repeats " + narrationFingerprints.get(fingerprint) + "; add a distinct evidence-backed development instead of recycling a claim.");
+    else narrationFingerprints.set(fingerprint, w);
     if (n > 90) err(w, "narration is " + n + " words; split it into two beats."); else if (n > 60) warn(w, "narration is " + n + " words.");
     const kind = b.kind || "claim";
     const ids = Array.isArray(b.claim_ids) ? b.claim_ids : [];
@@ -58,6 +69,7 @@ for (const [si, sc] of (script.scenes || []).entries()) {
       if (!c) { err(w, "unknown claim_id: " + cid); continue; }
       used.add(cid); linked.push(c);
       if (!ELIGIBLE.has(c.classification)) err(w, "claim " + cid + " is '" + c.classification + "' and cannot be narrated.");
+      if (!str(c.passageQuote) || !str(c.passageReference) || c.passageMatchedSourceId !== (c.sourceIds || [])[0]) err(w, "claim " + cid + " lacks a recorded exact passage, passage reference, or matched source; manual verification is still required.");
     }
     const text = linked.map(c => c.text).join(" ");
     if (kind === "claim") {
@@ -95,6 +107,13 @@ for (const [si, sc] of (script.scenes || []).entries()) {
 }
 if (beatCount && stockCount / beatCount > 0.25) err("visuals", "stock visuals are " + Math.round(100 * stockCount / beatCount) + "% of beats; the limit is 25%.");
 for (const cid of claims.keys()) if (ELIGIBLE.has(claims.get(cid).classification) && !used.has(cid)) warn("claim " + cid, "eligible but never used in any beat.");
+if (requiredMinimumWords && totalWords < requiredMinimumWords) err("duration", "script has " + totalWords + " words; minimum for " + targetForMinimum.toFixed(1) + " minutes at 120 wpm is " + requiredMinimumWords + ". Do not pad with repeated claims; expand research and analysis.");
+for (const row of rows) {
+  const ids = row.linked.map(c => c.id);
+  if (ids.some(cid => ["CLM-009","CLM-010","CLM-011"].includes(cid)) && !/billion/i.test(row.b.narration)) err(row.w, "FY2026 segment/geographic figures must be explicitly labeled in $ billions, not raw millions.");
+  if (ids.includes("CLM-011") && !/headquarters/i.test(row.b.narration)) err(row.w, "geographic revenue must identify the direct-customer headquarters basis.");
+  if (ids.includes("CLM-011") && !/end customer|end-customer/i.test(row.b.narration)) err(row.w, "geographic revenue must include the end-customer-location caveat.");
+}
 const minutes = totalWords / 150;
 const target = Number(script.target_duration_minutes) || (Number(project.targetDurationSeconds) / 60) || 0;
 if (target && Math.abs(minutes - target) / target > 0.2) warn("script", "estimated narration is " + minutes.toFixed(1) + " min vs target " + target.toFixed(1) + " min.");
@@ -102,7 +121,7 @@ if (target && Math.abs(minutes - target) / target > 0.2) warn("script", "estimat
 const out = [];
 out.push("# Fact-check sheet: " + (script.title || id), "");
 out.push("**Status:** " + (errors.length ? "BLOCKED (" + errors.length + " errors)" : "PASSED automatic checks; human review still required"), "");
-out.push("Beats: " + beatCount + " | Estimated narration: " + minutes.toFixed(1) + " min | Stock visuals: " + stockCount, "");
+out.push("Beats: " + beatCount + " | Words: " + totalWords + " | Estimated narration: " + minutes.toFixed(1) + " min | Stock visuals: " + stockCount, "");
 if (errors.length) out.push("## Errors", "", ...errors.map(e => "- " + e), "");
 if (warnings.length) out.push("## Warnings", "", ...warnings.map(w => "- " + w), "");
 out.push("## Every spoken sentence with its evidence", "", "| Beat | Narration | Claims | Sources |", "|---|---|---|---|");
