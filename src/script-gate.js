@@ -107,6 +107,9 @@ for (const [si, sc] of (script.scenes || []).entries()) {
     if (str(b.on_screen_text) && words(b.on_screen_text) > 12) warn(w, "on_screen_text is longer than 12 words.");
     rows.push({ w, b, linked });
   }
+  const sceneWords = words((sc.beats || []).map(b => b.narration).join(" "));
+  const sceneMinimum = Math.ceil((Number(sc.targetSeconds) || 0) * 1.2);
+  if (sceneMinimum && sceneWords < sceneMinimum) err(sw, "has " + sceneWords + " words; at least " + sceneMinimum + " are required for its allocated " + sc.targetSeconds + " seconds at 60% coverage.");
 }
 if (beatCount && stockCount / beatCount > 0.25) err("visuals", "stock visuals are " + Math.round(100 * stockCount / beatCount) + "% of beats; the limit is 25%.");
 for (const cid of claims.keys()) if (ELIGIBLE.has(claims.get(cid).classification) && !used.has(cid)) warn("claim " + cid, "eligible but never used in any beat.");
