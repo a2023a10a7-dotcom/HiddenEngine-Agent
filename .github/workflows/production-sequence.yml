@@ -9,7 +9,7 @@ on:
         type: string
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: hiddenengine-sequence-${{ inputs.project_id }}
@@ -71,22 +71,6 @@ jobs:
         env:
           PROJECT_ID: ${{ inputs.project_id }}
         run: node src/script-gate.js
-
-      - name: Save successful or partial project outputs
-        if: always()
-        env:
-          PROJECT_ID: ${{ inputs.project_id }}
-        run: |
-          set -euo pipefail
-          git config user.name "HiddenEngine Agent"
-          git config user.email "agent@users.noreply.github.com"
-          git add "production/projects/$PROJECT_ID/"
-          if ! git diff --cached --quiet; then
-            git commit -m "Sequential production pipeline: $PROJECT_ID"
-            git push
-          else
-            echo "No project-file changes to save."
-          fi
 
       - name: Upload fact-check and evidence reports
         if: always()
