@@ -38,6 +38,7 @@ for (const s of draft.scenes || []) {
   });
   scenes.push({
     id: s.id,
+    targetSeconds: s.targetSeconds,
     title: act,
     subtitle: String(s.editorialGoal || "").slice(0, 120),
     keywords: act.split(/\s+/).slice(0, 4),
