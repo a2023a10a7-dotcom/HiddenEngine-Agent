@@ -33,6 +33,11 @@ on:
         required: false
         default: "480"
         type: string
+      force_reingest:
+        description: "Re-fetch all project sources during the ingest stage"
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -60,6 +65,7 @@ jobs:
           PROJECT_ID: ${{ inputs.project_id }}
           TOPIC: ${{ inputs.topic }}
           DURATION: ${{ inputs.duration_seconds }}
+          FORCE_REINGEST: ${{ inputs.force_reingest && '1' || '0' }}
         run: |
           set -euo pipefail
           if [ "$STAGE" != "new" ] && [ -z "${PROJECT_ID:-}" ]; then echo "project_id is required for stage $STAGE"; exit 1; fi
