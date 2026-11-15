@@ -58,7 +58,7 @@ for (const [si, sc] of (script.scenes || []).entries()) {
     if (!str(b.id)) err(w, "beat has no id."); else if (seen.has(b.id)) err(w, "duplicate beat id."); else seen.add(b.id);
     if (!str(b.narration)) { err(w, "narration is missing."); continue; }
     const n = words(b.narration); totalWords += n;
-    const fingerprint = squash(b.narration).toLowerCase().replace(/[^a-z0-9 ]/g, "").replace(/\\s+/g, " ");
+    const fingerprint = squash(b.narration).toLowerCase().replace(/[^a-z0-9 ]/g, "").replace(/\s+/g, " ");
     if (narrationFingerprints.has(fingerprint)) err(w, "duplicate narration repeats " + narrationFingerprints.get(fingerprint) + "; add a distinct evidence-backed development instead of recycling a claim.");
     else narrationFingerprints.set(fingerprint, w);
     if (n > 90) err(w, "narration is " + n + " words; split it into two beats."); else if (n > 60) warn(w, "narration is " + n + " words.");
