@@ -18,7 +18,7 @@ await mkdir(outDir, { recursive: true });
 // SEC's FY2026 shareholder annual-report PDF is about 24.5 MB; retain a hard bounded cap above it.
 const MAX_RESPONSE_BYTES = 32 * 1024 * 1024;
 const MAX_HTML_BYTES = 12 * 1024 * 1024;
-const MAX_TEXT_CHARS = 750000;
+const MAX_TEXT_CHARS = 1000000;
 const MAX_PDF_PAGES = 200;
 const TIMEOUT_MS = 30000;
 
@@ -116,10 +116,12 @@ const extractPdfText = async bytes => {
         .map(item => typeof item.str === "string" ? item.str : "")
         .filter(Boolean)
         .join(" ");
-      pages.push("[Page " + pageNumber + "] " + pageText);
+      const labeledPageText = "[Page " + pageNumber + "] " + pageText;
+      pages.push(labeledPageText);
+      extractedChars += labeledPageText.length + (pages.length > 1 ? 1 : 0);
       pagesExtracted++;
       page.cleanup();
-      if (pages.join("\n").length >= MAX_TEXT_CHARS) { charLimitReached = pageNumber < document.numPages; break; }
+      if (extractedChars >= MAX_TEXT_CHARS) { charLimitReached = pageNumber < document.numPages; break; }
     }
     return {
       text: pages.join("\n").slice(0, MAX_TEXT_CHARS).trim(),
