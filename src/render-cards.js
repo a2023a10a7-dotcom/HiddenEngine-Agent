@@ -78,7 +78,7 @@ function excerptCard(claim, sources, act, idx, total) {
   const hits = new Set(figureOf(claim.text).toLowerCase().split(/\s+/).filter(Boolean).map(t => t.replace(/\.$/, "")));
   const lines = wrap("\u201C" + claim.passageQuote + "\u201D", 58, 7);
   const panelH = 62 + 90 + lines.length * 62 + 30, top = Math.round(180 + (700 - panelH) / 2);
-  const keyOf = w => w.toLowerCase().replace(/[“”"',;:()]+/g, "").replace(/\.$/, "");
+  const keyOf = w => w.toLowerCase().replace(/[\u201C\u201D"',;:()]+/g, "").replace(/\.$/, "");
   const y = i => top + 62 + 85 + i * 62;
   const plain = lines.map((line, i) => `<text x="190" y="${y(i)}" class="doc" xml:space="preserve">${xml(line)}</text>`).join("");
   const marked = lines.map((line, i) => ({ i, spans: line.split(" ").map(w => hits.has(keyOf(w)) ? `<tspan class="hit">${xml(w)}</tspan>` : `<tspan fill-opacity="0">${xml(w)}</tspan>`).join(" "), any: line.split(" ").some(w => hits.has(keyOf(w))) }))
