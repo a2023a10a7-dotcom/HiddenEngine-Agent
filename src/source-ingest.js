@@ -18,7 +18,7 @@ await mkdir(outDir, { recursive: true });
 // SEC's FY2026 shareholder annual-report PDF is about 24.5 MB; retain a hard bounded cap above it.
 const MAX_RESPONSE_BYTES = 32 * 1024 * 1024;
 const MAX_HTML_BYTES = 12 * 1024 * 1024;
-const MAX_TEXT_CHARS = 50000;
+const MAX_TEXT_CHARS = 200000;
 const MAX_PDF_PAGES = 120;
 const TIMEOUT_MS = 30000;
 
@@ -108,6 +108,7 @@ const extractPdfText = async bytes => {
     document = await loadingTask.promise;
     const pageLimit = Math.min(document.numPages, MAX_PDF_PAGES);
     const pages = [];
+    let pagesExtracted = 0, charLimitReached = false;
     for (let pageNumber = 1; pageNumber <= pageLimit; pageNumber++) {
       const page = await document.getPage(pageNumber);
       const content = await page.getTextContent();
@@ -116,14 +117,15 @@ const extractPdfText = async bytes => {
         .filter(Boolean)
         .join(" ");
       pages.push("[Page " + pageNumber + "] " + pageText);
+      pagesExtracted++;
       page.cleanup();
-      if (pages.join("\n").length >= MAX_TEXT_CHARS) break;
+      if (pages.join("\n").length >= MAX_TEXT_CHARS) { charLimitReached = pageNumber < document.numPages; break; }
     }
     return {
       text: pages.join("\n").slice(0, MAX_TEXT_CHARS).trim(),
       pageCount: document.numPages,
-      pagesExtracted: pageLimit,
-      truncated: document.numPages > pageLimit
+      pagesExtracted,
+      truncated: document.numPages > pageLimit || charLimitReached
     };
   } finally {
     if (document) await document.destroy();
@@ -132,7 +134,7 @@ const extractPdfText = async bytes => {
 };
 
 const candidates = (project.research?.sources || [])
-  .filter(source => source.url && !source.snapshotPath);
+  .filter(source => source.url && (!source.snapshotPath || process.env.FORCE_REINGEST === "1"));
 const results = [];
 const errors = [];
 
@@ -198,7 +200,9 @@ for (const source of candidates) {
       const author = meta(html, "author") || meta(html, "article:author");
       const published = meta(html, "article:published_time") || meta(html, "date");
       const main = html.match(/<(?:article|main)\b[^>]*>([\s\S]*?)<\/(?:article|main)>/i)?.[1] || html;
-      const extractedText = strip(main).slice(0, MAX_TEXT_CHARS);
+      const fullText = strip(main);
+      const extractedText = fullText.slice(0, MAX_TEXT_CHARS);
+      const htmlTruncated = fullText.length > MAX_TEXT_CHARS;
 
       record.title = title;
       record.description = description;
@@ -208,9 +212,11 @@ for (const source of candidates) {
       record.textCharacters = extractedText.length;
       record.contentSha256 = createHash("sha256").update(extractedText).digest("hex");
       record.extractionStatus = extractedText.length >= 300
-        ? "html_text_extracted"
+        ? (htmlTruncated ? "html_text_truncated" : "html_text_extracted")
         : "thin_or_blocked_content";
-      record.note = "Automated extraction is a reading aid only. Check context, tables, footnotes, and original documents manually.";
+      record.note = htmlTruncated
+        ? "HTML text exceeded the configured character limit and was truncated. Review later sections in the original source."
+        : "Automated extraction is a reading aid only. Check context, tables, footnotes, and original documents manually.";
     } else {
       const bytes = await readLimited(response, MAX_RESPONSE_BYTES);
       record.extractionStatus = "unsupported_content_type";
