@@ -9,7 +9,7 @@ on:
       - "src/script-writer.js"
       - "src/script-compile.js"
       - "src/script-gate.js"
-      - ".github/workflows/sequential-production.yml"
+      - "src/render-cards.js"
   workflow_dispatch:
     inputs:
       project_id:
@@ -137,7 +137,7 @@ jobs:
           PROJECT_ID: ${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}
           PIPER_LENGTH_SCALE: ${{ inputs.speaking_rate || '1.0' }}
           TTS_FAKE: ${{ inputs.dry_run == true && '1' || '0' }}
-          AMBIENT: ${{ inputs.ambient_bed == false && '0' || '1' }}
+          AMBIENT: ${{ github.event_name == 'push' && '1' || (inputs.ambient_bed && '1' || '0') }}
         run: node src/render-beats.js
 
       - name: Upload video and review files
