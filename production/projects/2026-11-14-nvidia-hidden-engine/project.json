@@ -147,7 +147,7 @@
       },
       {
         "id": "CLM-009",
-        "text": "For fiscal 2026, Compute & Networking revenue was $193,479 and Graphics revenue was $22,459.",
+        "text": "For fiscal 2026, NVIDIA reported Compute & Networking revenue of $193.479 billion and Graphics revenue of $22.459 billion. The source table reports figures in millions of dollars.",
         "classification": "verified",
         "sourceIds": [
           "SRC-001"
@@ -159,7 +159,7 @@
       },
       {
         "id": "CLM-010",
-        "text": "For fiscal 2026, Compute & Networking segment operating income was $130,141 and Graphics segment operating income was $9,156.",
+        "text": "For fiscal 2026, NVIDIA reported segment operating income of $130.141 billion for Compute & Networking and $9.156 billion for Graphics. The source table reports figures in millions of dollars.",
         "classification": "verified",
         "sourceIds": [
           "SRC-001"
@@ -171,7 +171,7 @@
       },
       {
         "id": "CLM-011",
-        "text": "For fiscal 2026, NVIDIA reported revenue by direct-customer headquarters location of $149,617 in the United States, $42,345 in Taiwan, and $19,677 in China including Hong Kong.",
+        "text": "For fiscal 2026, NVIDIA reported revenue by direct-customer headquarters location of $149.617 billion in the United States, $42.345 billion in Taiwan, and $19.677 billion in China including Hong Kong. These figures identify customer headquarters, not necessarily end-customer or shipping locations; NVIDIA estimated that 76% of Data Center revenue from Taiwan-headquartered customers was attributed to end customers in the United States and Europe.",
         "classification": "verified",
         "sourceIds": [
           "SRC-001"
