@@ -15,7 +15,8 @@ const outDir = path.join(dir, "research", "source-snapshots");
 await mkdir(outDir, { recursive: true });
 
 // Bound downloads while allowing ordinary SEC filings and annual-report PDFs.
-const MAX_RESPONSE_BYTES = 20 * 1024 * 1024;
+// SEC's FY2026 shareholder annual-report PDF is about 24.5 MB; retain a hard bounded cap above it.
+const MAX_RESPONSE_BYTES = 32 * 1024 * 1024;
 const MAX_HTML_BYTES = 12 * 1024 * 1024;
 const MAX_TEXT_CHARS = 50000;
 const MAX_PDF_PAGES = 120;
