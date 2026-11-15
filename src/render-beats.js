@@ -112,29 +112,50 @@ async function main() {
 
       // visual cards for this beat
       (b.claim_ids || []).forEach(id => (claims.get(id)?.sourceIds || []).forEach(s => usedSources.add(s)));
-      const { svgs, warning } = cardsForBeat(b, { claims, sources, act, idx: si + 1, total });
+      const { cards, warning } = cardsForBeat(b, { claims, sources, act, idx: si + 1, total });
       if (warning) warnings.push(warning);
 
       const first = bi === 0, last = bi === sc.beats.length - 1;
       await writeFile(path.join(OUT, stem + ".ass"), subtitles(b.narration, audioDur));
-      const inputs = [], chains = [], forward = beatNo % 2 === 0;
-      for (const [k, svg] of svgs.entries()) {
-        const d = dur / svgs.length, png = stem + "-" + k + ".png";
-        await writeFile(path.join(OUT, stem + "-" + k + ".svg"), svg);
-        await run("ffmpeg", ["-y", "-i", stem + "-" + k + ".svg", "-frames:v", "1", png], OUT);
-        if (k === 0) await run("ffmpeg", ["-y", "-i", png, "-vf", "scale=480:-1", stem + ".jpg"], OUT);
-        inputs.push("-loop", "1", "-framerate", String(FPS), "-t", d.toFixed(3), "-i", png);
-        const f = forward ? "t/" + d.toFixed(3) : "(1-t/" + d.toFixed(3) + ")";
-        chains.push("[" + k + ":v]crop=1920:1080:x='(iw-1920)*" + f + "':y='(ih-1080)*" + f + "',setsar=1,fps=" + FPS + "[c" + k + "]");
+      // Each card = background + layers that fade and slide in one after another.
+      // The background drifts slowly and the layers drift faster, which gives depth (parallax).
+      const inputs = [], graph = [], forward = beatNo % 2 === 0;
+      let nIn = 0;
+      for (const [k, cardK] of cards.entries()) {
+        const d = dur / cards.length, fexp = forward ? "t/" + d.toFixed(3) : "(1-t/" + d.toFixed(3) + ")";
+        const pos = m => "x='(iw-1920)*" + m + "*" + fexp + "':y='(ih-1080)*" + m + "*" + fexp + "'";
+        const files = [cardK.base, ...cardK.layers.map(l => l.svg)], pngs = [];
+        for (const [j, svg] of files.entries()) {
+          const name = stem + "-" + k + "-" + j;
+          await writeFile(path.join(OUT, name + ".svg"), svg);
+          await run("ffmpeg", ["-y", "-i", name + ".svg", "-frames:v", "1", name + ".png"], OUT);
+          pngs.push(name + ".png");
+          inputs.push("-loop", "1", "-framerate", String(FPS), "-t", d.toFixed(3), "-i", name + ".png");
+        }
+        if (k === 0) { // finished-card thumbnail for the contact sheet
+          const ov = pngs.slice(1).map((_, j) => "[o" + j + "]").length;
+          const f = "[0:v]" + pngs.slice(1).map((_, j) => "[" + (j + 1) + ":v]overlay=0:0" + (j < pngs.length - 2 ? "[o" + j + "];[o" + j + "]" : "")).join("") + ",scale=480:-1";
+          await run("ffmpeg", ["-y", ...pngs.flatMap(p => ["-i", p]), "-filter_complex", pngs.length > 1 ? f.replace("[0:v]", "[0:v]") : "[0:v]scale=480:-1", "-frames:v", "1", stem + ".jpg"].filter(Boolean), OUT);
+        }
+        const base = nIn; nIn += pngs.length;
+        graph.push("[" + base + ":v]crop=1920:1080:" + pos("0.45") + ",setsar=1,fps=" + FPS + "[g" + k + "_0]");
+        let prev = "g" + k + "_0";
+        for (let j = 0; j < cardK.layers.length; j++) {
+          const dl = Math.min(cardK.layers[j].delay, d * 0.4).toFixed(2);
+          graph.push("[" + (base + 1 + j) + ":v]crop=1920:1080:" + pos("1") + ",format=rgba,fade=t=in:st=" + dl + ":d=0.4:alpha=1[l" + k + "_" + j + "]");
+          graph.push("[" + prev + "][l" + k + "_" + j + "]overlay=x=0:y='24*pow(1-min(1,max(0,(t-" + dl + ")/0.55)),2)':format=auto[g" + k + "_" + (j + 1) + "]");
+          prev = "g" + k + "_" + (j + 1);
+        }
+        graph.push("[" + prev + "]null[c" + k + "]");
       }
-      const n = svgs.length;
-      const head = n > 1 ? chains.join(";") + ";" + svgs.map((_, k) => "[c" + k + "]").join("") + "concat=n=" + n + ":v=1:a=0[cv]" : chains[0].replace("[c0]", "[cv]");
+      const n = cards.length;
+      if (n > 1) graph.push(cards.map((_, k) => "[c" + k + "]").join("") + "concat=n=" + n + ":v=1:a=0[cv]"); else graph.push("[c0]null[cv]");
       const fx = (first ? ",fade=t=in:st=0:d=0.3" : "") + (last ? ",fade=t=out:st=" + Math.max(0, dur - 0.3).toFixed(2) + ":d=0.3" : "");
-      await run("ffmpeg", ["-y", ...inputs, "-i", stem + ".wav", "-filter_complex", head + ";[cv]subtitles=" + stem + ".ass" + fx + ",format=yuv420p[v]",
-        "-map", "[v]", "-map", n + ":a", "-af", "apad=pad_dur=" + GAP, "-c:v", "libx264", "-preset", "veryfast", "-crf", "19",
+      await run("ffmpeg", ["-y", ...inputs, "-i", stem + ".wav", "-filter_complex", graph.join(";") + ";[cv]noise=alls=4:allf=t,subtitles=" + stem + ".ass" + fx + ",format=yuv420p[v]",
+        "-map", "[v]", "-map", nIn + ":a", "-af", "apad=pad_dur=" + GAP, "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
         "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-t", dur.toFixed(3), stem + ".mp4"], OUT);
       segs.push(stem);
-      console.log("Beat " + beatNo + " (" + b.id + "): " + dur.toFixed(1) + "s, " + svgs.length + " card(s)");
+      console.log("Beat " + beatNo + " (" + b.id + "): " + dur.toFixed(1) + "s, " + cards.length + " card(s)");
     }
   }
   await writeFile(path.join(OUT, "concat.txt"), segs.map(s => "file '" + s + ".mp4'").join("\n") + "\n");
