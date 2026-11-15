@@ -1,0 +1,144 @@
+{
+  "projectId": "2026-11-14-nvidia-hidden-engine",
+  "checkedAt": "2026-11-15T17:19:04.799Z",
+  "status": "structurally_consistent",
+  "summary": {
+    "sources": 7,
+    "primarySources": 7,
+    "claims": 14,
+    "claimsWithPrimaryLinks": 14,
+    "unresolvedContradictions": 0
+  },
+  "issues": [],
+  "warnings": [],
+  "claimLedger": [
+    {
+      "claimId": "CLM-001",
+      "text": "NVIDIA reported fiscal-year 2026 revenue of $215.9 billion, up 65%, while Data Center revenue was up 68%.",
+      "classification": "verified",
+      "sourceCount": 1,
+      "primarySourceCount": 1,
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "claimId": "CLM-002",
+      "text": "NVIDIA said Gaming revenue for fiscal year 2026 was up 41%, driven by Blackwell demand.",
+      "classification": "attributed",
+      "sourceCount": 1,
+      "primarySourceCount": 1,
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "claimId": "CLM-003",
+      "text": "NVIDIA describes its GPUs as the foundation of its accelerated-computing platform for parallel workloads including neural-network training and inference.",
+      "classification": "attributed",
+      "sourceCount": 1,
+      "primarySourceCount": 1,
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "claimId": "CLM-004",
+      "text": "NVIDIA describes its full-stack computing platform as combining chips with CUDA, CUDA-X libraries, AI models and training datasets, APIs, SDKs, and application frameworks.",
+      "classification": "attributed",
+      "sourceCount": 1,
+      "primarySourceCount": 1,
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "claimId": "CLM-005",
+      "text": "NVIDIA's gross margin decreased to 71.1% in fiscal 2026 from 75.0% in fiscal 2025; the company cited its transition to Blackwell full-scale data-center solutions and a $4.5 billion H20-related charge.",
+      "classification": "attributed",
+      "sourceCount": 1,
+      "primarySourceCount": 1,
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "claimId": "CLM-006",
+      "text": "NVIDIA said its supply commitments increased from $119 billion in the prior quarter to $279 billion as of July 26, 2026.",
+      "classification": "attributed",
+      "sourceCount": 1,
+      "primarySourceCount": 1,
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "claimId": "CLM-007",
+      "text": "NVIDIA disclosed that some supplier agreements may be canceled, rescheduled, or adjusted before firm orders, and that changes may result in additional costs.",
+      "classification": "attributed",
+      "sourceCount": 1,
+      "primarySourceCount": 1,
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "claimId": "CLM-008",
+      "text": "The CUDA Programming Guide describes CUDA as a parallel-computing platform and programming model developed by NVIDIA that uses GPU processing power.",
+      "classification": "attributed",
+      "sourceCount": 1,
+      "primarySourceCount": 1,
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "claimId": "CLM-009",
+      "text": "For fiscal 2026, Compute & Networking revenue was $193,479 and Graphics revenue was $22,459.",
+      "classification": "verified",
+      "sourceCount": 1,
+      "primarySourceCount": 1,
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "claimId": "CLM-010",
+      "text": "For fiscal 2026, Compute & Networking segment operating income was $130,141 and Graphics segment operating income was $9,156.",
+      "classification": "verified",
+      "sourceCount": 1,
+      "primarySourceCount": 1,
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "claimId": "CLM-011",
+      "text": "For fiscal 2026, NVIDIA reported revenue by direct-customer headquarters location of $149,617 in the United States, $42,345 in Taiwan, and $19,677 in China including Hong Kong.",
+      "classification": "verified",
+      "sourceCount": 1,
+      "primarySourceCount": 1,
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "claimId": "CLM-012",
+      "text": "In Q2 FY27, NVIDIA revenue was $96,221, up 106% year over year, and gross margin was 75.0%.",
+      "classification": "verified",
+      "sourceCount": 1,
+      "primarySourceCount": 1,
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "claimId": "CLM-013",
+      "text": "For the third quarter of fiscal 2027, NVIDIA forecast revenue of $108.0 billion, plus or minus 2%, and assumed no Data Center compute revenue from China.",
+      "classification": "estimated",
+      "sourceCount": 1,
+      "primarySourceCount": 1,
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "claimId": "CLM-014",
+      "text": "NVIDIA reported quarterly Data Center revenue of $62.3 billion, up 75% year over year, for the fourth quarter ended January 25, 2026.",
+      "classification": "verified",
+      "sourceCount": 1,
+      "primarySourceCount": 1,
+      "issues": [],
+      "warnings": []
+    }
+  ],
+  "contradictions": [],
+  "disclaimer": "This is metadata and traceability QA, not independent verification of source authenticity, claim truth, completeness, or legal rights."
+}
