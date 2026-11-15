@@ -1,0 +1,1137 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectId": "2026-11-14-nvidia-hidden-engine",
+  "topic": "NVIDIA: How It Became the Engine of the AI Infrastructure Boom",
+  "createdAt": "2026-11-15T17:29:01.606Z",
+  "status": "visual_plan_only_assets_not_acquired",
+  "format": {
+    "aspectRatio": "16:9",
+    "masterResolution": "1920x1080",
+    "frameRate": "25fps",
+    "safeMargins": "10%"
+  },
+  "artDirection": {
+    "palette": [
+      "charcoal",
+      "near-black",
+      "warm ivory",
+      "muted copper"
+    ],
+    "typography": "Editorial sans-serif for labels; restrained display face for chapter titles.",
+    "texture": "Subtle film grain only where it does not obscure evidence.",
+    "cameraLanguage": "Deliberate, stable, investigative; avoid gratuitous movement.",
+    "transitions": "Hard cuts, restrained dissolves, motivated match cuts."
+  },
+  "scenes": [
+    {
+      "sceneId": "S01",
+      "act": "Cold open",
+      "targetSeconds": 63,
+      "visualThesis": "Every shot must clarify a claim, explain a mechanism, establish context, or create a deliberate transition.",
+      "shotList": [
+        {
+          "shot": "01",
+          "durationSeconds": 8,
+          "type": "evidence_open",
+          "assetIds": [
+            "ASSET-001",
+            "ASSET-002"
+          ],
+          "camera": "Slow controlled push-in; preserve document legibility.",
+          "overlay": "Chapter title only; no unsupported superlatives."
+        },
+        {
+          "shot": "02",
+          "durationSeconds": 12,
+          "type": "context_broll",
+          "assetIds": [
+            null
+          ],
+          "camera": "Measured lateral move or locked archival frame.",
+          "overlay": "Date/location only when verified."
+        },
+        {
+          "shot": "03",
+          "durationSeconds": 16,
+          "type": "data_explainer",
+          "assetIds": [
+            "ASSET-003",
+            "ASSET-004"
+          ],
+          "camera": "Clean motion-graphic build; one idea at a time.",
+          "overlay": "Units, period, source, and caveat visible."
+        },
+        {
+          "shot": "04",
+          "durationSeconds": 10,
+          "type": "editorial_transition",
+          "assetIds": [],
+          "camera": "Cut on meaningful visual or sound transition.",
+          "overlay": "No decorative stock presented as evidence."
+        }
+      ],
+      "claimIds": [
+        "CLM-001",
+        "CLM-002",
+        "CLM-005",
+        "CLM-006",
+        "CLM-007",
+        "CLM-009",
+        "CLM-011",
+        "CLM-012",
+        "CLM-013",
+        "CLM-014"
+      ],
+      "editNotes": [
+        "Use only acquired assets with cleared rights.",
+        "Match archival dates and product models to the narrated period.",
+        "Do not imply a causal relationship through juxtaposition alone.",
+        "Keep charts readable on mobile; label axes and source.",
+        "Use restrained transitions; avoid generic AI-generated pseudo-archive."
+      ],
+      "audioNotes": {
+        "ambience": "Subtle location-appropriate ambience only when authentic or clearly designed.",
+        "music": "Restrained underscore; duck under narration.",
+        "sfx": "Use sparingly for transitions and interface/mechanical details; never fabricate documentary events."
+      }
+    },
+    {
+      "sceneId": "S02",
+      "act": "The system",
+      "targetSeconds": 135,
+      "visualThesis": "Every shot must clarify a claim, explain a mechanism, establish context, or create a deliberate transition.",
+      "shotList": [
+        {
+          "shot": "01",
+          "durationSeconds": 8,
+          "type": "evidence_open",
+          "assetIds": [
+            "ASSET-005",
+            "ASSET-006"
+          ],
+          "camera": "Slow controlled push-in; preserve document legibility.",
+          "overlay": "Chapter title only; no unsupported superlatives."
+        },
+        {
+          "shot": "02",
+          "durationSeconds": 12,
+          "type": "context_broll",
+          "assetIds": [
+            null
+          ],
+          "camera": "Measured lateral move or locked archival frame.",
+          "overlay": "Date/location only when verified."
+        },
+        {
+          "shot": "03",
+          "durationSeconds": 16,
+          "type": "data_explainer",
+          "assetIds": [
+            "ASSET-007",
+            "ASSET-008"
+          ],
+          "camera": "Clean motion-graphic build; one idea at a time.",
+          "overlay": "Units, period, source, and caveat visible."
+        },
+        {
+          "shot": "04",
+          "durationSeconds": 10,
+          "type": "editorial_transition",
+          "assetIds": [],
+          "camera": "Cut on meaningful visual or sound transition.",
+          "overlay": "No decorative stock presented as evidence."
+        }
+      ],
+      "claimIds": [
+        "CLM-001",
+        "CLM-002",
+        "CLM-003",
+        "CLM-004",
+        "CLM-005",
+        "CLM-006",
+        "CLM-007",
+        "CLM-008",
+        "CLM-009",
+        "CLM-010",
+        "CLM-011",
+        "CLM-012"
+      ],
+      "editNotes": [
+        "Use only acquired assets with cleared rights.",
+        "Match archival dates and product models to the narrated period.",
+        "Do not imply a causal relationship through juxtaposition alone.",
+        "Keep charts readable on mobile; label axes and source.",
+        "Use restrained transitions; avoid generic AI-generated pseudo-archive."
+      ],
+      "audioNotes": {
+        "ambience": "Subtle location-appropriate ambience only when authentic or clearly designed.",
+        "music": "Restrained underscore; duck under narration.",
+        "sfx": "Use sparingly for transitions and interface/mechanical details; never fabricate documentary events."
+      }
+    },
+    {
+      "sceneId": "S03",
+      "act": "The hidden engine",
+      "targetSeconds": 198,
+      "visualThesis": "Every shot must clarify a claim, explain a mechanism, establish context, or create a deliberate transition.",
+      "shotList": [
+        {
+          "shot": "01",
+          "durationSeconds": 8,
+          "type": "evidence_open",
+          "assetIds": [
+            "ASSET-009",
+            "ASSET-010"
+          ],
+          "camera": "Slow controlled push-in; preserve document legibility.",
+          "overlay": "Chapter title only; no unsupported superlatives."
+        },
+        {
+          "shot": "02",
+          "durationSeconds": 12,
+          "type": "context_broll",
+          "assetIds": [
+            null
+          ],
+          "camera": "Measured lateral move or locked archival frame.",
+          "overlay": "Date/location only when verified."
+        },
+        {
+          "shot": "03",
+          "durationSeconds": 16,
+          "type": "data_explainer",
+          "assetIds": [
+            "ASSET-011",
+            "ASSET-012"
+          ],
+          "camera": "Clean motion-graphic build; one idea at a time.",
+          "overlay": "Units, period, source, and caveat visible."
+        },
+        {
+          "shot": "04",
+          "durationSeconds": 10,
+          "type": "editorial_transition",
+          "assetIds": [],
+          "camera": "Cut on meaningful visual or sound transition.",
+          "overlay": "No decorative stock presented as evidence."
+        }
+      ],
+      "claimIds": [
+        "CLM-001",
+        "CLM-002",
+        "CLM-005",
+        "CLM-007",
+        "CLM-009",
+        "CLM-011",
+        "CLM-012",
+        "CLM-013",
+        "CLM-014"
+      ],
+      "editNotes": [
+        "Use only acquired assets with cleared rights.",
+        "Match archival dates and product models to the narrated period.",
+        "Do not imply a causal relationship through juxtaposition alone.",
+        "Keep charts readable on mobile; label axes and source.",
+        "Use restrained transitions; avoid generic AI-generated pseudo-archive."
+      ],
+      "audioNotes": {
+        "ambience": "Subtle location-appropriate ambience only when authentic or clearly designed.",
+        "music": "Restrained underscore; duck under narration.",
+        "sfx": "Use sparingly for transitions and interface/mechanical details; never fabricate documentary events."
+      }
+    },
+    {
+      "sceneId": "S04",
+      "act": "The strategic bet",
+      "targetSeconds": 180,
+      "visualThesis": "Every shot must clarify a claim, explain a mechanism, establish context, or create a deliberate transition.",
+      "shotList": [
+        {
+          "shot": "01",
+          "durationSeconds": 8,
+          "type": "evidence_open",
+          "assetIds": [
+            "ASSET-013",
+            "ASSET-014"
+          ],
+          "camera": "Slow controlled push-in; preserve document legibility.",
+          "overlay": "Chapter title only; no unsupported superlatives."
+        },
+        {
+          "shot": "02",
+          "durationSeconds": 12,
+          "type": "context_broll",
+          "assetIds": [
+            null
+          ],
+          "camera": "Measured lateral move or locked archival frame.",
+          "overlay": "Date/location only when verified."
+        },
+        {
+          "shot": "03",
+          "durationSeconds": 16,
+          "type": "document_explainer",
+          "assetIds": [
+            "ASSET-015"
+          ],
+          "camera": "Clean motion-graphic build; one idea at a time.",
+          "overlay": "Units, period, source, and caveat visible."
+        },
+        {
+          "shot": "04",
+          "durationSeconds": 10,
+          "type": "editorial_transition",
+          "assetIds": [],
+          "camera": "Cut on meaningful visual or sound transition.",
+          "overlay": "No decorative stock presented as evidence."
+        }
+      ],
+      "claimIds": [],
+      "editNotes": [
+        "Use only acquired assets with cleared rights.",
+        "Match archival dates and product models to the narrated period.",
+        "Do not imply a causal relationship through juxtaposition alone.",
+        "Keep charts readable on mobile; label axes and source.",
+        "Use restrained transitions; avoid generic AI-generated pseudo-archive."
+      ],
+      "audioNotes": {
+        "ambience": "Subtle location-appropriate ambience only when authentic or clearly designed.",
+        "music": "Restrained underscore; duck under narration.",
+        "sfx": "Use sparingly for transitions and interface/mechanical details; never fabricate documentary events."
+      }
+    },
+    {
+      "sceneId": "S05",
+      "act": "The turning point",
+      "targetSeconds": 162,
+      "visualThesis": "Every shot must clarify a claim, explain a mechanism, establish context, or create a deliberate transition.",
+      "shotList": [
+        {
+          "shot": "01",
+          "durationSeconds": 8,
+          "type": "evidence_open",
+          "assetIds": [
+            "ASSET-016",
+            "ASSET-017"
+          ],
+          "camera": "Slow controlled push-in; preserve document legibility.",
+          "overlay": "Chapter title only; no unsupported superlatives."
+        },
+        {
+          "shot": "02",
+          "durationSeconds": 12,
+          "type": "context_broll",
+          "assetIds": [
+            null
+          ],
+          "camera": "Measured lateral move or locked archival frame.",
+          "overlay": "Date/location only when verified."
+        },
+        {
+          "shot": "03",
+          "durationSeconds": 16,
+          "type": "data_explainer",
+          "assetIds": [
+            "ASSET-018",
+            "ASSET-019"
+          ],
+          "camera": "Clean motion-graphic build; one idea at a time.",
+          "overlay": "Units, period, source, and caveat visible."
+        },
+        {
+          "shot": "04",
+          "durationSeconds": 10,
+          "type": "editorial_transition",
+          "assetIds": [],
+          "camera": "Cut on meaningful visual or sound transition.",
+          "overlay": "No decorative stock presented as evidence."
+        }
+      ],
+      "claimIds": [
+        "CLM-006",
+        "CLM-007"
+      ],
+      "editNotes": [
+        "Use only acquired assets with cleared rights.",
+        "Match archival dates and product models to the narrated period.",
+        "Do not imply a causal relationship through juxtaposition alone.",
+        "Keep charts readable on mobile; label axes and source.",
+        "Use restrained transitions; avoid generic AI-generated pseudo-archive."
+      ],
+      "audioNotes": {
+        "ambience": "Subtle location-appropriate ambience only when authentic or clearly designed.",
+        "music": "Restrained underscore; duck under narration.",
+        "sfx": "Use sparingly for transitions and interface/mechanical details; never fabricate documentary events."
+      }
+    },
+    {
+      "sceneId": "S06",
+      "act": "Who wins and pays",
+      "targetSeconds": 108,
+      "visualThesis": "Every shot must clarify a claim, explain a mechanism, establish context, or create a deliberate transition.",
+      "shotList": [
+        {
+          "shot": "01",
+          "durationSeconds": 8,
+          "type": "evidence_open",
+          "assetIds": [
+            "ASSET-020",
+            "ASSET-021"
+          ],
+          "camera": "Slow controlled push-in; preserve document legibility.",
+          "overlay": "Chapter title only; no unsupported superlatives."
+        },
+        {
+          "shot": "02",
+          "durationSeconds": 12,
+          "type": "context_broll",
+          "assetIds": [
+            null
+          ],
+          "camera": "Measured lateral move or locked archival frame.",
+          "overlay": "Date/location only when verified."
+        },
+        {
+          "shot": "03",
+          "durationSeconds": 16,
+          "type": "data_explainer",
+          "assetIds": [
+            "ASSET-022",
+            "ASSET-023"
+          ],
+          "camera": "Clean motion-graphic build; one idea at a time.",
+          "overlay": "Units, period, source, and caveat visible."
+        },
+        {
+          "shot": "04",
+          "durationSeconds": 10,
+          "type": "editorial_transition",
+          "assetIds": [],
+          "camera": "Cut on meaningful visual or sound transition.",
+          "overlay": "No decorative stock presented as evidence."
+        }
+      ],
+      "claimIds": [
+        "CLM-001",
+        "CLM-002",
+        "CLM-007",
+        "CLM-009",
+        "CLM-011",
+        "CLM-012",
+        "CLM-013",
+        "CLM-014"
+      ],
+      "editNotes": [
+        "Use only acquired assets with cleared rights.",
+        "Match archival dates and product models to the narrated period.",
+        "Do not imply a causal relationship through juxtaposition alone.",
+        "Keep charts readable on mobile; label axes and source.",
+        "Use restrained transitions; avoid generic AI-generated pseudo-archive."
+      ],
+      "audioNotes": {
+        "ambience": "Subtle location-appropriate ambience only when authentic or clearly designed.",
+        "music": "Restrained underscore; duck under narration.",
+        "sfx": "Use sparingly for transitions and interface/mechanical details; never fabricate documentary events."
+      }
+    },
+    {
+      "sceneId": "S07",
+      "act": "What remains",
+      "targetSeconds": 54,
+      "visualThesis": "Every shot must clarify a claim, explain a mechanism, establish context, or create a deliberate transition.",
+      "shotList": [
+        {
+          "shot": "01",
+          "durationSeconds": 8,
+          "type": "evidence_open",
+          "assetIds": [
+            "ASSET-024",
+            "ASSET-025"
+          ],
+          "camera": "Slow controlled push-in; preserve document legibility.",
+          "overlay": "Chapter title only; no unsupported superlatives."
+        },
+        {
+          "shot": "02",
+          "durationSeconds": 12,
+          "type": "context_broll",
+          "assetIds": [
+            null
+          ],
+          "camera": "Measured lateral move or locked archival frame.",
+          "overlay": "Date/location only when verified."
+        },
+        {
+          "shot": "03",
+          "durationSeconds": 16,
+          "type": "data_explainer",
+          "assetIds": [
+            "ASSET-026",
+            "ASSET-027"
+          ],
+          "camera": "Clean motion-graphic build; one idea at a time.",
+          "overlay": "Units, period, source, and caveat visible."
+        },
+        {
+          "shot": "04",
+          "durationSeconds": 10,
+          "type": "editorial_transition",
+          "assetIds": [],
+          "camera": "Cut on meaningful visual or sound transition.",
+          "overlay": "No decorative stock presented as evidence."
+        }
+      ],
+      "claimIds": [
+        "CLM-001",
+        "CLM-002",
+        "CLM-003",
+        "CLM-004",
+        "CLM-005",
+        "CLM-006",
+        "CLM-007",
+        "CLM-008",
+        "CLM-009",
+        "CLM-010",
+        "CLM-011",
+        "CLM-012"
+      ],
+      "editNotes": [
+        "Use only acquired assets with cleared rights.",
+        "Match archival dates and product models to the narrated period.",
+        "Do not imply a causal relationship through juxtaposition alone.",
+        "Keep charts readable on mobile; label axes and source.",
+        "Use restrained transitions; avoid generic AI-generated pseudo-archive."
+      ],
+      "audioNotes": {
+        "ambience": "Subtle location-appropriate ambience only when authentic or clearly designed.",
+        "music": "Restrained underscore; duck under narration.",
+        "sfx": "Use sparingly for transitions and interface/mechanical details; never fabricate documentary events."
+      }
+    }
+  ],
+  "assets": [
+    {
+      "id": "ASSET-001",
+      "sceneId": "S01",
+      "kind": "archival_footage",
+      "description": "Authentic footage of the company, product, factory, office, market, or period relevant to this chapter.",
+      "usage": "Establish time, place, and physical reality.",
+      "searchBrief": "Authentic, date-identifiable archival footage directly related to NVIDIA: How It Became the Engine of the AI Infrastructure Boom",
+      "preferredSources": [
+        "Company press/media archive",
+        "Government or public institutional archive",
+        "Licensed news footage libraries"
+      ],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    },
+    {
+      "id": "ASSET-002",
+      "sceneId": "S01",
+      "kind": "primary_document",
+      "description": "Original annual report, regulatory filing, investor presentation, court record, or dated company document supporting the chapter's claims.",
+      "usage": "Show the evidence on screen with page/section highlighted.",
+      "searchBrief": "Original primary document supporting claims in Cold open",
+      "preferredSources": [
+        "Company investor relations",
+        "SEC/official regulator or equivalent",
+        "Court or government archive"
+      ],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    },
+    {
+      "id": "ASSET-003",
+      "sceneId": "S01",
+      "kind": "data_visualization",
+      "description": "Evidence-led chart built only from sourced figures; show period, currency, units, source, and methodology.",
+      "usage": "Make the economic mechanism legible.",
+      "searchBrief": "Chart specification from verified project claim ledger",
+      "preferredSources": [],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    },
+    {
+      "id": "ASSET-004",
+      "sceneId": "S01",
+      "kind": "product_or_infrastructure_detail",
+      "description": "Close-up of the relevant product, component, facility, or infrastructure.",
+      "usage": "Give the viewer a concrete visual anchor.",
+      "searchBrief": "Accurate model- and date-matched product or infrastructure imagery",
+      "preferredSources": [
+        "Company media archive",
+        "Licensed editorial photo agency",
+        "Public institutional archive"
+      ],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    },
+    {
+      "id": "ASSET-005",
+      "sceneId": "S02",
+      "kind": "archival_footage",
+      "description": "Authentic footage of the company, product, factory, office, market, or period relevant to this chapter.",
+      "usage": "Establish time, place, and physical reality.",
+      "searchBrief": "Authentic, date-identifiable archival footage directly related to NVIDIA: How It Became the Engine of the AI Infrastructure Boom",
+      "preferredSources": [
+        "Company press/media archive",
+        "Government or public institutional archive",
+        "Licensed news footage libraries"
+      ],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    },
+    {
+      "id": "ASSET-006",
+      "sceneId": "S02",
+      "kind": "primary_document",
+      "description": "Original annual report, regulatory filing, investor presentation, court record, or dated company document supporting the chapter's claims.",
+      "usage": "Show the evidence on screen with page/section highlighted.",
+      "searchBrief": "Original primary document supporting claims in The system",
+      "preferredSources": [
+        "Company investor relations",
+        "SEC/official regulator or equivalent",
+        "Court or government archive"
+      ],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    },
+    {
+      "id": "ASSET-007",
+      "sceneId": "S02",
+      "kind": "data_visualization",
+      "description": "Evidence-led chart built only from sourced figures; show period, currency, units, source, and methodology.",
+      "usage": "Make the economic mechanism legible.",
+      "searchBrief": "Chart specification from verified project claim ledger",
+      "preferredSources": [],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    },
+    {
+      "id": "ASSET-008",
+      "sceneId": "S02",
+      "kind": "product_or_infrastructure_detail",
+      "description": "Close-up of the relevant product, component, facility, or infrastructure.",
+      "usage": "Give the viewer a concrete visual anchor.",
+      "searchBrief": "Accurate model- and date-matched product or infrastructure imagery",
+      "preferredSources": [
+        "Company media archive",
+        "Licensed editorial photo agency",
+        "Public institutional archive"
+      ],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    },
+    {
+      "id": "ASSET-009",
+      "sceneId": "S03",
+      "kind": "archival_footage",
+      "description": "Authentic footage of the company, product, factory, office, market, or period relevant to this chapter.",
+      "usage": "Establish time, place, and physical reality.",
+      "searchBrief": "Authentic, date-identifiable archival footage directly related to NVIDIA: How It Became the Engine of the AI Infrastructure Boom",
+      "preferredSources": [
+        "Company press/media archive",
+        "Government or public institutional archive",
+        "Licensed news footage libraries"
+      ],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    },
+    {
+      "id": "ASSET-010",
+      "sceneId": "S03",
+      "kind": "primary_document",
+      "description": "Original annual report, regulatory filing, investor presentation, court record, or dated company document supporting the chapter's claims.",
+      "usage": "Show the evidence on screen with page/section highlighted.",
+      "searchBrief": "Original primary document supporting claims in The hidden engine",
+      "preferredSources": [
+        "Company investor relations",
+        "SEC/official regulator or equivalent",
+        "Court or government archive"
+      ],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    },
+    {
+      "id": "ASSET-011",
+      "sceneId": "S03",
+      "kind": "data_visualization",
+      "description": "Evidence-led chart built only from sourced figures; show period, currency, units, source, and methodology.",
+      "usage": "Make the economic mechanism legible.",
+      "searchBrief": "Chart specification from verified project claim ledger",
+      "preferredSources": [],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    },
+    {
+      "id": "ASSET-012",
+      "sceneId": "S03",
+      "kind": "product_or_infrastructure_detail",
+      "description": "Close-up of the relevant product, component, facility, or infrastructure.",
+      "usage": "Give the viewer a concrete visual anchor.",
+      "searchBrief": "Accurate model- and date-matched product or infrastructure imagery",
+      "preferredSources": [
+        "Company media archive",
+        "Licensed editorial photo agency",
+        "Public institutional archive"
+      ],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    },
+    {
+      "id": "ASSET-013",
+      "sceneId": "S04",
+      "kind": "archival_footage",
+      "description": "Authentic footage of the company, product, factory, office, market, or period relevant to this chapter.",
+      "usage": "Establish time, place, and physical reality.",
+      "searchBrief": "Authentic, date-identifiable archival footage directly related to NVIDIA: How It Became the Engine of the AI Infrastructure Boom",
+      "preferredSources": [
+        "Company press/media archive",
+        "Government or public institutional archive",
+        "Licensed news footage libraries"
+      ],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    },
+    {
+      "id": "ASSET-014",
+      "sceneId": "S04",
+      "kind": "primary_document",
+      "description": "Original annual report, regulatory filing, investor presentation, court record, or dated company document supporting the chapter's claims.",
+      "usage": "Show the evidence on screen with page/section highlighted.",
+      "searchBrief": "Original primary document supporting claims in The strategic bet",
+      "preferredSources": [
+        "Company investor relations",
+        "SEC/official regulator or equivalent",
+        "Court or government archive"
+      ],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    },
+    {
+      "id": "ASSET-015",
+      "sceneId": "S04",
+      "kind": "product_or_infrastructure_detail",
+      "description": "Close-up of the relevant product, component, facility, or infrastructure.",
+      "usage": "Give the viewer a concrete visual anchor.",
+      "searchBrief": "Accurate model- and date-matched product or infrastructure imagery",
+      "preferredSources": [
+        "Company media archive",
+        "Licensed editorial photo agency",
+        "Public institutional archive"
+      ],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    },
+    {
+      "id": "ASSET-016",
+      "sceneId": "S05",
+      "kind": "archival_footage",
+      "description": "Authentic footage of the company, product, factory, office, market, or period relevant to this chapter.",
+      "usage": "Establish time, place, and physical reality.",
+      "searchBrief": "Authentic, date-identifiable archival footage directly related to NVIDIA: How It Became the Engine of the AI Infrastructure Boom",
+      "preferredSources": [
+        "Company press/media archive",
+        "Government or public institutional archive",
+        "Licensed news footage libraries"
+      ],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    },
+    {
+      "id": "ASSET-017",
+      "sceneId": "S05",
+      "kind": "primary_document",
+      "description": "Original annual report, regulatory filing, investor presentation, court record, or dated company document supporting the chapter's claims.",
+      "usage": "Show the evidence on screen with page/section highlighted.",
+      "searchBrief": "Original primary document supporting claims in The turning point",
+      "preferredSources": [
+        "Company investor relations",
+        "SEC/official regulator or equivalent",
+        "Court or government archive"
+      ],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    },
+    {
+      "id": "ASSET-018",
+      "sceneId": "S05",
+      "kind": "data_visualization",
+      "description": "Evidence-led chart built only from sourced figures; show period, currency, units, source, and methodology.",
+      "usage": "Make the economic mechanism legible.",
+      "searchBrief": "Chart specification from verified project claim ledger",
+      "preferredSources": [],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    },
+    {
+      "id": "ASSET-019",
+      "sceneId": "S05",
+      "kind": "product_or_infrastructure_detail",
+      "description": "Close-up of the relevant product, component, facility, or infrastructure.",
+      "usage": "Give the viewer a concrete visual anchor.",
+      "searchBrief": "Accurate model- and date-matched product or infrastructure imagery",
+      "preferredSources": [
+        "Company media archive",
+        "Licensed editorial photo agency",
+        "Public institutional archive"
+      ],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    },
+    {
+      "id": "ASSET-020",
+      "sceneId": "S06",
+      "kind": "archival_footage",
+      "description": "Authentic footage of the company, product, factory, office, market, or period relevant to this chapter.",
+      "usage": "Establish time, place, and physical reality.",
+      "searchBrief": "Authentic, date-identifiable archival footage directly related to NVIDIA: How It Became the Engine of the AI Infrastructure Boom",
+      "preferredSources": [
+        "Company press/media archive",
+        "Government or public institutional archive",
+        "Licensed news footage libraries"
+      ],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    },
+    {
+      "id": "ASSET-021",
+      "sceneId": "S06",
+      "kind": "primary_document",
+      "description": "Original annual report, regulatory filing, investor presentation, court record, or dated company document supporting the chapter's claims.",
+      "usage": "Show the evidence on screen with page/section highlighted.",
+      "searchBrief": "Original primary document supporting claims in Who wins and pays",
+      "preferredSources": [
+        "Company investor relations",
+        "SEC/official regulator or equivalent",
+        "Court or government archive"
+      ],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    },
+    {
+      "id": "ASSET-022",
+      "sceneId": "S06",
+      "kind": "data_visualization",
+      "description": "Evidence-led chart built only from sourced figures; show period, currency, units, source, and methodology.",
+      "usage": "Make the economic mechanism legible.",
+      "searchBrief": "Chart specification from verified project claim ledger",
+      "preferredSources": [],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    },
+    {
+      "id": "ASSET-023",
+      "sceneId": "S06",
+      "kind": "product_or_infrastructure_detail",
+      "description": "Close-up of the relevant product, component, facility, or infrastructure.",
+      "usage": "Give the viewer a concrete visual anchor.",
+      "searchBrief": "Accurate model- and date-matched product or infrastructure imagery",
+      "preferredSources": [
+        "Company media archive",
+        "Licensed editorial photo agency",
+        "Public institutional archive"
+      ],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    },
+    {
+      "id": "ASSET-024",
+      "sceneId": "S07",
+      "kind": "archival_footage",
+      "description": "Authentic footage of the company, product, factory, office, market, or period relevant to this chapter.",
+      "usage": "Establish time, place, and physical reality.",
+      "searchBrief": "Authentic, date-identifiable archival footage directly related to NVIDIA: How It Became the Engine of the AI Infrastructure Boom",
+      "preferredSources": [
+        "Company press/media archive",
+        "Government or public institutional archive",
+        "Licensed news footage libraries"
+      ],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    },
+    {
+      "id": "ASSET-025",
+      "sceneId": "S07",
+      "kind": "primary_document",
+      "description": "Original annual report, regulatory filing, investor presentation, court record, or dated company document supporting the chapter's claims.",
+      "usage": "Show the evidence on screen with page/section highlighted.",
+      "searchBrief": "Original primary document supporting claims in What remains",
+      "preferredSources": [
+        "Company investor relations",
+        "SEC/official regulator or equivalent",
+        "Court or government archive"
+      ],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    },
+    {
+      "id": "ASSET-026",
+      "sceneId": "S07",
+      "kind": "data_visualization",
+      "description": "Evidence-led chart built only from sourced figures; show period, currency, units, source, and methodology.",
+      "usage": "Make the economic mechanism legible.",
+      "searchBrief": "Chart specification from verified project claim ledger",
+      "preferredSources": [],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    },
+    {
+      "id": "ASSET-027",
+      "sceneId": "S07",
+      "kind": "product_or_infrastructure_detail",
+      "description": "Close-up of the relevant product, component, facility, or infrastructure.",
+      "usage": "Give the viewer a concrete visual anchor.",
+      "searchBrief": "Accurate model- and date-matched product or infrastructure imagery",
+      "preferredSources": [
+        "Company media archive",
+        "Licensed editorial photo agency",
+        "Public institutional archive"
+      ],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    }
+  ],
+  "rightsGate": {
+    "requiredFields": [
+      "sourceUrl",
+      "creator",
+      "license",
+      "licenseEvidence",
+      "territory",
+      "expiry",
+      "attributionRequired"
+    ],
+    "rule": "No asset may enter the final timeline unless provenance and usage rights are documented and approved."
+  },
+  "qualityGate": [
+    "Every factual visual maps to claim IDs and source records.",
+    "Charts reproduce source figures accurately and disclose calculations.",
+    "No stock footage is misrepresented as the company, location, event, or period.",
+    "Maps use verified boundaries and dated geographic context.",
+    "All images are sharp, correctly oriented, and appropriate to the stated period.",
+    "On-screen text is proofread and readable at mobile size."
+  ],
+  "warnings": [
+    "This is a shot and asset acquisition plan, not a collection of acquired media.",
+    "No external assets were downloaded or licensed.",
+    "Shot durations are planning targets and must be conformed to final narration.",
+    "All rights and factual provenance require human approval."
+  ]
+}
