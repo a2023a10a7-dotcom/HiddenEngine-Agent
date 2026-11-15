@@ -44,7 +44,10 @@ const buckets=[
  {id:"S07",act:"What remains",goal:"Resolve the thesis, state the counterargument, and disclose what remains unknown.",candidates:usable}
 ];
 const strategicCandidates=buckets.find(b=>b.id==="S04")?.candidates||[];
-if(!strategicCandidates.length) issues.push("S04 strategic bet has no documented decision/strategy claims. Research dated strategic decisions and evidence; do not fill this scene with generic CUDA descriptions.");
+if(!strategicCandidates.length) {
+ console.error(JSON.stringify({status:"blocked",issues:["S04 strategic bet has no documented decision/strategy claims. Research dated strategic decisions and evidence; do not fill this scene with generic CUDA descriptions."],warnings},null,2));
+ process.exit(1);
+}
 const scenes=buckets.map((b,i)=>({
  id:b.id,act:b.act,targetSeconds:project.scenes?.[i]?.targetSeconds||60,editorialGoal:b.goal,
  candidateClaimIds:[...new Set(b.candidates.map(c=>c.id))].slice(0,12),
