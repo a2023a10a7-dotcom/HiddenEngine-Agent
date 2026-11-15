@@ -21,6 +21,8 @@ for(const c of usable){
 }
 const unresolved=(project.research?.contradictions||[]).filter(c=>c.status!=="resolved");
 if(unresolved.length) warnings.push(unresolved.length+" unresolved contradiction(s) must be addressed in the script.");
+if(!project.thesis?.centralArgument?.trim()) issues.push("Missing central thesis: research must state a defensible argument before narration is assembled.");
+if(!project.thesis?.counterArgument?.trim()) issues.push("Missing counterargument: add the strongest evidence-based challenge to the thesis.");
 if(issues.length){
  console.error(JSON.stringify({status:"blocked",issues,warnings},null,2));
  process.exit(1);
@@ -41,6 +43,8 @@ const buckets=[
  {id:"S06",act:"Who wins and pays",goal:"Quantify consequences and distinguish company disclosures from independent estimates.",candidates:byType.consequences},
  {id:"S07",act:"What remains",goal:"Resolve the thesis, state the counterargument, and disclose what remains unknown.",candidates:usable}
 ];
+const strategicCandidates=buckets.find(b=>b.id==="S04")?.candidates||[];
+if(!strategicCandidates.length) issues.push("S04 strategic bet has no documented decision/strategy claims. Research dated strategic decisions and evidence; do not fill this scene with generic CUDA descriptions.");
 const scenes=buckets.map((b,i)=>({
  id:b.id,act:b.act,targetSeconds:project.scenes?.[i]?.targetSeconds||60,editorialGoal:b.goal,
  candidateClaimIds:[...new Set(b.candidates.map(c=>c.id))].slice(0,12),
