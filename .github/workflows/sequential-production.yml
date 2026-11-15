@@ -1,0 +1,153 @@
+name: HiddenEngine Sequential Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      project_id:
+        description: "Project folder name"
+        required: true
+        type: string
+      dry_run:
+        description: "Render a silent test instead of final voice"
+        required: true
+        default: false
+        type: boolean
+      ambient_bed:
+        description: "Add a quiet original ambient music bed"
+        required: true
+        default: true
+        type: boolean
+      voice_model:
+        description: "Piper voice model"
+        required: true
+        default: "en_US-lessac-medium"
+        type: string
+      speaking_rate:
+        description: "Piper length scale: higher is slower"
+        required: true
+        default: "1.0"
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: hiddenengine-sequential-${{ inputs.project_id }}
+  cancel-in-progress: false
+
+jobs:
+  production:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/beats-pipeline
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Node dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Validate project input
+        env:
+          PROJECT_ID: ${{ inputs.project_id }}
+        run: |
+          set -euo pipefail
+          [[ "$PROJECT_ID" =~ ^[a-z0-9-]+$ ]]
+          test -f "production/projects/$PROJECT_ID/project.json"
+
+      - name: 1. Evidence audit
+        env:
+          PROJECT_ID: ${{ inputs.project_id }}
+        run: node src/evidence-audit.js
+
+      - name: 2. Build script architecture
+        env:
+          PROJECT_ID: ${{ inputs.project_id }}
+        run: node src/script-architect.js
+
+      - name: 3. Assemble evidence-linked script draft
+        env:
+          PROJECT_ID: ${{ inputs.project_id }}
+        run: node src/script-writer.js
+
+      - name: 4. Build visual direction and asset register
+        env:
+          PROJECT_ID: ${{ inputs.project_id }}
+        run: node src/visual-director.js
+
+      - name: 5. Compile beats into renderer script
+        env:
+          PROJECT_ID: ${{ inputs.project_id }}
+          FORCE: "1"
+        run: node src/script-compile.js
+
+      - name: 6. Script gate
+        env:
+          PROJECT_ID: ${{ inputs.project_id }}
+        run: node src/script-gate.js
+
+      - name: Save generated production files
+        run: |
+          set -euo pipefail
+          git config user.name "HiddenEngine Agent"
+          git config user.email "agent@users.noreply.github.com"
+          git add "production/projects/${{ inputs.project_id }}/"
+          git diff --cached --quiet || git commit -m "Build sequential production package for ${{ inputs.project_id }}"
+          git push origin HEAD:feature/beats-pipeline
+
+      - name: Install rendering tools and fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-dejavu-core librsvg2-bin
+
+      - name: Install Piper TTS and voice
+        if: ${{ !inputs.dry_run }}
+        env:
+          PIPER_VOICE: ${{ inputs.voice_model }}
+        run: |
+          set -euo pipefail
+          python3 -m venv .venv-piper
+          .venv-piper/bin/pip install --upgrade pip
+          .venv-piper/bin/pip install piper-tts
+          lang="${PIPER_VOICE%%_*}"
+          locale_and_rest="${PIPER_VOICE#*_}"
+          locale="${locale_and_rest%%-*}"
+          speaker_and_quality="${locale_and_rest#*-}"
+          speaker="${speaker_and_quality%-*}"
+          quality="${speaker_and_quality##*-}"
+          mkdir -p models
+          base="https://huggingface.co/rhasspy/piper-voices/resolve/main/${lang}/${lang}_${locale}/${speaker}/${quality}/${PIPER_VOICE}"
+          curl -fL "$base.onnx" -o "models/${PIPER_VOICE}.onnx"
+          curl -fL "$base.onnx.json" -o "models/${PIPER_VOICE}.onnx.json"
+          echo "PIPER_MODEL=models/${PIPER_VOICE}.onnx" >> "$GITHUB_ENV"
+          echo "PIPER_EXECUTABLE=$GITHUB_WORKSPACE/.venv-piper/bin/piper" >> "$GITHUB_ENV"
+
+      - name: 7. Recheck script gate immediately before rendering
+        env:
+          PROJECT_ID: ${{ inputs.project_id }}
+        run: node src/script-gate.js
+
+      - name: 8. Render documentary
+        env:
+          PROJECT_ID: ${{ inputs.project_id }}
+          PIPER_LENGTH_SCALE: ${{ inputs.speaking_rate }}
+          TTS_FAKE: ${{ inputs.dry_run && '1' || '0' }}
+          AMBIENT: ${{ inputs.ambient_bed && '1' || '0' }}
+        run: node src/render-beats.js
+
+      - name: Upload video and review files
+        uses: actions/upload-artifact@v4
+        with:
+          name: hiddenengine-${{ inputs.project_id }}${{ inputs.dry_run && '-DRYRUN' || '' }}
+          path: |
+            dist/${{ inputs.project_id }}/the-hidden-engine-documentary.mp4
+            dist/${{ inputs.project_id }}/CREDITS.md
+            dist/${{ inputs.project_id }}/QA-REPORT.json
+            dist/${{ inputs.project_id }}/contact-sheet.jpg
+            dist/${{ inputs.project_id }}/FACT-CHECK-SHEET.md
+          if-no-files-found: error
+          retention-days: 14
