@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "projectId": "2026-11-14-nvidia-hidden-engine",
   "createdAt": "2026-11-14T15:00:00.000Z",
-  "updatedAt": "2026-11-15T00:03:16.375Z",
+  "updatedAt": "2026-11-15T16:40:13.626Z",
   "channel": "The Hidden Engine",
   "topic": "NVIDIA: How It Became the Engine of the AI Infrastructure Boom",
   "language": "en",
@@ -29,7 +29,7 @@
     ]
   },
   "research": {
-    "status": "ingestion_partial",
+    "status": "ingestion_complete",
     "questions": [
       "Which primary filings best explain NVIDIA's business model, segment economics, and customer concentration?",
       "How much of recent growth comes from Data Center versus Gaming, Networking, and other platforms?",
@@ -55,8 +55,8 @@
         "addedBy": "sources-import",
         "canonicalUrl": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
         "snapshotPath": "research/source-snapshots/SRC-001.json",
-        "ingestionStatus": "html_text_extracted",
-        "fetchedAt": "2026-11-15T00:03:15.880Z"
+        "ingestionStatus": "html_text_truncated",
+        "fetchedAt": "2026-11-15T16:40:09.868Z"
       },
       {
         "id": "SRC-002",
@@ -71,7 +71,7 @@
         "canonicalUrl": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
         "snapshotPath": "research/source-snapshots/SRC-002.json",
         "ingestionStatus": "html_text_extracted",
-        "fetchedAt": "2026-11-15T00:03:16.179Z"
+        "fetchedAt": "2026-11-15T16:40:10.076Z"
       },
       {
         "id": "SRC-003",
@@ -86,7 +86,7 @@
         "canonicalUrl": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/",
         "snapshotPath": "research/source-snapshots/SRC-003.json",
         "ingestionStatus": "html_text_extracted",
-        "fetchedAt": "2026-11-14T23:56:14.424Z"
+        "fetchedAt": "2026-11-15T16:40:10.802Z"
       },
       {
         "id": "SRC-004",
@@ -101,7 +101,7 @@
         "canonicalUrl": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Fourth-Quarter-and-Fiscal-2026/",
         "snapshotPath": "research/source-snapshots/SRC-004.json",
         "ingestionStatus": "html_text_extracted",
-        "fetchedAt": "2026-11-14T23:56:14.676Z"
+        "fetchedAt": "2026-11-15T16:40:11.020Z"
       },
       {
         "id": "SRC-005",
@@ -116,7 +116,7 @@
         "canonicalUrl": "https://docs.nvidia.com/cuda/cuda-programming-guide/",
         "snapshotPath": "research/source-snapshots/SRC-005.json",
         "ingestionStatus": "html_text_extracted",
-        "fetchedAt": "2026-11-14T23:56:14.927Z"
+        "fetchedAt": "2026-11-15T16:40:11.409Z"
       },
       {
         "id": "SRC-006",
@@ -131,7 +131,7 @@
         "canonicalUrl": "https://developer.nvidia.com/cuda/faq",
         "snapshotPath": "research/source-snapshots/SRC-006.json",
         "ingestionStatus": "html_text_extracted",
-        "fetchedAt": "2026-11-14T23:56:15.322Z"
+        "fetchedAt": "2026-11-15T16:40:12.087Z"
       },
       {
         "id": "SRC-007",
@@ -142,7 +142,11 @@
         "accessedAt": "2026-11-14T23:51:49.326Z",
         "type": "annual_report",
         "notes": "PDF annual report. Importer will flag it for dedicated PDF extraction; current source-ingest stage does not extract PDF text.",
-        "addedBy": "sources-import"
+        "addedBy": "sources-import",
+        "canonicalUrl": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000038/a2026-annualxreportxwebxfi.pdf",
+        "snapshotPath": "research/source-snapshots/SRC-007.json",
+        "ingestionStatus": "pdf_text_truncated",
+        "fetchedAt": "2026-11-15T16:40:12.155Z"
       }
     ],
     "contradictions": [],
@@ -167,13 +171,20 @@
         "attempted": 3,
         "succeeded": 2,
         "failed": 1
+      },
+      {
+        "at": "2026-11-15T16:40:13.626Z",
+        "action": "public_source_ingestion",
+        "attempted": 7,
+        "succeeded": 7,
+        "failed": 0
       }
     ],
     "sourceIngestion": {
-      "at": "2026-11-15T00:03:16.375Z",
-      "attempted": 3,
-      "succeeded": 2,
-      "failed": 1
+      "at": "2026-11-15T16:40:13.626Z",
+      "attempted": 7,
+      "succeeded": 7,
+      "failed": 0
     }
   },
   "scenes": [

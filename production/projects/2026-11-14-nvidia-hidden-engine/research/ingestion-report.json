@@ -1,32 +1,57 @@
 {
   "projectId": "2026-11-14-nvidia-hidden-engine",
-  "attempted": 3,
-  "succeeded": 2,
-  "failed": 1,
+  "attempted": 7,
+  "succeeded": 7,
+  "failed": 0,
   "results": [
     {
       "sourceId": "SRC-001",
-      "status": "html_text_extracted",
-      "textCharacters": 50000,
+      "status": "html_text_truncated",
+      "textCharacters": 200000,
       "canonicalUrl": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm"
     },
     {
       "sourceId": "SRC-002",
       "status": "html_text_extracted",
-      "textCharacters": 50000,
+      "textCharacters": 174507,
       "canonicalUrl": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm"
-    }
-  ],
-  "errors": [
+    },
+    {
+      "sourceId": "SRC-003",
+      "status": "html_text_extracted",
+      "textCharacters": 26568,
+      "canonicalUrl": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/"
+    },
+    {
+      "sourceId": "SRC-004",
+      "status": "html_text_extracted",
+      "textCharacters": 30313,
+      "canonicalUrl": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Fourth-Quarter-and-Fiscal-2026/"
+    },
+    {
+      "sourceId": "SRC-005",
+      "status": "html_text_extracted",
+      "textCharacters": 3714,
+      "canonicalUrl": "https://docs.nvidia.com/cuda/cuda-programming-guide/"
+    },
+    {
+      "sourceId": "SRC-006",
+      "status": "html_text_extracted",
+      "textCharacters": 16272,
+      "canonicalUrl": "https://developer.nvidia.com/cuda/faq"
+    },
     {
       "sourceId": "SRC-007",
-      "error": "Response exceeds safety limit (20971520 bytes)."
+      "status": "pdf_text_truncated",
+      "textCharacters": 200000,
+      "canonicalUrl": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000038/a2026-annualxreportxwebxfi.pdf"
     }
   ],
+  "errors": [],
   "limits": {
-    "maxResponseBytes": 20971520,
+    "maxResponseBytes": 33554432,
     "maxHtmlBytes": 12582912,
-    "maxTextCharacters": 50000,
+    "maxTextCharacters": 200000,
     "maxPdfPages": 120
   },
   "limitations": [
