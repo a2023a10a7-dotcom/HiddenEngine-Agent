@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "projectId": "2026-11-14-nvidia-hidden-engine",
   "createdAt": "2026-11-14T15:00:00.000Z",
-  "updatedAt": "2026-11-15T16:45:44.243Z",
+  "updatedAt": "2026-11-15T16:51:50.164Z",
   "channel": "The Hidden Engine",
   "topic": "NVIDIA: How It Became the Engine of the AI Infrastructure Boom",
   "language": "en",
@@ -29,7 +29,7 @@
     ]
   },
   "research": {
-    "status": "ingestion_complete",
+    "status": "claims_imported",
     "questions": [
       "Which primary filings best explain NVIDIA's business model, segment economics, and customer concentration?",
       "How much of recent growth comes from Data Center versus Gaming, Networking, and other platforms?",
@@ -41,7 +41,111 @@
       "Which parts of the AI infrastructure boom are durable workloads versus speculative capacity buildout?",
       "What independent evidence challenges NVIDIA's own framing, and what remains unknown?"
     ],
-    "claims": [],
+    "claims": [
+      {
+        "id": "CLM-001",
+        "text": "NVIDIA reported fiscal-year 2026 revenue of $215.9 billion, up 65%, while Data Center revenue was up 68%.",
+        "classification": "verified",
+        "sourceIds": [
+          "SRC-001"
+        ],
+        "passageQuote": "Revenue for fiscal year 2026 was $215.9 billion, up 65% from a year ago. Data Center revenue for fiscal year 2026 was up 68% from a year ago.",
+        "passageReference": "verbatim passage matched in SRC-001: “Revenue for fiscal year 2026 was $215.9 billion, up 65% from a year ago. Data Center revenue for fiscal year 2026 was up…”",
+        "passageMatchedSourceId": "SRC-001",
+        "importedAt": "2026-11-15T16:51:50.156Z"
+      },
+      {
+        "id": "CLM-002",
+        "text": "NVIDIA said Gaming revenue for fiscal year 2026 was up 41%, driven by Blackwell demand.",
+        "classification": "attributed",
+        "sourceIds": [
+          "SRC-001"
+        ],
+        "passageQuote": "Gaming revenue for fiscal year 2026 was up 41% from a year ago, driven by strong Blackwell demand.",
+        "passageReference": "verbatim passage matched in SRC-001: “Gaming revenue for fiscal year 2026 was up 41% from a year ago, driven by strong Blackwell demand.”",
+        "passageMatchedSourceId": "SRC-001",
+        "attribution": "NVIDIA's Form 10-K",
+        "importedAt": "2026-11-15T16:51:50.156Z"
+      },
+      {
+        "id": "CLM-003",
+        "text": "NVIDIA describes its GPUs as the foundation of its accelerated-computing platform for parallel workloads including neural-network training and inference.",
+        "classification": "attributed",
+        "sourceIds": [
+          "SRC-001"
+        ],
+        "passageQuote": "At the foundation of the NVIDIA accelerated computing platform are our GPUs, which excel at parallel workloads such as the training and inferencing of neural networks.",
+        "passageReference": "verbatim passage matched in SRC-001: “At the foundation of the NVIDIA accelerated computing platform are our GPUs, which excel at parallel workloads such as t…”",
+        "passageMatchedSourceId": "SRC-001",
+        "attribution": "NVIDIA's Form 10-K",
+        "importedAt": "2026-11-15T16:51:50.157Z"
+      },
+      {
+        "id": "CLM-004",
+        "text": "NVIDIA describes its full-stack computing platform as combining chips with CUDA, CUDA-X libraries, AI models and training datasets, APIs, SDKs, and application frameworks.",
+        "classification": "attributed",
+        "sourceIds": [
+          "SRC-001"
+        ],
+        "passageQuote": "While our approach starts with powerful chips, what makes it a full-stack computing platform is our large body of software, including the CUDA development platform, the CUDA-X collection of acceleration libraries, AI models and training data sets, APIs, SDKs, and domain-specific application frameworks.",
+        "passageReference": "verbatim passage matched in SRC-001: “While our approach starts with powerful chips, what makes it a full-stack computing platform is our large body of softwa…”",
+        "passageMatchedSourceId": "SRC-001",
+        "attribution": "NVIDIA's Form 10-K",
+        "importedAt": "2026-11-15T16:51:50.157Z"
+      },
+      {
+        "id": "CLM-005",
+        "text": "NVIDIA's gross margin decreased to 71.1% in fiscal 2026 from 75.0% in fiscal 2025; the company cited its transition to Blackwell full-scale data-center solutions and a $4.5 billion H20-related charge.",
+        "classification": "attributed",
+        "sourceIds": [
+          "SRC-001"
+        ],
+        "passageQuote": "Gross margins decreased to 71.1% in fiscal year 2026 from 75.0% in fiscal year 2025 as our business model transitioned from offering Hopper HGX systems to Blackwell full-scale datacenter solutions and a $4.5 billion charge associated with H20 excess inventory and purchase obligations in the first quarter of fiscal year 2026.",
+        "passageReference": "verbatim passage matched in SRC-001: “Gross margins decreased to 71.1% in fiscal year 2026 from 75.0% in fiscal year 2025 as our business model transitioned f…”",
+        "passageMatchedSourceId": "SRC-001",
+        "attribution": "NVIDIA's Form 10-K",
+        "importedAt": "2026-11-15T16:51:50.157Z"
+      },
+      {
+        "id": "CLM-006",
+        "text": "NVIDIA said its supply commitments increased from $119 billion in the prior quarter to $279 billion as of July 26, 2026.",
+        "classification": "attributed",
+        "sourceIds": [
+          "SRC-002"
+        ],
+        "passageQuote": "increasing supply commitments from $ 119 billion last quarter to $ 279 billion as of July 26, 2026.",
+        "passageReference": "verbatim passage matched in SRC-002: “increasing supply commitments from $ 119 billion last quarter to $ 279 billion as of July 26, 2026.”",
+        "passageMatchedSourceId": "SRC-002",
+        "attribution": "NVIDIA's Form 10-Q",
+        "importedAt": "2026-11-15T16:51:50.162Z"
+      },
+      {
+        "id": "CLM-007",
+        "text": "NVIDIA disclosed that some supplier agreements may be canceled, rescheduled, or adjusted before firm orders, and that changes may result in additional costs.",
+        "classification": "attributed",
+        "sourceIds": [
+          "SRC-002"
+        ],
+        "passageQuote": "in certain instances, these agreements may be cancelable, rescheduled, or adjustable for our business needs prior to placing firm orders. Changes to these agreements may result in additional costs.",
+        "passageReference": "verbatim passage matched in SRC-002: “in certain instances, these agreements may be cancelable, rescheduled, or adjustable for our business needs prior to pla…”",
+        "passageMatchedSourceId": "SRC-002",
+        "attribution": "NVIDIA's Form 10-Q",
+        "importedAt": "2026-11-15T16:51:50.162Z"
+      },
+      {
+        "id": "CLM-008",
+        "text": "The CUDA Programming Guide describes CUDA as a parallel-computing platform and programming model developed by NVIDIA that uses GPU processing power.",
+        "classification": "attributed",
+        "sourceIds": [
+          "SRC-005"
+        ],
+        "passageQuote": "CUDA is a parallel computing platform and programming model developed by NVIDIA that enables dramatic increases in computing performance by harnessing the power of the GPU.",
+        "passageReference": "verbatim passage matched in SRC-005: “CUDA is a parallel computing platform and programming model developed by NVIDIA that enables dramatic increases in compu…”",
+        "passageMatchedSourceId": "SRC-005",
+        "attribution": "NVIDIA CUDA Programming Guide",
+        "importedAt": "2026-11-15T16:51:50.164Z"
+      }
+    ],
     "sources": [
       {
         "id": "SRC-001",
@@ -185,6 +289,13 @@
         "attempted": 7,
         "succeeded": 7,
         "failed": 0
+      },
+      {
+        "at": "2026-11-15T16:51:50.164Z",
+        "action": "claims_import",
+        "received": 14,
+        "accepted": 8,
+        "rejected": 6
       }
     ],
     "sourceIngestion": {
