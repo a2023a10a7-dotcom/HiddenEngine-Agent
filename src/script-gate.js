@@ -41,6 +41,7 @@ if (!sources.size) err("ledger", "project.json has no research.sources.");
 
 const used = new Set(), rows = [];
 const narrationFingerprints = new Map();
+const claimOccurrences = new Map();
 const targetForMinimum = Number(script.target_duration_minutes) || (Number(project.targetDurationSeconds) / 60) || 0;
 const requiredMinimumWords = targetForMinimum ? Math.ceil(targetForMinimum * 120) : 0;
 let beatCount = 0, stockCount = 0, totalWords = 0;
@@ -68,6 +69,8 @@ for (const [si, sc] of (script.scenes || []).entries()) {
       const c = claims.get(cid);
       if (!c) { err(w, "unknown claim_id: " + cid); continue; }
       used.add(cid); linked.push(c);
+      if (claimOccurrences.has(cid)) err(w, "claim " + cid + " is reused; first appeared in " + claimOccurrences.get(cid) + ". Develop a different evidence-backed point instead.");
+      else claimOccurrences.set(cid, w);
       if (!ELIGIBLE.has(c.classification)) err(w, "claim " + cid + " is '" + c.classification + "' and cannot be narrated.");
       if (!str(c.passageQuote) || !str(c.passageReference) || c.passageMatchedSourceId !== (c.sourceIds || [])[0]) err(w, "claim " + cid + " lacks a recorded exact passage, passage reference, or matched source; manual verification is still required.");
     }
