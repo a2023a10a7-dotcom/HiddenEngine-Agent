@@ -9,7 +9,7 @@ on:
       - "src/script-writer.js"
       - "src/script-compile.js"
       - "src/script-gate.js"
-      - "src/render-cards.js"
+      - "src/render-cards.js"\n      - "src/render-beats.js"\n      - "src/prepare-project-assets.js"\n      - ".github/workflows/sequential-production.yml"
   workflow_dispatch:
     inputs:
       project_id:
