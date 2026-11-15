@@ -194,7 +194,7 @@
       },
       {
         "id": "CLM-012",
-        "text": "In Q2 FY27, NVIDIA revenue was $96,221, up 106% year over year, and gross margin was 75.0%.",
+        "text": "In Q2 FY27, NVIDIA reported revenue of $96.221 billion, up 106% year over year, and gross margin of 75.0%. The source table reports figures in millions of dollars.",
         "classification": "verified",
         "sourceIds": [
           "SRC-003"
@@ -203,7 +203,7 @@
         "passageReference": "verbatim passage matched in SRC-003: “Q2 FY27 Q1 FY27 Q2 FY26 Q/Q Y/Y Revenue $96,221 $81,615 $46,743 18 % 106 % Gross margin 75.0 % 74.9 % 72.4 % 0.1 pts 2.6…”",
         "passageMatchedSourceId": "SRC-003",
         "importedAt": "2026-11-15T17:01:24.462Z",
-        "narrationDraft": "The second-quarter results provide a more recent snapshot. NVIDIA reported revenue of $96,221 million, up 106 percent year over year, with gross margin at 75.0 percent. These are reported quarterly results, not a forecast. They show that the business remained large and fast-growing in that period, while leaving the deeper question unanswered: how much of this demand is sustainable?"
+        "narrationDraft": "The second-quarter results provide a more recent snapshot. NVIDIA reported revenue of $96.221 billion, up 106 percent year over year, with gross margin at 75.0 percent. These are reported quarterly results, not a forecast. They show that the business remained large and fast-growing in that period, while leaving the deeper question unanswered: how much of this demand is sustainable?"
       },
       {
         "id": "CLM-013",
@@ -244,7 +244,7 @@
         "passageReference": "FY2019 Form 10-K, Business section, platform strategy discussion",
         "passageMatchedSourceId": "SRC-008",
         "importedAt": "2026-11-15T00:00:00.000Z",
-        "narrationDraft": "The platform idea predates the current AI boom. In its fiscal 2019 annual filing, NVIDIA described a strategy that combined hardware, system software, programmable algorithms, libraries, systems, and services. It identified GPUs and CUDA as building blocks and said a growing developer base increased the platform's value to customers. This is the company's own historical account, but it shows that the full-stack ambition was already explicit years earlier. The filing does not quantify the separate contribution of each layer, so this supports a documented strategic direction, not a numerical estimate of its effect."
+        "narrationDraft": "The platform idea predates the current AI boom. In its fiscal 2019 annual filing, NVIDIA described a strategy that combined hardware, system software, programmable algorithms, libraries, systems, and services. It identified GPUs and CUDA as building blocks and said a growing developer base increased the platform's value to customers. This is the company's own historical account, but it shows that the full-stack ambition was already explicit years earlier. The filing does not quantify each layer's separate contribution or its effect."
       },
       {
         "id": "CLM-016",
