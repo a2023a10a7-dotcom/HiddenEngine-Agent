@@ -49,8 +49,8 @@ if(!strategicCandidates.length) {
  process.exit(1);
 }
 const scenes=buckets.map((b,i)=>({
- id:b.id,act:b.act,targetSeconds:project.scenes?.[i]?.targetSeconds||60,editorialGoal:b.goal,
- candidateClaimIds:[...new Set(b.candidates.map(c=>c.id))].slice(0,12),
+ id:b.id,act:b.act,targetSeconds:project.scenes?.find(s=>s.id===b.id)?.targetSeconds||60,editorialGoal:b.goal,
+ candidateClaimIds:[...new Set((project.editorialPlan?.sceneClaimIds?.[b.id]||b.candidates.map(c=>c.id)))].slice(0,12),
  requiredChecks:["Select only claims that directly support this scene.","Record the precise source passage, page/table/section, and publication date.","Do not upgrade estimates, attributions, or analysis into verified fact.","Add counter-evidence and uncertainty where material."],
  narrationDraft:null,visualIdeas:[],status:"outline_only"
 }));
