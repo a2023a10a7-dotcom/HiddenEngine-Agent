@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "projectId": "2026-11-14-nvidia-hidden-engine",
   "createdAt": "2026-11-14T15:00:00.000Z",
-  "updatedAt": "2026-11-14T23:56:15.346Z",
+  "updatedAt": "2026-11-15T00:03:16.375Z",
   "channel": "The Hidden Engine",
   "topic": "NVIDIA: How It Became the Engine of the AI Infrastructure Boom",
   "language": "en",
@@ -29,7 +29,7 @@
     ]
   },
   "research": {
-    "status": "sources_pending_import",
+    "status": "ingestion_partial",
     "questions": [
       "Which primary filings best explain NVIDIA's business model, segment economics, and customer concentration?",
       "How much of recent growth comes from Data Center versus Gaming, Networking, and other platforms?",
@@ -52,7 +52,11 @@
         "accessedAt": "2026-11-14T23:51:49.325Z",
         "type": "primary_filing",
         "notes": "Primary annual filing. Inspect business overview, risk factors, MD&A, segments, supply chain, customer concentration, and cash flows.",
-        "addedBy": "sources-import"
+        "addedBy": "sources-import",
+        "canonicalUrl": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
+        "snapshotPath": "research/source-snapshots/SRC-001.json",
+        "ingestionStatus": "html_text_extracted",
+        "fetchedAt": "2026-11-15T00:03:15.880Z"
       },
       {
         "id": "SRC-002",
@@ -63,7 +67,11 @@
         "accessedAt": "2026-11-14T23:51:49.326Z",
         "type": "primary_filing",
         "notes": "Primary quarterly filing. Inspect revenue by market platform, geographic customer headquarters, customer concentration, inventory, commitments, supply, and risk factors.",
-        "addedBy": "sources-import"
+        "addedBy": "sources-import",
+        "canonicalUrl": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+        "snapshotPath": "research/source-snapshots/SRC-002.json",
+        "ingestionStatus": "html_text_extracted",
+        "fetchedAt": "2026-11-15T00:03:16.179Z"
       },
       {
         "id": "SRC-003",
@@ -152,13 +160,20 @@
         "attempted": 7,
         "succeeded": 4,
         "failed": 3
+      },
+      {
+        "at": "2026-11-15T00:03:16.375Z",
+        "action": "public_source_ingestion",
+        "attempted": 3,
+        "succeeded": 2,
+        "failed": 1
       }
     ],
     "sourceIngestion": {
-      "at": "2026-11-14T23:56:15.346Z",
-      "attempted": 7,
-      "succeeded": 4,
-      "failed": 3
+      "at": "2026-11-15T00:03:16.375Z",
+      "attempted": 3,
+      "succeeded": 2,
+      "failed": 1
     }
   },
   "scenes": [

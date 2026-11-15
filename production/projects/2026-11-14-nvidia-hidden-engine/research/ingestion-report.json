@@ -1,46 +1,38 @@
 {
   "projectId": "2026-11-14-nvidia-hidden-engine",
-  "attempted": 7,
+  "attempted": 3,
+  "succeeded": 2,
+  "failed": 1,
   "results": [
     {
-      "sourceId": "SRC-003",
+      "sourceId": "SRC-001",
       "status": "html_text_extracted",
-      "canonicalUrl": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/"
+      "textCharacters": 50000,
+      "canonicalUrl": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm"
     },
     {
-      "sourceId": "SRC-004",
+      "sourceId": "SRC-002",
       "status": "html_text_extracted",
-      "canonicalUrl": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Fourth-Quarter-and-Fiscal-2026/"
-    },
-    {
-      "sourceId": "SRC-005",
-      "status": "html_text_extracted",
-      "canonicalUrl": "https://docs.nvidia.com/cuda/cuda-programming-guide/"
-    },
-    {
-      "sourceId": "SRC-006",
-      "status": "html_text_extracted",
-      "canonicalUrl": "https://developer.nvidia.com/cuda/faq"
+      "textCharacters": 50000,
+      "canonicalUrl": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm"
     }
   ],
   "errors": [
     {
-      "sourceId": "SRC-001",
-      "error": "HTML body exceeds safety limit."
-    },
-    {
-      "sourceId": "SRC-002",
-      "error": "HTML body exceeds safety limit."
-    },
-    {
       "sourceId": "SRC-007",
-      "error": "Response exceeds safety limit."
+      "error": "Response exceeds safety limit (20971520 bytes)."
     }
   ],
+  "limits": {
+    "maxResponseBytes": 20971520,
+    "maxHtmlBytes": 12582912,
+    "maxTextCharacters": 50000,
+    "maxPdfPages": 120
+  },
   "limitations": [
     "No login, paywall bypass, or script execution.",
-    "PDFs are detected but not parsed.",
-    "Extracted text may omit tables, footnotes, charts, or dynamic content.",
-    "Extraction is not fact-checking; rights and quotation limits need separate review."
+    "Scanned/image-only PDFs require OCR and are reported as thin_or_scanned_pdf.",
+    "PDF and HTML extraction may omit or reorder tables, footnotes, charts, and complex layouts.",
+    "Extraction is not fact-checking; source context and every claim still require review."
   ]
 }
