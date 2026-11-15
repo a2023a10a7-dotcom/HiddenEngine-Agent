@@ -137,7 +137,7 @@ async function main() {
         const pos = m => "x='(iw-1920)*" + m + "*" + fexp + "':y='(ih-1080)*" + m + "*" + fexp + "'";
         const sceneAssets = assetsByScene.get(si + 1) || [];
         const visual = sceneAssets[bi % sceneAssets.length];
-        const visualPath = path.join(FINAL_DIR, visual.previewFile);
+        const visualPath = path.resolve(FINAL_DIR, visual.previewFile);
         await access(visualPath).catch(() => { throw new Error("Missing visual asset " + visual.id + ": " + visualPath); });
         const imageInput = nIn++;
         inputs.push("-loop", "1", "-framerate", String(FPS), "-t", d.toFixed(3), "-i", visualPath);
