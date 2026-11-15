@@ -1,0 +1,199 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectId": "2026-11-14-nvidia-hidden-engine",
+  "topic": "NVIDIA: How It Became the Engine of the AI Infrastructure Boom",
+  "createdAt": "2026-11-15T17:24:50.464Z",
+  "status": "outline_only_not_script_ready",
+  "thesisPrompt": "What is the hidden economic mechanism, and which documented strategic choices made it matter?",
+  "workingThesis": null,
+  "counterArgument": null,
+  "sourceCoverage": {
+    "sourceCount": 7,
+    "claimCount": 14,
+    "eligibleClaimCount": 14,
+    "unresolvedContradictions": 0
+  },
+  "scenes": [
+    {
+      "id": "S01",
+      "act": "Cold open",
+      "targetSeconds": 63,
+      "editorialGoal": "Establish the stakes with the strongest specific, source-backed fact.",
+      "candidateClaimIds": [
+        "CLM-001",
+        "CLM-002",
+        "CLM-005",
+        "CLM-006",
+        "CLM-007",
+        "CLM-009",
+        "CLM-011",
+        "CLM-012",
+        "CLM-013",
+        "CLM-014"
+      ],
+      "requiredChecks": [
+        "Select only claims that directly support this scene.",
+        "Record the precise source passage, page/table/section, and publication date.",
+        "Do not upgrade estimates, attributions, or analysis into verified fact.",
+        "Add counter-evidence and uncertainty where material."
+      ],
+      "narrationDraft": null,
+      "visualIdeas": [],
+      "status": "outline_only"
+    },
+    {
+      "id": "S02",
+      "act": "The system",
+      "targetSeconds": 135,
+      "editorialGoal": "Explain the company, market, customer, and product context.",
+      "candidateClaimIds": [
+        "CLM-001",
+        "CLM-002",
+        "CLM-003",
+        "CLM-004",
+        "CLM-005",
+        "CLM-006",
+        "CLM-007",
+        "CLM-008",
+        "CLM-009",
+        "CLM-010",
+        "CLM-011",
+        "CLM-012"
+      ],
+      "requiredChecks": [
+        "Select only claims that directly support this scene.",
+        "Record the precise source passage, page/table/section, and publication date.",
+        "Do not upgrade estimates, attributions, or analysis into verified fact.",
+        "Add counter-evidence and uncertainty where material."
+      ],
+      "narrationDraft": null,
+      "visualIdeas": [],
+      "status": "outline_only"
+    },
+    {
+      "id": "S03",
+      "act": "The hidden engine",
+      "targetSeconds": 198,
+      "editorialGoal": "Explain how money is made, where costs sit, and where value accrues.",
+      "candidateClaimIds": [
+        "CLM-001",
+        "CLM-002",
+        "CLM-005",
+        "CLM-007",
+        "CLM-009",
+        "CLM-011",
+        "CLM-012",
+        "CLM-013",
+        "CLM-014"
+      ],
+      "requiredChecks": [
+        "Select only claims that directly support this scene.",
+        "Record the precise source passage, page/table/section, and publication date.",
+        "Do not upgrade estimates, attributions, or analysis into verified fact.",
+        "Add counter-evidence and uncertainty where material."
+      ],
+      "narrationDraft": null,
+      "visualIdeas": [],
+      "status": "outline_only"
+    },
+    {
+      "id": "S04",
+      "act": "The strategic bet",
+      "targetSeconds": 180,
+      "editorialGoal": "Reconstruct documented decisions, incentives, and trade-offs.",
+      "candidateClaimIds": [],
+      "requiredChecks": [
+        "Select only claims that directly support this scene.",
+        "Record the precise source passage, page/table/section, and publication date.",
+        "Do not upgrade estimates, attributions, or analysis into verified fact.",
+        "Add counter-evidence and uncertainty where material."
+      ],
+      "narrationDraft": null,
+      "visualIdeas": [],
+      "status": "outline_only"
+    },
+    {
+      "id": "S05",
+      "act": "The turning point",
+      "targetSeconds": 162,
+      "editorialGoal": "Show what changed, when, and what evidence supports the shift.",
+      "candidateClaimIds": [
+        "CLM-006",
+        "CLM-007"
+      ],
+      "requiredChecks": [
+        "Select only claims that directly support this scene.",
+        "Record the precise source passage, page/table/section, and publication date.",
+        "Do not upgrade estimates, attributions, or analysis into verified fact.",
+        "Add counter-evidence and uncertainty where material."
+      ],
+      "narrationDraft": null,
+      "visualIdeas": [],
+      "status": "outline_only"
+    },
+    {
+      "id": "S06",
+      "act": "Who wins and pays",
+      "targetSeconds": 108,
+      "editorialGoal": "Quantify consequences and distinguish company disclosures from independent estimates.",
+      "candidateClaimIds": [
+        "CLM-001",
+        "CLM-002",
+        "CLM-007",
+        "CLM-009",
+        "CLM-011",
+        "CLM-012",
+        "CLM-013",
+        "CLM-014"
+      ],
+      "requiredChecks": [
+        "Select only claims that directly support this scene.",
+        "Record the precise source passage, page/table/section, and publication date.",
+        "Do not upgrade estimates, attributions, or analysis into verified fact.",
+        "Add counter-evidence and uncertainty where material."
+      ],
+      "narrationDraft": null,
+      "visualIdeas": [],
+      "status": "outline_only"
+    },
+    {
+      "id": "S07",
+      "act": "What remains",
+      "targetSeconds": 54,
+      "editorialGoal": "Resolve the thesis, state the counterargument, and disclose what remains unknown.",
+      "candidateClaimIds": [
+        "CLM-001",
+        "CLM-002",
+        "CLM-003",
+        "CLM-004",
+        "CLM-005",
+        "CLM-006",
+        "CLM-007",
+        "CLM-008",
+        "CLM-009",
+        "CLM-010",
+        "CLM-011",
+        "CLM-012"
+      ],
+      "requiredChecks": [
+        "Select only claims that directly support this scene.",
+        "Record the precise source passage, page/table/section, and publication date.",
+        "Do not upgrade estimates, attributions, or analysis into verified fact.",
+        "Add counter-evidence and uncertainty where material."
+      ],
+      "narrationDraft": null,
+      "visualIdeas": [],
+      "status": "outline_only"
+    }
+  ],
+  "mandatoryEditorialRules": [
+    "No narration sentence may introduce a factual assertion without one or more claim IDs.",
+    "Keep reported fact, attributed statement, estimate, analysis, and disputed claim linguistically distinct.",
+    "Do not infer causation from correlation or chronology alone.",
+    "Do not invent quotations, numbers, dates, scenes, or visual evidence.",
+    "Use primary documents for financial figures whenever available; record fiscal period and currency.",
+    "Visual concepts are not acquired assets. Rights and provenance must be cleared separately."
+  ],
+  "blockingIssues": [],
+  "warnings": []
+}

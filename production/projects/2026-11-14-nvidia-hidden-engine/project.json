@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "projectId": "2026-11-14-nvidia-hidden-engine",
   "createdAt": "2026-11-14T15:00:00.000Z",
-  "updatedAt": "2026-11-15T17:19:04.799Z",
+  "updatedAt": "2026-11-15T17:24:50.417Z",
   "channel": "The Hidden Engine",
   "topic": "NVIDIA: How It Became the Engine of the AI Infrastructure Boom",
   "language": "en",
@@ -386,7 +386,7 @@
     },
     "evidenceAudit": {
       "status": "structurally_consistent",
-      "checkedAt": "2026-11-15T17:19:04.799Z",
+      "checkedAt": "2026-11-15T17:24:50.417Z",
       "report": "EVIDENCE-AUDIT.json"
     }
   },
