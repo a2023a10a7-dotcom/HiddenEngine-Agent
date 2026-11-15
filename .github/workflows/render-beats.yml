@@ -10,7 +10,7 @@ on:
       dry_run:
         description: "Quick test with silent audio (not publishable)"
         required: true
-        default: true
+        default: false
         type: boolean
       ambient_bed:
         description: "Add a quiet original ambient music bed"
