@@ -1,0 +1,94 @@
+[
+  {
+    "sourceId": "SRC-001",
+    "quote": "Revenue for fiscal year 2026 was $215.9 billion, up 65% from a year ago. Data Center revenue for fiscal year 2026 was up 68% from a year ago.",
+    "text": "NVIDIA reported fiscal-year 2026 revenue of $215.9 billion, up 65%, while Data Center revenue was up 68%.",
+    "classification": "verified"
+  },
+  {
+    "sourceId": "SRC-001",
+    "quote": "Gaming revenue for fiscal year 2026 was up 41% from a year ago, driven by strong Blackwell demand.",
+    "text": "NVIDIA said Gaming revenue for fiscal year 2026 was up 41%, driven by Blackwell demand.",
+    "classification": "attributed",
+    "attribution": "NVIDIA's Form 10-K"
+  },
+  {
+    "sourceId": "SRC-001",
+    "quote": "Compute & Networking $ 193,479 $ 116,193 $ 77,286 67 % Graphics 22,459 14,304 8,155 57 % Total $ 215,938 $ 130,497 $ 85,441 65 %",
+    "text": "For fiscal 2026, Compute & Networking revenue was $193,479 million and Graphics revenue was $22,459 million.",
+    "classification": "verified"
+  },
+  {
+    "sourceId": "SRC-001",
+    "quote": "Compute & Networking $ 130,141 $ 82,875 $ 47,266 57 % Graphics 9,156 5,085 4,071 80 % Total $ 139,297 $ 87,960 $ 51,337 58 %",
+    "text": "For fiscal 2026, Compute & Networking segment operating income was $130,141 million and Graphics segment operating income was $9,156 million.",
+    "classification": "verified"
+  },
+  {
+    "sourceId": "SRC-001",
+    "quote": "At the foundation of the NVIDIA accelerated computing platform are our GPUs, which excel at parallel workloads such as the training and inferencing of neural networks.",
+    "text": "NVIDIA describes its GPUs as the foundation of its accelerated-computing platform for parallel workloads including neural-network training and inference.",
+    "classification": "attributed",
+    "attribution": "NVIDIA's Form 10-K"
+  },
+  {
+    "sourceId": "SRC-001",
+    "quote": "While our approach starts with powerful chips, what makes it a full-stack computing platform is our large body of software, including the CUDA development platform, the CUDA-X collection of acceleration libraries, AI models and training data sets, APIs, SDKs, and domain-specific application frameworks.",
+    "text": "NVIDIA describes its full-stack computing platform as combining chips with CUDA, CUDA-X libraries, AI models and training datasets, APIs, SDKs, and application frameworks.",
+    "classification": "attributed",
+    "attribution": "NVIDIA's Form 10-K"
+  },
+  {
+    "sourceId": "SRC-001",
+    "quote": "Gross margins decreased to 71.1% in fiscal year 2026 from 75.0% in fiscal year 2025 as our business model transitioned from offering Hopper HGX systems to Blackwell full-scale datacenter solutions and a $4.5 billion charge associated with H20 excess inventory and purchase obligations in the first quarter of fiscal year 2026.",
+    "text": "NVIDIA's gross margin decreased to 71.1% in fiscal 2026 from 75.0% in fiscal 2025; the company cited its transition to Blackwell full-scale data-center solutions and a $4.5 billion H20-related charge.",
+    "classification": "attributed",
+    "attribution": "NVIDIA's Form 10-K"
+  },
+  {
+    "sourceId": "SRC-001",
+    "quote": "United States $ 149,617 $ 77,482 $ 31,533 Taiwan (2) 42,345 23,600 14,912 China (including Hong Kong) 19,677 25,048 12,330 Other 4,299 4,367 2,147 Total revenue $ 215,938",
+    "text": "NVIDIA reported fiscal-2026 revenue by direct-customer headquarters location of $149,617 million in the United States, $42,345 million in Taiwan, and $19,677 million in China including Hong Kong.",
+    "classification": "verified"
+  },
+  {
+    "sourceId": "SRC-002",
+    "quote": "increasing supply commitments from $ 119 billion last quarter to $ 279 billion as of July 26, 2026.",
+    "text": "NVIDIA said its supply commitments increased from $119 billion in the prior quarter to $279 billion as of July 26, 2026.",
+    "classification": "attributed",
+    "attribution": "NVIDIA's Form 10-Q"
+  },
+  {
+    "sourceId": "SRC-002",
+    "quote": "in certain instances, these agreements may be cancelable, rescheduled, or adjustable for our business needs prior to placing firm orders. Changes to these agreements may result in additional costs.",
+    "text": "NVIDIA disclosed that some supplier agreements may be canceled, rescheduled, or adjusted before firm orders, and that changes may result in additional costs.",
+    "classification": "attributed",
+    "attribution": "NVIDIA's Form 10-Q"
+  },
+  {
+    "sourceId": "SRC-003",
+    "quote": "Revenue $96,221 $81,615 $46,743 18 % 106 % Gross margin 75.0 % 74.9 % 72.4 % 0.1 pts 2.6 pts Operating expenses $8,408 $7,621 $5,413 10 % 55 % Operating income $63,734",
+    "text": "NVIDIA reported Q2 fiscal-2027 revenue of $96,221 million, up 106% year over year, and gross margin of 75.0%.",
+    "classification": "verified"
+  },
+  {
+    "sourceId": "SRC-003",
+    "quote": "Revenue is expected to be $108.0 billion, plus or minus 2%. NVIDIA is not assuming any Data Center compute revenue from China in its outlook.",
+    "text": "NVIDIA forecast Q3 fiscal-2027 revenue of $108.0 billion, plus or minus 2%, and said its outlook assumed no Data Center compute revenue from China.",
+    "classification": "estimated",
+    "caveat": "This is management guidance, not a reported result; actual revenue may differ."
+  },
+  {
+    "sourceId": "SRC-004",
+    "quote": "Record quarterly Data Center revenue of $62.3 billion, up 22% from Q3 and up 75% from a year ago",
+    "text": "NVIDIA announced Q4 fiscal-2026 Data Center revenue of $62.3 billion, up 75% year over year.",
+    "classification": "verified"
+  },
+  {
+    "sourceId": "SRC-005",
+    "quote": "CUDA is a parallel computing platform and programming model developed by NVIDIA that enables dramatic increases in computing performance by harnessing the power of the GPU.",
+    "text": "The CUDA Programming Guide describes CUDA as a parallel-computing platform and programming model developed by NVIDIA that uses GPU processing power.",
+    "classification": "attributed",
+    "attribution": "NVIDIA CUDA Programming Guide"
+  }
+]
