@@ -64,6 +64,19 @@ async function download(url,file){
  }
  throw new Error("Preview download failed after extended retries: "+(lastError?.message||"unknown error"));
 }
+async function downloadVideo(url,file){
+ let lastError;
+ for(let attempt=0;attempt<5;attempt++){
+  try{
+   const r=await fetch(url,{signal:AbortSignal.timeout(90000)});
+   if(!r.ok) throw new Error("Video download HTTP "+r.status);
+   const b=Buffer.from(await r.arrayBuffer());
+   if(b.length<50000||b.length>180*1024*1024) throw new Error("Video file size is invalid ("+b.length+" bytes)");
+   await writeFile(file,b);return b.length;
+  }catch(e){lastError=e;if(attempt===4)break;await sleep(Math.min(30000,2500*Math.pow(2,attempt)));}
+ }
+ throw new Error("Video download failed: "+(lastError?.message||"unknown error"));
+}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&apos;"}[c]));}
 async function main(){
  const script=JSON.parse(await readFile(path.join(root,"script.json"),"utf8"));
@@ -104,6 +117,25 @@ async function main(){
   for(const c of candidates){if(chosen.length>=8) break;if(c.score<4) continue;seen.add(c.hit.id);chosen.push(c);}
   if(chosen.length<6) throw new Error("Only "+chosen.length+" relevant high-resolution images found for scene "+(i+1)+" ("+scene.title+"). At least six are required; refusing a text-only render.");
   const ids=[];
+  // Prefer short, scene-relevant moving footage; photographs remain the fallback.
+  const videoCandidates=[];
+  for(const query of queries){
+   const u=new URL("https://pixabay.com/api/videos/");
+   u.searchParams.set("key",apiKey);u.searchParams.set("q",query);u.searchParams.set("safesearch","true");u.searchParams.set("per_page","30");
+   try{
+    const data=await fetchJson(u);
+    for(const hit of data.hits||[]){
+     const v=hit.videos?.medium||hit.videos?.large;
+     if(!v?.url||!hit.pageURL||seen.has("video-"+hit.id)||(v.width||0)<960||(v.height||0)<540) continue;
+     const tags=String(hit.tags||"").toLowerCase();
+     const score=terms(query).reduce((n,t)=>n+(tags.includes(t)?(t.length>5?3:1):0),0)+requirements.reduce((n,g)=>n+(g.some(term=>tags.includes(term.toLowerCase()))?6:0),0);
+     if(score>=3) videoCandidates.push({hit,video:v,query,score});
+    }
+   }catch(e){console.warn("Video search unavailable for '"+query+"': "+e.message);}
+  }
+  videoCandidates.sort((a,b)=>b.score-a.score || (b.video.width*b.video.height)-(a.video.width*a.video.height));
+  const chosenVideos=[];
+  for(const v of videoCandidates){if(chosenVideos.length>=3)break;const key="video-"+v.hit.id;if(seen.has(key))continue;seen.add(key);chosenVideos.push(v);}
   for(let n=0;n<chosen.length;n++){
    const c=chosen[n],h=c.hit,id="S"+String(i+1).padStart(2,"0")+"-I"+(n+1);
    const preview=path.join(out,id+".jpg");
@@ -114,13 +146,24 @@ async function main(){
    const item={id,scene:i+1,creator:h.user||"Pixabay contributor",tags:h.tags||"",width:h.imageWidth,height:h.imageHeight,
     sourcePage:h.pageURL,previewFile:id+".jpg",largeImageURL:h.largeImageURL,license:"Pixabay Content License",
     licenseUrl:"https://pixabay.com/service/license-summary/",searchQuery:c.query,relevanceScore:c.score};
-   assets.push(item);ids.push(id);sheetItems.push({id,scene:i+1,tags:item.tags,file:preview});
+   assets.push({...item,kind:"photo"});ids.push(id);sheetItems.push({id,scene:i+1,tags:item.tags,file:preview});
   }
-  selection.push({scene:i+1,title:scene.title,selectedImageIds:ids});
+  const videoIds=[];
+  for(let n=0;n<chosenVideos.length;n++){
+   const v=chosenVideos[n],h=v.hit,id="S"+String(i+1).padStart(2,"0")+"-V"+(n+1),file=path.join(out,id+".mp4");
+   try{
+    const bytes=await downloadVideo(v.video.url,file);
+    assets.push({id,scene:i+1,kind:"video",creator:h.user||"Pixabay contributor",tags:h.tags||"",width:v.video.width,height:v.video.height,
+     durationSeconds:h.duration||null,sourcePage:h.pageURL,previewFile:id+".mp4",license:"Pixabay Content License",
+     licenseUrl:"https://pixabay.com/service/license-summary/",searchQuery:v.query,relevanceScore:v.score,bytes});
+    videoIds.push(id);
+   }catch(e){console.warn(id+": skipped video clip: "+e.message);}
+  }
+  selection.push({scene:i+1,title:scene.title,selectedImageIds:ids,selectedVideoIds:videoIds});
   console.log("Scene "+(i+1)+": selected "+ids.join(", ")+ "; matched terms and minimum 1280x720.");
  }
  await writeFile(path.join(root,"visual-selection.json"),JSON.stringify({projectId,title:script.title,source:"Automated semantic match against Pixabay tags; six to eight high-resolution images per scene, matched against scene-specific search terms",scenes:selection},null,2)+"\n");
- await writeFile(path.join(root,"visual-assets.json"),JSON.stringify({projectId,source:"Pixabay API search; relevance-scored against scene-specific queries",assetCount:assets.length,assets},null,2)+"\n");
+ await writeFile(path.join(root,"visual-assets.json"),JSON.stringify({projectId,source:"Pixabay API search; scene-matched photos and video clips relevance-scored against scene-specific queries",assetCount:assets.length,assets},null,2)+"\n");
  const cols=5,cellW=320,cellH=180,labelH=48,gap=10,margin=10,rows=Math.ceil(sheetItems.length/cols);
  const parts=['<svg xmlns="http://www.w3.org/2000/svg" width="'+(margin*2+cols*cellW+(cols-1)*gap)+'" height="'+(margin*2+rows*(cellH+labelH)+(rows-1)*gap)+'">','<rect width="100%" height="100%" fill="#090b0e"/>'];
  for(let i=0;i<sheetItems.length;i++){
