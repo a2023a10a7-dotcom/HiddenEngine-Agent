@@ -2,15 +2,15 @@
   "schemaVersion": "1.0.0",
   "projectId": "2026-11-14-nvidia-hidden-engine",
   "topic": "NVIDIA: How It Became the Engine of the AI Infrastructure Boom",
-  "createdAt": "2026-11-15T17:29:01.496Z",
+  "createdAt": "2026-11-15T17:38:45.357Z",
   "status": "outline_only_not_script_ready",
   "thesisPrompt": "What is the hidden economic mechanism, and which documented strategic choices made it matter?",
-  "workingThesis": null,
-  "counterArgument": null,
+  "workingThesis": "NVIDIA's rise was built by extending the GPU into a programmable accelerated-computing platform—CUDA, libraries, systems and networking—and aligning that platform with the AI data-center buildout. Its economics therefore depend on a full-stack ecosystem, not chips alone.",
+  "counterArgument": "That position is not guaranteed to be durable: revenue is concentrated among a small number of direct customers, gross margin has fallen during the transition to full data-center systems, and large supply commitments create execution and cost exposure. The filings document scale, but do not prove permanent pricing power or customer lock-in.",
   "sourceCoverage": {
-    "sourceCount": 7,
-    "claimCount": 14,
-    "eligibleClaimCount": 14,
+    "sourceCount": 8,
+    "claimCount": 16,
+    "eligibleClaimCount": 16,
     "unresolvedContradictions": 0
   },
   "scenes": [
@@ -26,10 +26,12 @@
         "CLM-006",
         "CLM-007",
         "CLM-009",
+        "CLM-010",
         "CLM-011",
         "CLM-012",
         "CLM-013",
-        "CLM-014"
+        "CLM-014",
+        "CLM-016"
       ],
       "requiredChecks": [
         "Select only claims that directly support this scene.",
@@ -84,7 +86,9 @@
         "CLM-011",
         "CLM-012",
         "CLM-013",
-        "CLM-014"
+        "CLM-014",
+        "CLM-015",
+        "CLM-016"
       ],
       "requiredChecks": [
         "Select only claims that directly support this scene.",
@@ -101,7 +105,9 @@
       "act": "The strategic bet",
       "targetSeconds": 180,
       "editorialGoal": "Reconstruct documented decisions, incentives, and trade-offs.",
-      "candidateClaimIds": [],
+      "candidateClaimIds": [
+        "CLM-015"
+      ],
       "requiredChecks": [
         "Select only claims that directly support this scene.",
         "Record the precise source passage, page/table/section, and publication date.",
@@ -144,7 +150,9 @@
         "CLM-011",
         "CLM-012",
         "CLM-013",
-        "CLM-014"
+        "CLM-014",
+        "CLM-015",
+        "CLM-016"
       ],
       "requiredChecks": [
         "Select only claims that directly support this scene.",

@@ -2,12 +2,12 @@
   "schemaVersion": "1.0.0",
   "projectId": "2026-11-14-nvidia-hidden-engine",
   "topic": "NVIDIA: How It Became the Engine of the AI Infrastructure Boom",
-  "generatedAt": "2026-11-15T17:29:01.550Z",
+  "generatedAt": "2026-11-15T17:38:45.406Z",
   "status": "evidence_linked_draft_needs_human_rewrite",
   "language": "en",
   "targetDurationSeconds": 900,
-  "editorialThesis": null,
-  "counterArgument": null,
+  "editorialThesis": "NVIDIA's rise was built by extending the GPU into a programmable accelerated-computing platform—CUDA, libraries, systems and networking—and aligning that platform with the AI data-center buildout. Its economics therefore depend on a full-stack ecosystem, not chips alone.",
+  "counterArgument": "That position is not guaranteed to be durable: revenue is concentrated among a small number of direct customers, gross margin has fallen during the transition to full data-center systems, and large supply commitments create execution and cost exposure. The filings document scale, but do not prove permanent pricing power or customer lock-in.",
   "editorialDisclaimer": "This is a constrained draft assembly, not a polished final narration. Every block must be rewritten for clarity and checked against the original cited passage. Claim classifications are editorial metadata, not proof.",
   "scenes": [
     {
@@ -18,9 +18,9 @@
       "openingDirection": "Begin with the documented stakes. Do not imply more than the cited evidence establishes.",
       "narrationBlocks": [
         {
-          "claimId": "CLM-001",
+          "claimId": "CLM-010",
           "classification": "verified",
-          "narrationText": "NVIDIA reported fiscal-year 2026 revenue of $215.9 billion, up 65%, while Data Center revenue was up 68%.",
+          "narrationText": "For fiscal 2026, NVIDIA reported segment operating income of $130.141 billion for Compute & Networking and $9.156 billion for Graphics. The source table reports figures in millions of dollars.",
           "qualification": "The research ledger classifies this as verified; independently recheck the cited passage before recording.",
           "sourceRefs": [
             {
@@ -32,232 +32,7 @@
               "snapshotPath": "research/source-snapshots/SRC-001.json",
               "sourceType": "primary_filing",
               "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-001: “Revenue for fiscal year 2026 was $215.9 billion, up 65% from a year ago. Data Center revenue for fiscal year 2026 was up…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-002",
-          "classification": "attributed",
-          "narrationText": "NVIDIA said Gaming revenue for fiscal year 2026 was up 41%, driven by Blackwell demand.",
-          "qualification": "Attribute this statement explicitly to NVIDIA's Form 10-K.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-001",
-              "title": "NVIDIA Corporation Form 10-K for fiscal year ended January 25, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
-              "publishedAt": "2026-02-25",
-              "snapshotPath": "research/source-snapshots/SRC-001.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-001: “Gaming revenue for fiscal year 2026 was up 41% from a year ago, driven by strong Blackwell demand.”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-005",
-          "classification": "attributed",
-          "narrationText": "NVIDIA's gross margin decreased to 71.1% in fiscal 2026 from 75.0% in fiscal 2025; the company cited its transition to Blackwell full-scale data-center solutions and a $4.5 billion H20-related charge.",
-          "qualification": "Attribute this statement explicitly to NVIDIA's Form 10-K.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-001",
-              "title": "NVIDIA Corporation Form 10-K for fiscal year ended January 25, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
-              "publishedAt": "2026-02-25",
-              "snapshotPath": "research/source-snapshots/SRC-001.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-001: “Gross margins decreased to 71.1% in fiscal year 2026 from 75.0% in fiscal year 2025 as our business model transitioned f…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-006",
-          "classification": "attributed",
-          "narrationText": "NVIDIA said its supply commitments increased from $119 billion in the prior quarter to $279 billion as of July 26, 2026.",
-          "qualification": "Attribute this statement explicitly to NVIDIA's Form 10-Q.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-002",
-              "title": "NVIDIA Corporation Form 10-Q for quarter ended July 26, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
-              "publishedAt": "2026-08-26",
-              "snapshotPath": "research/source-snapshots/SRC-002.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-002: “increasing supply commitments from $ 119 billion last quarter to $ 279 billion as of July 26, 2026.”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-007",
-          "classification": "attributed",
-          "narrationText": "NVIDIA disclosed that some supplier agreements may be canceled, rescheduled, or adjusted before firm orders, and that changes may result in additional costs.",
-          "qualification": "Attribute this statement explicitly to NVIDIA's Form 10-Q.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-002",
-              "title": "NVIDIA Corporation Form 10-Q for quarter ended July 26, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
-              "publishedAt": "2026-08-26",
-              "snapshotPath": "research/source-snapshots/SRC-002.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-002: “in certain instances, these agreements may be cancelable, rescheduled, or adjustable for our business needs prior to pla…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-009",
-          "classification": "verified",
-          "narrationText": "For fiscal 2026, Compute & Networking revenue was $193,479 and Graphics revenue was $22,459.",
-          "qualification": "The research ledger classifies this as verified; independently recheck the cited passage before recording.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-001",
-              "title": "NVIDIA Corporation Form 10-K for fiscal year ended January 25, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
-              "publishedAt": "2026-02-25",
-              "snapshotPath": "research/source-snapshots/SRC-001.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-001: “Year Ended Jan 25, 2026 Jan 26, 2025 $ Change % Change ($ in millions) Compute & Networking $ 193,479 $ 116,193 $ 77,286…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-011",
-          "classification": "verified",
-          "narrationText": "For fiscal 2026, NVIDIA reported revenue by direct-customer headquarters location of $149,617 in the United States, $42,345 in Taiwan, and $19,677 in China including Hong Kong.",
-          "qualification": "The research ledger classifies this as verified; independently recheck the cited passage before recording.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-001",
-              "title": "NVIDIA Corporation Form 10-K for fiscal year ended January 25, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
-              "publishedAt": "2026-02-25",
-              "snapshotPath": "research/source-snapshots/SRC-001.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-001: “Year Ended Jan 25, 2026 Jan 26, 2025 Jan 28, 2024 Geographic Revenue based upon Customer Headquarters Location (1): (In …”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-012",
-          "classification": "verified",
-          "narrationText": "In Q2 FY27, NVIDIA revenue was $96,221, up 106% year over year, and gross margin was 75.0%.",
-          "qualification": "The research ledger classifies this as verified; independently recheck the cited passage before recording.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-003",
-              "title": "NVIDIA Announces Financial Results for Second Quarter Fiscal 2027",
-              "publisher": "NVIDIA Investor Relations",
-              "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/",
-              "publishedAt": "2026-08-26",
-              "snapshotPath": "research/source-snapshots/SRC-003.json",
-              "sourceType": "company_statement",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-003: “Q2 FY27 Q1 FY27 Q2 FY26 Q/Q Y/Y Revenue $96,221 $81,615 $46,743 18 % 106 % Gross margin 75.0 % 74.9 % 72.4 % 0.1 pts 2.6…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-013",
-          "classification": "estimated",
-          "narrationText": "For the third quarter of fiscal 2027, NVIDIA forecast revenue of $108.0 billion, plus or minus 2%, and assumed no Data Center compute revenue from China.",
-          "qualification": "Present this only as an estimate and state its limitations: This is company guidance, not a realized result..",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-003",
-              "title": "NVIDIA Announces Financial Results for Second Quarter Fiscal 2027",
-              "publisher": "NVIDIA Investor Relations",
-              "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/",
-              "publishedAt": "2026-08-26",
-              "snapshotPath": "research/source-snapshots/SRC-003.json",
-              "sourceType": "company_statement",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-003: “NVIDIA’s outlook for the third quarter of fiscal 2027 is as follows: Revenue is expected to be $108.0 billion, plus or m…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-014",
-          "classification": "verified",
-          "narrationText": "NVIDIA reported quarterly Data Center revenue of $62.3 billion, up 75% year over year, for the fourth quarter ended January 25, 2026.",
-          "qualification": "The research ledger classifies this as verified; independently recheck the cited passage before recording.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-004",
-              "title": "NVIDIA Announces Financial Results for Fourth Quarter and Fiscal 2026",
-              "publisher": "NVIDIA Investor Relations",
-              "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Fourth-Quarter-and-Fiscal-2026/",
-              "publishedAt": "2026-02-25",
-              "snapshotPath": "research/source-snapshots/SRC-004.json",
-              "sourceType": "company_statement",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-004: “Record quarterly Data Center revenue of $62.3 billion, up 22% from Q3 and up 75% from a year ago Record full-year revenu…”"
+              "passageReference": "verbatim passage matched in SRC-001: “Operating Income by Reportable Segments Year Ended Jan 25, 2026 Jan 26, 2025 $ Change % Change ($ in millions) Compute &…”"
             }
           ],
           "confidence": "not_assessed",
@@ -283,56 +58,6 @@
       "editorialGoal": "Explain the company, market, customer, and product context.",
       "openingDirection": "Now establish the company, market, product, and time period before explaining the mechanism.",
       "narrationBlocks": [
-        {
-          "claimId": "CLM-001",
-          "classification": "verified",
-          "narrationText": "NVIDIA reported fiscal-year 2026 revenue of $215.9 billion, up 65%, while Data Center revenue was up 68%.",
-          "qualification": "The research ledger classifies this as verified; independently recheck the cited passage before recording.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-001",
-              "title": "NVIDIA Corporation Form 10-K for fiscal year ended January 25, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
-              "publishedAt": "2026-02-25",
-              "snapshotPath": "research/source-snapshots/SRC-001.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-001: “Revenue for fiscal year 2026 was $215.9 billion, up 65% from a year ago. Data Center revenue for fiscal year 2026 was up…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-002",
-          "classification": "attributed",
-          "narrationText": "NVIDIA said Gaming revenue for fiscal year 2026 was up 41%, driven by Blackwell demand.",
-          "qualification": "Attribute this statement explicitly to NVIDIA's Form 10-K.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-001",
-              "title": "NVIDIA Corporation Form 10-K for fiscal year ended January 25, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
-              "publishedAt": "2026-02-25",
-              "snapshotPath": "research/source-snapshots/SRC-001.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-001: “Gaming revenue for fiscal year 2026 was up 41% from a year ago, driven by strong Blackwell demand.”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
         {
           "claimId": "CLM-003",
           "classification": "attributed",
@@ -384,81 +109,6 @@
           }
         },
         {
-          "claimId": "CLM-005",
-          "classification": "attributed",
-          "narrationText": "NVIDIA's gross margin decreased to 71.1% in fiscal 2026 from 75.0% in fiscal 2025; the company cited its transition to Blackwell full-scale data-center solutions and a $4.5 billion H20-related charge.",
-          "qualification": "Attribute this statement explicitly to NVIDIA's Form 10-K.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-001",
-              "title": "NVIDIA Corporation Form 10-K for fiscal year ended January 25, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
-              "publishedAt": "2026-02-25",
-              "snapshotPath": "research/source-snapshots/SRC-001.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-001: “Gross margins decreased to 71.1% in fiscal year 2026 from 75.0% in fiscal year 2025 as our business model transitioned f…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-006",
-          "classification": "attributed",
-          "narrationText": "NVIDIA said its supply commitments increased from $119 billion in the prior quarter to $279 billion as of July 26, 2026.",
-          "qualification": "Attribute this statement explicitly to NVIDIA's Form 10-Q.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-002",
-              "title": "NVIDIA Corporation Form 10-Q for quarter ended July 26, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
-              "publishedAt": "2026-08-26",
-              "snapshotPath": "research/source-snapshots/SRC-002.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-002: “increasing supply commitments from $ 119 billion last quarter to $ 279 billion as of July 26, 2026.”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-007",
-          "classification": "attributed",
-          "narrationText": "NVIDIA disclosed that some supplier agreements may be canceled, rescheduled, or adjusted before firm orders, and that changes may result in additional costs.",
-          "qualification": "Attribute this statement explicitly to NVIDIA's Form 10-Q.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-002",
-              "title": "NVIDIA Corporation Form 10-Q for quarter ended July 26, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
-              "publishedAt": "2026-08-26",
-              "snapshotPath": "research/source-snapshots/SRC-002.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-002: “in certain instances, these agreements may be cancelable, rescheduled, or adjustable for our business needs prior to pla…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
           "claimId": "CLM-008",
           "classification": "attributed",
           "narrationText": "The CUDA Programming Guide describes CUDA as a parallel-computing platform and programming model developed by NVIDIA that uses GPU processing power.",
@@ -474,106 +124,6 @@
               "sourceType": "technical_paper",
               "verificationStatus": "not_recorded",
               "passageReference": "verbatim passage matched in SRC-005: “CUDA is a parallel computing platform and programming model developed by NVIDIA that enables dramatic increases in compu…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-009",
-          "classification": "verified",
-          "narrationText": "For fiscal 2026, Compute & Networking revenue was $193,479 and Graphics revenue was $22,459.",
-          "qualification": "The research ledger classifies this as verified; independently recheck the cited passage before recording.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-001",
-              "title": "NVIDIA Corporation Form 10-K for fiscal year ended January 25, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
-              "publishedAt": "2026-02-25",
-              "snapshotPath": "research/source-snapshots/SRC-001.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-001: “Year Ended Jan 25, 2026 Jan 26, 2025 $ Change % Change ($ in millions) Compute & Networking $ 193,479 $ 116,193 $ 77,286…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-010",
-          "classification": "verified",
-          "narrationText": "For fiscal 2026, Compute & Networking segment operating income was $130,141 and Graphics segment operating income was $9,156.",
-          "qualification": "The research ledger classifies this as verified; independently recheck the cited passage before recording.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-001",
-              "title": "NVIDIA Corporation Form 10-K for fiscal year ended January 25, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
-              "publishedAt": "2026-02-25",
-              "snapshotPath": "research/source-snapshots/SRC-001.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-001: “Operating Income by Reportable Segments Year Ended Jan 25, 2026 Jan 26, 2025 $ Change % Change ($ in millions) Compute &…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-011",
-          "classification": "verified",
-          "narrationText": "For fiscal 2026, NVIDIA reported revenue by direct-customer headquarters location of $149,617 in the United States, $42,345 in Taiwan, and $19,677 in China including Hong Kong.",
-          "qualification": "The research ledger classifies this as verified; independently recheck the cited passage before recording.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-001",
-              "title": "NVIDIA Corporation Form 10-K for fiscal year ended January 25, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
-              "publishedAt": "2026-02-25",
-              "snapshotPath": "research/source-snapshots/SRC-001.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-001: “Year Ended Jan 25, 2026 Jan 26, 2025 Jan 28, 2024 Geographic Revenue based upon Customer Headquarters Location (1): (In …”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-012",
-          "classification": "verified",
-          "narrationText": "In Q2 FY27, NVIDIA revenue was $96,221, up 106% year over year, and gross margin was 75.0%.",
-          "qualification": "The research ledger classifies this as verified; independently recheck the cited passage before recording.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-003",
-              "title": "NVIDIA Announces Financial Results for Second Quarter Fiscal 2027",
-              "publisher": "NVIDIA Investor Relations",
-              "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/",
-              "publishedAt": "2026-08-26",
-              "snapshotPath": "research/source-snapshots/SRC-003.json",
-              "sourceType": "company_statement",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-003: “Q2 FY27 Q1 FY27 Q2 FY26 Q/Q Y/Y Revenue $96,221 $81,615 $46,743 18 % 106 % Gross margin 75.0 % 74.9 % 72.4 % 0.1 pts 2.6…”"
             }
           ],
           "confidence": "not_assessed",
@@ -702,7 +252,7 @@
         {
           "claimId": "CLM-009",
           "classification": "verified",
-          "narrationText": "For fiscal 2026, Compute & Networking revenue was $193,479 and Graphics revenue was $22,459.",
+          "narrationText": "For fiscal 2026, NVIDIA reported Compute & Networking revenue of $193.479 billion and Graphics revenue of $22.459 billion. The source table reports figures in millions of dollars.",
           "qualification": "The research ledger classifies this as verified; independently recheck the cited passage before recording.",
           "sourceRefs": [
             {
@@ -727,7 +277,7 @@
         {
           "claimId": "CLM-011",
           "classification": "verified",
-          "narrationText": "For fiscal 2026, NVIDIA reported revenue by direct-customer headquarters location of $149,617 in the United States, $42,345 in Taiwan, and $19,677 in China including Hong Kong.",
+          "narrationText": "For fiscal 2026, NVIDIA reported revenue by direct-customer headquarters location of $149.617 billion in the United States, $42.345 billion in Taiwan, and $19.677 billion in China including Hong Kong. These figures identify customer headquarters, not necessarily end-customer or shipping locations; NVIDIA estimated that 76% of Data Center revenue from Taiwan-headquartered customers was attributed to end customers in the United States and Europe.",
           "qualification": "The research ledger classifies this as verified; independently recheck the cited passage before recording.",
           "sourceRefs": [
             {
@@ -823,6 +373,31 @@
             "exactPassageConfirmed": false,
             "independentCorroboration": false
           }
+        },
+        {
+          "claimId": "CLM-016",
+          "classification": "verified",
+          "narrationText": "For fiscal 2026, sales to one NVIDIA direct customer represented 22% of total revenue and sales to another represented 14%; both were primarily attributable to Compute & Networking.",
+          "qualification": "The research ledger classifies this as verified; independently recheck the cited passage before recording.",
+          "sourceRefs": [
+            {
+              "sourceId": "SRC-001",
+              "title": "NVIDIA Corporation Form 10-K for fiscal year ended January 25, 2026",
+              "publisher": "U.S. Securities and Exchange Commission",
+              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
+              "publishedAt": "2026-02-25",
+              "snapshotPath": "research/source-snapshots/SRC-001.json",
+              "sourceType": "primary_filing",
+              "verificationStatus": "not_recorded",
+              "passageReference": "FY2026 Form 10-K, Note 16, Direct Customers"
+            }
+          ],
+          "confidence": "not_assessed",
+          "editorialStatus": "needs_passage_review",
+          "factCheck": {
+            "exactPassageConfirmed": false,
+            "independentCorroboration": false
+          }
         }
       ],
       "missingEvidence": [],
@@ -839,14 +414,40 @@
       "targetSeconds": 180,
       "editorialGoal": "Reconstruct documented decisions, incentives, and trade-offs.",
       "openingDirection": "Move from economics to choices. Separate documented decisions from interpretations of motive.",
-      "narrationBlocks": [],
+      "narrationBlocks": [
+        {
+          "claimId": "CLM-015",
+          "classification": "attributed",
+          "narrationText": "In its fiscal 2019 Form 10-K, NVIDIA described a platform strategy combining hardware, system software, programmable algorithms, libraries, systems and services, with GPUs and CUDA as fundamental building blocks; it said a growing developer base strengthens the ecosystem's value to customers.",
+          "qualification": "Attribute this statement explicitly to NVIDIA's FY2019 Form 10-K.",
+          "sourceRefs": [
+            {
+              "sourceId": "SRC-008",
+              "title": "NVIDIA Corporation Form 10-K for fiscal year 2019",
+              "publisher": "U.S. Securities and Exchange Commission",
+              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581019000023/nvda-2019x10k.htm",
+              "publishedAt": null,
+              "snapshotPath": null,
+              "sourceType": "primary_filing",
+              "verificationStatus": "not_recorded",
+              "passageReference": "FY2019 Form 10-K, Business section, platform strategy discussion"
+            }
+          ],
+          "confidence": "not_assessed",
+          "editorialStatus": "needs_passage_review",
+          "factCheck": {
+            "exactPassageConfirmed": false,
+            "independentCorroboration": false
+          }
+        }
+      ],
       "missingEvidence": [],
       "visualDirection": [],
       "soundDirection": {
         "music": "Use restrained documentary underscore; do not use music to imply certainty or emotion unsupported by the story.",
         "sfx": []
       },
-      "status": "blocked_no_eligible_evidence"
+      "status": "draft_assembly_needs_editorial_rewrite"
     },
     {
       "id": "S05",
@@ -879,31 +480,6 @@
             "exactPassageConfirmed": false,
             "independentCorroboration": false
           }
-        },
-        {
-          "claimId": "CLM-007",
-          "classification": "attributed",
-          "narrationText": "NVIDIA disclosed that some supplier agreements may be canceled, rescheduled, or adjusted before firm orders, and that changes may result in additional costs.",
-          "qualification": "Attribute this statement explicitly to NVIDIA's Form 10-Q.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-002",
-              "title": "NVIDIA Corporation Form 10-Q for quarter ended July 26, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
-              "publishedAt": "2026-08-26",
-              "snapshotPath": "research/source-snapshots/SRC-002.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-002: “in certain instances, these agreements may be cancelable, rescheduled, or adjustable for our business needs prior to pla…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
         }
       ],
       "missingEvidence": [],
@@ -920,215 +496,14 @@
       "targetSeconds": 108,
       "editorialGoal": "Quantify consequences and distinguish company disclosures from independent estimates.",
       "openingDirection": "Translate the evidence into consequences for customers, workers, competitors, and investors where measurable.",
-      "narrationBlocks": [
-        {
-          "claimId": "CLM-001",
-          "classification": "verified",
-          "narrationText": "NVIDIA reported fiscal-year 2026 revenue of $215.9 billion, up 65%, while Data Center revenue was up 68%.",
-          "qualification": "The research ledger classifies this as verified; independently recheck the cited passage before recording.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-001",
-              "title": "NVIDIA Corporation Form 10-K for fiscal year ended January 25, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
-              "publishedAt": "2026-02-25",
-              "snapshotPath": "research/source-snapshots/SRC-001.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-001: “Revenue for fiscal year 2026 was $215.9 billion, up 65% from a year ago. Data Center revenue for fiscal year 2026 was up…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-002",
-          "classification": "attributed",
-          "narrationText": "NVIDIA said Gaming revenue for fiscal year 2026 was up 41%, driven by Blackwell demand.",
-          "qualification": "Attribute this statement explicitly to NVIDIA's Form 10-K.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-001",
-              "title": "NVIDIA Corporation Form 10-K for fiscal year ended January 25, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
-              "publishedAt": "2026-02-25",
-              "snapshotPath": "research/source-snapshots/SRC-001.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-001: “Gaming revenue for fiscal year 2026 was up 41% from a year ago, driven by strong Blackwell demand.”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-007",
-          "classification": "attributed",
-          "narrationText": "NVIDIA disclosed that some supplier agreements may be canceled, rescheduled, or adjusted before firm orders, and that changes may result in additional costs.",
-          "qualification": "Attribute this statement explicitly to NVIDIA's Form 10-Q.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-002",
-              "title": "NVIDIA Corporation Form 10-Q for quarter ended July 26, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
-              "publishedAt": "2026-08-26",
-              "snapshotPath": "research/source-snapshots/SRC-002.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-002: “in certain instances, these agreements may be cancelable, rescheduled, or adjustable for our business needs prior to pla…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-009",
-          "classification": "verified",
-          "narrationText": "For fiscal 2026, Compute & Networking revenue was $193,479 and Graphics revenue was $22,459.",
-          "qualification": "The research ledger classifies this as verified; independently recheck the cited passage before recording.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-001",
-              "title": "NVIDIA Corporation Form 10-K for fiscal year ended January 25, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
-              "publishedAt": "2026-02-25",
-              "snapshotPath": "research/source-snapshots/SRC-001.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-001: “Year Ended Jan 25, 2026 Jan 26, 2025 $ Change % Change ($ in millions) Compute & Networking $ 193,479 $ 116,193 $ 77,286…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-011",
-          "classification": "verified",
-          "narrationText": "For fiscal 2026, NVIDIA reported revenue by direct-customer headquarters location of $149,617 in the United States, $42,345 in Taiwan, and $19,677 in China including Hong Kong.",
-          "qualification": "The research ledger classifies this as verified; independently recheck the cited passage before recording.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-001",
-              "title": "NVIDIA Corporation Form 10-K for fiscal year ended January 25, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
-              "publishedAt": "2026-02-25",
-              "snapshotPath": "research/source-snapshots/SRC-001.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-001: “Year Ended Jan 25, 2026 Jan 26, 2025 Jan 28, 2024 Geographic Revenue based upon Customer Headquarters Location (1): (In …”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-012",
-          "classification": "verified",
-          "narrationText": "In Q2 FY27, NVIDIA revenue was $96,221, up 106% year over year, and gross margin was 75.0%.",
-          "qualification": "The research ledger classifies this as verified; independently recheck the cited passage before recording.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-003",
-              "title": "NVIDIA Announces Financial Results for Second Quarter Fiscal 2027",
-              "publisher": "NVIDIA Investor Relations",
-              "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/",
-              "publishedAt": "2026-08-26",
-              "snapshotPath": "research/source-snapshots/SRC-003.json",
-              "sourceType": "company_statement",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-003: “Q2 FY27 Q1 FY27 Q2 FY26 Q/Q Y/Y Revenue $96,221 $81,615 $46,743 18 % 106 % Gross margin 75.0 % 74.9 % 72.4 % 0.1 pts 2.6…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-013",
-          "classification": "estimated",
-          "narrationText": "For the third quarter of fiscal 2027, NVIDIA forecast revenue of $108.0 billion, plus or minus 2%, and assumed no Data Center compute revenue from China.",
-          "qualification": "Present this only as an estimate and state its limitations: This is company guidance, not a realized result..",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-003",
-              "title": "NVIDIA Announces Financial Results for Second Quarter Fiscal 2027",
-              "publisher": "NVIDIA Investor Relations",
-              "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/",
-              "publishedAt": "2026-08-26",
-              "snapshotPath": "research/source-snapshots/SRC-003.json",
-              "sourceType": "company_statement",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-003: “NVIDIA’s outlook for the third quarter of fiscal 2027 is as follows: Revenue is expected to be $108.0 billion, plus or m…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-014",
-          "classification": "verified",
-          "narrationText": "NVIDIA reported quarterly Data Center revenue of $62.3 billion, up 75% year over year, for the fourth quarter ended January 25, 2026.",
-          "qualification": "The research ledger classifies this as verified; independently recheck the cited passage before recording.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-004",
-              "title": "NVIDIA Announces Financial Results for Fourth Quarter and Fiscal 2026",
-              "publisher": "NVIDIA Investor Relations",
-              "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Fourth-Quarter-and-Fiscal-2026/",
-              "publishedAt": "2026-02-25",
-              "snapshotPath": "research/source-snapshots/SRC-004.json",
-              "sourceType": "company_statement",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-004: “Record quarterly Data Center revenue of $62.3 billion, up 22% from Q3 and up 75% from a year ago Record full-year revenu…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        }
-      ],
+      "narrationBlocks": [],
       "missingEvidence": [],
       "visualDirection": [],
       "soundDirection": {
         "music": "Use restrained documentary underscore; do not use music to imply certainty or emotion unsupported by the story.",
         "sfx": []
       },
-      "status": "draft_assembly_needs_editorial_rewrite"
+      "status": "blocked_no_eligible_evidence"
     },
     {
       "id": "S07",
@@ -1136,322 +511,21 @@
       "targetSeconds": 54,
       "editorialGoal": "Resolve the thesis, state the counterargument, and disclose what remains unknown.",
       "openingDirection": "Return to the central question, state the strongest counterargument, and leave unresolved facts visible.",
-      "narrationBlocks": [
-        {
-          "claimId": "CLM-001",
-          "classification": "verified",
-          "narrationText": "NVIDIA reported fiscal-year 2026 revenue of $215.9 billion, up 65%, while Data Center revenue was up 68%.",
-          "qualification": "The research ledger classifies this as verified; independently recheck the cited passage before recording.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-001",
-              "title": "NVIDIA Corporation Form 10-K for fiscal year ended January 25, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
-              "publishedAt": "2026-02-25",
-              "snapshotPath": "research/source-snapshots/SRC-001.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-001: “Revenue for fiscal year 2026 was $215.9 billion, up 65% from a year ago. Data Center revenue for fiscal year 2026 was up…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-002",
-          "classification": "attributed",
-          "narrationText": "NVIDIA said Gaming revenue for fiscal year 2026 was up 41%, driven by Blackwell demand.",
-          "qualification": "Attribute this statement explicitly to NVIDIA's Form 10-K.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-001",
-              "title": "NVIDIA Corporation Form 10-K for fiscal year ended January 25, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
-              "publishedAt": "2026-02-25",
-              "snapshotPath": "research/source-snapshots/SRC-001.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-001: “Gaming revenue for fiscal year 2026 was up 41% from a year ago, driven by strong Blackwell demand.”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-003",
-          "classification": "attributed",
-          "narrationText": "NVIDIA describes its GPUs as the foundation of its accelerated-computing platform for parallel workloads including neural-network training and inference.",
-          "qualification": "Attribute this statement explicitly to NVIDIA's Form 10-K.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-001",
-              "title": "NVIDIA Corporation Form 10-K for fiscal year ended January 25, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
-              "publishedAt": "2026-02-25",
-              "snapshotPath": "research/source-snapshots/SRC-001.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-001: “At the foundation of the NVIDIA accelerated computing platform are our GPUs, which excel at parallel workloads such as t…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-004",
-          "classification": "attributed",
-          "narrationText": "NVIDIA describes its full-stack computing platform as combining chips with CUDA, CUDA-X libraries, AI models and training datasets, APIs, SDKs, and application frameworks.",
-          "qualification": "Attribute this statement explicitly to NVIDIA's Form 10-K.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-001",
-              "title": "NVIDIA Corporation Form 10-K for fiscal year ended January 25, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
-              "publishedAt": "2026-02-25",
-              "snapshotPath": "research/source-snapshots/SRC-001.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-001: “While our approach starts with powerful chips, what makes it a full-stack computing platform is our large body of softwa…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-005",
-          "classification": "attributed",
-          "narrationText": "NVIDIA's gross margin decreased to 71.1% in fiscal 2026 from 75.0% in fiscal 2025; the company cited its transition to Blackwell full-scale data-center solutions and a $4.5 billion H20-related charge.",
-          "qualification": "Attribute this statement explicitly to NVIDIA's Form 10-K.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-001",
-              "title": "NVIDIA Corporation Form 10-K for fiscal year ended January 25, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
-              "publishedAt": "2026-02-25",
-              "snapshotPath": "research/source-snapshots/SRC-001.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-001: “Gross margins decreased to 71.1% in fiscal year 2026 from 75.0% in fiscal year 2025 as our business model transitioned f…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-006",
-          "classification": "attributed",
-          "narrationText": "NVIDIA said its supply commitments increased from $119 billion in the prior quarter to $279 billion as of July 26, 2026.",
-          "qualification": "Attribute this statement explicitly to NVIDIA's Form 10-Q.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-002",
-              "title": "NVIDIA Corporation Form 10-Q for quarter ended July 26, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
-              "publishedAt": "2026-08-26",
-              "snapshotPath": "research/source-snapshots/SRC-002.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-002: “increasing supply commitments from $ 119 billion last quarter to $ 279 billion as of July 26, 2026.”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-007",
-          "classification": "attributed",
-          "narrationText": "NVIDIA disclosed that some supplier agreements may be canceled, rescheduled, or adjusted before firm orders, and that changes may result in additional costs.",
-          "qualification": "Attribute this statement explicitly to NVIDIA's Form 10-Q.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-002",
-              "title": "NVIDIA Corporation Form 10-Q for quarter ended July 26, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
-              "publishedAt": "2026-08-26",
-              "snapshotPath": "research/source-snapshots/SRC-002.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-002: “in certain instances, these agreements may be cancelable, rescheduled, or adjustable for our business needs prior to pla…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-008",
-          "classification": "attributed",
-          "narrationText": "The CUDA Programming Guide describes CUDA as a parallel-computing platform and programming model developed by NVIDIA that uses GPU processing power.",
-          "qualification": "Attribute this statement explicitly to NVIDIA CUDA Programming Guide.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-005",
-              "title": "CUDA Programming Guide",
-              "publisher": "NVIDIA Developer Documentation",
-              "url": "https://docs.nvidia.com/cuda/cuda-programming-guide/",
-              "publishedAt": null,
-              "snapshotPath": "research/source-snapshots/SRC-005.json",
-              "sourceType": "technical_paper",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-005: “CUDA is a parallel computing platform and programming model developed by NVIDIA that enables dramatic increases in compu…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-009",
-          "classification": "verified",
-          "narrationText": "For fiscal 2026, Compute & Networking revenue was $193,479 and Graphics revenue was $22,459.",
-          "qualification": "The research ledger classifies this as verified; independently recheck the cited passage before recording.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-001",
-              "title": "NVIDIA Corporation Form 10-K for fiscal year ended January 25, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
-              "publishedAt": "2026-02-25",
-              "snapshotPath": "research/source-snapshots/SRC-001.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-001: “Year Ended Jan 25, 2026 Jan 26, 2025 $ Change % Change ($ in millions) Compute & Networking $ 193,479 $ 116,193 $ 77,286…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-010",
-          "classification": "verified",
-          "narrationText": "For fiscal 2026, Compute & Networking segment operating income was $130,141 and Graphics segment operating income was $9,156.",
-          "qualification": "The research ledger classifies this as verified; independently recheck the cited passage before recording.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-001",
-              "title": "NVIDIA Corporation Form 10-K for fiscal year ended January 25, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
-              "publishedAt": "2026-02-25",
-              "snapshotPath": "research/source-snapshots/SRC-001.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-001: “Operating Income by Reportable Segments Year Ended Jan 25, 2026 Jan 26, 2025 $ Change % Change ($ in millions) Compute &…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-011",
-          "classification": "verified",
-          "narrationText": "For fiscal 2026, NVIDIA reported revenue by direct-customer headquarters location of $149,617 in the United States, $42,345 in Taiwan, and $19,677 in China including Hong Kong.",
-          "qualification": "The research ledger classifies this as verified; independently recheck the cited passage before recording.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-001",
-              "title": "NVIDIA Corporation Form 10-K for fiscal year ended January 25, 2026",
-              "publisher": "U.S. Securities and Exchange Commission",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
-              "publishedAt": "2026-02-25",
-              "snapshotPath": "research/source-snapshots/SRC-001.json",
-              "sourceType": "primary_filing",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-001: “Year Ended Jan 25, 2026 Jan 26, 2025 Jan 28, 2024 Geographic Revenue based upon Customer Headquarters Location (1): (In …”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        },
-        {
-          "claimId": "CLM-012",
-          "classification": "verified",
-          "narrationText": "In Q2 FY27, NVIDIA revenue was $96,221, up 106% year over year, and gross margin was 75.0%.",
-          "qualification": "The research ledger classifies this as verified; independently recheck the cited passage before recording.",
-          "sourceRefs": [
-            {
-              "sourceId": "SRC-003",
-              "title": "NVIDIA Announces Financial Results for Second Quarter Fiscal 2027",
-              "publisher": "NVIDIA Investor Relations",
-              "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/",
-              "publishedAt": "2026-08-26",
-              "snapshotPath": "research/source-snapshots/SRC-003.json",
-              "sourceType": "company_statement",
-              "verificationStatus": "not_recorded",
-              "passageReference": "verbatim passage matched in SRC-003: “Q2 FY27 Q1 FY27 Q2 FY26 Q/Q Y/Y Revenue $96,221 $81,615 $46,743 18 % 106 % Gross margin 75.0 % 74.9 % 72.4 % 0.1 pts 2.6…”"
-            }
-          ],
-          "confidence": "not_assessed",
-          "editorialStatus": "needs_passage_review",
-          "factCheck": {
-            "exactPassageConfirmed": false,
-            "independentCorroboration": false
-          }
-        }
-      ],
+      "narrationBlocks": [],
       "missingEvidence": [],
       "visualDirection": [],
       "soundDirection": {
         "music": "Use restrained documentary underscore; do not use music to imply certainty or emotion unsupported by the story.",
         "sfx": []
       },
-      "status": "draft_assembly_needs_editorial_rewrite"
+      "status": "blocked_no_eligible_evidence"
     }
   ],
   "evidenceCoverage": {
     "sceneCount": 7,
-    "narrationBlocks": 53,
-    "claimsUsed": 14,
-    "blocksNeedingPassageReview": 53
+    "narrationBlocks": 16,
+    "claimsUsed": 16,
+    "blocksNeedingPassageReview": 16
   },
   "issues": [],
   "warnings": [],

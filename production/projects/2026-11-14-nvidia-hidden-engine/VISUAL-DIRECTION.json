@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "projectId": "2026-11-14-nvidia-hidden-engine",
   "topic": "NVIDIA: How It Became the Engine of the AI Infrastructure Boom",
-  "createdAt": "2026-11-15T17:29:01.606Z",
+  "createdAt": "2026-11-15T17:38:45.450Z",
   "status": "visual_plan_only_assets_not_acquired",
   "format": {
     "aspectRatio": "16:9",
@@ -71,16 +71,7 @@
         }
       ],
       "claimIds": [
-        "CLM-001",
-        "CLM-002",
-        "CLM-005",
-        "CLM-006",
-        "CLM-007",
-        "CLM-009",
-        "CLM-011",
-        "CLM-012",
-        "CLM-013",
-        "CLM-014"
+        "CLM-010"
       ],
       "editNotes": [
         "Use only acquired assets with cleared rights.",
@@ -125,10 +116,9 @@
         {
           "shot": "03",
           "durationSeconds": 16,
-          "type": "data_explainer",
+          "type": "document_explainer",
           "assetIds": [
-            "ASSET-007",
-            "ASSET-008"
+            "ASSET-007"
           ],
           "camera": "Clean motion-graphic build; one idea at a time.",
           "overlay": "Units, period, source, and caveat visible."
@@ -143,18 +133,9 @@
         }
       ],
       "claimIds": [
-        "CLM-001",
-        "CLM-002",
         "CLM-003",
         "CLM-004",
-        "CLM-005",
-        "CLM-006",
-        "CLM-007",
-        "CLM-008",
-        "CLM-009",
-        "CLM-010",
-        "CLM-011",
-        "CLM-012"
+        "CLM-008"
       ],
       "editNotes": [
         "Use only acquired assets with cleared rights.",
@@ -180,8 +161,8 @@
           "durationSeconds": 8,
           "type": "evidence_open",
           "assetIds": [
-            "ASSET-009",
-            "ASSET-010"
+            "ASSET-008",
+            "ASSET-009"
           ],
           "camera": "Slow controlled push-in; preserve document legibility.",
           "overlay": "Chapter title only; no unsupported superlatives."
@@ -201,8 +182,8 @@
           "durationSeconds": 16,
           "type": "data_explainer",
           "assetIds": [
-            "ASSET-011",
-            "ASSET-012"
+            "ASSET-010",
+            "ASSET-011"
           ],
           "camera": "Clean motion-graphic build; one idea at a time.",
           "overlay": "Units, period, source, and caveat visible."
@@ -225,7 +206,8 @@
         "CLM-011",
         "CLM-012",
         "CLM-013",
-        "CLM-014"
+        "CLM-014",
+        "CLM-016"
       ],
       "editNotes": [
         "Use only acquired assets with cleared rights.",
@@ -251,8 +233,8 @@
           "durationSeconds": 8,
           "type": "evidence_open",
           "assetIds": [
-            "ASSET-013",
-            "ASSET-014"
+            "ASSET-012",
+            "ASSET-013"
           ],
           "camera": "Slow controlled push-in; preserve document legibility.",
           "overlay": "Chapter title only; no unsupported superlatives."
@@ -270,8 +252,9 @@
         {
           "shot": "03",
           "durationSeconds": 16,
-          "type": "document_explainer",
+          "type": "timeline_explainer",
           "assetIds": [
+            "ASSET-014",
             "ASSET-015"
           ],
           "camera": "Clean motion-graphic build; one idea at a time.",
@@ -286,7 +269,9 @@
           "overlay": "No decorative stock presented as evidence."
         }
       ],
-      "claimIds": [],
+      "claimIds": [
+        "CLM-015"
+      ],
       "editNotes": [
         "Use only acquired assets with cleared rights.",
         "Match archival dates and product models to the narrated period.",
@@ -348,8 +333,7 @@
         }
       ],
       "claimIds": [
-        "CLM-006",
-        "CLM-007"
+        "CLM-006"
       ],
       "editNotes": [
         "Use only acquired assets with cleared rights.",
@@ -394,10 +378,9 @@
         {
           "shot": "03",
           "durationSeconds": 16,
-          "type": "data_explainer",
+          "type": "document_explainer",
           "assetIds": [
-            "ASSET-022",
-            "ASSET-023"
+            "ASSET-022"
           ],
           "camera": "Clean motion-graphic build; one idea at a time.",
           "overlay": "Units, period, source, and caveat visible."
@@ -411,16 +394,7 @@
           "overlay": "No decorative stock presented as evidence."
         }
       ],
-      "claimIds": [
-        "CLM-001",
-        "CLM-002",
-        "CLM-007",
-        "CLM-009",
-        "CLM-011",
-        "CLM-012",
-        "CLM-013",
-        "CLM-014"
-      ],
+      "claimIds": [],
       "editNotes": [
         "Use only acquired assets with cleared rights.",
         "Match archival dates and product models to the narrated period.",
@@ -445,8 +419,8 @@
           "durationSeconds": 8,
           "type": "evidence_open",
           "assetIds": [
-            "ASSET-024",
-            "ASSET-025"
+            "ASSET-023",
+            "ASSET-024"
           ],
           "camera": "Slow controlled push-in; preserve document legibility.",
           "overlay": "Chapter title only; no unsupported superlatives."
@@ -464,10 +438,9 @@
         {
           "shot": "03",
           "durationSeconds": 16,
-          "type": "data_explainer",
+          "type": "document_explainer",
           "assetIds": [
-            "ASSET-026",
-            "ASSET-027"
+            "ASSET-025"
           ],
           "camera": "Clean motion-graphic build; one idea at a time.",
           "overlay": "Units, period, source, and caveat visible."
@@ -481,20 +454,7 @@
           "overlay": "No decorative stock presented as evidence."
         }
       ],
-      "claimIds": [
-        "CLM-001",
-        "CLM-002",
-        "CLM-003",
-        "CLM-004",
-        "CLM-005",
-        "CLM-006",
-        "CLM-007",
-        "CLM-008",
-        "CLM-009",
-        "CLM-010",
-        "CLM-011",
-        "CLM-012"
-      ],
+      "claimIds": [],
       "editNotes": [
         "Use only acquired assets with cleared rights.",
         "Match archival dates and product models to the narrated period.",
@@ -647,25 +607,6 @@
     {
       "id": "ASSET-007",
       "sceneId": "S02",
-      "kind": "data_visualization",
-      "description": "Evidence-led chart built only from sourced figures; show period, currency, units, source, and methodology.",
-      "usage": "Make the economic mechanism legible.",
-      "searchBrief": "Chart specification from verified project claim ledger",
-      "preferredSources": [],
-      "status": "not_acquired",
-      "sourceUrl": null,
-      "creator": null,
-      "license": null,
-      "licenseEvidence": null,
-      "territory": null,
-      "expiry": null,
-      "attributionRequired": null,
-      "editorialVerification": "not_checked",
-      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
-    },
-    {
-      "id": "ASSET-008",
-      "sceneId": "S02",
       "kind": "product_or_infrastructure_detail",
       "description": "Close-up of the relevant product, component, facility, or infrastructure.",
       "usage": "Give the viewer a concrete visual anchor.",
@@ -687,7 +628,7 @@
       "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
     },
     {
-      "id": "ASSET-009",
+      "id": "ASSET-008",
       "sceneId": "S03",
       "kind": "archival_footage",
       "description": "Authentic footage of the company, product, factory, office, market, or period relevant to this chapter.",
@@ -710,7 +651,7 @@
       "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
     },
     {
-      "id": "ASSET-010",
+      "id": "ASSET-009",
       "sceneId": "S03",
       "kind": "primary_document",
       "description": "Original annual report, regulatory filing, investor presentation, court record, or dated company document supporting the chapter's claims.",
@@ -733,7 +674,7 @@
       "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
     },
     {
-      "id": "ASSET-011",
+      "id": "ASSET-010",
       "sceneId": "S03",
       "kind": "data_visualization",
       "description": "Evidence-led chart built only from sourced figures; show period, currency, units, source, and methodology.",
@@ -752,7 +693,7 @@
       "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
     },
     {
-      "id": "ASSET-012",
+      "id": "ASSET-011",
       "sceneId": "S03",
       "kind": "product_or_infrastructure_detail",
       "description": "Close-up of the relevant product, component, facility, or infrastructure.",
@@ -775,7 +716,7 @@
       "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
     },
     {
-      "id": "ASSET-013",
+      "id": "ASSET-012",
       "sceneId": "S04",
       "kind": "archival_footage",
       "description": "Authentic footage of the company, product, factory, office, market, or period relevant to this chapter.",
@@ -798,7 +739,7 @@
       "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
     },
     {
-      "id": "ASSET-014",
+      "id": "ASSET-013",
       "sceneId": "S04",
       "kind": "primary_document",
       "description": "Original annual report, regulatory filing, investor presentation, court record, or dated company document supporting the chapter's claims.",
@@ -809,6 +750,25 @@
         "SEC/official regulator or equivalent",
         "Court or government archive"
       ],
+      "status": "not_acquired",
+      "sourceUrl": null,
+      "creator": null,
+      "license": null,
+      "licenseEvidence": null,
+      "territory": null,
+      "expiry": null,
+      "attributionRequired": null,
+      "editorialVerification": "not_checked",
+      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
+    },
+    {
+      "id": "ASSET-014",
+      "sceneId": "S04",
+      "kind": "timeline_or_map",
+      "description": "Dated strategic timeline or geographic map grounded in documented events and locations.",
+      "usage": "Clarify sequence, geography, and strategic choices.",
+      "searchBrief": "Timeline/map derived from source-backed dates and locations",
+      "preferredSources": [],
       "status": "not_acquired",
       "sourceUrl": null,
       "creator": null,
@@ -980,25 +940,6 @@
     {
       "id": "ASSET-022",
       "sceneId": "S06",
-      "kind": "data_visualization",
-      "description": "Evidence-led chart built only from sourced figures; show period, currency, units, source, and methodology.",
-      "usage": "Make the economic mechanism legible.",
-      "searchBrief": "Chart specification from verified project claim ledger",
-      "preferredSources": [],
-      "status": "not_acquired",
-      "sourceUrl": null,
-      "creator": null,
-      "license": null,
-      "licenseEvidence": null,
-      "territory": null,
-      "expiry": null,
-      "attributionRequired": null,
-      "editorialVerification": "not_checked",
-      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
-    },
-    {
-      "id": "ASSET-023",
-      "sceneId": "S06",
       "kind": "product_or_infrastructure_detail",
       "description": "Close-up of the relevant product, component, facility, or infrastructure.",
       "usage": "Give the viewer a concrete visual anchor.",
@@ -1020,7 +961,7 @@
       "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
     },
     {
-      "id": "ASSET-024",
+      "id": "ASSET-023",
       "sceneId": "S07",
       "kind": "archival_footage",
       "description": "Authentic footage of the company, product, factory, office, market, or period relevant to this chapter.",
@@ -1043,7 +984,7 @@
       "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
     },
     {
-      "id": "ASSET-025",
+      "id": "ASSET-024",
       "sceneId": "S07",
       "kind": "primary_document",
       "description": "Original annual report, regulatory filing, investor presentation, court record, or dated company document supporting the chapter's claims.",
@@ -1066,26 +1007,7 @@
       "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
     },
     {
-      "id": "ASSET-026",
-      "sceneId": "S07",
-      "kind": "data_visualization",
-      "description": "Evidence-led chart built only from sourced figures; show period, currency, units, source, and methodology.",
-      "usage": "Make the economic mechanism legible.",
-      "searchBrief": "Chart specification from verified project claim ledger",
-      "preferredSources": [],
-      "status": "not_acquired",
-      "sourceUrl": null,
-      "creator": null,
-      "license": null,
-      "licenseEvidence": null,
-      "territory": null,
-      "expiry": null,
-      "attributionRequired": null,
-      "editorialVerification": "not_checked",
-      "notes": "Do not use in final edit until provenance, accuracy, and usage rights are recorded and approved."
-    },
-    {
-      "id": "ASSET-027",
+      "id": "ASSET-025",
       "sceneId": "S07",
       "kind": "product_or_infrastructure_detail",
       "description": "Close-up of the relevant product, component, facility, or infrastructure.",

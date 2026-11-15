@@ -1,12 +1,12 @@
 {
   "projectId": "2026-11-14-nvidia-hidden-engine",
-  "checkedAt": "2026-11-15T17:29:01.442Z",
+  "checkedAt": "2026-11-15T17:38:45.306Z",
   "status": "structurally_consistent",
   "summary": {
-    "sources": 7,
-    "primarySources": 7,
-    "claims": 14,
-    "claimsWithPrimaryLinks": 14,
+    "sources": 8,
+    "primarySources": 8,
+    "claims": 16,
+    "claimsWithPrimaryLinks": 16,
     "unresolvedContradictions": 0
   },
   "issues": [],
@@ -86,7 +86,7 @@
     },
     {
       "claimId": "CLM-009",
-      "text": "For fiscal 2026, Compute & Networking revenue was $193,479 and Graphics revenue was $22,459.",
+      "text": "For fiscal 2026, NVIDIA reported Compute & Networking revenue of $193.479 billion and Graphics revenue of $22.459 billion. The source table reports figures in millions of dollars.",
       "classification": "verified",
       "sourceCount": 1,
       "primarySourceCount": 1,
@@ -95,7 +95,7 @@
     },
     {
       "claimId": "CLM-010",
-      "text": "For fiscal 2026, Compute & Networking segment operating income was $130,141 and Graphics segment operating income was $9,156.",
+      "text": "For fiscal 2026, NVIDIA reported segment operating income of $130.141 billion for Compute & Networking and $9.156 billion for Graphics. The source table reports figures in millions of dollars.",
       "classification": "verified",
       "sourceCount": 1,
       "primarySourceCount": 1,
@@ -104,7 +104,7 @@
     },
     {
       "claimId": "CLM-011",
-      "text": "For fiscal 2026, NVIDIA reported revenue by direct-customer headquarters location of $149,617 in the United States, $42,345 in Taiwan, and $19,677 in China including Hong Kong.",
+      "text": "For fiscal 2026, NVIDIA reported revenue by direct-customer headquarters location of $149.617 billion in the United States, $42.345 billion in Taiwan, and $19.677 billion in China including Hong Kong. These figures identify customer headquarters, not necessarily end-customer or shipping locations; NVIDIA estimated that 76% of Data Center revenue from Taiwan-headquartered customers was attributed to end customers in the United States and Europe.",
       "classification": "verified",
       "sourceCount": 1,
       "primarySourceCount": 1,
@@ -132,6 +132,24 @@
     {
       "claimId": "CLM-014",
       "text": "NVIDIA reported quarterly Data Center revenue of $62.3 billion, up 75% year over year, for the fourth quarter ended January 25, 2026.",
+      "classification": "verified",
+      "sourceCount": 1,
+      "primarySourceCount": 1,
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "claimId": "CLM-015",
+      "text": "In its fiscal 2019 Form 10-K, NVIDIA described a platform strategy combining hardware, system software, programmable algorithms, libraries, systems and services, with GPUs and CUDA as fundamental building blocks; it said a growing developer base strengthens the ecosystem's value to customers.",
+      "classification": "attributed",
+      "sourceCount": 1,
+      "primarySourceCount": 1,
+      "issues": [],
+      "warnings": []
+    },
+    {
+      "claimId": "CLM-016",
+      "text": "For fiscal 2026, sales to one NVIDIA direct customer represented 22% of total revenue and sales to another represented 14%; both were primarily attributable to Compute & Networking.",
       "classification": "verified",
       "sourceCount": 1,
       "primarySourceCount": 1,
