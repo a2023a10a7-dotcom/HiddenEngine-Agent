@@ -2,11 +2,11 @@
   "schemaVersion": "1.0.0",
   "projectId": "2026-11-14-nvidia-hidden-engine",
   "createdAt": "2026-11-14T15:00:00.000Z",
-  "updatedAt": "2026-11-15T17:38:45.306Z",
+  "updatedAt": "2026-11-15T17:44:57.817Z",
   "channel": "The Hidden Engine",
   "topic": "NVIDIA: How It Became the Engine of the AI Infrastructure Boom",
   "language": "en",
-  "targetDurationSeconds": 900,
+  "targetDurationSeconds": 420,
   "editorialPromise": "Reveal the documented economic and strategic mechanism behind NVIDIA's rise: the hardware, software, supply chain, customers, margins, and constraints behind the AI infrastructure boom.",
   "status": "topic_received",
   "thesis": {
@@ -52,7 +52,8 @@
         "passageQuote": "Revenue for fiscal year 2026 was $215.9 billion, up 65% from a year ago. Data Center revenue for fiscal year 2026 was up 68% from a year ago.",
         "passageReference": "verbatim passage matched in SRC-001: “Revenue for fiscal year 2026 was $215.9 billion, up 65% from a year ago. Data Center revenue for fiscal year 2026 was up…”",
         "passageMatchedSourceId": "SRC-001",
-        "importedAt": "2026-11-15T16:51:50.156Z"
+        "importedAt": "2026-11-15T16:51:50.156Z",
+        "narrationDraft": "The annual result establishes the scale of the transformation, but the headline is only the starting point. NVIDIA reported $215.9 billion in fiscal 2026 revenue, up 65 percent, while Data Center revenue grew 68 percent. Those figures show how strongly the business had shifted toward accelerated computing; they do not, by themselves, prove that demand or pricing power will last."
       },
       {
         "id": "CLM-002",
@@ -65,7 +66,8 @@
         "passageReference": "verbatim passage matched in SRC-001: “Gaming revenue for fiscal year 2026 was up 41% from a year ago, driven by strong Blackwell demand.”",
         "passageMatchedSourceId": "SRC-001",
         "attribution": "NVIDIA's Form 10-K",
-        "importedAt": "2026-11-15T16:51:50.156Z"
+        "importedAt": "2026-11-15T16:51:50.156Z",
+        "narrationDraft": "Gaming did not disappear as NVIDIA expanded into data-center computing. The company said Gaming revenue rose 41 percent in fiscal 2026 and attributed that increase to Blackwell demand. That is the company's explanation, not an independent breakdown of every cause. The important point is that NVIDIA continued to report growth across more than one market, even as Data Center became the larger story."
       },
       {
         "id": "CLM-003",
@@ -78,7 +80,8 @@
         "passageReference": "verbatim passage matched in SRC-001: “At the foundation of the NVIDIA accelerated computing platform are our GPUs, which excel at parallel workloads such as t…”",
         "passageMatchedSourceId": "SRC-001",
         "attribution": "NVIDIA's Form 10-K",
-        "importedAt": "2026-11-15T16:51:50.157Z"
+        "importedAt": "2026-11-15T16:51:50.157Z",
+        "narrationDraft": "A graphics processor is designed to perform many calculations in parallel. NVIDIA describes its GPUs as the foundation of a platform built for parallel workloads, including neural-network training and inference. That distinction matters: the product is not simply a faster component in a computer. It is a processor architecture that the company positions as useful for a broad class of computational work."
       },
       {
         "id": "CLM-004",
@@ -91,7 +94,8 @@
         "passageReference": "verbatim passage matched in SRC-001: “While our approach starts with powerful chips, what makes it a full-stack computing platform is our large body of softwa…”",
         "passageMatchedSourceId": "SRC-001",
         "attribution": "NVIDIA's Form 10-K",
-        "importedAt": "2026-11-15T16:51:50.157Z"
+        "importedAt": "2026-11-15T16:51:50.157Z",
+        "narrationDraft": "NVIDIA's own description makes clear that the offer extends beyond silicon. Its full-stack platform combines chips with CUDA, CUDA-X libraries, models, training datasets, APIs, software development kits, and application frameworks. Each layer addresses a different part of the developer's task. The strategic proposition is that customers buy a working computing environment, not merely a processor delivered in a box."
       },
       {
         "id": "CLM-005",
@@ -104,7 +108,8 @@
         "passageReference": "verbatim passage matched in SRC-001: “Gross margins decreased to 71.1% in fiscal year 2026 from 75.0% in fiscal year 2025 as our business model transitioned f…”",
         "passageMatchedSourceId": "SRC-001",
         "attribution": "NVIDIA's Form 10-K",
-        "importedAt": "2026-11-15T16:51:50.157Z"
+        "importedAt": "2026-11-15T16:51:50.157Z",
+        "narrationDraft": "The economics are not frictionless. NVIDIA reported gross margin of 71.1 percent in fiscal 2026, down from 75.0 percent the year before. The company linked the change to its move toward full-scale Blackwell data-center systems and a $4.5 billion H20-related charge. This is a reminder that a richer system offering can bring costs and transition risks alongside revenue."
       },
       {
         "id": "CLM-006",
@@ -117,7 +122,8 @@
         "passageReference": "verbatim passage matched in SRC-002: “increasing supply commitments from $ 119 billion last quarter to $ 279 billion as of July 26, 2026.”",
         "passageMatchedSourceId": "SRC-002",
         "attribution": "NVIDIA's Form 10-Q",
-        "importedAt": "2026-11-15T16:51:50.162Z"
+        "importedAt": "2026-11-15T16:51:50.162Z",
+        "narrationDraft": "NVIDIA disclosed that supply commitments rose from $119 billion in the prior quarter to $279 billion as of July 26, 2026. These commitments reveal the scale of resources being arranged to support expected demand. They are not the same as revenue already earned, nor do they guarantee that every planned purchase will convert into a sale. They expose the operational stakes behind the growth story."
       },
       {
         "id": "CLM-007",
@@ -130,7 +136,8 @@
         "passageReference": "verbatim passage matched in SRC-002: “in certain instances, these agreements may be cancelable, rescheduled, or adjustable for our business needs prior to pla…”",
         "passageMatchedSourceId": "SRC-002",
         "attribution": "NVIDIA's Form 10-Q",
-        "importedAt": "2026-11-15T16:51:50.162Z"
+        "importedAt": "2026-11-15T16:51:50.162Z",
+        "narrationDraft": "The filing also describes flexibility in some supplier agreements: certain commitments may be canceled, rescheduled, or adjusted before firm orders. NVIDIA warns that changes can create additional costs. That qualification matters because supply commitments are not all identical, and the headline total should not be read as a fixed bill due immediately. The company is balancing capacity planning with uncertainty about timing and requirements."
       },
       {
         "id": "CLM-008",
@@ -143,7 +150,8 @@
         "passageReference": "verbatim passage matched in SRC-005: “CUDA is a parallel computing platform and programming model developed by NVIDIA that enables dramatic increases in compu…”",
         "passageMatchedSourceId": "SRC-005",
         "attribution": "NVIDIA CUDA Programming Guide",
-        "importedAt": "2026-11-15T16:51:50.164Z"
+        "importedAt": "2026-11-15T16:51:50.164Z",
+        "narrationDraft": "CUDA is the software layer that lets developers express parallel work for NVIDIA GPUs. The company's programming guide calls it both a computing platform and a programming model. In practical terms, hardware capability becomes useful only when software can direct work to it. CUDA therefore connects the physical processor to the tools developers use to build and run applications."
       },
       {
         "id": "CLM-009",
@@ -155,7 +163,8 @@
         "passageQuote": "Year Ended Jan 25, 2026 Jan 26, 2025 $ Change % Change ($ in millions) Compute & Networking $ 193,479 $ 116,193 $ 77,286 67 % Graphics 22,459 14,304 8,155 57 % Total $ 215,938 $ 130,497 $ 85,441 65 %",
         "passageReference": "verbatim passage matched in SRC-001: “Year Ended Jan 25, 2026 Jan 26, 2025 $ Change % Change ($ in millions) Compute & Networking $ 193,479 $ 116,193 $ 77,286…”",
         "passageMatchedSourceId": "SRC-001",
-        "importedAt": "2026-11-15T17:01:24.459Z"
+        "importedAt": "2026-11-15T17:01:24.459Z",
+        "narrationDraft": "The segment figures show where the business is concentrated. In fiscal 2026, NVIDIA reported $193.479 billion of revenue in Compute and Networking, compared with $22.459 billion in Graphics. The filing reports the original table in millions, so these figures are expressed here in billions. The comparison makes the company's changing center of gravity visible without implying that Graphics has vanished."
       },
       {
         "id": "CLM-010",
@@ -167,7 +176,8 @@
         "passageQuote": "Operating Income by Reportable Segments Year Ended Jan 25, 2026 Jan 26, 2025 $ Change % Change ($ in millions) Compute & Networking $ 130,141 $ 82,875 $ 47,266 57 % Graphics 9,156 5,085 4,071 80 % Total $ 139,297 $ 87,960 $ 51,337 58 %",
         "passageReference": "verbatim passage matched in SRC-001: “Operating Income by Reportable Segments Year Ended Jan 25, 2026 Jan 26, 2025 $ Change % Change ($ in millions) Compute &…”",
         "passageMatchedSourceId": "SRC-001",
-        "importedAt": "2026-11-15T17:01:24.460Z"
+        "importedAt": "2026-11-15T17:01:24.460Z",
+        "narrationDraft": "NVIDIA's segment operating-income table gives another view of that concentration. Compute and Networking reported $130.141 billion, while Graphics reported $9.156 billion for fiscal 2026. These are segment operating-income figures, not a direct measure of cash available to shareholders. They also sit within the company's segment-reporting definitions, so they should be compared with care rather than treated as standalone company profit."
       },
       {
         "id": "CLM-011",
@@ -179,7 +189,8 @@
         "passageQuote": "Year Ended Jan 25, 2026 Jan 26, 2025 Jan 28, 2024 Geographic Revenue based upon Customer Headquarters Location (1): (In millions) United States $ 149,617 $ 77,482 $ 31,533 Taiwan (2) 42,345 23,600 14,912 China (including Hong Kong) 19,677 25,048 12,330 Other 4,299 4,367 2,147 Total revenue $ 215,938",
         "passageReference": "verbatim passage matched in SRC-001: “Year Ended Jan 25, 2026 Jan 26, 2025 Jan 28, 2024 Geographic Revenue based upon Customer Headquarters Location (1): (In …”",
         "passageMatchedSourceId": "SRC-001",
-        "importedAt": "2026-11-15T17:01:24.460Z"
+        "importedAt": "2026-11-15T17:01:24.460Z",
+        "narrationDraft": "The geographic table needs careful reading. NVIDIA assigns revenue by the headquarters location of its direct customers, not necessarily where the final buyer or equipment is located. It reported $149.617 billion for U.S.-headquartered customers and $42.345 billion for Taiwan-headquartered customers. The company estimated that 76 percent of Data Center revenue from Taiwan-based customers went to end customers in the United States and Europe."
       },
       {
         "id": "CLM-012",
@@ -191,7 +202,8 @@
         "passageQuote": "Q2 FY27 Q1 FY27 Q2 FY26 Q/Q Y/Y Revenue $96,221 $81,615 $46,743 18 % 106 % Gross margin 75.0 % 74.9 % 72.4 % 0.1 pts 2.6 pts",
         "passageReference": "verbatim passage matched in SRC-003: “Q2 FY27 Q1 FY27 Q2 FY26 Q/Q Y/Y Revenue $96,221 $81,615 $46,743 18 % 106 % Gross margin 75.0 % 74.9 % 72.4 % 0.1 pts 2.6…”",
         "passageMatchedSourceId": "SRC-003",
-        "importedAt": "2026-11-15T17:01:24.462Z"
+        "importedAt": "2026-11-15T17:01:24.462Z",
+        "narrationDraft": "The second-quarter fiscal 2027 results provide a more recent snapshot. NVIDIA reported revenue of $96,221 million, up 106 percent year over year, with gross margin at 75.0 percent. These are reported quarterly results, not a forecast. They show that the business remained large and fast-growing in that period, while leaving the deeper question unanswered: how much of this demand is sustainable?"
       },
       {
         "id": "CLM-013",
@@ -204,7 +216,8 @@
         "passageReference": "verbatim passage matched in SRC-003: “NVIDIA’s outlook for the third quarter of fiscal 2027 is as follows: Revenue is expected to be $108.0 billion, plus or m…”",
         "passageMatchedSourceId": "SRC-003",
         "caveat": "This is company guidance, not a realized result.",
-        "importedAt": "2026-11-15T17:01:24.462Z"
+        "importedAt": "2026-11-15T17:01:24.462Z",
+        "narrationDraft": "For the following quarter, NVIDIA forecast revenue of $108.0 billion, plus or minus 2 percent, and said its outlook assumed no Data Center compute revenue from China. This is guidance, not a completed result. It shows how management framed the near-term opportunity and the export-market constraint at that moment. The forecast should be judged against the results when that quarter is reported."
       },
       {
         "id": "CLM-014",
@@ -216,7 +229,8 @@
         "passageQuote": "Record quarterly Data Center revenue of $62.3 billion, up 22% from Q3 and up 75% from a year ago Record full-year revenue of $215.9 billion, up 65% SANTA CLARA, Calif., Feb. 25, 2026 (GLOBE NEWSWIRE) -- NVIDIA (NASDAQ: NVDA) today reported record revenue for the fourth quarter ended January 25, 2026, of $68.1 billion",
         "passageReference": "verbatim passage matched in SRC-004: “Record quarterly Data Center revenue of $62.3 billion, up 22% from Q3 and up 75% from a year ago Record full-year revenu…”",
         "passageMatchedSourceId": "SRC-004",
-        "importedAt": "2026-11-15T17:01:24.463Z"
+        "importedAt": "2026-11-15T17:01:24.463Z",
+        "narrationDraft": "The earlier fourth-quarter release reported Data Center revenue of $62.3 billion, up 75 percent from a year earlier. Set beside the later fiscal-year totals, this helps show the speed of the expansion into AI infrastructure. But one quarter is not the whole cycle: a strong result records what happened in that period, not whether customers will keep spending at the same pace."
       },
       {
         "id": "CLM-015",
@@ -229,7 +243,8 @@
         "passageQuote": "NVIDIA has a platform strategy, bringing together hardware, system software, programmable algorithms, libraries, systems, and services to create unique value for the markets we serve. While the requirements of these end markets are diverse, we address them with a unified underlying architecture leveraging our GPUs and Compute Unified Device Architecture, or CUDA, as the fundamental building blocks. The large and growing number of developers across our platforms strengthens our ecosystem and increases the value of our platform to our customers.",
         "passageReference": "FY2019 Form 10-K, Business section, platform strategy discussion",
         "passageMatchedSourceId": "SRC-008",
-        "importedAt": "2026-11-15T00:00:00.000Z"
+        "importedAt": "2026-11-15T00:00:00.000Z",
+        "narrationDraft": "The platform idea predates the current AI boom. In its fiscal 2019 annual filing, NVIDIA described a strategy that combined hardware, system software, programmable algorithms, libraries, systems, and services. It identified GPUs and CUDA as building blocks and said a growing developer base increased the platform's value to customers. This is the company's own historical account, but it shows that the full-stack ambition was already explicit years earlier."
       },
       {
         "id": "CLM-016",
@@ -241,7 +256,8 @@
         "passageQuote": "For fiscal year 2026, sales to one direct customer represented 22% of total revenue and sales to another direct customer represented 14% of total revenue, all of which were primarily attributable to the Compute & Networking segment.",
         "passageReference": "FY2026 Form 10-K, Note 16, Direct Customers",
         "passageMatchedSourceId": "SRC-001",
-        "importedAt": "2026-11-15T00:00:00.000Z"
+        "importedAt": "2026-11-15T00:00:00.000Z",
+        "narrationDraft": "Customer concentration is another part of the risk picture. NVIDIA reported that one direct customer represented 22 percent of fiscal 2026 revenue and another represented 14 percent; both were primarily tied to Compute and Networking. The filing does not name those customers in this disclosure. The figures therefore show dependence on a small number of large buyers without allowing us to identify them from this note alone."
       }
     ],
     "sources": [
@@ -432,7 +448,7 @@
       "id": "S01",
       "act": "Cold open",
       "purpose": "Open with a verified contradiction, consequence, or striking documented fact.",
-      "targetSeconds": 63,
+      "targetSeconds": 30,
       "narration": "",
       "claims": [],
       "visuals": [],
@@ -446,7 +462,7 @@
       "id": "S02",
       "act": "The system",
       "purpose": "Explain NVIDIA's business model, GPU platforms, customer groups, and ecosystem.",
-      "targetSeconds": 135,
+      "targetSeconds": 55,
       "narration": "",
       "claims": [],
       "visuals": [],
@@ -460,7 +476,7 @@
       "id": "S03",
       "act": "The hidden engine",
       "purpose": "Reveal revenue mechanics, margins, supply chain, software leverage, and infrastructure economics.",
-      "targetSeconds": 198,
+      "targetSeconds": 75,
       "narration": "",
       "claims": [],
       "visuals": [],
@@ -474,7 +490,7 @@
       "id": "S04",
       "act": "The strategic bet",
       "purpose": "Reconstruct documented bets on accelerated computing, CUDA, data centers, and platform transitions.",
-      "targetSeconds": 180,
+      "targetSeconds": 65,
       "narration": "",
       "claims": [],
       "visuals": [],
@@ -488,7 +504,7 @@
       "id": "S05",
       "act": "The turning point",
       "purpose": "Show what changed through dated primary evidence, from gaming GPUs to AI infrastructure.",
-      "targetSeconds": 162,
+      "targetSeconds": 70,
       "narration": "",
       "claims": [],
       "visuals": [],
@@ -502,7 +518,7 @@
       "id": "S06",
       "act": "Who wins and pays",
       "purpose": "Trace customer concentration, capex, energy, manufacturing dependencies, competition, and geopolitical exposure.",
-      "targetSeconds": 108,
+      "targetSeconds": 70,
       "narration": "",
       "claims": [],
       "visuals": [],
@@ -516,7 +532,7 @@
       "id": "S07",
       "act": "What remains",
       "purpose": "Close with a balanced view of durability, constraints, and unresolved questions.",
-      "targetSeconds": 54,
+      "targetSeconds": 55,
       "narration": "",
       "claims": [],
       "visuals": [],
@@ -558,5 +574,40 @@
     "video": null,
     "sourceLog": null,
     "qaReport": null
+  },
+  "editorialPlan": {
+    "targetDurationSeconds": 420,
+    "sceneClaimIds": {
+      "S01": [
+        "CLM-012"
+      ],
+      "S02": [
+        "CLM-003",
+        "CLM-004",
+        "CLM-008"
+      ],
+      "S03": [
+        "CLM-005",
+        "CLM-009",
+        "CLM-010"
+      ],
+      "S04": [
+        "CLM-015"
+      ],
+      "S05": [
+        "CLM-001",
+        "CLM-002",
+        "CLM-014"
+      ],
+      "S06": [
+        "CLM-006",
+        "CLM-007",
+        "CLM-011",
+        "CLM-016"
+      ],
+      "S07": [
+        "CLM-013"
+      ]
+    }
   }
 }
