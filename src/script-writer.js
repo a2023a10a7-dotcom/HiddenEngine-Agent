@@ -41,7 +41,7 @@ for(const outline of orderedOutlines){
     assignedClaims.add(c.id);
     blocks.push({
       claimId:c.id,classification:c.classification,
-      narrationText:c.text.trim(),qualification,
+      narrationText:(c.narrationDraft||c.text).trim(), claimText:c.text.trim(),qualification,
       sourceRefs,confidence:c.confidence||"not_assessed",
       editorialStatus:"needs_passage_review",
       factCheck:{exactPassageConfirmed:false,independentCorroboration:false}
