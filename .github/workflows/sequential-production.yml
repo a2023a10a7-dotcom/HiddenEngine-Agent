@@ -29,7 +29,7 @@ on:
         type: string
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: hiddenengine-sequential-${{ inputs.project_id }}
@@ -38,7 +38,7 @@ concurrency:
 jobs:
   production:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
         with:
@@ -90,15 +90,6 @@ jobs:
           PROJECT_ID: ${{ inputs.project_id }}
         run: node src/script-gate.js
 
-      - name: Save generated production files
-        run: |
-          set -euo pipefail
-          git config user.name "HiddenEngine Agent"
-          git config user.email "agent@users.noreply.github.com"
-          git add "production/projects/${{ inputs.project_id }}/"
-          git diff --cached --quiet || git commit -m "Build sequential production package for ${{ inputs.project_id }}"
-          git push origin HEAD:feature/beats-pipeline
-
       - name: Install rendering tools and fonts
         run: |
           sudo apt-get update
@@ -140,6 +131,7 @@ jobs:
         run: node src/render-beats.js
 
       - name: Upload video and review files
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: hiddenengine-${{ inputs.project_id }}${{ inputs.dry_run && '-DRYRUN' || '' }}
