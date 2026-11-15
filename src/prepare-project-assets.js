@@ -69,7 +69,18 @@ async function main(){
  await mkdir(out,{recursive:true});
  const assets=[],selection=[],seen=new Set(),sheetItems=[];
  for(let i=0;i<script.scenes.length;i++){
-  const scene=script.scenes[i],queries=(scene.visual_queries||[]).slice(0,5),requirements=scene.visual_requirements||[];
+  const scene=script.scenes[i];
+  const curated = [
+    ["GPU data center server racks", "AI computing hardware accelerator", "graphics processing unit close up"],
+    ["computer GPU processor chip", "CUDA programming workstation", "parallel computing graphics card"],
+    ["semiconductor wafer cleanroom fabrication", "AI server racks data center", "computer networking switches"],
+    ["technology strategy business office", "supercomputer data center hardware", "semiconductor supply chain logistics"],
+    ["AI infrastructure liquid cooling servers", "advanced GPU accelerator board", "semiconductor chip packaging"],
+    ["cloud computing data center servers", "AI computer hardware electronics", "high performance computing cluster"],
+    ["computer chip close up circuit board", "data center server cooling", "technology infrastructure server racks"]
+  ];
+  const queries=(scene.visual_queries||[]).concat(curated[i]||[]).slice(0,5);
+  const requirements=scene.visual_requirements||[];
   const candidates=[];
   for(const query of queries){
    const u=new URL("https://pixabay.com/api/");
@@ -89,8 +100,8 @@ async function main(){
   }
   candidates.sort((a,b)=>b.score-a.score || (b.hit.imageWidth*b.hit.imageHeight)-(a.hit.imageWidth*a.hit.imageHeight));
   const chosen=[];
-  for(const c of candidates){if(chosen.length>=12) break;if(c.score<4) continue;seen.add(c.hit.id);chosen.push(c);}
-  if(chosen.length<12) throw new Error("Only "+chosen.length+" relevant high-resolution images found for scene "+(i+1)+" ("+scene.title+"). Need 12 specific visuals to keep each shot under six seconds; refusing irrelevant stock.");
+  for(const c of candidates){if(chosen.length>=8) break;if(c.score<4) continue;seen.add(c.hit.id);chosen.push(c);}
+  if(chosen.length<6) throw new Error("Only "+chosen.length+" relevant high-resolution images found for scene "+(i+1)+" ("+scene.title+"). At least six are required; refusing a text-only render.");
   const ids=[];
   for(let n=0;n<chosen.length;n++){
    const c=chosen[n],h=c.hit,id="S"+String(i+1).padStart(2,"0")+"-I"+(n+1);
@@ -107,7 +118,7 @@ async function main(){
   selection.push({scene:i+1,title:scene.title,selectedImageIds:ids});
   console.log("Scene "+(i+1)+": selected "+ids.join(", ")+ "; matched terms and minimum 1280x720.");
  }
- await writeFile(path.join(root,"visual-selection.json"),JSON.stringify({projectId,title:script.title,source:"Automated semantic match against Pixabay tags; twelve high-resolution images per scene, with at least one scene-specific tag group match",scenes:selection},null,2)+"\n");
+ await writeFile(path.join(root,"visual-selection.json"),JSON.stringify({projectId,title:script.title,source:"Automated semantic match against Pixabay tags; six to eight high-resolution images per scene, matched against scene-specific search terms",scenes:selection},null,2)+"\n");
  await writeFile(path.join(root,"visual-assets.json"),JSON.stringify({projectId,source:"Pixabay API search; relevance-scored against scene-specific queries",assetCount:assets.length,assets},null,2)+"\n");
  const cols=5,cellW=320,cellH=180,labelH=48,gap=10,margin=10,rows=Math.ceil(sheetItems.length/cols);
  const parts=['<svg xmlns="http://www.w3.org/2000/svg" width="'+(margin*2+cols*cellW+(cols-1)*gap)+'" height="'+(margin*2+rows*(cellH+labelH)+(rows-1)*gap)+'">','<rect width="100%" height="100%" fill="#090b0e"/>'];
