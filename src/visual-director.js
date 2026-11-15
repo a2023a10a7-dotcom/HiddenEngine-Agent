@@ -49,7 +49,21 @@ const plan={
  warnings:["This is a shot and asset acquisition plan, not a collection of acquired media.","No external assets were downloaded or licensed.","Shot durations are planning targets and must be conformed to final narration.","All rights and factual provenance require human approval."]
 };
 await writeFile(path.join(dir,"VISUAL-DIRECTION.json"),JSON.stringify(plan,null,2)+"\n");
-const md=["# Visual direction & asset acquisition plan","", "**Status:** "+plan.status,"","## Art direction","", "- Palette: charcoal, near-black, warm ivory, muted copper","- 16:9, 1920×1080, 25fps","- Investigative camera language; restrained transitions","- Charts and documents must remain legible on mobile","",...scenes.flatMap(s=>["## "+s.sceneId+" — "+s.act,"",...s.shotList.map(sh=>"- **"+sh.shot+" · "+sh.type+" · "+sh.durationSeconds+"s:** "+sh.camera+" "+sh.overlay+" (assets: "+(sh.assetIds.join(", ")||"none")+")"),"", "**Claims:** "+(s.claimIds.join(", ")||"none"),"",...s.editNotes.map(n=>"- "+n),""]), "## Asset register","",...assets.map(a=>"- **"+a.id+" ["+a.kind+"]** — "+a.description+" Search: "+a.searchBrief+" Status: NOT ACQUIRED. Rights: NOT CLEARED."),"","## Rights and editorial gate","", "Do not use any asset in the final edit until its original URL, creator, exact license, license evidence, territory, expiry, and attribution obligations are recorded and approved. Visual suggestions are not evidence."]).join("\n");
+const mdLines=["# Visual direction & asset acquisition plan","","**Status:** "+plan.status,"","## Art direction","","- Palette: charcoal, near-black, warm ivory, muted copper","- 16:9, 1920×1080, 25fps","- Investigative camera language; restrained transitions","- Charts and documents must remain legible on mobile",""];
+for (const s of scenes) {
+  mdLines.push("## "+s.sceneId+" — "+s.act,"");
+  for (const sh of s.shotList) {
+    const assetText = sh.assetIds.length ? sh.assetIds.join(", ") : "none";
+    mdLines.push("- **"+sh.shot+" · "+sh.type+" · "+sh.durationSeconds+"s:** "+sh.camera+" "+sh.overlay+" (assets: "+assetText+")");
+  }
+  mdLines.push("","**Claims:** "+(s.claimIds.join(", ") || "none"),"");
+  for (const note of s.editNotes) mdLines.push("- "+note);
+  mdLines.push("");
+}
+mdLines.push("## Asset register","");
+for (const a of assets) mdLines.push("- **"+a.id+" ["+a.kind+"]** — "+a.description+" Search: "+a.searchBrief+" Status: NOT ACQUIRED. Rights: NOT CLEARED.");
+mdLines.push("","## Rights and editorial gate","","Do not use any asset in the final edit until its original URL, creator, exact license, license evidence, territory, expiry, and attribution obligations are recorded and approved. Visual suggestions are not evidence.");
+const md=mdLines.join("\n");
 await writeFile(path.join(dir,"VISUAL-DIRECTION.md"),md);
 await writeFile(path.join(assetDir,"ASSET-REGISTER.json"),JSON.stringify({projectId,createdAt:plan.createdAt,assets},null,2)+"\n");
 console.log(JSON.stringify({status:plan.status,scenes:scenes.length,assets:assets.length,outputs:["VISUAL-DIRECTION.json","VISUAL-DIRECTION.md","visual-assets/ASSET-REGISTER.json"],warnings},null,2));
