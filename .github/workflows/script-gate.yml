@@ -4,7 +4,6 @@ on:
   push:
     paths:
       - "production/projects/*/script.json"
-      - "production/projects/*/project.json"
       - "src/script-gate.js"
   workflow_dispatch:
     inputs:
