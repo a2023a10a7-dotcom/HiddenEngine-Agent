@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "projectId": "2026-11-14-nvidia-hidden-engine",
   "createdAt": "2026-11-14T15:00:00.000Z",
-  "updatedAt": "2026-11-15T16:40:13.626Z",
+  "updatedAt": "2026-11-15T16:45:44.243Z",
   "channel": "The Hidden Engine",
   "topic": "NVIDIA: How It Became the Engine of the AI Infrastructure Boom",
   "language": "en",
@@ -55,8 +55,8 @@
         "addedBy": "sources-import",
         "canonicalUrl": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
         "snapshotPath": "research/source-snapshots/SRC-001.json",
-        "ingestionStatus": "html_text_truncated",
-        "fetchedAt": "2026-11-15T16:40:09.868Z"
+        "ingestionStatus": "html_text_extracted",
+        "fetchedAt": "2026-11-15T16:45:37.739Z"
       },
       {
         "id": "SRC-002",
@@ -71,7 +71,7 @@
         "canonicalUrl": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
         "snapshotPath": "research/source-snapshots/SRC-002.json",
         "ingestionStatus": "html_text_extracted",
-        "fetchedAt": "2026-11-15T16:40:10.076Z"
+        "fetchedAt": "2026-11-15T16:45:37.845Z"
       },
       {
         "id": "SRC-003",
@@ -86,7 +86,7 @@
         "canonicalUrl": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/",
         "snapshotPath": "research/source-snapshots/SRC-003.json",
         "ingestionStatus": "html_text_extracted",
-        "fetchedAt": "2026-11-15T16:40:10.802Z"
+        "fetchedAt": "2026-11-15T16:45:39.216Z"
       },
       {
         "id": "SRC-004",
@@ -101,7 +101,7 @@
         "canonicalUrl": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Fourth-Quarter-and-Fiscal-2026/",
         "snapshotPath": "research/source-snapshots/SRC-004.json",
         "ingestionStatus": "html_text_extracted",
-        "fetchedAt": "2026-11-15T16:40:11.020Z"
+        "fetchedAt": "2026-11-15T16:45:39.538Z"
       },
       {
         "id": "SRC-005",
@@ -116,7 +116,7 @@
         "canonicalUrl": "https://docs.nvidia.com/cuda/cuda-programming-guide/",
         "snapshotPath": "research/source-snapshots/SRC-005.json",
         "ingestionStatus": "html_text_extracted",
-        "fetchedAt": "2026-11-15T16:40:11.409Z"
+        "fetchedAt": "2026-11-15T16:45:39.906Z"
       },
       {
         "id": "SRC-006",
@@ -131,7 +131,7 @@
         "canonicalUrl": "https://developer.nvidia.com/cuda/faq",
         "snapshotPath": "research/source-snapshots/SRC-006.json",
         "ingestionStatus": "html_text_extracted",
-        "fetchedAt": "2026-11-15T16:40:12.087Z"
+        "fetchedAt": "2026-11-15T16:45:40.597Z"
       },
       {
         "id": "SRC-007",
@@ -145,8 +145,8 @@
         "addedBy": "sources-import",
         "canonicalUrl": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000038/a2026-annualxreportxwebxfi.pdf",
         "snapshotPath": "research/source-snapshots/SRC-007.json",
-        "ingestionStatus": "pdf_text_truncated",
-        "fetchedAt": "2026-11-15T16:40:12.155Z"
+        "ingestionStatus": "pdf_text_extracted",
+        "fetchedAt": "2026-11-15T16:45:40.766Z"
       }
     ],
     "contradictions": [],
@@ -178,10 +178,17 @@
         "attempted": 7,
         "succeeded": 7,
         "failed": 0
+      },
+      {
+        "at": "2026-11-15T16:45:44.243Z",
+        "action": "public_source_ingestion",
+        "attempted": 7,
+        "succeeded": 7,
+        "failed": 0
       }
     ],
     "sourceIngestion": {
-      "at": "2026-11-15T16:40:13.626Z",
+      "at": "2026-11-15T16:45:44.243Z",
       "attempted": 7,
       "succeeded": 7,
       "failed": 0

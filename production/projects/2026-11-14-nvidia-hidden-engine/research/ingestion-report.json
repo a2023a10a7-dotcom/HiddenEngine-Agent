@@ -6,8 +6,8 @@
   "results": [
     {
       "sourceId": "SRC-001",
-      "status": "html_text_truncated",
-      "textCharacters": 200000,
+      "status": "html_text_extracted",
+      "textCharacters": 360427,
       "canonicalUrl": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm"
     },
     {
@@ -42,8 +42,8 @@
     },
     {
       "sourceId": "SRC-007",
-      "status": "pdf_text_truncated",
-      "textCharacters": 200000,
+      "status": "pdf_text_extracted",
+      "textCharacters": 639387,
       "canonicalUrl": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000038/a2026-annualxreportxwebxfi.pdf"
     }
   ],
@@ -51,8 +51,8 @@
   "limits": {
     "maxResponseBytes": 33554432,
     "maxHtmlBytes": 12582912,
-    "maxTextCharacters": 200000,
-    "maxPdfPages": 120
+    "maxTextCharacters": 1000000,
+    "maxPdfPages": 200
   },
   "limitations": [
     "No login, paywall bypass, or script execution.",
