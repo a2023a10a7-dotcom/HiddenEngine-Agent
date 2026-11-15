@@ -20,15 +20,16 @@ if (exists && process.env.FORCE !== "1") { console.error("ERROR script.json alre
 
 const endSentence = s => { const t = String(s || "").replace(/\s+/g, " ").trim(); return /[.!?]$/.test(t) ? t : t + "."; };
 const scenes = [];
-for (const s of draft.scenes || []) {
-  if (!s.narrationBlocks?.length) continue;
+const draftScenes = Array.isArray(draft.scenes) ? draft.scenes : [];
+for (const s of draftScenes) {
+  // Preserve every planned scene. Empty scenes must remain visible so the gate can
+  // report missing evidence instead of the compiler silently deleting structure.
   const act = String(s.act || s.id).toUpperCase();
-  const beats = s.narrationBlocks.map((b, i) => {
+  const blocks = Array.isArray(s.narrationBlocks) ? s.narrationBlocks : [];
+  const beats = blocks.map((b, i) => {
     const narration = endSentence(b.narrationText);
     const hasFigure = /\d/.test(narration);
     const claim = byId.get(b.claimId);
-    // Visual variety rule: analysis -> text card; claims with a verbatim passage alternate
-    // between a figure card and a source-document excerpt; the rest fall back to figure or text.
     let visual;
     if (claim?.classification === "analysis") visual = { type: "kinetic_text" };
     else if (claim?.passageQuote && (!hasFigure || i % 2 === 1)) visual = { type: "source_excerpt" };
@@ -46,7 +47,7 @@ for (const s of draft.scenes || []) {
     beats
   });
 }
-if (!scenes.length) { console.error("ERROR no scene has narration blocks."); process.exit(1); }
+if (!scenes.length) { console.error("ERROR draft contains no planned scenes."); process.exit(1); }
 const script = {
   schema: "beats-1",
   title: project.topic || id,
@@ -55,4 +56,5 @@ const script = {
   scenes
 };
 await writeFile(target, JSON.stringify(script, null, 2) + "\n");
-console.log("Wrote " + target + " with " + scenes.length + " scenes and " + scenes.reduce((n, s) => n + s.beats.length, 0) + " beats.");
+console.log("Wrote " + target + " with " + scenes.length + " planned scenes and " + scenes.reduce((n, s) => n + s.beats.length, 0) + " beats.");
+console.log("Empty scenes are preserved intentionally; script-gate.js must reject scenes without evidence-backed narration.");
