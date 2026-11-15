@@ -15,8 +15,11 @@ const issues=[],warnings=[];
 if(architecture.projectId!==projectId) issues.push("Story architecture belongs to a different project.");
 if(architecture.status!=="outline_only_not_script_ready") warnings.push("Story architecture status is not the expected outline-only state.");
 const scenes=[];
-for(const outline of architecture.scenes||[]){
-  const selected=(outline.candidateClaimIds||[]).map(id=>claimMap.get(id)).filter(Boolean).filter(c=>allowed.has(c.classification));
+const assignedClaims=new Set();
+const scenePriority={S04:0,S03:1,S05:2,S06:3,S01:4,S02:5,S07:6};
+const orderedOutlines=[...(architecture.scenes||[])].sort((a,b)=>(scenePriority[a.id]??99)-(scenePriority[b.id]??99));
+for(const outline of orderedOutlines){
+  const selected=(outline.candidateClaimIds||[]).map(id=>claimMap.get(id)).filter(Boolean).filter(c=>allowed.has(c.classification)&&!assignedClaims.has(c.id));
   const blocks=[];
   for(const c of selected){
     const linked=(c.sourceIds||[]).map(id=>sourceMap.get(id)).filter(Boolean);
@@ -35,6 +38,7 @@ for(const outline of architecture.scenes||[]){
       estimated:"Present this only as an estimate and state its limitations: "+(c.caveat||"caveat not supplied")+".",
       analysis:"Present this as analysis, not reported fact. Reasoning: "+(c.reasoning||"reasoning not supplied")+"."
     }[c.classification];
+    assignedClaims.add(c.id);
     blocks.push({
       claimId:c.id,classification:c.classification,
       narrationText:c.text.trim(),qualification,
@@ -62,6 +66,7 @@ for(const outline of architecture.scenes||[]){
     status:blocks.length?"draft_assembly_needs_editorial_rewrite":"blocked_no_eligible_evidence"
   });
 }
+scenes.sort((a,b)=>String(a.id).localeCompare(String(b.id)));
 const total= scenes.reduce((n,s)=>n+s.narrationBlocks.length,0);
 if(!total) issues.push("No source-linked narration blocks could be assembled.");
 const script={
