@@ -123,7 +123,7 @@ export function validateAssetManifest(manifest, sceneCount) {
     if (!asset?.id || ids.has(asset.id)) errors.push("Asset IDs must be present and unique: " + (asset?.id || "<missing>"));
     ids.add(asset?.id);
     if (!Number.isInteger(asset?.scene) || asset.scene < 1 || asset.scene > sceneCount) errors.push("Asset " + asset?.id + " has an invalid scene index.");
-    if (!asset?.previewFile || /(^|\\/)\\.\\.(\\/|$)/.test(asset.previewFile)) errors.push("Asset " + asset?.id + " has an unsafe or missing previewFile.");
+    if (!asset?.previewFile || /(^|\/)\.\.(\/|$)/.test(asset.previewFile)) errors.push("Asset " + asset?.id + " has an unsafe or missing previewFile.");
     if (!asset?.sourcePage || !/^https:\/\//i.test(asset.sourcePage)) errors.push("Asset " + asset?.id + " has no HTTPS provenance page.");
     if (asset.kind === "video" && Number.isFinite(asset.durationSeconds) && asset.durationSeconds <= 0) errors.push("Video asset " + asset.id + " has an invalid duration.");
   }
