@@ -1,0 +1,24 @@
+name: HiddenEngine Visual QA Tests
+
+on:
+  push:
+    branches:
+      - feature/beats-pipeline
+  pull_request:
+    branches:
+      - main
+      - feature/beats-pipeline
+
+permissions:
+  contents: read
+
+jobs:
+  visual-quality-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Run visual quality unit tests
+        run: node --test test/visual-quality.test.js
