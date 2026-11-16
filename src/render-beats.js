@@ -176,7 +176,13 @@ async function main() {
           await run("ffmpeg", ["-y", ...(isVideo ? ["-ss", "0.5"] : []), "-i", visualPath, "-vf", "scale=480:270:force_original_aspect_ratio=increase,crop=480:270", "-frames:v", "1", stem + ".jpg"], OUT);
         }
         const base = nIn; nIn += pngs.length;
-        graph.push("[" + imageInput + ":v]" + (isVideo ? "trim=duration=" + d.toFixed(3) + ",setpts=PTS-STARTPTS," : "") + "scale=2112:1188:force_original_aspect_ratio=increase,crop=2112:1188,setsar=1[bg" + k + "]");
+        const motionSeconds = Math.min(d, 6);
+        const motionFilter = isVideo
+          ? "trim=duration=" + motionSeconds.toFixed(3) + ",setpts=PTS-STARTPTS" +
+            (d > motionSeconds ? ",tpad=stop_mode=clone:stop_duration=" + (d - motionSeconds).toFixed(3) : "") +
+            ",trim=duration=" + d.toFixed(3) + ","
+          : "";
+        graph.push("[" + imageInput + ":v]" + motionFilter + "scale=2112:1188:force_original_aspect_ratio=increase,crop=2112:1188,setsar=1[bg" + k + "]");
         graph.push("[bg" + k + "][" + base + ":v]overlay=0:0:shortest=1,crop=1920:1080:" + pos("0.45") + ",setsar=1,fps=" + FPS + "[g" + k + "_0]");
         let prev = "g" + k + "_0";
         for (let j = 0; j < cardK.layers.length; j++) {
