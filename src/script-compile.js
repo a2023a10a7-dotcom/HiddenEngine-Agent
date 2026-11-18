@@ -10,6 +10,10 @@ const dir = path.join("production", "projects", id);
 const read = async name => { try { return JSON.parse(await readFile(path.join(dir, name), "utf8")); } catch (e) { console.error("ERROR cannot read " + name + ": " + e.message + ". Run the earlier stages first."); process.exit(1); } };
 const draft = await read("SCRIPT-DRAFT.json");
 const project = await read("project.json");
+// Preserve editor-curated visual searches when rebuilding narration/beats.
+let previousScript = null;
+try { previousScript = JSON.parse(await readFile(path.join(dir, "script.json"), "utf8")); } catch {}
+const previousScenes = new Map((previousScript?.scenes || []).map(scene => [scene.id, scene]));
 const byId = new Map((project.research?.claims || []).map(c => [c.id, c]));
 
 if (draft.projectId !== id) { console.error("ERROR SCRIPT-DRAFT.json belongs to another project."); process.exit(1); }
@@ -37,12 +41,17 @@ for (const s of draftScenes) {
     else visual = { type: "kinetic_text" };
     return { id: s.id + "-B" + (i + 1), kind: "claim", narration, claim_ids: [b.claimId], visual, on_screen_text: act };
   });
+  const prior = previousScenes.get(s.id) || {};
+  const visualQueries = Array.isArray(prior.visual_queries) ? prior.visual_queries : [];
+  const visualKeywords = Array.isArray(prior.keywords) && prior.keywords.length
+    ? prior.keywords : act.split(/\s+/).slice(0, 4);
   scenes.push({
     id: s.id,
     targetSeconds: s.targetSeconds,
     title: act,
     subtitle: String(s.editorialGoal || "").slice(0, 120),
-    keywords: act.split(/\s+/).slice(0, 4),
+    keywords: visualKeywords,
+    ...(visualQueries.length ? { visual_queries: visualQueries } : {}),
     narration: beats.map(b => b.narration).join(" "),
     beats
   });
@@ -53,7 +62,8 @@ const script = {
   title: project.topic || id,
   language: draft.language || project.language || "en",
   target_duration_minutes: Math.round(((draft.targetDurationSeconds || project.targetDurationSeconds || 480) / 60) * 10) / 10,
-  scenes
+  scenes,
+  ...(previousScript?.visual_policy ? { visual_policy: previousScript.visual_policy } : {})
 };
 await writeFile(target, JSON.stringify(script, null, 2) + "\n");
 console.log("Wrote " + target + " with " + scenes.length + " planned scenes and " + scenes.reduce((n, s) => n + s.beats.length, 0) + " beats.");
