@@ -40,12 +40,12 @@
         }
       ],
       "visual_queries": [
-        "NVIDIA headquarters Santa Clara campus exterior",
-        "NVIDIA GB200 NVL72 AI data center server racks"
+        "NVIDIA Santa Clara Voyager Endeavor headquarters campus exterior aerial",
+        "NVIDIA GB200 NVL72 Blackwell AI server rack data center"
       ],
       "keywords": [
-        "NVIDIA headquarters Santa Clara",
-        "NVIDIA GB200 NVL72 AI"
+        "NVIDIA Voyager headquarters Santa Clara",
+        "NVIDIA GB200 NVL72 AI server racks"
       ]
     },
     {
@@ -78,12 +78,12 @@
         }
       ],
       "visual_queries": [
-        "NVIDIA Blackwell GPU chip close up",
-        "NVIDIA GPU parallel computing CUDA developer workstation"
+        "NVIDIA Blackwell B200 GPU processor chip close-up official product photography",
+        "NVIDIA GeForce GPU graphics card die semiconductor close-up"
       ],
       "keywords": [
-        "NVIDIA Blackwell GPU chip",
-        "NVIDIA GPU parallel computing"
+        "NVIDIA Blackwell B200 GPU processor",
+        "NVIDIA GeForce graphics card GPU"
       ]
     },
     {
@@ -116,12 +116,12 @@
         }
       ],
       "visual_queries": [
-        "NVIDIA CUDA software developer GPU programming screen",
-        "NVIDIA CUDA X libraries accelerated computing platform"
+        "NVIDIA CUDA developer programming GPU parallel computing workstation",
+        "NVIDIA CUDA-X accelerated computing software libraries developer conference"
       ],
       "keywords": [
-        "NVIDIA CUDA software developer",
-        "NVIDIA CUDA X libraries"
+        "NVIDIA CUDA GPU programming developer",
+        "CUDA-X software accelerated computing"
       ]
     },
     {
@@ -171,12 +171,12 @@
         }
       ],
       "visual_queries": [
-        "NVIDIA data center GPU server racks Blackwell",
-        "NVIDIA gaming GeForce graphics card GPU"
+        "NVIDIA DGX GB200 NVL72 data center server racks official",
+        "NVIDIA GeForce RTX graphics card gaming GPU product photo"
       ],
       "keywords": [
-        "NVIDIA data center GPU",
-        "NVIDIA gaming GeForce graphics"
+        "NVIDIA DGX GB200 data center racks",
+        "NVIDIA GeForce RTX gaming graphics card"
       ]
     },
     {
@@ -212,12 +212,12 @@
         }
       ],
       "visual_queries": [
-        "NVIDIA Blackwell GB200 liquid cooled server rack",
-        "semiconductor advanced packaging CoWoS wafer manufacturing TSMC"
+        "NVIDIA Blackwell GB200 NVL72 liquid cooling rack close-up",
+        "TSMC CoWoS advanced semiconductor packaging wafer cleanroom manufacturing"
       ],
       "keywords": [
-        "NVIDIA Blackwell GB200 liquid",
-        "semiconductor advanced packaging CoWoS"
+        "NVIDIA Blackwell liquid cooled rack",
+        "TSMC CoWoS advanced packaging semiconductor"
       ]
     },
     {
@@ -253,12 +253,12 @@
         }
       ],
       "visual_queries": [
-        "semiconductor supply chain Taiwan TSMC chip fabrication cleanroom",
-        "NVIDIA AI data center servers United States cloud infrastructure"
+        "TSMC Taiwan semiconductor fabrication foundry cleanroom wafer production",
+        "hyperscale AI data center server infrastructure United States"
       ],
       "keywords": [
-        "semiconductor supply chain Taiwan",
-        "NVIDIA AI data center"
+        "TSMC Taiwan chip fabrication cleanroom",
+        "AI data center infrastructure United States"
       ]
     },
     {
@@ -308,12 +308,12 @@
         }
       ],
       "visual_queries": [
-        "TSMC semiconductor wafer fabrication cleanroom machinery",
-        "NVIDIA Blackwell GB200 NVL72 system manufacturing assembly"
+        "TSMC advanced semiconductor packaging CoWoS wafer production machinery",
+        "NVIDIA GB200 Blackwell system assembly manufacturing supply chain"
       ],
       "keywords": [
-        "TSMC semiconductor wafer fabrication",
-        "NVIDIA Blackwell GB200 NVL72"
+        "TSMC CoWoS wafer manufacturing",
+        "NVIDIA GB200 Blackwell system assembly"
       ]
     }
   ]
