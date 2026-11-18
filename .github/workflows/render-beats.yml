@@ -71,6 +71,13 @@ jobs:
         env:
           PROJECT_ID: ${{ inputs.project_id }}
         run: node src/script-gate.js
+      - name: Acquire scene-matched visuals from all configured providers
+        env:
+          PROJECT_ID: ${{ inputs.project_id }}
+          POLLINATIONS_API_KEY: ${{ secrets.POLLINATIONS_API_KEY }}
+          UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+        run: node src/prepare-project-assets.js
       - name: Render
         env:
           PROJECT_ID: ${{ inputs.project_id }}
