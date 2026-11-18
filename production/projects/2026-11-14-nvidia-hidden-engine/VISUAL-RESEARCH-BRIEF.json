@@ -2,16 +2,16 @@
   "projectId": "2026-11-14-nvidia-hidden-engine",
   "objective": "Curated visual sourcing for a factual NVIDIA documentary. Prefer real, scene-specific assets over generic technology stock photos.",
   "instructions": [
-    "Use visual_queries in script.json as the only primary search terms; do not concatenate full narration into image searches.",
-    "Rank returned assets by title/tag relevance. Reject low-relevance results instead of filling quotas with unrelated images.",
-    "Never use animals, shopping carts, motivational signs, unrelated transport, generic office people, books, or maps unless the narration explicitly calls for them.",
-    "For NVIDIA products, use identifiable real NVIDIA hardware or official NVIDIA newsroom media assets; do not substitute generic servers and label them as NVIDIA.",
+    "Use visual_queries in script.json as the only primary search terms; never concatenate full narration into image searches.",
+    "Rank assets by exact title/tag relevance and reject low-relevance candidates rather than filling quotas with unrelated images.",
+    "Never use animals, shopping carts, motivational signs, unrelated transport, generic office people, books, or unrelated maps.",
+    "For NVIDIA products, select identifiable NVIDIA hardware or clearly label generic infrastructure as illustrative; do not claim generic servers are NVIDIA systems.",
+    "Use real, source-attributed images and footage only for factual claims. AI-generated images are disabled for this documentary.",
     "For TSMC manufacturing, label footage as illustrative unless the source confirms the specific facility or process.",
-    "Do not use AI-generated imagery as factual evidence or as a substitute for real NVIDIA products. If used for abstract transitions, label it illustrative.",
-    "Acquire only media with documented reuse terms. NVIDIA newsroom assets are leads for editorial review, not blanket proof of reuse rights; follow each asset's stated terms.",
-    "For video, prioritize official NVIDIA newsroom B-roll and clearly licensed Internet Archive footage. Do not download oversized corporate B-roll packages without selecting a relevant clip and checking its terms.",
+    "Acquire only media with documented reuse terms. NVIDIA newsroom assets are leads for editorial review, not blanket proof of reuse rights.",
+    "Prioritize clearly licensed footage from Internet Archive; never imply a generic data-center clip depicts an NVIDIA-owned facility.",
     "Record provider asset ID, original source page, direct media URL, creator, license, attribution, target scene and reason for selection in visual-assets.json.",
-    "Build a contact sheet and fail the render if any selected image is visibly unrelated to its scene."
+    "Upload visual-selection.json, visual-assets.json and contact-sheet.jpg with the final video so selected IDs can be audited."
   ],
   "scenes": [
     {
@@ -19,70 +19,70 @@
       "id": "S01",
       "title": "THE SCALE OF THE SHIFT",
       "visual_queries": [
-        "NVIDIA headquarters Santa Clara campus exterior",
-        "NVIDIA GB200 NVL72 AI data center server racks"
+        "NVIDIA Santa Clara Voyager Endeavor headquarters campus exterior aerial",
+        "NVIDIA GB200 NVL72 Blackwell AI server rack data center"
       ],
-      "visual_goal": "Company scale and data-center growth; NVIDIA campus and GB200 rack."
+      "visual_goal": "NVIDIA headquarters and GB200 AI infrastructure."
     },
     {
       "scene": 2,
       "id": "S02",
       "title": "WHY THE GPU MATTERS",
       "visual_queries": [
-        "NVIDIA Blackwell GPU chip close up",
-        "NVIDIA GPU parallel computing CUDA developer workstation"
+        "NVIDIA Blackwell B200 GPU processor chip close-up official product photography",
+        "NVIDIA GeForce GPU graphics card die semiconductor close-up"
       ],
-      "visual_goal": "Actual GPU hardware, parallel computing and CUDA programming."
+      "visual_goal": "Identifiable GPU processor and GeForce hardware."
     },
     {
       "scene": 3,
       "id": "S03",
       "title": "THE SOFTWARE PLATFORM",
       "visual_queries": [
-        "NVIDIA CUDA software developer GPU programming screen",
-        "NVIDIA CUDA X libraries accelerated computing platform"
+        "NVIDIA CUDA developer programming GPU parallel computing workstation",
+        "NVIDIA CUDA-X accelerated computing software libraries developer conference"
       ],
-      "visual_goal": "CUDA developer ecosystem, libraries, software tooling and GPU workflow."
+      "visual_goal": "CUDA developer software and GPU programming ecosystem."
     },
     {
       "scene": 4,
       "id": "S04",
       "title": "WHERE THE MONEY FLOWS",
       "visual_queries": [
-        "NVIDIA data center GPU server racks Blackwell",
-        "NVIDIA gaming GeForce graphics card GPU"
+        "NVIDIA DGX GB200 NVL72 data center server racks official",
+        "NVIDIA GeForce RTX graphics card gaming GPU product photo"
       ],
-      "visual_goal": "Compute/networking hardware contrasted with GeForce gaming GPUs; financial charts remain generated from verified claims."
+      "visual_goal": "Compute/data-center systems contrasted with GeForce gaming products; charts generated from verified claims."
     },
     {
       "scene": 5,
       "id": "S05",
       "title": "THE COST OF SCALE",
       "visual_queries": [
-        "NVIDIA Blackwell GB200 liquid cooled server rack",
-        "semiconductor advanced packaging CoWoS wafer manufacturing TSMC"
+        "NVIDIA Blackwell GB200 NVL72 liquid cooling rack close-up",
+        "TSMC CoWoS advanced semiconductor packaging wafer cleanroom manufacturing"
       ],
-      "visual_goal": "Blackwell system integration, liquid cooling, semiconductor packaging and manufacturing constraints."
+      "visual_goal": "Blackwell liquid-cooled systems and TSMC advanced packaging; label manufacturing footage carefully."
     },
     {
       "scene": 6,
       "id": "S06",
       "title": "THE GLOBAL MAP",
       "visual_queries": [
-        "semiconductor supply chain Taiwan TSMC chip fabrication cleanroom",
-        "NVIDIA AI data center servers United States cloud infrastructure"
+        "TSMC Taiwan semiconductor fabrication foundry cleanroom wafer production",
+        "hyperscale AI data center server infrastructure United States"
       ],
-      "visual_goal": "Map of customer-headquarters revenue geography, Taiwan semiconductor production, US data-center demand; distinguish customer HQ from end-user location."
+      "visual_goal": "Taiwan semiconductor fabrication and global AI data-center geography; explain customer-headquarters basis."
     },
     {
       "scene": 7,
       "id": "S07",
       "title": "THE SUPPLY-SIDE WAGER",
       "visual_queries": [
-        "TSMC semiconductor wafer fabrication cleanroom machinery",
-        "NVIDIA Blackwell GB200 NVL72 system manufacturing assembly"
+        "TSMC advanced semiconductor packaging CoWoS wafer production machinery",
+        "NVIDIA GB200 Blackwell system assembly manufacturing supply chain"
       ],
-      "visual_goal": "Wafer fabrication, packaging, server assembly and supplier logistics; use actual factory footage only when provenance is clear."
+      "visual_goal": "TSMC advanced packaging and NVIDIA GB200 system assembly; distinguish disclosed commitments from revenue."
     }
   ],
   "reference_sources": [
