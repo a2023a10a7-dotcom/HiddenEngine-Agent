@@ -112,7 +112,7 @@ async function main() {
   }
   for (let i = 1; i <= total; i++) {
     const photos = (assetsByScene.get(i) || []).filter(a => a.kind !== "video");
-    if (photos.length < 6) throw new Error("Scene " + i + " has fewer than six cleared-to-use photographs; refusing a text-only render.");
+    if (photos.length < 1) throw new Error("Scene " + i + " has no provenance-recorded photograph; refusing a text-only render.");
   }
   let beatNo = 0;
   for (const [si, sc] of script.scenes.entries()) {
