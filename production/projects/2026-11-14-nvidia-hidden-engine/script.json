@@ -38,6 +38,14 @@
             ]
           }
         }
+      ],
+      "visual_queries": [
+        "NVIDIA headquarters Santa Clara campus exterior",
+        "NVIDIA GB200 NVL72 AI data center server racks"
+      ],
+      "keywords": [
+        "NVIDIA headquarters Santa Clara",
+        "NVIDIA GB200 NVL72 AI"
       ]
     },
     {
@@ -68,6 +76,14 @@
             "type": "source_excerpt"
           }
         }
+      ],
+      "visual_queries": [
+        "NVIDIA Blackwell GPU chip close up",
+        "NVIDIA GPU parallel computing CUDA developer workstation"
+      ],
+      "keywords": [
+        "NVIDIA Blackwell GPU chip",
+        "NVIDIA GPU parallel computing"
       ]
     },
     {
@@ -98,6 +114,14 @@
             "type": "source_excerpt"
           }
         }
+      ],
+      "visual_queries": [
+        "NVIDIA CUDA software developer GPU programming screen",
+        "NVIDIA CUDA X libraries accelerated computing platform"
+      ],
+      "keywords": [
+        "NVIDIA CUDA software developer",
+        "NVIDIA CUDA X libraries"
       ]
     },
     {
@@ -145,6 +169,14 @@
             "type": "source_excerpt"
           }
         }
+      ],
+      "visual_queries": [
+        "NVIDIA data center GPU server racks Blackwell",
+        "NVIDIA gaming GeForce graphics card GPU"
+      ],
+      "keywords": [
+        "NVIDIA data center GPU",
+        "NVIDIA gaming GeForce graphics"
       ]
     },
     {
@@ -178,6 +210,14 @@
             "type": "source_excerpt"
           }
         }
+      ],
+      "visual_queries": [
+        "NVIDIA Blackwell GB200 liquid cooled server rack",
+        "semiconductor advanced packaging CoWoS wafer manufacturing TSMC"
+      ],
+      "keywords": [
+        "NVIDIA Blackwell GB200 liquid",
+        "semiconductor advanced packaging CoWoS"
       ]
     },
     {
@@ -211,6 +251,14 @@
             "type": "source_excerpt"
           }
         }
+      ],
+      "visual_queries": [
+        "semiconductor supply chain Taiwan TSMC chip fabrication cleanroom",
+        "NVIDIA AI data center servers United States cloud infrastructure"
+      ],
+      "keywords": [
+        "semiconductor supply chain Taiwan",
+        "NVIDIA AI data center"
       ]
     },
     {
@@ -258,6 +306,14 @@
             ]
           }
         }
+      ],
+      "visual_queries": [
+        "TSMC semiconductor wafer fabrication cleanroom machinery",
+        "NVIDIA Blackwell GB200 NVL72 system manufacturing assembly"
+      ],
+      "keywords": [
+        "TSMC semiconductor wafer fabrication",
+        "NVIDIA Blackwell GB200 NVL72"
       ]
     }
   ]
