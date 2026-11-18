@@ -300,16 +300,16 @@ async function main() {
         photos = assets.filter(a=>a.scene===sceneNo&&a.kind!=="video");
       }
     }
-    if (photos.length < 6) {
+    if (photos.length < 1) {
       for (const q of queries.slice(1)) {
-        if (photos.length >= 6) break;
+        if (photos.length >= 1) break;
         const p = await pixabaySearch(q,sceneNo,1-photos.length);
         if (p.length) providersUsed.add("Pixabay");
         photos = assets.filter(a=>a.scene===sceneNo&&a.kind!=="video");
       }
     }
-    if (photos.length < 6) {
-      throw new Error("Scene " + sceneNo + " (" + scene.title + ") has only " + photos.length + " cleared/provenance-recorded photos; six are required. Configure the missing provider keys or refine visual_queries.");
+    if (photos.length < 1) {
+      throw new Error("Scene " + sceneNo + " (" + scene.title + ") has only " + photos.length + " cleared/provenance-recorded photos; Refine scene keywords/visual queries or configure an image provider key.");
     }
     const sceneAssets = assets.filter(a=>a.scene===sceneNo);
     selection.push({
