@@ -1,6 +1,12 @@
 name: HiddenEngine Sequential Production
 
 on:
+  push:
+    branches:
+      - feature/beats-pipeline
+    paths:
+      - "src/script-compile.js"
+      - ".github/workflows/production-sequence.yml"
   workflow_dispatch:
     inputs:
       project_id:
