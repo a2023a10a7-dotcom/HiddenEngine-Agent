@@ -1,6 +1,11 @@
 name: HiddenEngine Beat Render
 
 on:
+  push:
+    branches:
+      - feature/beats-pipeline
+    paths:
+      - "production/projects/2026-11-14-nvidia-hidden-engine/RENDER-REQUEST"
   workflow_dispatch:
     inputs:
       project_id:
@@ -47,7 +52,7 @@ jobs:
       - name: Install Piper TTS and voice
         if: ${{ !inputs.dry_run }}
         env:
-          PIPER_VOICE: ${{ inputs.voice_model }}
+          PIPER_VOICE: ${{ inputs.voice_model || 'en_US-lessac-medium' }}
         run: |
           set -euo pipefail
           python3 -m venv .venv-piper
@@ -69,32 +74,32 @@ jobs:
         run: npm test
       - name: Script gate
         env:
-          PROJECT_ID: ${{ inputs.project_id }}
+          PROJECT_ID: ${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}
         run: node src/script-gate.js
       - name: Acquire scene-matched visuals from all configured providers
         env:
-          PROJECT_ID: ${{ inputs.project_id }}
+          PROJECT_ID: ${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}
           POLLINATIONS_API_KEY: ${{ secrets.POLLINATIONS_API_KEY }}
           UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
         run: node src/prepare-project-assets.js
       - name: Render
         env:
-          PROJECT_ID: ${{ inputs.project_id }}
-          PIPER_LENGTH_SCALE: ${{ inputs.speaking_rate }}
-          TTS_FAKE: ${{ inputs.dry_run && '1' || '0' }}
-          AMBIENT: ${{ inputs.ambient_bed && '1' || '0' }}
+          PROJECT_ID: ${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}
+          PIPER_LENGTH_SCALE: ${{ inputs.speaking_rate || '1.0' }}
+          TTS_FAKE: ${{ (inputs.dry_run || false) && '1' || '0' }}
+          AMBIENT: ${{ (inputs.ambient_bed || true) && '1' || '0' }}
         run: node src/render-beats.js
       - name: Upload video and review files
         uses: actions/upload-artifact@v4
         with:
-          name: hiddenengine-${{ inputs.project_id }}${{ inputs.dry_run && '-DRYRUN' || '' }}
+          name: hiddenengine-${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}${{ (inputs.dry_run || false) && '-DRYRUN' || '' }}
           path: |
-            dist/${{ inputs.project_id }}/the-hidden-engine-documentary.mp4
-            dist/${{ inputs.project_id }}/CREDITS.md
-            dist/${{ inputs.project_id }}/QA-REPORT.json
-            dist/${{ inputs.project_id }}/VISUAL-QA-REPORT.json
-            dist/${{ inputs.project_id }}/contact-sheet.jpg
-            dist/${{ inputs.project_id }}/FACT-CHECK-SHEET.md
+            dist/${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}/the-hidden-engine-documentary.mp4
+            dist/${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}/CREDITS.md
+            dist/${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}/QA-REPORT.json
+            dist/${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}/VISUAL-QA-REPORT.json
+            dist/${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}/contact-sheet.jpg
+            dist/${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}/FACT-CHECK-SHEET.md
           if-no-files-found: error
           retention-days: 14
