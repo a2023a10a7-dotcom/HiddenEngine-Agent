@@ -56,10 +56,25 @@ async function download(url, file, maxBytes = MAX_IMAGE_BYTES, headers = {}) {
   if (type.includes("text/html") || type.includes("application/json")) throw new Error("Provider returned a page instead of media.");
   const declared = Number(response.headers.get("content-length") || 0);
   if (declared > maxBytes) throw new Error("Media exceeds size limit.");
-  const bytes = Buffer.from(await response.arrayBuffer());
-  if (bytes.length < 4096 || bytes.length > maxBytes) throw new Error("Downloaded media size is invalid (" + bytes.length + " bytes).");
+  if (!response.body) throw new Error("Media response has no readable body.");
+  const reader = response.body.getReader(), chunks = [];
+  let total = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      total += value.byteLength;
+      if (total > maxBytes) {
+        await reader.cancel("Media exceeds configured size limit.");
+        throw new Error("Media exceeds size limit.");
+      }
+      chunks.push(Buffer.from(value));
+    }
+  } finally { reader.releaseLock(); }
+  if (total < 4096) throw new Error("Downloaded media size is invalid (" + total + " bytes).");
+  const bytes = Buffer.concat(chunks, total);
   await writeFile(file, bytes);
-  return { bytes: bytes.length, url: finalUrl, contentType: type };
+  return { bytes: total, url: finalUrl, contentType: type };
 }
 function scoreTags(query, tags) {
   const hay = String(tags || "").toLowerCase();
@@ -185,7 +200,7 @@ async function pollinationsImage(query, sceneNo, index) {
     const got = await download(u.toString(), file, MAX_IMAGE_BYTES, { Authorization:"Bearer " + keys.pollinations });
     return addAsset({
       scene:sceneNo,kind:"photo",provider:"Pollinations",title:"AI-generated visual: " + query,
-      creator:"Generated for The Hidden Engine using Pollinations",tags:query,sourcePage:"https://gen.pollinations.ai/docs",
+      creator:"Generated for The Hidden Engine using Pollinations",tags:query,sourcePage:u.toString(),
       previewFile:path.basename(file),license:"AI-generated; subject to Pollinations service terms",
       licenseUrl:"https://gen.pollinations.ai/docs",licenseEvidence:"https://gen.pollinations.ai/docs",
       attributionRequired:false,attribution:"AI-generated image; not documentary evidence",
@@ -211,7 +226,7 @@ async function unsplashSearch(query, sceneNo, max = 2) {
       seen.add("unsplash:" + photo.id);
       selected.push(addAsset({
         scene:sceneNo,kind:"photo",provider:"Unsplash",title:photo.alt_description || photo.description || query,
-        creator:photo.user?.name || photo.user?.username || "Unsplash photographer",creatorUrl:photo.user?.links?.html || null,
+        creator:photo.user?.name || photo.user?.username || "Unsplash photographer",creatorUrl:photo.user?.links?.html ? photo.user.links.html.split("?")[0] + "?utm_source=the_hidden_engine&utm_medium=referral" : "https://unsplash.com/?utm_source=the_hidden_engine&utm_medium=referral",
         tags:(photo.alt_description||"") + " " + query,sourcePage:page,previewFile:path.basename(file),
         license:"Unsplash License",licenseUrl:"https://unsplash.com/license",licenseEvidence:"https://unsplash.com/documentation",
         attributionRequired:true,attribution:"Photo by " + (photo.user?.name || photo.user?.username || "Unsplash photographer") + " on Unsplash",
