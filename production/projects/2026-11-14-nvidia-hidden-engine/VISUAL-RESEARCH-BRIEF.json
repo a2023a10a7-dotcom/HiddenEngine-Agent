@@ -1,0 +1,110 @@
+{
+  "projectId": "2026-11-14-nvidia-hidden-engine",
+  "objective": "Curated visual sourcing for a factual NVIDIA documentary. Prefer real, scene-specific assets over generic technology stock photos.",
+  "instructions": [
+    "Use visual_queries in script.json as the only primary search terms; do not concatenate full narration into image searches.",
+    "Rank returned assets by title/tag relevance. Reject low-relevance results instead of filling quotas with unrelated images.",
+    "Never use animals, shopping carts, motivational signs, unrelated transport, generic office people, books, or maps unless the narration explicitly calls for them.",
+    "For NVIDIA products, use identifiable real NVIDIA hardware or official NVIDIA newsroom media assets; do not substitute generic servers and label them as NVIDIA.",
+    "For TSMC manufacturing, label footage as illustrative unless the source confirms the specific facility or process.",
+    "Do not use AI-generated imagery as factual evidence or as a substitute for real NVIDIA products. If used for abstract transitions, label it illustrative.",
+    "Acquire only media with documented reuse terms. NVIDIA newsroom assets are leads for editorial review, not blanket proof of reuse rights; follow each asset's stated terms.",
+    "For video, prioritize official NVIDIA newsroom B-roll and clearly licensed Internet Archive footage. Do not download oversized corporate B-roll packages without selecting a relevant clip and checking its terms.",
+    "Record provider asset ID, original source page, direct media URL, creator, license, attribution, target scene and reason for selection in visual-assets.json.",
+    "Build a contact sheet and fail the render if any selected image is visibly unrelated to its scene."
+  ],
+  "scenes": [
+    {
+      "scene": 1,
+      "id": "S01",
+      "title": "THE SCALE OF THE SHIFT",
+      "visual_queries": [
+        "NVIDIA headquarters Santa Clara campus exterior",
+        "NVIDIA GB200 NVL72 AI data center server racks"
+      ],
+      "visual_goal": "Company scale and data-center growth; NVIDIA campus and GB200 rack."
+    },
+    {
+      "scene": 2,
+      "id": "S02",
+      "title": "WHY THE GPU MATTERS",
+      "visual_queries": [
+        "NVIDIA Blackwell GPU chip close up",
+        "NVIDIA GPU parallel computing CUDA developer workstation"
+      ],
+      "visual_goal": "Actual GPU hardware, parallel computing and CUDA programming."
+    },
+    {
+      "scene": 3,
+      "id": "S03",
+      "title": "THE SOFTWARE PLATFORM",
+      "visual_queries": [
+        "NVIDIA CUDA software developer GPU programming screen",
+        "NVIDIA CUDA X libraries accelerated computing platform"
+      ],
+      "visual_goal": "CUDA developer ecosystem, libraries, software tooling and GPU workflow."
+    },
+    {
+      "scene": 4,
+      "id": "S04",
+      "title": "WHERE THE MONEY FLOWS",
+      "visual_queries": [
+        "NVIDIA data center GPU server racks Blackwell",
+        "NVIDIA gaming GeForce graphics card GPU"
+      ],
+      "visual_goal": "Compute/networking hardware contrasted with GeForce gaming GPUs; financial charts remain generated from verified claims."
+    },
+    {
+      "scene": 5,
+      "id": "S05",
+      "title": "THE COST OF SCALE",
+      "visual_queries": [
+        "NVIDIA Blackwell GB200 liquid cooled server rack",
+        "semiconductor advanced packaging CoWoS wafer manufacturing TSMC"
+      ],
+      "visual_goal": "Blackwell system integration, liquid cooling, semiconductor packaging and manufacturing constraints."
+    },
+    {
+      "scene": 6,
+      "id": "S06",
+      "title": "THE GLOBAL MAP",
+      "visual_queries": [
+        "semiconductor supply chain Taiwan TSMC chip fabrication cleanroom",
+        "NVIDIA AI data center servers United States cloud infrastructure"
+      ],
+      "visual_goal": "Map of customer-headquarters revenue geography, Taiwan semiconductor production, US data-center demand; distinguish customer HQ from end-user location."
+    },
+    {
+      "scene": 7,
+      "id": "S07",
+      "title": "THE SUPPLY-SIDE WAGER",
+      "visual_queries": [
+        "TSMC semiconductor wafer fabrication cleanroom machinery",
+        "NVIDIA Blackwell GB200 NVL72 system manufacturing assembly"
+      ],
+      "visual_goal": "Wafer fabrication, packaging, server assembly and supplier logistics; use actual factory footage only when provenance is clear."
+    }
+  ],
+  "reference_sources": [
+    {
+      "name": "NVIDIA Newsroom Media Assets",
+      "url": "https://nvidianews.nvidia.com/multimedia",
+      "use": "Official source library; inspect item-level terms before reuse."
+    },
+    {
+      "name": "NVIDIA Corporate B-roll 2026",
+      "url": "https://nvidianews.nvidia.com/file/nvidia-corporate-b-roll-2026?action=",
+      "use": "Official video lead; 2.2 GB package, do not fetch whole package blindly."
+    },
+    {
+      "name": "NVIDIA Data Center Media Assets",
+      "url": "https://nvidianews.nvidia.com/multimedia/data-center-cloud",
+      "use": "Official data-center and accelerated-computing media category."
+    },
+    {
+      "name": "NVIDIA Corporate Media Assets",
+      "url": "https://nvidianews.nvidia.com/multimedia/corporate",
+      "use": "Official corporate and executive media category."
+    }
+  ]
+}
