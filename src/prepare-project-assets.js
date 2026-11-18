@@ -45,10 +45,10 @@ async function fetchJson(url, options = {}, label = "provider") {
   }
   throw new Error(label + " request failed: " + (last?.message || "unknown error"));
 }
-async function download(url, file, maxBytes = MAX_IMAGE_BYTES) {
+async function download(url, file, maxBytes = MAX_IMAGE_BYTES, headers = {}) {
   const safe = safeHttps(url);
   if (!safe) throw new Error("Rejected non-HTTPS media URL.");
-  const response = await fetch(safe, { redirect: "follow", signal: AbortSignal.timeout(90000) });
+  const response = await fetch(safe, { headers, redirect: "follow", signal: AbortSignal.timeout(90000) });
   if (!response.ok) throw new Error("Media download HTTP " + response.status);
   const finalUrl = safeHttps(response.url);
   if (!finalUrl) throw new Error("Rejected unsafe media redirect.");
@@ -94,7 +94,7 @@ function addAsset(data) {
   const id = "VIS-" + String(++assetCounter).padStart(4, "0");
   const asset = { id, ...data };
   assets.push(asset);
-  if (asset.kind !== "video") sheetItems.push({ id, scene: asset.scene, tags: asset.tags || asset.title || asset.provider, file: path.join(out, asset.previewFile) });
+  if (asset.kind !== "video") sheetItems.push({ id, scene: asset.scene, tags: asset.tags || asset.title || asset.provider, mimeType: asset.mimeType || "image/jpeg", file: path.join(out, asset.previewFile) });
   return asset;
 }
 async function commonsSearch(query, sceneNo, max = 3) {
@@ -127,7 +127,7 @@ async function commonsSearch(query, sceneNo, max = 3) {
         tags:page.title + " " + query,sourcePage,previewFile:path.basename(file),
         license,licenseUrl:licenseUrl || sourcePage,licenseEvidence:sourcePage,
         attributionRequired:true,attribution:extValue(meta,"AttributionRequired") || "Credit creator and license; verify source page",
-        mediaUrl:got.url,searchQuery:query,width:info.width,height:info.height,bytes:got.bytes
+        mediaUrl:got.url,mimeType:got.contentType || "image/jpeg",searchQuery:query,width:info.width,height:info.height,bytes:got.bytes
       }));
       if (selected.length >= max) break;
     } catch (e) { warnings.push("Wikimedia " + page.title + ": " + e.message); }
@@ -182,14 +182,14 @@ async function pollinationsImage(query, sceneNo, index) {
   u.searchParams.set("width","1536"); u.searchParams.set("height","864"); u.searchParams.set("nologo","true");
   const file = path.join(out, "pollinations-scene-" + sceneNo + "-" + index + ".jpg");
   try {
-    const got = await download(u.toString(), file, MAX_IMAGE_BYTES);
+    const got = await download(u.toString(), file, MAX_IMAGE_BYTES, { Authorization:"Bearer " + keys.pollinations });
     return addAsset({
       scene:sceneNo,kind:"photo",provider:"Pollinations",title:"AI-generated visual: " + query,
       creator:"Generated for The Hidden Engine using Pollinations",tags:query,sourcePage:"https://gen.pollinations.ai/docs",
       previewFile:path.basename(file),license:"AI-generated; subject to Pollinations service terms",
       licenseUrl:"https://gen.pollinations.ai/docs",licenseEvidence:"https://gen.pollinations.ai/docs",
       attributionRequired:false,attribution:"AI-generated image; not documentary evidence",
-      mediaUrl:got.url,searchQuery:query,width:1536,height:864,bytes:got.bytes,illustrative:true
+      mediaUrl:got.url,mimeType:got.contentType || "image/jpeg",searchQuery:query,width:1536,height:864,bytes:got.bytes,illustrative:true
     });
   } catch (e) { warnings.push("Pollinations scene " + sceneNo + ": " + e.message); return null; }
 }
@@ -215,7 +215,7 @@ async function unsplashSearch(query, sceneNo, max = 2) {
         tags:(photo.alt_description||"") + " " + query,sourcePage:page,previewFile:path.basename(file),
         license:"Unsplash License",licenseUrl:"https://unsplash.com/license",licenseEvidence:"https://unsplash.com/documentation",
         attributionRequired:true,attribution:"Photo by " + (photo.user?.name || photo.user?.username || "Unsplash photographer") + " on Unsplash",
-        mediaUrl:got.url,searchQuery:query,width:photo.width,height:photo.height,bytes:got.bytes
+        mediaUrl:got.url,mimeType:got.contentType || "image/jpeg",searchQuery:query,width:photo.width,height:photo.height,bytes:got.bytes
       }));
       if (selected.length >= max) break;
     } catch(e) { warnings.push("Unsplash " + photo.id + ": " + e.message); }
@@ -242,7 +242,7 @@ async function pixabaySearch(query, sceneNo, max = 3) {
         previewFile:path.basename(file),license:"Pixabay Content License",licenseUrl:"https://pixabay.com/service/license-summary/",
         licenseEvidence:"https://pixabay.com/service/license-summary/",attributionRequired:false,
         attribution:"Pixabay contributor " + (hit.user || "unknown"),mediaUrl:got.url,searchQuery:query,
-        width:hit.imageWidth,height:hit.imageHeight,bytes:got.bytes
+        width:hit.imageWidth,height:hit.imageHeight,mimeType:got.contentType || "image/jpeg",bytes:got.bytes
       }));
       if (selected.length >= max) break;
     } catch(e) { warnings.push("Pixabay " + hit.id + ": " + e.message); }
@@ -317,9 +317,9 @@ async function main() {
   const parts=['<svg xmlns="http://www.w3.org/2000/svg" width="'+(margin*2+cols*cellW+(cols-1)*gap)+'" height="'+(margin*2+rows*(cellH+labelH)+(rows-1)*gap)+'">','<rect width="100%" height="100%" fill="#090b0e"/>'];
   for(let i=0;i<sheetItems.length;i++){
     const x=margin+(i%cols)*(cellW+gap),y=margin+Math.floor(i/cols)*(cellH+labelH+gap),item=sheetItems[i];
-    const data=(await readFile(item.file)).toString("base64");
+    const data=(await readFile(item.file)).toString("base64"), mime=String(item.mimeType || "image/jpeg").split(";")[0];
     parts.push('<rect x="'+x+'" y="'+y+'" width="'+cellW+'" height="'+(cellH+labelH)+'" fill="#171a1e"/>');
-    parts.push('<image x="'+x+'" y="'+y+'" width="'+cellW+'" height="'+cellH+'" preserveAspectRatio="xMidYMid slice" href="data:image/jpeg;base64,'+data+'"/>');
+    parts.push('<image x="'+x+'" y="'+y+'" width="'+cellW+'" height="'+cellH+'" preserveAspectRatio="xMidYMid slice" href="data:'+esc(mime)+';base64,'+data+'"/>');
     parts.push('<text x="'+(x+12)+'" y="'+(y+cellH+23)+'" fill="#f0ede5" font-family="DejaVu Sans" font-size="16" font-weight="bold">'+esc(item.id)+' • SCENE '+item.scene+'</text>');
     parts.push('<text x="'+(x+12)+'" y="'+(y+cellH+44)+'" fill="#bdb6aa" font-family="DejaVu Sans" font-size="11">'+esc(String(item.tags).slice(0,72))+'</text>');
   }
