@@ -1,7 +1,9 @@
-Render request: full production NVIDIA documentary.
+Render request: full production NVIDIA documentary after script-gate repair.
 Project: 2026-11-14-nvidia-hidden-engine
+Scenes: 7
+Target duration: 7 minutes
 Dry run: false
 Voice: en_US-lessac-medium
 Speaking rate: 1.0
 Ambient bed: enabled
-Request revision: visual-acquisition-fix-2026-11-18
+Request revision: seven-scene-evidence-script-2026-11-18
