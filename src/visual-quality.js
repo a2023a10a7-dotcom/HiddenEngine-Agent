@@ -60,7 +60,7 @@ export function scoreAsset(asset, beat, scene = {}, linkedClaims = []) {
   const haystack = assetText(asset);
   const sources = [
     beat?.narration, beat?.on_screen_text, scene?.title, scene?.subtitle,
-    ...(scene?.keywords || []), ...(beat?.entities || []),
+    ...(scene?.keywords || []), ...(scene?.visual_queries || []), ...(beat?.entities || []),
     ...linkedClaims.map(c => c?.text)
   ].filter(Boolean);
   const wanted = expandedTokens(sources);
