@@ -316,5 +316,10 @@
         "NVIDIA GB200 Blackwell system assembly"
       ]
     }
-  ]
+  ],
+  "visual_policy": {
+    "allow_ai_generated": false,
+    "search_mode": "curated_scene_queries_only",
+    "require_source_attribution": true
+  }
 }
