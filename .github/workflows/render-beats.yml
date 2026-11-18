@@ -97,6 +97,8 @@ jobs:
             dist/${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}/CREDITS.md
             dist/${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}/QA-REPORT.json
             dist/${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}/VISUAL-QA-REPORT.json
+            production/projects/${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}/visual-selection.json
+            production/projects/${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}/visual-assets.json
             dist/${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}/contact-sheet.jpg
             dist/${{ inputs.project_id || '2026-11-14-nvidia-hidden-engine' }}/FACT-CHECK-SHEET.md
           if-no-files-found: error
