@@ -82,9 +82,12 @@ function scoreTags(query, tags) {
 }
 function sceneQueries(scene) {
   const raw = [
-    scene.title, scene.subtitle, ...(scene.visual_queries || []),
-    ...(scene.visual_requirements || []).flat(),
-    ...(scene.beats || []).slice(0, 4).map(b => b.on_screen_text || b.narration || "")
+    scene.title, scene.subtitle, ...(scene.keywords || []), ...(scene.visual_queries || []),
+    ...(Array.isArray(scene.visual_requirements) ? scene.visual_requirements.flat() : []),
+    ...(scene.beats || []).slice(0, 6).flatMap(b => [
+      b.on_screen_text || "", b.narration || "", ...(b.entities || []),
+      b.visual?.subject || "", b.visual?.description || ""
+    ])
   ].filter(Boolean).join(" ");
   const clean = raw.replace(/\s+/g, " ").trim();
   const base = clean.split(/[.!?]/)[0].slice(0, 150);
@@ -287,12 +290,12 @@ async function main() {
     if (unsplash.length) providersUsed.add("Unsplash");
     const pixabay = await pixabaySearch(queries[0],sceneNo,3);
     if (pixabay.length) providersUsed.add("Pixabay");
-    // Top up to the renderer's minimum of six real local photo assets, without inventing provenance.
+    // Ensure each scene has at least one provenance-recorded photo; the renderer can reuse it across beats.
     let photos = assets.filter(a=>a.scene===sceneNo&&a.kind!=="video");
-    if (photos.length < 6) {
+    if (photos.length < 1) {
       for (const q of queries.slice(1)) {
-        if (photos.length >= 6) break;
-        const c = await commonsSearch(q,sceneNo,6-photos.length);
+        if (photos.length >= 1) break;
+        const c = await commonsSearch(q,sceneNo,1-photos.length);
         if (c.length) providersUsed.add("Wikimedia Commons");
         photos = assets.filter(a=>a.scene===sceneNo&&a.kind!=="video");
       }
@@ -300,7 +303,7 @@ async function main() {
     if (photos.length < 6) {
       for (const q of queries.slice(1)) {
         if (photos.length >= 6) break;
-        const p = await pixabaySearch(q,sceneNo,6-photos.length);
+        const p = await pixabaySearch(q,sceneNo,1-photos.length);
         if (p.length) providersUsed.add("Pixabay");
         photos = assets.filter(a=>a.scene===sceneNo&&a.kind!=="video");
       }
