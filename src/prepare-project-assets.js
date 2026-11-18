@@ -81,19 +81,16 @@ function scoreTags(query, tags) {
   return terms(query).reduce((n, token) => n + (hay.includes(token) ? (token.length > 5 ? 3 : 1) : 0), 0);
 }
 function sceneQueries(scene) {
-  const raw = [
-    scene.title, scene.subtitle, ...(scene.keywords || []), ...(scene.visual_queries || []),
-    ...(Array.isArray(scene.visual_requirements) ? scene.visual_requirements.flat() : []),
-    ...(scene.beats || []).slice(0, 6).flatMap(b => [
-      b.on_screen_text || "", b.narration || "", ...(b.entities || []),
-      b.visual?.subject || "", b.visual?.description || ""
-    ])
-  ].filter(Boolean).join(" ");
-  const clean = raw.replace(/\s+/g, " ").trim();
-  const base = clean.split(/[.!?]/)[0].slice(0, 150);
-  const entity = terms(base).slice(0, 7).join(" ");
-  const queries = [...(scene.visual_queries || []), base, entity].filter(q => q && q.length > 5);
-  return [...new Set(queries)].slice(0, 3);
+  // Search only the editor's curated scene-specific terms.
+  // Narration previously polluted provider searches with generic words.
+  const curated = (scene.visual_queries || [])
+    .map(q => String(q || "").replace(/\\s+/g, " ").trim())
+    .filter(q => q.length >= 8);
+  if (!curated.length) {
+    throw new Error("Scene " + (scene.id || scene.title || "?") +
+      " has no curated visual_queries; refusing to search from narration.");
+  }
+  return [...new Set(curated)].slice(0, 3);
 }
 function licenseAllowed(value) {
   const s = String(value || "").toLowerCase();
@@ -290,8 +287,12 @@ async function main() {
     }
     const ia = await internetArchiveSearch(queries[0],sceneNo,1);
     if (ia.length) providersUsed.add("Internet Archive");
-    const generated = await pollinationsImage(queries[0],sceneNo,1);
-    if (generated) providersUsed.add("Pollinations");
+    if (script.visual_policy?.allow_ai_generated === true) {
+      const generated = await pollinationsImage(queries[0],sceneNo,1);
+      if (generated) providersUsed.add("Pollinations");
+    } else {
+      warnings.push("Pollinations skipped: factual documentary visuals must be real and source-attributed.");
+    }
     const unsplash = await unsplashSearch(queries[0],sceneNo,2);
     if (unsplash.length) providersUsed.add("Unsplash");
     const pixabay = await pixabaySearch(queries[0],sceneNo,3);
