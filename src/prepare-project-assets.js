@@ -127,6 +127,9 @@ async function commonsSearch(query, sceneNo, max = 3) {
   const selected = [];
   for (const page of pages) {
     const info = page.imageinfo?.[0], meta = info?.extmetadata || {};
+    const relevance = scoreTags(query, page.title);
+    // Reject weak title matches rather than filling a scene with unrelated stock imagery.
+    if (relevance < 3) continue;
     const license = extValue(meta, "LicenseShortName") || extValue(meta, "UsageTerms");
     const licenseUrl = extValue(meta, "LicenseUrl");
     const sourcePage = safeHttps(info?.descriptionurl);
@@ -249,8 +252,9 @@ async function pixabaySearch(query, sceneNo, max = 3) {
   u.searchParams.set("orientation","horizontal");u.searchParams.set("safesearch","true");u.searchParams.set("per_page","30");
   const data = await fetchJson(u,{},"Pixabay");
   const selected = [];
-  for (const hit of data.hits || []) {
+  for (const hit of (data.hits || []).sort((a,b)=>scoreTags(query,b.tags)-scoreTags(query,a.tags))) {
     if (!hit.id || seen.has("pixabay:" + hit.id) || !hit.largeImageURL || !hit.pageURL) continue;
+    if (scoreTags(query,hit.tags) < 2) continue;
     if ((hit.imageWidth||0) < MIN_WIDTH || (hit.imageHeight||0) < MIN_HEIGHT) continue;
     const file = path.join(out,"pixabay-" + hit.id + ".jpg");
     try {
