@@ -243,7 +243,7 @@ async function unsplashSearch(query, sceneNo, max = 2) {
 async function pixabaySearch(query, sceneNo, max = 3) {
   if (!keys.pixabay) { warnings.push("Pixabay skipped: PIXABAY_API_KEY is not configured."); return []; }
   const u = new URL("https://pixabay.com/api/");
-  u.searchParams.set("key",keys.pixabay);u.searchParams.set("q",query);u.searchParams.set("image_type","photo");
+  const safeQuery = String(query || "").replace(/\\s+/g, " ").trim().slice(0, 100);\n  if (!safeQuery) { warnings.push("Pixabay skipped: search query is empty."); return []; }\n  u.searchParams.set("key",keys.pixabay);u.searchParams.set("q",safeQuery);u.searchParams.set("image_type","photo");
   u.searchParams.set("orientation","horizontal");u.searchParams.set("safesearch","true");u.searchParams.set("per_page","30");
   const data = await fetchJson(u,{},"Pixabay");
   const selected = [];
