@@ -112,14 +112,23 @@ function addAsset(data) {
   if (asset.kind !== "video") sheetItems.push({ id, scene: asset.scene, tags: asset.tags || asset.title || asset.provider, mimeType: asset.mimeType || "image/jpeg", file: path.join(out, asset.previewFile) });
   return asset;
 }
+let commonsRateLimited = false;
 async function commonsSearch(query, sceneNo, max = 3) {
+  if (commonsRateLimited) return [];
   const u = new URL("https://commons.wikimedia.org/w/api.php");
   for (const [k,v] of Object.entries({
     action:"query",format:"json",generator:"search",gsrsearch:"filetype:bitmap " + query,
     gsrnamespace:"6",gsrlimit:String(max * 3),prop:"imageinfo",iiprop:"url|extmetadata|size",
     iiurlwidth:"1600",origin:"*"
   })) u.searchParams.set(k,v);
-  const data = await fetchJson(u, { headers: { "User-Agent":"TheHiddenEngine/1.0 (documentary media research; contact: github repository)" } }, "Wikimedia Commons");
+  let data;
+  try {
+    data = await fetchJson(u, { headers: { "User-Agent":"TheHiddenEngine/1.0 (documentary media research; contact: github repository)" } }, "Wikimedia Commons");
+  } catch (error) {
+    warnings.push("Wikimedia Commons unavailable for this run; continuing with other providers: " + error.message);
+    if (/HTTP 429/.test(error.message)) commonsRateLimited = true;
+    return [];
+  }
   const pages = Object.values(data.query?.pages || {});
   const selected = [];
   for (const page of pages) {
