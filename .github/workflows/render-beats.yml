@@ -1,6 +1,9 @@
 name: HiddenEngine Beat Render
 
 on:
+  push:
+    paths:
+      - "production/projects/2026-11-14-nvidia-hidden-engine/RENDER-REQUEST"
   workflow_dispatch:
     inputs:
       project_id:
