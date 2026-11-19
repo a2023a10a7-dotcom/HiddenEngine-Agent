@@ -21,4 +21,6 @@ Visual direction:
   S07: TSMC CoWoS production machinery; NVIDIA GB200 system assembly.
 - Reject unrelated generic imagery. Never label generic servers as NVIDIA products.
 - Upload visual-selection.json, visual-assets.json, VISUAL-QA-REPORT.json and contact-sheet.jpg with the MP4.
-Revision: curated-visuals-2026-11-18-r1
+Revision: balanced-visual-reuse-2026-11-19-r2
+- Renderer now balances repeated asset use across the full timeline and avoids consecutive reuse when a relevant alternative exists.
+- QA report records per-asset reuse counts.
