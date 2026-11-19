@@ -129,8 +129,16 @@ async function main() {
 
       // visual cards for this beat
       (b.claim_ids || []).forEach(id => (claims.get(id)?.sourceIds || []).forEach(s => usedSources.add(s)));
-      const { cards, warning } = cardsForBeat(b, { claims, sources, act, idx: si + 1, total });
+      const { cards: designedCards, warning } = cardsForBeat(b, { claims, sources, act, idx: si + 1, total });
       if (warning) warnings.push(warning);
+      // Documentary pacing: conform every beat to a maximum 4.5-second shot.
+      // Show the evidence graphic first, then cut to scene-matched imagery with subtitles.
+      const shotCount = Math.max(designedCards.length, Math.ceil(dur / 4.5));
+      const cards = Array.from({ length: shotCount }, (_, i) =>
+        designedCards[i] || { base: designedCards[0].base, layers: [] }
+      );
+      const shotDuration = dur / cards.length;
+      if (shotDuration > 5.01) throw new Error("Shot duration exceeds 5s for " + b.id + ": " + shotDuration.toFixed(2));
 
       const first = bi === 0, last = bi === sc.beats.length - 1;
       await writeFile(path.join(OUT, stem + ".ass"), subtitles(b.narration, audioDur));
@@ -139,7 +147,7 @@ async function main() {
       const inputs = [], graph = [], forward = beatNo % 2 === 0;
       let nIn = 0;
       for (const [k, cardK] of cards.entries()) {
-        const d = dur / cards.length, fexp = forward ? "t/" + d.toFixed(3) : "(1-t/" + d.toFixed(3) + ")";
+        const d = shotDuration, fexp = forward ? "t/" + d.toFixed(3) : "(1-t/" + d.toFixed(3) + ")";
         const pos = m => "x='(iw-1920)*" + m + "*" + fexp + "':y='(ih-1080)*" + m + "*" + fexp + "'";
         const sceneAssets = assetsByScene.get(si + 1) || [];
         const linkedClaims = (b.claim_ids || []).map(id => claims.get(id)).filter(Boolean);
@@ -200,7 +208,7 @@ async function main() {
         "-map", "[v]", "-map", nIn + ":a", "-af", "apad=pad_dur=" + GAP, "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
         "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-t", dur.toFixed(3), stem + ".mp4"], OUT);
       segs.push(stem);
-      console.log("Beat " + beatNo + " (" + b.id + "): " + dur.toFixed(1) + "s, " + cards.length + " card(s)");
+      console.log("Beat " + beatNo + " (" + b.id + "): " + dur.toFixed(1) + "s, " + cards.length + " shots, " + shotDuration.toFixed(1) + "s each");
     }
   }
   await writeFile(path.join(OUT, "concat.txt"), segs.map(s => "file '" + s + ".mp4'").join("\n") + "\n");
@@ -232,7 +240,7 @@ async function main() {
     ...[...usedSources].map(id => { const s = sources.get(id); return s ? "- " + (s.publisher || "") + "\u2014" + (s.title || "") + " " + (s.canonicalUrl || s.url || "") : "- " + id; }), ""].join("\n");
   await writeFile(path.join(FINAL_DIR, "CREDITS.md"), credits);
   await writeFile(path.join(FINAL_DIR, "VISUAL-QA-REPORT.json"), JSON.stringify({ projectId: ID, totalDecisions: visualDecisions.length, uniqueAssets: new Set(visualDecisions.map(x => x.assetId)).size, decisions: visualDecisions }, null, 2) + "\n");
-  await writeFile(path.join(FINAL_DIR, "QA-REPORT.json"), JSON.stringify({ file: path.basename(final), width: vs.width, height: vs.height, durationSeconds: Number(info.format.duration), audio: true, beats: segs.length, scenes: total, dryRun: FAKE, ambientBed: AMBIENT, visualAssets: assetManifest.assetCount, visualSources: [...new Set((assetManifest.assets || []).map(a => a.provider).filter(Boolean))], videoClips: (assetManifest.assets || []).filter(a => a.kind === "video").length, warnings,
+  await writeFile(path.join(FINAL_DIR, "QA-REPORT.json"), JSON.stringify({ file: path.basename(final), width: vs.width, height: vs.height, durationSeconds: Number(info.format.duration), audio: true, beats: segs.length, shots: visualDecisions.length, maxShotDurationSeconds: 4.5, scenes: total, dryRun: FAKE, ambientBed: AMBIENT, visualAssets: assetManifest.assetCount, visualSources: [...new Set((assetManifest.assets || []).map(a => a.provider).filter(Boolean))], videoClips: (assetManifest.assets || []).filter(a => a.kind === "video").length, warnings,
     note: "Technical QA only. Facts are checked by the script gate and by human review of FACT-CHECK-SHEET.md." }, null, 2) + "\n");
   console.log("Rendered: " + final + (warnings.length ? " | warnings: " + warnings.length : ""));
 }
