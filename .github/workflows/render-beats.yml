@@ -2,8 +2,15 @@ name: HiddenEngine Beat Render
 
 on:
   push:
+    branches:
+      - feature/beats-pipeline
     paths:
       - "production/projects/2026-11-14-nvidia-hidden-engine/RENDER-REQUEST"
+      - "src/render-beats.js"
+      - "src/render-cards.js"
+      - "src/visual-quality.js"
+      - "src/prepare-project-assets.js"
+      - "production/projects/2026-11-14-nvidia-hidden-engine/script.json"
   workflow_dispatch:
     inputs:
       project_id:
