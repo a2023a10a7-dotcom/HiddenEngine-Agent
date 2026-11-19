@@ -104,6 +104,8 @@ async function main() {
   if (manifestErrors.length) throw new Error("Visual asset manifest failed QA:\\n" + manifestErrors.join("\\n"));
   const assetsByScene = new Map();
   const usedVisualAssetIds = new Set();
+  const visualUsageCounts = new Map();
+  let lastVisualAssetId = null;
   const visualDecisions = [];
   for (const asset of assetManifest.assets || []) {
     const list = assetsByScene.get(asset.scene) || [];
@@ -154,14 +156,17 @@ async function main() {
         const decision = selectRelevantAsset({
           assets: sceneAssets, beat: b,
           scene: { ...sc, sceneNumber: si + 1, index: si + 1 },
-          linkedClaims, usedIds: usedVisualAssetIds, minScore: 3
+          linkedClaims, usedIds: usedVisualAssetIds, usageCounts: visualUsageCounts,
+          lastUsedId: lastVisualAssetId, minScore: 3
         });
         const visual = decision.asset;
         usedVisualAssetIds.add(visual.id);
+        visualUsageCounts.set(visual.id, (visualUsageCounts.get(visual.id) || 0) + 1);
+        lastVisualAssetId = visual.id;
         visualDecisions.push({
           beatId: b.id, assetId: visual.id, kind: visual.kind,
           relevanceScore: decision.score, matchedTerms: decision.matchedTerms,
-          penalties: decision.penalties, reused: decision.reused,
+          penalties: decision.penalties, reused: decision.reused, reuseCount: decision.reuseCount,
           sourcePage: visual.sourcePage
         });
         console.log("Visual QA " + b.id + ": " + visual.id + " score=" + decision.score +
