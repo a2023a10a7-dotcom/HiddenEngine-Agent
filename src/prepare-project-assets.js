@@ -17,6 +17,7 @@ const keys = {
 const MAX_IMAGE_BYTES = 25 * 1024 * 1024;
 const MAX_VIDEO_BYTES = 160 * 1024 * 1024;
 const MIN_WIDTH = 1280, MIN_HEIGHT = 720;
+const MIN_SCENE_PHOTOS = 8;
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 const stop = new Set(["the","and","for","with","from","that","this","into","over","under","about","after","before","when","where","what","which","while","will","would","could","should","have","has","had","were","was","are","is","been","being","its","our","your","company","companies","business","story","scene","chapter","technology","modern"]);
 const terms = value => String(value || "").toLowerCase().split(/[^a-z0-9]+/).filter(x => x.length > 2 && !stop.has(x));
@@ -289,10 +290,10 @@ async function main() {
     if (!queries.length) throw new Error("Scene " + sceneNo + " has no usable visual search terms.");
     const start = assets.length;
     // Each provider is deliberately called; missing optional keys are reported and do not abort discovery.
-    for (const q of queries.slice(0,2)) {
-      const got = await commonsSearch(q,sceneNo,2);
+    for (const q of queries) {
+      const got = await commonsSearch(q,sceneNo,3);
       if (got.length) providersUsed.add("Wikimedia Commons");
-      if (assets.filter(a=>a.scene===sceneNo&&a.kind!=="video").length >= 2) break;
+      if (assets.filter(a=>a.scene===sceneNo&&a.kind!=="video").length >= MIN_SCENE_PHOTOS) break;
     }
     const ia = await internetArchiveSearch(queries[0],sceneNo,1);
     if (ia.length) providersUsed.add("Internet Archive");
@@ -302,29 +303,29 @@ async function main() {
     } else {
       warnings.push("Pollinations skipped: factual documentary visuals must be real and source-attributed.");
     }
-    const unsplash = await unsplashSearch(queries[0],sceneNo,2);
+    const unsplash = await unsplashSearch(queries[0],sceneNo,3);
     if (unsplash.length) providersUsed.add("Unsplash");
-    const pixabay = await pixabaySearch(queries[0],sceneNo,3);
+    const pixabay = await pixabaySearch(queries[0],sceneNo,4);
     if (pixabay.length) providersUsed.add("Pixabay");
     // Ensure each scene has at least one provenance-recorded photo; the renderer can reuse it across beats.
     let photos = assets.filter(a=>a.scene===sceneNo&&a.kind!=="video");
-    if (photos.length < 5) {
+    if (photos.length < MIN_SCENE_PHOTOS) {
       for (const q of queries) {
-        if (photos.length >= 5) break;
-        const c = await commonsSearch(q,sceneNo,Math.min(3,5-photos.length));
+        if (photos.length >= MIN_SCENE_PHOTOS) break;
+        const c = await commonsSearch(q,sceneNo,Math.min(3,MIN_SCENE_PHOTOS-photos.length));
         if (c.length) providersUsed.add("Wikimedia Commons");
         photos = assets.filter(a=>a.scene===sceneNo&&a.kind!=="video");
       }
     }
-    if (photos.length < 5) {
+    if (photos.length < MIN_SCENE_PHOTOS) {
       for (const q of queries) {
-        if (photos.length >= 5) break;
-        const p = await pixabaySearch(q,sceneNo,Math.min(3,5-photos.length));
+        if (photos.length >= MIN_SCENE_PHOTOS) break;
+        const p = await pixabaySearch(q,sceneNo,Math.min(4,MIN_SCENE_PHOTOS-photos.length));
         if (p.length) providersUsed.add("Pixabay");
         photos = assets.filter(a=>a.scene===sceneNo&&a.kind!=="video");
       }
     }
-    if (photos.length < 5) warnings.push("Scene " + sceneNo + " has only " + photos.length + " cleared photos; renderer will reuse verified scene assets rather than insert unrelated stock.");
+    if (photos.length < MIN_SCENE_PHOTOS) warnings.push("Scene " + sceneNo + " has only " + photos.length + " cleared photos (target " + MIN_SCENE_PHOTOS + "); renderer will balance reuse rather than insert unrelated stock.");
     if (photos.length < 1) {
       throw new Error("Scene " + sceneNo + " (" + scene.title + ") has no cleared/provenance-recorded photos; refine visual queries or configure a provider key.");
     }
