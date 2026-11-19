@@ -308,24 +308,25 @@ async function main() {
     if (pixabay.length) providersUsed.add("Pixabay");
     // Ensure each scene has at least one provenance-recorded photo; the renderer can reuse it across beats.
     let photos = assets.filter(a=>a.scene===sceneNo&&a.kind!=="video");
-    if (photos.length < 1) {
-      for (const q of queries.slice(1)) {
-        if (photos.length >= 1) break;
-        const c = await commonsSearch(q,sceneNo,1-photos.length);
+    if (photos.length < 5) {
+      for (const q of queries) {
+        if (photos.length >= 5) break;
+        const c = await commonsSearch(q,sceneNo,Math.min(3,5-photos.length));
         if (c.length) providersUsed.add("Wikimedia Commons");
         photos = assets.filter(a=>a.scene===sceneNo&&a.kind!=="video");
       }
     }
-    if (photos.length < 1) {
-      for (const q of queries.slice(1)) {
-        if (photos.length >= 1) break;
-        const p = await pixabaySearch(q,sceneNo,1-photos.length);
+    if (photos.length < 5) {
+      for (const q of queries) {
+        if (photos.length >= 5) break;
+        const p = await pixabaySearch(q,sceneNo,Math.min(3,5-photos.length));
         if (p.length) providersUsed.add("Pixabay");
         photos = assets.filter(a=>a.scene===sceneNo&&a.kind!=="video");
       }
     }
+    if (photos.length < 5) warnings.push("Scene " + sceneNo + " has only " + photos.length + " cleared photos; renderer will reuse verified scene assets rather than insert unrelated stock.");
     if (photos.length < 1) {
-      throw new Error("Scene " + sceneNo + " (" + scene.title + ") has only " + photos.length + " cleared/provenance-recorded photos; Refine scene keywords/visual queries or configure an image provider key.");
+      throw new Error("Scene " + sceneNo + " (" + scene.title + ") has no cleared/provenance-recorded photos; refine visual queries or configure a provider key.");
     }
     const sceneAssets = assets.filter(a=>a.scene===sceneNo);
     selection.push({
