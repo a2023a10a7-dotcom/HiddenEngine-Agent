@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "projectId": "2026-11-14-nvidia-hidden-engine",
   "createdAt": "2026-11-14T15:00:00.000Z",
-  "updatedAt": "2026-11-15T17:45:29.257Z",
+  "updatedAt": "2026-11-19T21:58:52.177Z",
   "channel": "The Hidden Engine",
   "topic": "NVIDIA: How It Became the Engine of the AI Infrastructure Boom",
   "language": "en",
@@ -609,5 +609,24 @@
         "CLM-013"
       ]
     }
+  },
+  "visualCuration": {
+    "status": "editor_curated",
+    "method": "Scene-specific editorial search terms; prioritize exact NVIDIA/TSMC subjects and reject unrelated generic stock",
+    "shotLengthSeconds": {
+      "target": 4,
+      "max": 6
+    },
+    "prioritySources": [
+      "Wikimedia Commons verified CC BY/CC BY-SA/public domain",
+      "Internet Archive verified CC BY/CC BY-SA/public domain",
+      "Unsplash/Pixabay only when subject match is exact"
+    ],
+    "avoid": [
+      "generic AI robot imagery",
+      "unrelated trains or city footage",
+      "repeated server-rack photos",
+      "AI-generated imagery presented as documentary evidence"
+    ]
   }
 }
