@@ -40,12 +40,14 @@
         }
       ],
       "visual_queries": [
-        "NVIDIA Santa Clara Voyager Endeavor headquarters campus exterior aerial",
-        "NVIDIA GB200 NVL72 Blackwell AI server rack data center"
+        "NVIDIA Endeavor headquarters Santa Clara campus exterior",
+        "AI data center server rack GPU computing infrastructure",
+        "NVIDIA Blackwell GB200 NVL72 rack system"
       ],
       "keywords": [
-        "NVIDIA Voyager headquarters Santa Clara",
-        "NVIDIA GB200 NVL72 AI server racks"
+        "NVIDIA Endeavor headquarters",
+        "AI data center server racks",
+        "Blackwell GB200 NVL72"
       ]
     },
     {
@@ -78,12 +80,14 @@
         }
       ],
       "visual_queries": [
-        "NVIDIA Blackwell B200 GPU processor chip close-up official product photography",
-        "NVIDIA GeForce GPU graphics card die semiconductor close-up"
+        "NVIDIA GPU graphics card circuit board close up",
+        "semiconductor processor chip die macro photography",
+        "NVIDIA Blackwell B200 GPU product"
       ],
       "keywords": [
-        "NVIDIA Blackwell B200 GPU processor",
-        "NVIDIA GeForce graphics card GPU"
+        "NVIDIA GPU graphics card",
+        "semiconductor processor die",
+        "Blackwell B200"
       ]
     },
     {
@@ -116,12 +120,14 @@
         }
       ],
       "visual_queries": [
-        "NVIDIA CUDA developer programming GPU parallel computing workstation",
-        "NVIDIA CUDA-X accelerated computing software libraries developer conference"
+        "CUDA GPU parallel computing developer workstation",
+        "GPU computing software developer coding workstation",
+        "NVIDIA CUDA accelerated computing architecture"
       ],
       "keywords": [
-        "NVIDIA CUDA GPU programming developer",
-        "CUDA-X software accelerated computing"
+        "CUDA GPU parallel computing",
+        "developer workstation",
+        "accelerated computing software"
       ]
     },
     {
@@ -171,12 +177,14 @@
         }
       ],
       "visual_queries": [
-        "NVIDIA DGX GB200 NVL72 data center server racks official",
-        "NVIDIA GeForce RTX graphics card gaming GPU product photo"
+        "NVIDIA GeForce RTX graphics card gaming GPU",
+        "AI data center server racks GPU infrastructure",
+        "NVIDIA RTX graphics product close up"
       ],
       "keywords": [
-        "NVIDIA DGX GB200 data center racks",
-        "NVIDIA GeForce RTX gaming graphics card"
+        "GeForce RTX graphics",
+        "AI data center infrastructure",
+        "NVIDIA graphics"
       ]
     },
     {
@@ -212,12 +220,14 @@
         }
       ],
       "visual_queries": [
-        "NVIDIA Blackwell GB200 NVL72 liquid cooling rack close-up",
-        "TSMC CoWoS advanced semiconductor packaging wafer cleanroom manufacturing"
+        "TSMC advanced semiconductor packaging CoWoS wafer cleanroom",
+        "semiconductor wafer processing machinery cleanroom",
+        "Blackwell GPU liquid cooled server rack"
       ],
       "keywords": [
-        "NVIDIA Blackwell liquid cooled rack",
-        "TSMC CoWoS advanced packaging semiconductor"
+        "TSMC CoWoS advanced packaging",
+        "semiconductor wafer cleanroom",
+        "liquid cooled GPU server"
       ]
     },
     {
@@ -253,12 +263,14 @@
         }
       ],
       "visual_queries": [
-        "TSMC Taiwan semiconductor fabrication foundry cleanroom wafer production",
-        "hyperscale AI data center server infrastructure United States"
+        "TSMC semiconductor fabrication plant Taiwan exterior",
+        "hyperscale AI data center server racks facility",
+        "Taiwan semiconductor foundry wafer manufacturing"
       ],
       "keywords": [
-        "TSMC Taiwan chip fabrication cleanroom",
-        "AI data center infrastructure United States"
+        "TSMC Taiwan fabrication plant",
+        "hyperscale data center",
+        "Taiwan semiconductor supply chain"
       ]
     },
     {
@@ -308,12 +320,14 @@
         }
       ],
       "visual_queries": [
-        "TSMC advanced semiconductor packaging CoWoS wafer production machinery",
-        "NVIDIA GB200 Blackwell system assembly manufacturing supply chain"
+        "TSMC advanced packaging semiconductor wafer manufacturing machinery",
+        "semiconductor chip assembly production line",
+        "AI server system assembly manufacturing data center"
       ],
       "keywords": [
-        "TSMC CoWoS wafer manufacturing",
-        "NVIDIA GB200 Blackwell system assembly"
+        "TSMC advanced packaging",
+        "semiconductor chip assembly",
+        "AI server manufacturing"
       ]
     }
   ],
