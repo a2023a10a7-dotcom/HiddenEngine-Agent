@@ -11,6 +11,7 @@ on:
       - "src/visual-quality.js"
       - "src/prepare-project-assets.js"
       - "production/projects/2026-11-14-nvidia-hidden-engine/script.json"
+      - ".github/workflows/render-beats.yml"
   workflow_dispatch:
     inputs:
       project_id:
