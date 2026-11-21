@@ -282,7 +282,7 @@ async function main() {
       if (!asset || (asset.scene !== i+1 && !isHookRobotVisual)) throw new Error("Selected image " + id + " is missing or assigned to the wrong scene.");
       const imageFile = path.join(OUT, id + ".jpg");
       if (!await stat(imageFile).then(()=>true).catch(()=>false)) {
-        const imageUrl = await pixabayImageUrl(asset.sourcePage);
+        const imageUrl = asset.directUrl || await pixabayImageUrl(asset.sourcePage);
         await download(imageUrl, imageFile);
       }
       imageFiles.push(imageFile);
