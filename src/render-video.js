@@ -340,6 +340,8 @@ async function main() {
       "-t",audioDuration.toFixed(3),"-shortest","-movflags","+faststart",rendered);
     await run("ffmpeg",args);
     visualAudit.push({scene:i+1,selectedImageIds:renderIds,renderedImages:imageFiles.length,animated:true,
+      targetShotDurationSeconds:5,actualAverageShotDurationSeconds:Number((audioDuration/imageFiles.length).toFixed(2)),
+      narrationMatchedShots:selection.scenes.find(item=>item.scene===i+1)?.shots||[],
       sourceTags:selected.map(id=>assetById.get(id).tags)});
     clips.push(rendered);
     console.log("Rendered scene "+(i+1)+"/"+script.scenes.length+" with "+imageFiles.length+" fast-cut stills, 0.42s crossfades and 5-10% Ken Burns motion.");
@@ -377,7 +379,7 @@ async function main() {
   await writeFile(path.join(OUT,"README.txt"),[
     "The Hidden Engine documentary render",
     "Narration: Local Piper neural TTS (no paid API quota required).",
-    "Visuals: user-selected Pixabay stills with animated camera movement, crossfades, and original data overlays.",
+    "Visuals: AI-selected Pixabay stills matched to narration in approximately five-second shots, with animated camera movement, crossfades, and original data overlays.",
     "Identity: charcoal/black, ivory typography, restrained copper accents, documentary-investigative overlays.",
     "Review all claims, pronunciations, visual relevance, licenses, and credits before publication.",
     "No automatic YouTube upload."
@@ -386,7 +388,7 @@ async function main() {
   const finalDuration = Number(qa.format.duration);
   if (!qa.streams.some(x=>x.codec_type==="video" && x.width===1920 && x.height===1080) || !qa.streams.some(x=>x.codec_type==="audio")) throw new Error("Final MP4 failed audio/1080p QA.");
   if (finalDuration < 13*60 || finalDuration > 18*60) throw new Error("Final runtime "+finalDuration.toFixed(1)+"s is outside the 13–18 minute documentary target.");
-  if (visualAudit.some(x=>x.renderedImages < 10)) throw new Error("A scene has fewer than ten distinct visuals; refusing slow slideshow pacing.");
+  if (visualAudit.some(x=>x.renderedImages < 1 || x.actualAverageShotDurationSeconds > 6.5)) throw new Error("Visual pacing QA failed: every scene needs distinct narration-matched shots averaging no more than 6.5 seconds.");
   await access(path.join(OUT,"contact-sheet.jpg")).catch(()=>{throw new Error("Final contact-sheet.jpg is missing.");});
   await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:finalDuration,targetDurationMinutes:15,acceptedDurationRangeMinutes:[13,18],audio:true,scenes:clips.length,selectedImages:credits.length,imagesPerScene:12,visualChangeTargetSeconds:5,animatedImageScenes:visualAudit.filter(x=>x.animated).length,visualChangeTargetSeconds:5,originalMusic:false,musicTargetDb:null,transitionWhooshes:true,numberClicks:true,contactSheet:true},null,2)+"\n");
   console.log("Rendered and passed technical QA: "+output);
