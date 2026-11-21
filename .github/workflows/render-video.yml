@@ -1,14 +1,11 @@
 name: HiddenEngine Cinematic Documentary Render
-
 on:
   push:
     branches: [main]
     paths:
       - "src/render-video.js"
-      - "production/projects/2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re/visual-selection.json"
-      - "production/projects/2026-11-08-why-a-new-report-on-anthropic-automating-ai-development-is-alarming-re/visual-assets.json"
-      - "production/projects/2026-11-12-chinas-technology-rise/script.json"
-      - "src/prepare-project-assets.js"
+      - "src/import-visual-links.js"
+      - "production/projects/**/visual-links.json"
       - ".github/workflows/render-video.yml"
   workflow_dispatch:
     inputs:
@@ -23,14 +20,12 @@ on:
         default: "en_US-lessac-medium"
         type: string
       speaking_rate:
-        description: "Piper length scale: higher is slower; calibrated for a 15-minute narration"
+        description: "Piper length scale: higher is slower"
         required: true
         default: "1.0"
         type: string
-
 permissions:
   contents: read
-
 jobs:
   render:
     runs-on: ubuntu-latest
@@ -38,17 +33,14 @@ jobs:
     steps:
       - name: Get project
         uses: actions/checkout@v4
-
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-
       - name: Install rendering tools and fonts
         run: |
           sudo apt-get update
           sudo apt-get install -y ffmpeg fonts-dejavu-core librsvg2-bin
-
       - name: Install Piper TTS and download selected voice
         env:
           PIPER_VOICE: ${{ inputs.voice_model || 'en_US-lessac-medium' }}
@@ -69,28 +61,34 @@ jobs:
           curl -fL "$base.onnx.json" -o "models/${PIPER_VOICE}.onnx.json"
           echo "PIPER_MODEL=models/${PIPER_VOICE}.onnx" >> "$GITHUB_ENV"
           echo "PIPER_EXECUTABLE=$GITHUB_WORKSPACE/.venv-piper/bin/piper" >> "$GITHUB_ENV"
-      - name: Prepare scene-matched visuals and contact sheet
+      - name: Convert owner-selected links into render manifest
         env:
-          PROJECT_ID: ${{ inputs.project_id || '2026-11-12-chinas-technology-rise' }}
-          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: node src/prepare-project-assets.js
-
-      - name: Render cinematic documentary
+          PROJECT_ID: ${{ inputs.project_id || github.event.head_commit.message }}
+        run: |
+          set -euo pipefail
+          if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
+            project_id="$(node -e 'const fs=require("fs");const e=JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH));const f=e.commits?.flatMap(c=>c.added.concat(c.modified)).find(p=>/^production\/projects\/[^/]+\/visual-links\.json$/.test(p));if(!f)process.exit(2);process.stdout.write(f.split("/")[2])')"
+          else
+            project_id="${{ inputs.project_id }}"
+          fi
+          echo "PROJECT_ID=$project_id" >> "$GITHUB_ENV"
+          PROJECT_ID="$project_id" node src/import-visual-links.js
+      - name: Render using owner-selected images
         env:
-          PROJECT_ID: ${{ inputs.project_id || '2026-11-12-chinas-technology-rise' }}
+          PROJECT_ID: ${{ inputs.project_id }}
           PIPER_LENGTH_SCALE: ${{ inputs.speaking_rate || '1.0' }}
-          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
-        run: node src/render-video.js
-
+        run: |
+          if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
+            export PROJECT_ID="$(grep '^PROJECT_ID=' "$GITHUB_ENV" | tail -1 | cut -d= -f2-)"
+          fi
+          node src/render-video.js
       - name: Upload MP4 and production assets
         uses: actions/upload-artifact@v4
         with:
-          name: hiddenengine-cinematic-${{ inputs.project_id || '2026-11-12-chinas-technology-rise' }}
+          name: hiddenengine-cinematic-${{ inputs.project_id || 'owner-selected' }}
           path: |
-            dist/${{ inputs.project_id || '2026-11-12-chinas-technology-rise' }}/the-hidden-engine-documentary.mp4
-            dist/${{ inputs.project_id || '2026-11-12-chinas-technology-rise' }}/CREDITS.md
-            dist/${{ inputs.project_id || '2026-11-12-chinas-technology-rise' }}/QA-REPORT.json
-            dist/${{ inputs.project_id || '2026-11-12-chinas-technology-rise' }}/contact-sheet.jpg
+            dist/${{ inputs.project_id || 'owner-selected' }}/the-hidden-engine-documentary.mp4
+            dist/${{ inputs.project_id || 'owner-selected' }}/CREDITS.md
+            dist/${{ inputs.project_id || 'owner-selected' }}/QA-REPORT.json
           if-no-files-found: error
           retention-days: 14
