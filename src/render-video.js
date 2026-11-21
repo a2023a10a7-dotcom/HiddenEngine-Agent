@@ -246,7 +246,11 @@ async function pixabayImageUrl(pageUrl) {
 async function download(url, dest) {
   const response = await fetch(url);
   if (!response.ok) throw new Error("Asset download failed (" + response.status + ").");
-  await writeFile(dest, Buffer.from(await response.arrayBuffer()));
+  const contentType = response.headers.get("content-type") || "";
+  if (!contentType.toLowerCase().startsWith("image/")) throw new Error("The supplied visual URL did not return an image (content-type: " + contentType + "). Use a direct HTTPS image URL, not a webpage URL.");
+  const bytes = Buffer.from(await response.arrayBuffer());
+  if (bytes.length < 4096 || bytes.length > 25 * 1024 * 1024) throw new Error("The supplied image has an invalid file size.");
+  await writeFile(dest, bytes);
 }
 async function main() {
   if (!PIPER_EXECUTABLE || !PIPER_MODEL) throw new Error("Piper TTS is not configured.");
