@@ -16,17 +16,17 @@ const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function planNarrationShots(scene){
  const narration=String(scene.narration||"").trim();
  if(!narration) throw new Error("Scene has no narration for visual planning: "+scene.title);
- const words=narration.split(/\\s+/).length;
+ const words=narration.split(/\s+/).length;
  const targetCount=Math.max(1,Math.ceil(words/12.5));
  const prompt=[
   "You are a documentary visual editor. Divide the narration into chronological visual shots.",
-  "Return ONLY valid JSON: {\\"shots\\":[{\\"narration_excerpt\\":string,\\"visual_query\\":string,\\"visual_type\\":\\"specific\\",\\"reason\\":string}]}",
+  "Return ONLY valid JSON with this schema: "+JSON.stringify({shots:[{narration_excerpt:"string",visual_query:"string",visual_type:"specific",reason:"string"}]}),
   "Create exactly "+targetCount+" shots. Each shot represents about five seconds of spoken narration (roughly 10-15 words).",
   "Keep narration excerpts in their original order, cover the entire narration without skipping key facts, and make every visual query concrete, searchable, and directly relevant to that excerpt.",
   "Prefer identifiable real-world subjects, named products, locations, documents, machinery, people at work, maps, or data evidence. Avoid abstract generic AI imagery unless the narration is abstract.",
   "Do not invent an image of a real event. Mark illustrative context in the reason when exact archival footage is unlikely.",
   "Narration: "+narration
- ].join("\\n");
+ ].join("\n");
  const response=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key="+encodeURIComponent(geminiKey),{
   method:"POST",headers:{"content-type":"application/json"},
   body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.2,responseMimeType:"application/json"}}),
@@ -36,7 +36,7 @@ async function planNarrationShots(scene){
  const data=await response.json();
  const raw=data.candidates?.[0]?.content?.parts?.map(x=>x.text||"").join("")||"";
  let parsed;
- try{parsed=JSON.parse(raw.replace(/^\`\`\`json\\s*/i,"").replace(/\s*\`\`\`$/,""));}catch{throw new Error("Gemini returned invalid shot-plan JSON for "+scene.title+": "+raw.slice(0,500));}
+ try{parsed=JSON.parse(raw.trim());}catch{throw new Error("Gemini returned invalid shot-plan JSON for "+scene.title+": "+raw.slice(0,500));}
  if(!Array.isArray(parsed.shots)||parsed.shots.length!==targetCount) throw new Error("Gemini returned "+(parsed.shots?.length||0)+" shots; expected "+targetCount+" for "+scene.title);
  return parsed.shots.map((shot,index)=>({shot:index+1,narrationExcerpt:String(shot.narration_excerpt||"").trim(),visualQuery:String(shot.visual_query||"").trim(),visualType:String(shot.visual_type||"specific"),reason:String(shot.reason||"").trim(),targetDurationSeconds:5})).filter(x=>x.narrationExcerpt&&x.visualQuery);
 }
