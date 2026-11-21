@@ -73,6 +73,7 @@ jobs:
         env:
           PROJECT_ID: ${{ inputs.project_id || '2026-11-12-chinas-technology-rise' }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: node src/prepare-project-assets.js
 
       - name: Render cinematic documentary
