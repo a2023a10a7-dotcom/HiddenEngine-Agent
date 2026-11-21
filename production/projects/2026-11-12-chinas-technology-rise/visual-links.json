@@ -3,7 +3,7 @@
   "projectId": "2026-11-12-chinas-technology-rise",
   "updatedAt": "2026-11-21T22:50:38.953Z",
   "selectionMode": "chatgpt_curated",
-  "note": "Visual source pages and shot assignments were selected by ChatGPT for this documentary. Repeated source images are used as alternate camera-motion shots; review all credits and source-page licenses before public release. Manifest revision 2: retrigger after workflow path detection fix. Manifest revision 3: use git diff to detect the triggering project. Manifest revision 4: retrigger with repaired shell syntax.",
+  "note": "Visual source pages and shot assignments were selected by ChatGPT for this documentary. Repeated source images are used as alternate camera-motion shots; review all credits and source-page licenses before public release. Manifest revision 2: retrigger after workflow path detection fix. Manifest revision 3: use git diff to detect the triggering project. Manifest revision 4: retrigger with repaired shell syntax. Manifest revision 5: retrigger after YAML cleanup.",
   "scenes": [
     {
       "scene": 1,
