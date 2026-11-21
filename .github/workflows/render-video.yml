@@ -61,19 +61,19 @@ jobs:
           curl -fL "$base.onnx.json" -o "models/${PIPER_VOICE}.onnx.json"
           echo "PIPER_MODEL=models/${PIPER_VOICE}.onnx" >> "$GITHUB_ENV"
           echo "PIPER_EXECUTABLE=$GITHUB_WORKSPACE/.venv-piper/bin/piper" >> "$GITHUB_ENV"
-      - name: Convert owner-selected links into render manifest
+      - name: Convert ChatGPT-curated links into render manifest
         env:
-          PROJECT_ID: ${{ inputs.project_id || github.event.head_commit.message }}
+          PROJECT_ID: ${{ inputs.project_id }}
         run: |
           set -euo pipefail
           if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
-            project_id="$(node -e 'const fs=require("fs");const e=JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH));const f=e.commits?.flatMap(c=>c.added.concat(c.modified)).find(p=>/^production\/projects\/[^/]+\/visual-links\.json$/.test(p));if(!f)process.exit(2);process.stdout.write(f.split("/")[2])')"
+            project_id="$(node -e 'const fs=require("fs");const e=JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH));const f=e.commits?.flatMap(c=>[...(c.added||[]),...(c.modified||[])]).find(p=>/^production\/projects\/[^/]+\/visual-links\.json$/.test(p));if(!f)process.exit(2);process.stdout.write(f.split("/")[2])')"
           else
             project_id="${{ inputs.project_id }}"
           fi
           echo "PROJECT_ID=$project_id" >> "$GITHUB_ENV"
           PROJECT_ID="$project_id" node src/import-visual-links.js
-      - name: Render using owner-selected images
+      - name: Render using ChatGPT-curated images
         env:
           PROJECT_ID: ${{ inputs.project_id }}
           PIPER_LENGTH_SCALE: ${{ inputs.speaking_rate || '1.0' }}
@@ -93,5 +93,7 @@ jobs:
             dist/**/the-hidden-engine-documentary.mp4
             dist/**/CREDITS.md
             dist/**/QA-REPORT.json
+            dist/**/contact-sheet.jpg
+            dist/**/README.txt
           if-no-files-found: error
           retention-days: 14
