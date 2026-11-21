@@ -79,13 +79,9 @@ jobs:
           PROJECT_ID="$project_id" node src/import-visual-links.js
       - name: Render using ChatGPT-curated images
         env:
-          PROJECT_ID: ${{ inputs.project_id }}
           PIPER_LENGTH_SCALE: ${{ inputs.speaking_rate || '1.0' }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
         run: |
-          if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
-            export PROJECT_ID="$(grep '^PROJECT_ID=' "$GITHUB_ENV" | tail -1 | cut -d= -f2-)"
-          fi
           node src/render-video.js
       - name: Upload MP4 and production assets
         uses: actions/upload-artifact@v4
