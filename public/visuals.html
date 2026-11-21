@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>اختيار مرئيات HiddenEngine</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,"Segoe UI",sans-serif;background:#0c0e10;color:#eee9df}
+body{margin:0;background:radial-gradient(ellipse at top,#25211c,#0c0e10 55%);min-height:100vh}
+main{max-width:900px;margin:auto;padding:28px 18px 70px}header{border-bottom:1px solid #39332b;padding-bottom:20px;margin-bottom:24px}
+h1{font-size:clamp(25px,5vw,38px);margin:0 0 8px;color:#f1ede5}p{color:#bcb5aa;line-height:1.8}
+.panel,.scene{background:#171a1d;border:1px solid #34383a;border-radius:14px;padding:18px;margin:14px 0}
+label{display:block;color:#d7c3a7;margin:12px 0 6px;font-size:14px}
+input,textarea{width:100%;box-sizing:border-box;background:#0e1113;color:#f3eee6;border:1px solid #41474a;border-radius:9px;padding:12px;font:inherit}
+textarea{min-height:108px;resize:vertical;direction:ltr;text-align:left}
+button{background:#b17b4b;color:#111;border:0;border-radius:9px;padding:12px 18px;font-weight:700;font:inherit;cursor:pointer;margin:8px 0}
+button.secondary{background:#303538;color:#eee9df}button:disabled{opacity:.55;cursor:wait}
+small{color:#aaa196}.scene h2{font-size:18px;margin:0 0 6px;color:#d9b58e}.excerpt{font-size:13px;color:#aaa196;direction:ltr;text-align:left}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.visual-row{border-top:1px solid #34383a;padding-top:10px;margin-top:10px}
+#status{padding:12px;border-radius:9px;margin-top:14px;white-space:pre-wrap}.ok{background:#183326;color:#b9e4c6}.bad{background:#3b2020;color:#ffd0c8}
+@media(max-width:600px){.grid{grid-template-columns:1fr}main{padding:18px 12px 50px}}
+</style></head><body><main>
+<header><h1>اختيار المرئيات يدوياً</h1><p>اختر الصور واللقطات بنفسك، والصق رابطاً مباشراً للصورة في المشهد المناسب. أضف أكثر من صورة للمشهد، واحفظ اختياراتك في GitHub. لا يستبدل المحرك اختياراتك بصور تلقائية.</p></header>
+<section class="panel"><div class="grid">
+<div><label for="project">معرّف المشروع (Project ID)</label><input id="project" placeholder="مثال: 2026-11-12-chinas-technology-rise" dir="ltr"></div>
+<div><label for="password">كلمة مرور التحرير</label><input id="password" type="password" placeholder="EDITOR_PASSWORD"></div>
+</div><button id="load">تحميل مشاهد المشروع</button>
+<small>على الخادم ضبط GITHUB_TOKEN بصلاحية Contents: Read and write وEDITOR_PASSWORD.</small></section>
+<div id="scenes"></div><button id="save" hidden>حفظ الروابط في المشروع</button><div id="status" hidden></div>
+</main><script>
+const $=id=>document.getElementById(id);let loadedProject="";
+function status(message,ok=false){$("status").hidden=false;$("status").className=ok?"ok":"bad";$("status").textContent=message}
+function addVisual(section,values={}) {
+ const row=document.createElement("div");row.className="visual-row";
+ const url=document.createElement("input");url.className="visual-url";url.placeholder="https://... (رابط الصورة المباشر)";url.value=values.url||"";url.dir="ltr";
+ const meta=document.createElement("input");meta.className="visual-meta";meta.placeholder="المصور | الترخيص | رابط الترخيص | ملاحظة";meta.value=[values.creator,values.license,values.licenseUrl,values.note].join(" | ");meta.dir="auto";
+ const remove=document.createElement("button");remove.type="button";remove.className="secondary";remove.textContent="حذف هذا الرابط";remove.onclick=()=>row.remove();
+ row.append(url,meta,remove);section.append(row);
+}
+$("load").onclick=async()=>{
+ const id=$("project").value.trim();if(!id){status("أدخل معرّف المشروع أولاً.");return}
+ $("load").disabled=true;
+ try{
+  const response=await fetch("/api/projects/"+encodeURIComponent(id)+"/scenes");const data=await response.json();
+  if(!response.ok||!data.success)throw new Error(data.error||"تعذر تحميل المشروع.");
+  const savedResponse=await fetch("/api/projects/"+encodeURIComponent(id)+"/visual-links");const saved=await savedResponse.json();
+  if(!savedResponse.ok||!saved.success)throw new Error(saved.error||"تعذر تحميل الروابط المحفوظة.");
+  const byScene=new Map((saved.data?.scenes||[]).map(s=>[s.scene,s.visuals||[]]));
+  loadedProject=id;$("scenes").replaceChildren();
+  data.scenes.forEach(scene=>{
+   const section=document.createElement("section");section.className="scene";section.dataset.scene=scene.scene;
+   const title=document.createElement("h2");title.textContent="المشهد "+scene.scene+" — "+scene.title;section.append(title);
+   const excerpt=document.createElement("div");excerpt.className="excerpt";excerpt.textContent=scene.narration||"لا يوجد مقتطف سردي.";section.append(excerpt);
+   (byScene.get(scene.scene)||[]).forEach(v=>addVisual(section,v));
+   if(!(byScene.get(scene.scene)||[]).length)addVisual(section);
+   const add=document.createElement("button");add.type="button";add.className="secondary";add.textContent="+ إضافة رابط آخر";add.onclick=()=>addVisual(section);section.append(add);
+   $("scenes").append(section);
+  });
+  $("save").hidden=false;status("تم تحميل "+data.scenes.length+" مشهداً. يمكنك إضافة الروابط أو تعديلها.",true);
+ }catch(error){status(error.message)}finally{$("load").disabled=false}
+};
+$("save").onclick=async()=>{
+ if(!loadedProject){status("حمّل المشروع أولاً.");return}
+ const scenes=[...$("scenes").querySelectorAll(".scene")].map(section=>({scene:Number(section.dataset.scene),
+ visuals:[...section.querySelectorAll(".visual-row")].map(row=>{
+  const parts=row.querySelector(".visual-meta").value.split("|").map(x=>x.trim());
+  return {url:row.querySelector(".visual-url").value.trim(),creator:parts[0]||"",license:parts[1]||"",licenseUrl:parts[2]||"",note:parts[3]||""};
+ }).filter(v=>v.url)}));
+ if(scenes.some(s=>!s.visuals.length)){status("أضف رابط صورة واحداً على الأقل لكل مشهد.");return}
+ $("save").disabled=true;
+ try{
+  const response=await fetch("/api/projects/"+encodeURIComponent(loadedProject)+"/visual-links",{method:"POST",
+   headers:{"Content-Type":"application/json","x-editor-password":$("password").value},body:JSON.stringify({scenes})});
+  const data=await response.json();if(!response.ok||!data.success)throw new Error(data.error||"تعذر حفظ الروابط.");
+  status(data.message+"\n"+data.file+"\nسيبدأ سير العمل تلقائياً بعد وصول التغيير إلى GitHub.",true);
+ }catch(error){status(error.message)}finally{$("save").disabled=false}
+};
+</script></body></html>
