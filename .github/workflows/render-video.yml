@@ -84,11 +84,13 @@ jobs:
           node src/render-video.js
       - name: Upload MP4 and production assets
         uses: actions/upload-artifact@v4
+        env:
+          PROJECT_ID: ${{ inputs.project_id }}
         with:
           name: hiddenengine-cinematic-${{ inputs.project_id || 'owner-selected' }}
           path: |
-            dist/${{ inputs.project_id || 'owner-selected' }}/the-hidden-engine-documentary.mp4
-            dist/${{ inputs.project_id || 'owner-selected' }}/CREDITS.md
-            dist/${{ inputs.project_id || 'owner-selected' }}/QA-REPORT.json
+            dist/**/the-hidden-engine-documentary.mp4
+            dist/**/CREDITS.md
+            dist/**/QA-REPORT.json
           if-no-files-found: error
           retention-days: 14
