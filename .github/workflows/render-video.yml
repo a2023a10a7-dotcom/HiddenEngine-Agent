@@ -3,10 +3,7 @@ on:
   push:
     branches: [main]
     paths:
-      - "src/render-video.js"
-      - "src/import-visual-links.js"
       - "production/projects/**/visual-links.json"
-      - ".github/workflows/render-video.yml"
   workflow_dispatch:
     inputs:
       project_id:
