@@ -67,7 +67,39 @@ jobs:
         run: |
           set -euo pipefail
           if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
-            project_id="$(node -e 'const fs=require("fs");const e=JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH));const f=e.commits?.flatMap(c=>[...(c.added||[]),...(c.modified||[])]).find(p=>/^production\/projects\/[^/]+\/visual-links\.json$/.test(p));if(!f)process.exit(2);process.stdout.write(f.split("/")[2])')"
+            project_path="$(git diff-tree --no-commit-id --name-only -r HEAD | grep -E '^production/projects/[^/]+/visual-links\.json
+          echo "PROJECT_ID=$project_id" >> "$GITHUB_ENV"
+          PROJECT_ID="$project_id" node src/import-visual-links.js
+      - name: Render using ChatGPT-curated images
+        env:
+          PROJECT_ID: ${{ inputs.project_id }}
+          PIPER_LENGTH_SCALE: ${{ inputs.speaking_rate || '1.0' }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+        run: |
+          if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
+            export PROJECT_ID="$(grep '^PROJECT_ID=' "$GITHUB_ENV" | tail -1 | cut -d= -f2-)"
+          fi
+          node src/render-video.js
+      - name: Upload MP4 and production assets
+        uses: actions/upload-artifact@v4
+        env:
+          PROJECT_ID: ${{ inputs.project_id }}
+        with:
+          name: hiddenengine-cinematic-${{ inputs.project_id || 'owner-selected' }}
+          path: |
+            dist/**/the-hidden-engine-documentary.mp4
+            dist/**/CREDITS.md
+            dist/**/QA-REPORT.json
+            dist/**/contact-sheet.jpg
+            dist/**/README.txt
+          if-no-files-found: error
+          retention-days: 14
+ | head -n 1 || true)"
+            if [[ -z "$project_path" ]]; then
+              echo "No visual-links.json change found in the triggering commit." >&2
+              exit 2
+            fi
+            project_id="$(cut -d/ -f3 <<< "$project_path")"
           else
             project_id="${{ inputs.project_id }}"
           fi
