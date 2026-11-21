@@ -67,7 +67,15 @@ jobs:
         run: |
           set -euo pipefail
           if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
-            project_path="$(git diff-tree --no-commit-id --name-only -r HEAD | grep -E '^production/projects/[^/]+/visual-links\.json
+            project_path="$(git diff-tree --no-commit-id --name-only -r HEAD | awk -F/ '$1=="production" && $2=="projects" && $4=="visual-links.json" {print; exit}')"
+            if [[ -z "$project_path" ]]; then
+              echo "No visual-links.json change found in the triggering commit." >&2
+              exit 2
+            fi
+            project_id="$(cut -d/ -f3 <<< "$project_path")"
+          else
+            project_id="${{ inputs.project_id }}"
+          fi
           echo "PROJECT_ID=$project_id" >> "$GITHUB_ENV"
           PROJECT_ID="$project_id" node src/import-visual-links.js
       - name: Render using ChatGPT-curated images
