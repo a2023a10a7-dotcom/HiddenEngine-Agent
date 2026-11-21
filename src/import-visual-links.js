@@ -29,5 +29,5 @@ for (let i = 0; i < script.scenes.length; i++) {
   scenes.push({ scene: i + 1, title: script.scenes[i].title || ("Scene " + (i + 1)), selectedImageIds: ids });
 }
 await writeFile(path.join(root, "visual-assets.json"), JSON.stringify({ projectId, source: "ChatGPT-curated visual sources", assetCount: assets.length, assets }, null, 2) + "\n");
-await writeFile(path.join(root, "visual-selection.json"), JSON.stringify({ projectId, title: script.title || projectId, source: "Owner-selected visual URLs", scenes }, null, 2) + "\n");
+await writeFile(path.join(root, "visual-selection.json"), JSON.stringify({ projectId, title: script.title || projectId, source: "ChatGPT-curated visual source pages", scenes }, null, 2) + "\n");
 console.log("Imported " + assets.length + " ChatGPT-curated visuals across " + scenes.length + " scenes.");
