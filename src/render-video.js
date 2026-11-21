@@ -263,6 +263,8 @@ async function main() {
   const assetsManifest = JSON.parse(await readFile(assetsPath, "utf8"));
   const assetById = new Map((assetsManifest.assets || []).map(asset => [asset.id, asset]));
   const clips = [], credits = [], visualAudit = [];
+  const downloadedAssetFiles = new Map();
+  const contactSheetItems = [];
   for (let i=0; i<script.scenes.length; i++) {
     const scene = script.scenes[i];
     if (!scene.narration?.trim()) throw new Error("Scene " + (i+1) + " has no narration.");
@@ -284,13 +286,19 @@ async function main() {
       const asset = assetById.get(id);
       const isHookRobotVisual = i===0 && hookIds.includes(id) && asset?.scene===7;
       if (!asset || (asset.scene !== i+1 && !isHookRobotVisual)) throw new Error("Selected image " + id + " is missing or assigned to the wrong scene.");
-      const imageFile = path.join(OUT, id + ".jpg");
-      if (!await stat(imageFile).then(()=>true).catch(()=>false)) {
-        const imageUrl = asset.directUrl || await pixabayImageUrl(asset.sourcePage);
-        await download(imageUrl, imageFile);
+      const assetKey = asset.directUrl || asset.sourcePage;
+      let imageFile = downloadedAssetFiles.get(assetKey);
+      if (!imageFile) {
+        imageFile = path.join(OUT, id + ".jpg");
+        if (!await stat(imageFile).then(()=>true).catch(()=>false)) {
+          const imageUrl = asset.directUrl || await pixabayImageUrl(asset.sourcePage);
+          await download(imageUrl, imageFile);
+        }
+        downloadedAssetFiles.set(assetKey, imageFile);
+        contactSheetItems.push({ id, scene: asset.scene, file: imageFile });
       }
       imageFiles.push(imageFile);
-      credits.push({ scene:i+1, sourceScene:asset.scene, imageId:id, provider:"Pixabay", page:asset.sourcePage, creator:asset.creator,
+      credits.push({ scene:i+1, sourceScene:asset.scene, imageId:id, provider:asset.provider || "Pixabay", page:asset.sourcePage, creator:asset.creator,
         tags:asset.tags, license:asset.license, licenseUrl:asset.licenseUrl, illustrative:true });
     }
     const transition = imageFiles.length > 1 ? 0.42 : 0;
@@ -350,6 +358,23 @@ async function main() {
     clips.push(rendered);
     console.log("Rendered scene "+(i+1)+"/"+script.scenes.length+" with "+imageFiles.length+" fast-cut stills, 0.42s crossfades and 5-10% Ken Burns motion.");
   }
+  // Build the required review contact sheet from every distinct source image.
+  const cols = 5, cellW = 320, cellH = 180, labelH = 36, gap = 10, margin = 10;
+  const rows = Math.ceil(contactSheetItems.length / cols);
+  const sheetParts = ['<svg xmlns="http://www.w3.org/2000/svg" width="' + (margin*2+cols*cellW+(cols-1)*gap) + '" height="' + (margin*2+rows*(cellH+labelH)+(rows-1)*gap) + '">', '<rect width="100%" height="100%" fill="#090b0e"/>'];
+  for (let n = 0; n < contactSheetItems.length; n++) {
+    const item = contactSheetItems[n], x = margin + (n % cols) * (cellW + gap), y = margin + Math.floor(n / cols) * (cellH + labelH + gap);
+    const data = (await readFile(item.file)).toString("base64");
+    sheetParts.push('<rect x="' + x + '" y="' + y + '" width="' + cellW + '" height="' + (cellH + labelH) + '" fill="#171a1e"/>');
+    sheetParts.push('<image x="' + x + '" y="' + y + '" width="' + cellW + '" height="' + cellH + '" preserveAspectRatio="xMidYMid slice" href="data:image/jpeg;base64,' + data + '"/>');
+    sheetParts.push('<text x="' + (x + 10) + '" y="' + (y + cellH + 24) + '" fill="#f0ede5" font-family="DejaVu Sans" font-size="14">' + xml(item.id + " • SCENE " + item.scene) + '</text>');
+  }
+  sheetParts.push("</svg>");
+  const contactSvg = path.join(OUT, "contact-sheet.svg");
+  await writeFile(contactSvg, sheetParts.join(""));
+  await run("rsvg-convert", ["-f", "png", "-o", path.join(OUT, "contact-sheet.png"), contactSvg]);
+  await run("ffmpeg", ["-y", "-i", path.join(OUT, "contact-sheet.png"), "-frames:v", "1", "-q:v", "2", path.join(OUT, "contact-sheet.jpg")]);
+
   const list = path.join(OUT,"concat.txt");
   await writeFile(list, clips.map(f=>"file '"+path.basename(f)+"'").join("\n")+"\n");
   const output = path.join(OUT,"the-hidden-engine-documentary.mp4");
@@ -372,7 +397,7 @@ async function main() {
   await writeFile(path.join(OUT,"VISUAL-AUDIT.json"),JSON.stringify(visualAudit,null,2)+"\n");
   await writeFile(path.join(OUT,"CREDITS.md"),[
     "# Visual credits","",
-    "Selected still images are sourced from Pixabay. Review each linked asset page and applicable license before publication.",
+    "Visuals were curated for this documentary from the linked source pages. Review the applicable license and credit requirements before publication.",
     "All selected stills are illustrative stock imagery, not evidence of a specific company, person, product, or event unless independently verified.",
     "",
     ...script.scenes.filter(scene=>scene.visual?.source_url).map(scene=>"- Scene "+(script.scenes.indexOf(scene)+1)+" data graphic: "+(scene.visual.source_label||"Source")+": "+scene.visual.source_url),
@@ -383,7 +408,7 @@ async function main() {
   await writeFile(path.join(OUT,"README.txt"),[
     "The Hidden Engine documentary render",
     "Narration: Local Piper neural TTS (no paid API quota required).",
-    "Visuals: AI-selected Pixabay stills matched to narration in approximately five-second shots, with animated camera movement, crossfades, and original data overlays.",
+    "Visuals: ChatGPT-curated still images matched to narration, with animated camera movement, crossfades, and original data overlays.",
     "Identity: charcoal/black, ivory typography, restrained copper accents, documentary-investigative overlays.",
     "Review all claims, pronunciations, visual relevance, licenses, and credits before publication.",
     "No automatic YouTube upload."
@@ -394,7 +419,7 @@ async function main() {
   if (finalDuration < 13*60 || finalDuration > 18*60) throw new Error("Final runtime "+finalDuration.toFixed(1)+"s is outside the 13–18 minute documentary target.");
   if (visualAudit.some(x=>x.renderedImages < 1 || x.actualAverageShotDurationSeconds > 6.5)) throw new Error("Visual pacing QA failed: every scene needs distinct narration-matched shots averaging no more than 6.5 seconds.");
   await access(path.join(OUT,"contact-sheet.jpg")).catch(()=>{throw new Error("Final contact-sheet.jpg is missing.");});
-  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:finalDuration,targetDurationMinutes:15,acceptedDurationRangeMinutes:[13,18],audio:true,scenes:clips.length,selectedImages:credits.length,imagesPerScene:12,visualChangeTargetSeconds:5,animatedImageScenes:visualAudit.filter(x=>x.animated).length,visualChangeTargetSeconds:5,originalMusic:false,musicTargetDb:null,transitionWhooshes:true,numberClicks:true,contactSheet:true},null,2)+"\n");
+  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:finalDuration,targetDurationMinutes:15,acceptedDurationRangeMinutes:[13,18],audio:true,scenes:clips.length,selectedImages:credits.length,imagesPerScene:Math.min(...visualAudit.map(x=>x.renderedImages)),visualChangeTargetSeconds:5,animatedImageScenes:visualAudit.filter(x=>x.animated).length,originalMusic:false,musicTargetDb:null,transitionWhooshes:true,numberClicks:true,contactSheet:true},null,2)+"\n");
   console.log("Rendered and passed technical QA: "+output);
 }
 main().catch(error=>{console.error("Render failed:",error);process.exit(1);});
