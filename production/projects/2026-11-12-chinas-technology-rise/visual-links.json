@@ -1,0 +1,1449 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectId": "2026-11-12-chinas-technology-rise",
+  "updatedAt": "2026-11-21T22:50:38.953Z",
+  "selectionMode": "chatgpt_curated",
+  "note": "Visual source pages and shot assignments were selected by ChatGPT for this documentary. Repeated source images are used as alternate camera-motion shots; review all credits and source-page licenses before public release.",
+  "scenes": [
+    {
+      "scene": 1,
+      "title": "A DIFFERENT KIND OF TECHNOLOGY STORY",
+      "visuals": [
+        {
+          "url": "https://pixabay.com/photos/industry-factory-robot-digital-8150774/",
+          "sourcePage": "https://pixabay.com/photos/industry-factory-robot-digital-8150774/",
+          "creator": "u_sf2q0n59vt",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial factory and robotics stock image; illustrative context."
+        },
+        {
+          "url": "https://pixabay.com/photos/robot-arm-technology-robot-arm-2791670/",
+          "sourcePage": "https://pixabay.com/photos/robot-arm-technology-robot-arm-2791670/",
+          "creator": "jarmoluk",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial robotic arm; illustrative manufacturing context."
+        },
+        {
+          "url": "https://pixabay.com/photos/production-floor-manufacturing-316051/",
+          "sourcePage": "https://pixabay.com/photos/production-floor-manufacturing-316051/",
+          "creator": "PublicDomainPictures",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Electronics assembly line; illustrative supplier-network context."
+        },
+        {
+          "url": "https://pixabay.com/photos/industry-factory-robot-digital-8150774/",
+          "sourcePage": "https://pixabay.com/photos/industry-factory-robot-digital-8150774/",
+          "creator": "u_sf2q0n59vt",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial factory and robotics stock image; illustrative context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/robot-arm-technology-robot-arm-2791670/",
+          "sourcePage": "https://pixabay.com/photos/robot-arm-technology-robot-arm-2791670/",
+          "creator": "jarmoluk",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial robotic arm; illustrative manufacturing context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/production-floor-manufacturing-316051/",
+          "sourcePage": "https://pixabay.com/photos/production-floor-manufacturing-316051/",
+          "creator": "PublicDomainPictures",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Electronics assembly line; illustrative supplier-network context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/industry-factory-robot-digital-8150774/",
+          "sourcePage": "https://pixabay.com/photos/industry-factory-robot-digital-8150774/",
+          "creator": "u_sf2q0n59vt",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial factory and robotics stock image; illustrative context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/robot-arm-technology-robot-arm-2791670/",
+          "sourcePage": "https://pixabay.com/photos/robot-arm-technology-robot-arm-2791670/",
+          "creator": "jarmoluk",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial robotic arm; illustrative manufacturing context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/production-floor-manufacturing-316051/",
+          "sourcePage": "https://pixabay.com/photos/production-floor-manufacturing-316051/",
+          "creator": "PublicDomainPictures",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Electronics assembly line; illustrative supplier-network context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/industry-factory-robot-digital-8150774/",
+          "sourcePage": "https://pixabay.com/photos/industry-factory-robot-digital-8150774/",
+          "creator": "u_sf2q0n59vt",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial factory and robotics stock image; illustrative context. (alternate crop/shot from same source image)"
+        }
+      ]
+    },
+    {
+      "scene": 2,
+      "title": "HOW THE INDUSTRIAL BASE WAS BUILT",
+      "visuals": [
+        {
+          "url": "https://pixabay.com/photos/container-storage-cargo-shipping-163868/",
+          "sourcePage": "https://pixabay.com/photos/container-storage-cargo-shipping-163868/",
+          "creator": "PublicDomainPictures",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Cargo terminal and containers; illustrative global trade context."
+        },
+        {
+          "url": "https://pixabay.com/photos/shipping-container-terminal-4319421/",
+          "sourcePage": "https://pixabay.com/photos/shipping-container-terminal-4319421/",
+          "creator": "soualexandrerocha",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Aerial cargo port; illustrative logistics context."
+        },
+        {
+          "url": "https://pixabay.com/photos/cargo-shipping-port-container-386836/",
+          "sourcePage": "https://pixabay.com/photos/cargo-shipping-port-container-386836/",
+          "creator": "PublicDomainImages",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Port cranes and shipping containers; illustrative export logistics."
+        },
+        {
+          "url": "https://pixabay.com/photos/container-storage-cargo-shipping-163868/",
+          "sourcePage": "https://pixabay.com/photos/container-storage-cargo-shipping-163868/",
+          "creator": "PublicDomainPictures",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Cargo terminal and containers; illustrative global trade context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/shipping-container-terminal-4319421/",
+          "sourcePage": "https://pixabay.com/photos/shipping-container-terminal-4319421/",
+          "creator": "soualexandrerocha",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Aerial cargo port; illustrative logistics context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/cargo-shipping-port-container-386836/",
+          "sourcePage": "https://pixabay.com/photos/cargo-shipping-port-container-386836/",
+          "creator": "PublicDomainImages",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Port cranes and shipping containers; illustrative export logistics. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/container-storage-cargo-shipping-163868/",
+          "sourcePage": "https://pixabay.com/photos/container-storage-cargo-shipping-163868/",
+          "creator": "PublicDomainPictures",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Cargo terminal and containers; illustrative global trade context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/shipping-container-terminal-4319421/",
+          "sourcePage": "https://pixabay.com/photos/shipping-container-terminal-4319421/",
+          "creator": "soualexandrerocha",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Aerial cargo port; illustrative logistics context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/cargo-shipping-port-container-386836/",
+          "sourcePage": "https://pixabay.com/photos/cargo-shipping-port-container-386836/",
+          "creator": "PublicDomainImages",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Port cranes and shipping containers; illustrative export logistics. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/container-storage-cargo-shipping-163868/",
+          "sourcePage": "https://pixabay.com/photos/container-storage-cargo-shipping-163868/",
+          "creator": "PublicDomainPictures",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Cargo terminal and containers; illustrative global trade context. (alternate crop/shot from same source image)"
+        }
+      ]
+    },
+    {
+      "scene": 3,
+      "title": "THE CLUSTER EFFECT",
+      "visuals": [
+        {
+          "url": "https://pixabay.com/photos/circuit-boards-microprocessor-648602/",
+          "sourcePage": "https://pixabay.com/photos/circuit-boards-microprocessor-648602/",
+          "creator": "beear",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Electronic circuit board close-up; illustrative electronics supply chain."
+        },
+        {
+          "url": "https://pixabay.com/photos/technical-circuit-boards-electronics-647486/",
+          "sourcePage": "https://pixabay.com/photos/technical-circuit-boards-electronics-647486/",
+          "creator": "beear",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Circuit board components; illustrative electronics manufacturing."
+        },
+        {
+          "url": "https://pixabay.com/photos/electronics-shop-pcb-technology-4354151/",
+          "sourcePage": "https://pixabay.com/photos/electronics-shop-pcb-technology-4354151/",
+          "creator": "www-erzetich-com",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Hands assembling a circuit board; illustrative electronics production."
+        },
+        {
+          "url": "https://pixabay.com/photos/circuit-boards-microprocessor-648602/",
+          "sourcePage": "https://pixabay.com/photos/circuit-boards-microprocessor-648602/",
+          "creator": "beear",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Electronic circuit board close-up; illustrative electronics supply chain. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/technical-circuit-boards-electronics-647486/",
+          "sourcePage": "https://pixabay.com/photos/technical-circuit-boards-electronics-647486/",
+          "creator": "beear",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Circuit board components; illustrative electronics manufacturing. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/electronics-shop-pcb-technology-4354151/",
+          "sourcePage": "https://pixabay.com/photos/electronics-shop-pcb-technology-4354151/",
+          "creator": "www-erzetich-com",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Hands assembling a circuit board; illustrative electronics production. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/circuit-boards-microprocessor-648602/",
+          "sourcePage": "https://pixabay.com/photos/circuit-boards-microprocessor-648602/",
+          "creator": "beear",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Electronic circuit board close-up; illustrative electronics supply chain. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/technical-circuit-boards-electronics-647486/",
+          "sourcePage": "https://pixabay.com/photos/technical-circuit-boards-electronics-647486/",
+          "creator": "beear",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Circuit board components; illustrative electronics manufacturing. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/electronics-shop-pcb-technology-4354151/",
+          "sourcePage": "https://pixabay.com/photos/electronics-shop-pcb-technology-4354151/",
+          "creator": "www-erzetich-com",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Hands assembling a circuit board; illustrative electronics production. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/circuit-boards-microprocessor-648602/",
+          "sourcePage": "https://pixabay.com/photos/circuit-boards-microprocessor-648602/",
+          "creator": "beear",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Electronic circuit board close-up; illustrative electronics supply chain. (alternate crop/shot from same source image)"
+        }
+      ]
+    },
+    {
+      "scene": 4,
+      "title": "THE ELECTRIC CAR TURNING POINT",
+      "visuals": [
+        {
+          "url": "https://pixabay.com/photos/charging-station-e-mobility-5212924/",
+          "sourcePage": "https://pixabay.com/photos/charging-station-e-mobility-5212924/",
+          "creator": "AKrebs60",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Electric vehicle charging; illustrative EV market context, not a China-specific brand."
+        },
+        {
+          "url": "https://pixabay.com/photos/car-electric-car-charging-station-5864037/",
+          "sourcePage": "https://pixabay.com/photos/car-electric-car-charging-station-5864037/",
+          "creator": "SSidde",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Electric car at a charging point; illustrative EV adoption context."
+        },
+        {
+          "url": "https://pixabay.com/photos/electric-car-automobile-carsharing-4381728/",
+          "sourcePage": "https://pixabay.com/photos/electric-car-automobile-carsharing-4381728/",
+          "creator": "andreas160578",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Electric car charging in an urban area; illustrative EV adoption context."
+        },
+        {
+          "url": "https://pixabay.com/photos/charging-station-e-mobility-5212924/",
+          "sourcePage": "https://pixabay.com/photos/charging-station-e-mobility-5212924/",
+          "creator": "AKrebs60",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Electric vehicle charging; illustrative EV market context, not a China-specific brand. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/car-electric-car-charging-station-5864037/",
+          "sourcePage": "https://pixabay.com/photos/car-electric-car-charging-station-5864037/",
+          "creator": "SSidde",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Electric car at a charging point; illustrative EV adoption context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/electric-car-automobile-carsharing-4381728/",
+          "sourcePage": "https://pixabay.com/photos/electric-car-automobile-carsharing-4381728/",
+          "creator": "andreas160578",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Electric car charging in an urban area; illustrative EV adoption context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/charging-station-e-mobility-5212924/",
+          "sourcePage": "https://pixabay.com/photos/charging-station-e-mobility-5212924/",
+          "creator": "AKrebs60",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Electric vehicle charging; illustrative EV market context, not a China-specific brand. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/car-electric-car-charging-station-5864037/",
+          "sourcePage": "https://pixabay.com/photos/car-electric-car-charging-station-5864037/",
+          "creator": "SSidde",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Electric car at a charging point; illustrative EV adoption context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/electric-car-automobile-carsharing-4381728/",
+          "sourcePage": "https://pixabay.com/photos/electric-car-automobile-carsharing-4381728/",
+          "creator": "andreas160578",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Electric car charging in an urban area; illustrative EV adoption context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/charging-station-e-mobility-5212924/",
+          "sourcePage": "https://pixabay.com/photos/charging-station-e-mobility-5212924/",
+          "creator": "AKrebs60",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Electric vehicle charging; illustrative EV market context, not a China-specific brand. (alternate crop/shot from same source image)"
+        }
+      ]
+    },
+    {
+      "scene": 5,
+      "title": "THE BATTERY: THE REAL INDUSTRIAL BATTLE",
+      "visuals": [
+        {
+          "url": "https://pixabay.com/photos/battery-cell-lithium-cr2032-3281346/",
+          "sourcePage": "https://pixabay.com/photos/battery-cell-lithium-cr2032-3281346/",
+          "creator": "Pixabay contributor",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Lithium battery cell close-up; illustrative chemistry detail, not an EV battery pack."
+        },
+        {
+          "url": "https://pixabay.com/photos/e-mobility-charging-station-4707904/",
+          "sourcePage": "https://pixabay.com/photos/e-mobility-charging-station-4707904/",
+          "creator": "AKrebs60",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Electric mobility charging point; illustrative battery-powered transport context."
+        },
+        {
+          "url": "https://pixabay.com/photos/charging-station-e-mobility-5212924/",
+          "sourcePage": "https://pixabay.com/photos/charging-station-e-mobility-5212924/",
+          "creator": "AKrebs60",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Electric vehicle charging; illustrative EV market context, not a China-specific brand."
+        },
+        {
+          "url": "https://pixabay.com/photos/battery-cell-lithium-cr2032-3281346/",
+          "sourcePage": "https://pixabay.com/photos/battery-cell-lithium-cr2032-3281346/",
+          "creator": "Pixabay contributor",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Lithium battery cell close-up; illustrative chemistry detail, not an EV battery pack. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/e-mobility-charging-station-4707904/",
+          "sourcePage": "https://pixabay.com/photos/e-mobility-charging-station-4707904/",
+          "creator": "AKrebs60",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Electric mobility charging point; illustrative battery-powered transport context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/charging-station-e-mobility-5212924/",
+          "sourcePage": "https://pixabay.com/photos/charging-station-e-mobility-5212924/",
+          "creator": "AKrebs60",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Electric vehicle charging; illustrative EV market context, not a China-specific brand. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/battery-cell-lithium-cr2032-3281346/",
+          "sourcePage": "https://pixabay.com/photos/battery-cell-lithium-cr2032-3281346/",
+          "creator": "Pixabay contributor",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Lithium battery cell close-up; illustrative chemistry detail, not an EV battery pack. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/e-mobility-charging-station-4707904/",
+          "sourcePage": "https://pixabay.com/photos/e-mobility-charging-station-4707904/",
+          "creator": "AKrebs60",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Electric mobility charging point; illustrative battery-powered transport context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/charging-station-e-mobility-5212924/",
+          "sourcePage": "https://pixabay.com/photos/charging-station-e-mobility-5212924/",
+          "creator": "AKrebs60",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Electric vehicle charging; illustrative EV market context, not a China-specific brand. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/battery-cell-lithium-cr2032-3281346/",
+          "sourcePage": "https://pixabay.com/photos/battery-cell-lithium-cr2032-3281346/",
+          "creator": "Pixabay contributor",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Lithium battery cell close-up; illustrative chemistry detail, not an EV battery pack. (alternate crop/shot from same source image)"
+        }
+      ]
+    },
+    {
+      "scene": 6,
+      "title": "SOLAR POWER AT INDUSTRIAL SCALE",
+      "visuals": [
+        {
+          "url": "https://pixabay.com/photos/photovoltaic-system-solar-2742305/",
+          "sourcePage": "https://pixabay.com/photos/photovoltaic-system-solar-2742305/",
+          "creator": "mrganso",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Photovoltaic solar installation; illustrative solar deployment."
+        },
+        {
+          "url": "https://pixabay.com/photos/junction-box-mounting-product-solar-3482687/",
+          "sourcePage": "https://pixabay.com/photos/junction-box-mounting-product-solar-3482687/",
+          "creator": "thaianeoliveira",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Technician assembling photovoltaic equipment; illustrative solar manufacturing."
+        },
+        {
+          "url": "https://pixabay.com/photos/loading-column-charging-station-4077305/",
+          "sourcePage": "https://pixabay.com/photos/loading-column-charging-station-4077305/",
+          "creator": "Ralphs_Fotos",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "EV charging with solar-energy context; illustrative clean-energy system."
+        },
+        {
+          "url": "https://pixabay.com/photos/photovoltaic-system-solar-2742305/",
+          "sourcePage": "https://pixabay.com/photos/photovoltaic-system-solar-2742305/",
+          "creator": "mrganso",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Photovoltaic solar installation; illustrative solar deployment. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/junction-box-mounting-product-solar-3482687/",
+          "sourcePage": "https://pixabay.com/photos/junction-box-mounting-product-solar-3482687/",
+          "creator": "thaianeoliveira",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Technician assembling photovoltaic equipment; illustrative solar manufacturing. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/loading-column-charging-station-4077305/",
+          "sourcePage": "https://pixabay.com/photos/loading-column-charging-station-4077305/",
+          "creator": "Ralphs_Fotos",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "EV charging with solar-energy context; illustrative clean-energy system. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/photovoltaic-system-solar-2742305/",
+          "sourcePage": "https://pixabay.com/photos/photovoltaic-system-solar-2742305/",
+          "creator": "mrganso",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Photovoltaic solar installation; illustrative solar deployment. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/junction-box-mounting-product-solar-3482687/",
+          "sourcePage": "https://pixabay.com/photos/junction-box-mounting-product-solar-3482687/",
+          "creator": "thaianeoliveira",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Technician assembling photovoltaic equipment; illustrative solar manufacturing. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/loading-column-charging-station-4077305/",
+          "sourcePage": "https://pixabay.com/photos/loading-column-charging-station-4077305/",
+          "creator": "Ralphs_Fotos",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "EV charging with solar-energy context; illustrative clean-energy system. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/photovoltaic-system-solar-2742305/",
+          "sourcePage": "https://pixabay.com/photos/photovoltaic-system-solar-2742305/",
+          "creator": "mrganso",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Photovoltaic solar installation; illustrative solar deployment. (alternate crop/shot from same source image)"
+        }
+      ]
+    },
+    {
+      "scene": 7,
+      "title": "ROBOTS AND THE AUTOMATED FACTORY",
+      "visuals": [
+        {
+          "url": "https://pixabay.com/photos/robot-arm-technology-robot-arm-2791670/",
+          "sourcePage": "https://pixabay.com/photos/robot-arm-technology-robot-arm-2791670/",
+          "creator": "jarmoluk",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial robotic arm; illustrative manufacturing context."
+        },
+        {
+          "url": "https://pixabay.com/photos/industry-factory-robot-digital-8150774/",
+          "sourcePage": "https://pixabay.com/photos/industry-factory-robot-digital-8150774/",
+          "creator": "u_sf2q0n59vt",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial factory and robotics stock image; illustrative context."
+        },
+        {
+          "url": "https://pixabay.com/photos/engineer-engineering-robotics-4904915/",
+          "sourcePage": "https://pixabay.com/photos/engineer-engineering-robotics-4904915/",
+          "creator": "This_is_Engineering",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Engineer and robotics; illustrative technical workforce."
+        },
+        {
+          "url": "https://pixabay.com/photos/robot-arm-technology-robot-arm-2791670/",
+          "sourcePage": "https://pixabay.com/photos/robot-arm-technology-robot-arm-2791670/",
+          "creator": "jarmoluk",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial robotic arm; illustrative manufacturing context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/industry-factory-robot-digital-8150774/",
+          "sourcePage": "https://pixabay.com/photos/industry-factory-robot-digital-8150774/",
+          "creator": "u_sf2q0n59vt",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial factory and robotics stock image; illustrative context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/engineer-engineering-robotics-4904915/",
+          "sourcePage": "https://pixabay.com/photos/engineer-engineering-robotics-4904915/",
+          "creator": "This_is_Engineering",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Engineer and robotics; illustrative technical workforce. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/robot-arm-technology-robot-arm-2791670/",
+          "sourcePage": "https://pixabay.com/photos/robot-arm-technology-robot-arm-2791670/",
+          "creator": "jarmoluk",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial robotic arm; illustrative manufacturing context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/industry-factory-robot-digital-8150774/",
+          "sourcePage": "https://pixabay.com/photos/industry-factory-robot-digital-8150774/",
+          "creator": "u_sf2q0n59vt",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial factory and robotics stock image; illustrative context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/engineer-engineering-robotics-4904915/",
+          "sourcePage": "https://pixabay.com/photos/engineer-engineering-robotics-4904915/",
+          "creator": "This_is_Engineering",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Engineer and robotics; illustrative technical workforce. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/robot-arm-technology-robot-arm-2791670/",
+          "sourcePage": "https://pixabay.com/photos/robot-arm-technology-robot-arm-2791670/",
+          "creator": "jarmoluk",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial robotic arm; illustrative manufacturing context. (alternate crop/shot from same source image)"
+        }
+      ]
+    },
+    {
+      "scene": 8,
+      "title": "HIGH-SPEED RAIL: ENGINEERING A NATIONAL NETWORK",
+      "visuals": [
+        {
+          "url": "https://pixabay.com/photos/train-railway-high-speed-rail-china-8110653/",
+          "sourcePage": "https://pixabay.com/photos/train-railway-high-speed-rail-china-8110653/",
+          "creator": "r-q",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "High-speed train inside a modern Chinese station."
+        },
+        {
+          "url": "https://pixabay.com/photos/high-speed-train-china-white-2718526/",
+          "sourcePage": "https://pixabay.com/photos/high-speed-train-china-white-2718526/",
+          "creator": "chowbins",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "High-speed train at a Chinese railway platform."
+        },
+        {
+          "url": "https://pixabay.com/photos/train-high-speed-rail-bullet-train-8446276/",
+          "sourcePage": "https://pixabay.com/photos/train-high-speed-rail-bullet-train-8446276/",
+          "creator": "Kanenori",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Japanese Shinkansen; used only as a clearly illustrative global rail comparison, not as Chinese rolling stock."
+        },
+        {
+          "url": "https://pixabay.com/photos/train-railway-high-speed-rail-china-8110653/",
+          "sourcePage": "https://pixabay.com/photos/train-railway-high-speed-rail-china-8110653/",
+          "creator": "r-q",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "High-speed train inside a modern Chinese station. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/high-speed-train-china-white-2718526/",
+          "sourcePage": "https://pixabay.com/photos/high-speed-train-china-white-2718526/",
+          "creator": "chowbins",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "High-speed train at a Chinese railway platform. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/train-high-speed-rail-bullet-train-8446276/",
+          "sourcePage": "https://pixabay.com/photos/train-high-speed-rail-bullet-train-8446276/",
+          "creator": "Kanenori",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Japanese Shinkansen; used only as a clearly illustrative global rail comparison, not as Chinese rolling stock. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/train-railway-high-speed-rail-china-8110653/",
+          "sourcePage": "https://pixabay.com/photos/train-railway-high-speed-rail-china-8110653/",
+          "creator": "r-q",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "High-speed train inside a modern Chinese station. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/high-speed-train-china-white-2718526/",
+          "sourcePage": "https://pixabay.com/photos/high-speed-train-china-white-2718526/",
+          "creator": "chowbins",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "High-speed train at a Chinese railway platform. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/train-high-speed-rail-bullet-train-8446276/",
+          "sourcePage": "https://pixabay.com/photos/train-high-speed-rail-bullet-train-8446276/",
+          "creator": "Kanenori",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Japanese Shinkansen; used only as a clearly illustrative global rail comparison, not as Chinese rolling stock. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/train-railway-high-speed-rail-china-8110653/",
+          "sourcePage": "https://pixabay.com/photos/train-railway-high-speed-rail-china-8110653/",
+          "creator": "r-q",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "High-speed train inside a modern Chinese station. (alternate crop/shot from same source image)"
+        }
+      ]
+    },
+    {
+      "scene": 9,
+      "title": "DRONES, CAMERAS AND THE LOW-ALTITUDE ECONOMY",
+      "visuals": [
+        {
+          "url": "https://pixabay.com/photos/drone-quadcopter-flying-machine-1596333/",
+          "sourcePage": "https://pixabay.com/photos/drone-quadcopter-flying-machine-1596333/",
+          "creator": "fotolehrling",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Camera drone above farmland; illustrative civilian drone applications."
+        },
+        {
+          "url": "https://pixabay.com/photos/aerial-view-drone-quadcopter-camera-1612921/",
+          "sourcePage": "https://pixabay.com/photos/aerial-view-drone-quadcopter-camera-1612921/",
+          "creator": "Harald_Landsrath",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Aerial camera drone; illustrative drone technology."
+        },
+        {
+          "url": "https://pixabay.com/photos/drone-quadcopter-dji-uav-camera-3620334/",
+          "sourcePage": "https://pixabay.com/photos/drone-quadcopter-dji-uav-camera-3620334/",
+          "creator": "ElyPenner",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Camera-equipped quadcopter; illustrative consumer drone."
+        },
+        {
+          "url": "https://pixabay.com/photos/drone-quadcopter-flying-machine-1596333/",
+          "sourcePage": "https://pixabay.com/photos/drone-quadcopter-flying-machine-1596333/",
+          "creator": "fotolehrling",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Camera drone above farmland; illustrative civilian drone applications. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/aerial-view-drone-quadcopter-camera-1612921/",
+          "sourcePage": "https://pixabay.com/photos/aerial-view-drone-quadcopter-camera-1612921/",
+          "creator": "Harald_Landsrath",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Aerial camera drone; illustrative drone technology. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/drone-quadcopter-dji-uav-camera-3620334/",
+          "sourcePage": "https://pixabay.com/photos/drone-quadcopter-dji-uav-camera-3620334/",
+          "creator": "ElyPenner",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Camera-equipped quadcopter; illustrative consumer drone. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/drone-quadcopter-flying-machine-1596333/",
+          "sourcePage": "https://pixabay.com/photos/drone-quadcopter-flying-machine-1596333/",
+          "creator": "fotolehrling",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Camera drone above farmland; illustrative civilian drone applications. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/aerial-view-drone-quadcopter-camera-1612921/",
+          "sourcePage": "https://pixabay.com/photos/aerial-view-drone-quadcopter-camera-1612921/",
+          "creator": "Harald_Landsrath",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Aerial camera drone; illustrative drone technology. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/drone-quadcopter-dji-uav-camera-3620334/",
+          "sourcePage": "https://pixabay.com/photos/drone-quadcopter-dji-uav-camera-3620334/",
+          "creator": "ElyPenner",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Camera-equipped quadcopter; illustrative consumer drone. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/drone-quadcopter-flying-machine-1596333/",
+          "sourcePage": "https://pixabay.com/photos/drone-quadcopter-flying-machine-1596333/",
+          "creator": "fotolehrling",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Camera drone above farmland; illustrative civilian drone applications. (alternate crop/shot from same source image)"
+        }
+      ]
+    },
+    {
+      "scene": 10,
+      "title": "SEMICONDUCTORS: THE HARD FRONTIER",
+      "visuals": [
+        {
+          "url": "https://pixabay.com/photos/semiconductor-wafer-laboratory-7978337/",
+          "sourcePage": "https://pixabay.com/photos/semiconductor-wafer-laboratory-7978337/",
+          "creator": "Bing-lab",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Semiconductor wafer; illustrative chip fabrication context."
+        },
+        {
+          "url": "https://pixabay.com/photos/cpu-technology-computer-3262915/",
+          "sourcePage": "https://pixabay.com/photos/cpu-technology-computer-3262915/",
+          "creator": "Pixabay contributor",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Microchip on circuit board; illustrative semiconductor component."
+        },
+        {
+          "url": "https://pixabay.com/photos/wafer-electronics-technology-4082938/",
+          "sourcePage": "https://pixabay.com/photos/wafer-electronics-technology-4082938/",
+          "creator": "fabersam",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Silicon wafer close-up; illustrative semiconductor process."
+        },
+        {
+          "url": "https://pixabay.com/photos/semiconductor-wafer-laboratory-7978337/",
+          "sourcePage": "https://pixabay.com/photos/semiconductor-wafer-laboratory-7978337/",
+          "creator": "Bing-lab",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Semiconductor wafer; illustrative chip fabrication context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/cpu-technology-computer-3262915/",
+          "sourcePage": "https://pixabay.com/photos/cpu-technology-computer-3262915/",
+          "creator": "Pixabay contributor",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Microchip on circuit board; illustrative semiconductor component. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/wafer-electronics-technology-4082938/",
+          "sourcePage": "https://pixabay.com/photos/wafer-electronics-technology-4082938/",
+          "creator": "fabersam",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Silicon wafer close-up; illustrative semiconductor process. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/semiconductor-wafer-laboratory-7978337/",
+          "sourcePage": "https://pixabay.com/photos/semiconductor-wafer-laboratory-7978337/",
+          "creator": "Bing-lab",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Semiconductor wafer; illustrative chip fabrication context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/cpu-technology-computer-3262915/",
+          "sourcePage": "https://pixabay.com/photos/cpu-technology-computer-3262915/",
+          "creator": "Pixabay contributor",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Microchip on circuit board; illustrative semiconductor component. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/wafer-electronics-technology-4082938/",
+          "sourcePage": "https://pixabay.com/photos/wafer-electronics-technology-4082938/",
+          "creator": "fabersam",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Silicon wafer close-up; illustrative semiconductor process. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/semiconductor-wafer-laboratory-7978337/",
+          "sourcePage": "https://pixabay.com/photos/semiconductor-wafer-laboratory-7978337/",
+          "creator": "Bing-lab",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Semiconductor wafer; illustrative chip fabrication context. (alternate crop/shot from same source image)"
+        }
+      ]
+    },
+    {
+      "scene": 11,
+      "title": "RESEARCH, UNIVERSITIES AND THE TALENT PIPELINE",
+      "visuals": [
+        {
+          "url": "https://pixabay.com/photos/laboratory-scientists-research-385349/",
+          "sourcePage": "https://pixabay.com/photos/laboratory-scientists-research-385349/",
+          "creator": "felixioncool",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Scientists in a laboratory; illustrative research work."
+        },
+        {
+          "url": "https://pixabay.com/photos/technology-laboratory-research-7506133/",
+          "sourcePage": "https://pixabay.com/photos/technology-laboratory-research-7506133/",
+          "creator": "Donnie0102",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "University-style technology laboratory; illustrative research environment."
+        },
+        {
+          "url": "https://pixabay.com/photos/engineer-engineering-robotics-4904915/",
+          "sourcePage": "https://pixabay.com/photos/engineer-engineering-robotics-4904915/",
+          "creator": "This_is_Engineering",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Engineer and robotics; illustrative technical workforce."
+        },
+        {
+          "url": "https://pixabay.com/photos/laboratory-scientists-research-385349/",
+          "sourcePage": "https://pixabay.com/photos/laboratory-scientists-research-385349/",
+          "creator": "felixioncool",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Scientists in a laboratory; illustrative research work. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/technology-laboratory-research-7506133/",
+          "sourcePage": "https://pixabay.com/photos/technology-laboratory-research-7506133/",
+          "creator": "Donnie0102",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "University-style technology laboratory; illustrative research environment. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/engineer-engineering-robotics-4904915/",
+          "sourcePage": "https://pixabay.com/photos/engineer-engineering-robotics-4904915/",
+          "creator": "This_is_Engineering",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Engineer and robotics; illustrative technical workforce. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/laboratory-scientists-research-385349/",
+          "sourcePage": "https://pixabay.com/photos/laboratory-scientists-research-385349/",
+          "creator": "felixioncool",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Scientists in a laboratory; illustrative research work. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/technology-laboratory-research-7506133/",
+          "sourcePage": "https://pixabay.com/photos/technology-laboratory-research-7506133/",
+          "creator": "Donnie0102",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "University-style technology laboratory; illustrative research environment. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/engineer-engineering-robotics-4904915/",
+          "sourcePage": "https://pixabay.com/photos/engineer-engineering-robotics-4904915/",
+          "creator": "This_is_Engineering",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Engineer and robotics; illustrative technical workforce. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/laboratory-scientists-research-385349/",
+          "sourcePage": "https://pixabay.com/photos/laboratory-scientists-research-385349/",
+          "creator": "felixioncool",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Scientists in a laboratory; illustrative research work. (alternate crop/shot from same source image)"
+        }
+      ]
+    },
+    {
+      "scene": 12,
+      "title": "THE PRICE OF SCALE",
+      "visuals": [
+        {
+          "url": "https://pixabay.com/photos/factory-smokestack-industrial-power-19670/",
+          "sourcePage": "https://pixabay.com/photos/factory-smokestack-industrial-power-19670/",
+          "creator": "PublicDomainPictures",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial smokestack; illustrative environmental cost of industrial scale."
+        },
+        {
+          "url": "https://pixabay.com/photos/pollution-smoke-environment-smog-2043666/",
+          "sourcePage": "https://pixabay.com/photos/pollution-smoke-environment-smog-2043666/",
+          "creator": "nikolabelopitov",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial emissions; illustrative environmental impact."
+        },
+        {
+          "url": "https://pixabay.com/photos/pollution-smokestack-industrial-1809580/",
+          "sourcePage": "https://pixabay.com/photos/pollution-smokestack-industrial-1809580/",
+          "creator": "cwizner",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial smokestacks; illustrative overcapacity and emissions context."
+        },
+        {
+          "url": "https://pixabay.com/photos/factory-smokestack-industrial-power-19670/",
+          "sourcePage": "https://pixabay.com/photos/factory-smokestack-industrial-power-19670/",
+          "creator": "PublicDomainPictures",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial smokestack; illustrative environmental cost of industrial scale. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/pollution-smoke-environment-smog-2043666/",
+          "sourcePage": "https://pixabay.com/photos/pollution-smoke-environment-smog-2043666/",
+          "creator": "nikolabelopitov",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial emissions; illustrative environmental impact. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/pollution-smokestack-industrial-1809580/",
+          "sourcePage": "https://pixabay.com/photos/pollution-smokestack-industrial-1809580/",
+          "creator": "cwizner",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial smokestacks; illustrative overcapacity and emissions context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/factory-smokestack-industrial-power-19670/",
+          "sourcePage": "https://pixabay.com/photos/factory-smokestack-industrial-power-19670/",
+          "creator": "PublicDomainPictures",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial smokestack; illustrative environmental cost of industrial scale. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/pollution-smoke-environment-smog-2043666/",
+          "sourcePage": "https://pixabay.com/photos/pollution-smoke-environment-smog-2043666/",
+          "creator": "nikolabelopitov",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial emissions; illustrative environmental impact. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/pollution-smokestack-industrial-1809580/",
+          "sourcePage": "https://pixabay.com/photos/pollution-smokestack-industrial-1809580/",
+          "creator": "cwizner",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial smokestacks; illustrative overcapacity and emissions context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/factory-smokestack-industrial-power-19670/",
+          "sourcePage": "https://pixabay.com/photos/factory-smokestack-industrial-power-19670/",
+          "creator": "PublicDomainPictures",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial smokestack; illustrative environmental cost of industrial scale. (alternate crop/shot from same source image)"
+        }
+      ]
+    },
+    {
+      "scene": 13,
+      "title": "THE GLOBAL REACTION",
+      "visuals": [
+        {
+          "url": "https://pixabay.com/photos/shipping-container-terminal-4319421/",
+          "sourcePage": "https://pixabay.com/photos/shipping-container-terminal-4319421/",
+          "creator": "soualexandrerocha",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Aerial cargo port; illustrative logistics context."
+        },
+        {
+          "url": "https://pixabay.com/photos/container-storage-cargo-shipping-163868/",
+          "sourcePage": "https://pixabay.com/photos/container-storage-cargo-shipping-163868/",
+          "creator": "PublicDomainPictures",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Cargo terminal and containers; illustrative global trade context."
+        },
+        {
+          "url": "https://pixabay.com/photos/container-shipping-port-ship-4465494/",
+          "sourcePage": "https://pixabay.com/photos/container-shipping-port-ship-4465494/",
+          "creator": "Engin_Akyurt",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Shipping containers and port; illustrative global supply chains."
+        },
+        {
+          "url": "https://pixabay.com/photos/shipping-container-terminal-4319421/",
+          "sourcePage": "https://pixabay.com/photos/shipping-container-terminal-4319421/",
+          "creator": "soualexandrerocha",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Aerial cargo port; illustrative logistics context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/container-storage-cargo-shipping-163868/",
+          "sourcePage": "https://pixabay.com/photos/container-storage-cargo-shipping-163868/",
+          "creator": "PublicDomainPictures",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Cargo terminal and containers; illustrative global trade context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/container-shipping-port-ship-4465494/",
+          "sourcePage": "https://pixabay.com/photos/container-shipping-port-ship-4465494/",
+          "creator": "Engin_Akyurt",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Shipping containers and port; illustrative global supply chains. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/shipping-container-terminal-4319421/",
+          "sourcePage": "https://pixabay.com/photos/shipping-container-terminal-4319421/",
+          "creator": "soualexandrerocha",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Aerial cargo port; illustrative logistics context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/container-storage-cargo-shipping-163868/",
+          "sourcePage": "https://pixabay.com/photos/container-storage-cargo-shipping-163868/",
+          "creator": "PublicDomainPictures",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Cargo terminal and containers; illustrative global trade context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/container-shipping-port-ship-4465494/",
+          "sourcePage": "https://pixabay.com/photos/container-shipping-port-ship-4465494/",
+          "creator": "Engin_Akyurt",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Shipping containers and port; illustrative global supply chains. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/shipping-container-terminal-4319421/",
+          "sourcePage": "https://pixabay.com/photos/shipping-container-terminal-4319421/",
+          "creator": "soualexandrerocha",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Aerial cargo port; illustrative logistics context. (alternate crop/shot from same source image)"
+        }
+      ]
+    },
+    {
+      "scene": 14,
+      "title": "WHAT CHINA HAS — AND WHAT IT STILL NEEDS",
+      "visuals": [
+        {
+          "url": "https://pixabay.com/photos/shenzhen-city-night-building-china-6011450/",
+          "sourcePage": "https://pixabay.com/photos/shenzhen-city-night-building-china-6011450/",
+          "creator": "axdaohang",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Shenzhen skyline at night."
+        },
+        {
+          "url": "https://pixabay.com/photos/shenzhen-city-cityscape-china-2653665/",
+          "sourcePage": "https://pixabay.com/photos/shenzhen-city-cityscape-china-2653665/",
+          "creator": "buihuy89",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Shenzhen skyline; illustrative technology cluster context."
+        },
+        {
+          "url": "https://pixabay.com/photos/shenzhen-skyline-skyscraper-7422575/",
+          "sourcePage": "https://pixabay.com/photos/shenzhen-skyline-skyscraper-7422575/",
+          "creator": "gdmoonkiller",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Shenzhen skyline; illustrative urban technology economy."
+        },
+        {
+          "url": "https://pixabay.com/photos/shenzhen-city-night-building-china-6011450/",
+          "sourcePage": "https://pixabay.com/photos/shenzhen-city-night-building-china-6011450/",
+          "creator": "axdaohang",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Shenzhen skyline at night. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/shenzhen-city-cityscape-china-2653665/",
+          "sourcePage": "https://pixabay.com/photos/shenzhen-city-cityscape-china-2653665/",
+          "creator": "buihuy89",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Shenzhen skyline; illustrative technology cluster context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/shenzhen-skyline-skyscraper-7422575/",
+          "sourcePage": "https://pixabay.com/photos/shenzhen-skyline-skyscraper-7422575/",
+          "creator": "gdmoonkiller",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Shenzhen skyline; illustrative urban technology economy. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/shenzhen-city-night-building-china-6011450/",
+          "sourcePage": "https://pixabay.com/photos/shenzhen-city-night-building-china-6011450/",
+          "creator": "axdaohang",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Shenzhen skyline at night. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/shenzhen-city-cityscape-china-2653665/",
+          "sourcePage": "https://pixabay.com/photos/shenzhen-city-cityscape-china-2653665/",
+          "creator": "buihuy89",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Shenzhen skyline; illustrative technology cluster context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/shenzhen-skyline-skyscraper-7422575/",
+          "sourcePage": "https://pixabay.com/photos/shenzhen-skyline-skyscraper-7422575/",
+          "creator": "gdmoonkiller",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Shenzhen skyline; illustrative urban technology economy. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/shenzhen-city-night-building-china-6011450/",
+          "sourcePage": "https://pixabay.com/photos/shenzhen-city-night-building-china-6011450/",
+          "creator": "axdaohang",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Shenzhen skyline at night. (alternate crop/shot from same source image)"
+        }
+      ]
+    },
+    {
+      "scene": 15,
+      "title": "THE NEXT DECADE: WHO BUILDS THE FUTURE?",
+      "visuals": [
+        {
+          "url": "https://pixabay.com/photos/industry-factory-robot-digital-8150774/",
+          "sourcePage": "https://pixabay.com/photos/industry-factory-robot-digital-8150774/",
+          "creator": "u_sf2q0n59vt",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial factory and robotics stock image; illustrative context."
+        },
+        {
+          "url": "https://pixabay.com/photos/engineer-engineering-robotics-4904915/",
+          "sourcePage": "https://pixabay.com/photos/engineer-engineering-robotics-4904915/",
+          "creator": "This_is_Engineering",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Engineer and robotics; illustrative technical workforce."
+        },
+        {
+          "url": "https://pixabay.com/photos/shenzhen-skyline-skyscraper-7422575/",
+          "sourcePage": "https://pixabay.com/photos/shenzhen-skyline-skyscraper-7422575/",
+          "creator": "gdmoonkiller",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Shenzhen skyline; illustrative urban technology economy."
+        },
+        {
+          "url": "https://pixabay.com/photos/industry-factory-robot-digital-8150774/",
+          "sourcePage": "https://pixabay.com/photos/industry-factory-robot-digital-8150774/",
+          "creator": "u_sf2q0n59vt",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial factory and robotics stock image; illustrative context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/engineer-engineering-robotics-4904915/",
+          "sourcePage": "https://pixabay.com/photos/engineer-engineering-robotics-4904915/",
+          "creator": "This_is_Engineering",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Engineer and robotics; illustrative technical workforce. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/shenzhen-skyline-skyscraper-7422575/",
+          "sourcePage": "https://pixabay.com/photos/shenzhen-skyline-skyscraper-7422575/",
+          "creator": "gdmoonkiller",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Shenzhen skyline; illustrative urban technology economy. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/industry-factory-robot-digital-8150774/",
+          "sourcePage": "https://pixabay.com/photos/industry-factory-robot-digital-8150774/",
+          "creator": "u_sf2q0n59vt",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial factory and robotics stock image; illustrative context. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/engineer-engineering-robotics-4904915/",
+          "sourcePage": "https://pixabay.com/photos/engineer-engineering-robotics-4904915/",
+          "creator": "This_is_Engineering",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Engineer and robotics; illustrative technical workforce. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/shenzhen-skyline-skyscraper-7422575/",
+          "sourcePage": "https://pixabay.com/photos/shenzhen-skyline-skyscraper-7422575/",
+          "creator": "gdmoonkiller",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Shenzhen skyline; illustrative urban technology economy. (alternate crop/shot from same source image)"
+        },
+        {
+          "url": "https://pixabay.com/photos/industry-factory-robot-digital-8150774/",
+          "sourcePage": "https://pixabay.com/photos/industry-factory-robot-digital-8150774/",
+          "creator": "u_sf2q0n59vt",
+          "provider": "Pixabay",
+          "license": "Pixabay Content License",
+          "licenseUrl": "https://pixabay.com/service/license-summary/",
+          "note": "Industrial factory and robotics stock image; illustrative context. (alternate crop/shot from same source image)"
+        }
+      ]
+    }
+  ]
+}
