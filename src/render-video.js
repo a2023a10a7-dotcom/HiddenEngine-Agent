@@ -282,8 +282,7 @@ async function main() {
     await writeFile(svg, overlaySvg(scene, i, script.scenes.length));
     const selected = selection.scenes.find(item => item.scene === i+1)?.selectedImageIds || [];
     if (!selected.length) throw new Error("Scene " + (i+1) + " has no approved visual selections.");
-    const hookIds = i===0 ? (selection.scenes.find(item => item.scene === 7)?.selectedImageIds || []).slice(0,4) : [];
-    const renderIds = [...hookIds,...selected];
+    const renderIds = [...selected];
     const imageFiles = [];
     for (const id of renderIds) {
       const asset = assetById.get(id);
@@ -294,7 +293,7 @@ async function main() {
       if (!imageFile) {
         imageFile = path.join(OUT, id + ".jpg");
         if (!await stat(imageFile).then(()=>true).catch(()=>false)) {
-          const imageUrl = asset.directUrl || await pixabayImageUrl(asset.sourcePage);
+          const imageUrl = asset.directUrl || asset.largeImageURL || await pixabayImageUrl(asset.sourcePage);
           await download(imageUrl, imageFile);
         }
         downloadedAssetFiles.set(assetKey, imageFile);
