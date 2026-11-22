@@ -8,7 +8,7 @@ if(!projectId||!/^[a-z0-9-]+$/.test(projectId)) throw new Error("PROJECT_ID miss
 if(!apiKey) throw new Error("PIXABAY_API_KEY is required");
 const root=path.join("production","projects",projectId);
 const out=path.join("dist",projectId);
-const stop=new Set(["with","from","that","this","into","over","under","china","modern","technology"]);
+const stop=new Set(["with","from","that","this","into","over","under","china","modern","technology","factory","industrial","manufacturing","production","assembly","workers","equipment","plant","market","product","line","system","business","city","global","aerial","advanced","company","industry","facility","machine","machines","process"]);
 function terms(s){return String(s||"").toLowerCase().split(/[^a-z0-9]+/).filter(x=>x.length>2&&!stop.has(x));}
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function planNarrationShots(scene){
@@ -98,12 +98,19 @@ async function main(){
    u.searchParams.set("safesearch","true");u.searchParams.set("per_page","50");
    const data=await fetchJson(u);
    const tokens=terms(shot.visualQuery);
+   const requirementGroups=Array.isArray(scene.visual_requirements)?scene.visual_requirements:[];
    const candidates=(data.hits||[]).filter(hit=>hit.largeImageURL&&hit.webformatURL&&hit.pageURL&&!seen.has(hit.id)
      &&(hit.imageWidth||0)>=1280&&(hit.imageHeight||0)>=720).map(hit=>{
       const tags=String(hit.tags||"").toLowerCase();
-      const score=tokens.reduce((n,t)=>n+(tags.includes(t)?(t.length>5?3:1):0),0);
-      return {hit,score};
-     }).filter(x=>x.score>=1).sort((a,b)=>b.score-a.score||(b.hit.imageWidth*b.hit.imageHeight)-(a.hit.imageWidth*a.hit.imageHeight));
+      const queryMatches=tokens.filter(t=>tags.includes(t));
+      const groupMatches=requirementGroups.map(group=>(Array.isArray(group)?group:[]).some(term=>{
+       const value=String(term||"").toLowerCase();
+       return value && (tags.includes(value)||terms(value).some(t=>tags.includes(t)));
+      }));
+      const score=queryMatches.reduce((n,t)=>n+(t.length>5?5:3),0)+groupMatches.filter(Boolean).length*2;
+      return {hit,score,queryMatches,groupMatches};
+     }).filter(x=>x.queryMatches.length>=1&&(!scene.requireAllVisualGroups||x.groupMatches.every(Boolean)))
+     .sort((a,b)=>b.score-a.score||(b.hit.imageWidth*b.hit.imageHeight)-(a.hit.imageWidth*a.hit.imageHeight));
    const chosen=candidates[0];
    if(!chosen) throw new Error("No relevant 1280x720+ Pixabay image for scene "+(i+1)+" shot "+shot.shot+": "+shot.visualQuery+". Retry with broader visual_queries.");
    const h=chosen.hit,id="S"+String(i+1).padStart(2,"0")+"-SH"+String(shot.shot).padStart(3,"0");
@@ -116,15 +123,19 @@ async function main(){
    const item={id,scene:i+1,shot:shot.shot,creator:h.user||"Pixabay contributor",tags:h.tags||"",
     width:h.imageWidth,height:h.imageHeight,sourcePage:h.pageURL,previewFile:id+".jpg",
     largeImageURL:h.largeImageURL,license:"Pixabay Content License",licenseUrl:"https://pixabay.com/service/license-summary/",
-    searchQuery:shot.visualQuery,relevanceScore:chosen.score,narrationExcerpt:shot.narrationExcerpt,visualReason:shot.reason};
+    searchQuery:shot.visualQuery,relevanceScore:chosen.score,matchedQueryTerms:chosen.queryMatches,matchedVisualRequirementGroups:chosen.groupMatches.map((matched,index)=>matched?index+1:null).filter(Boolean),narrationExcerpt:shot.narrationExcerpt,visualReason:shot.reason};
    assets.push(item);sheetItems.push({id,scene:i+1,tags:item.tags,file:preview});
-   selectedShots.push({...shot,imageId:id});
+   selectedShots.push({...shot,imageId:id,relevanceScore:chosen.score,matchedQueryTerms:chosen.queryMatches});
   }
   selection.push({scene:i+1,title:scene.title,selectedImageIds:selectedShots.map(x=>x.imageId),shots:selectedShots});
   console.log("Scene "+(i+1)+": AI planned "+selectedShots.length+" narration-matched shots; target ~5 seconds each.");
  }
- await writeFile(path.join(root,"visual-selection.json"),JSON.stringify({projectId,title:script.title,source:"Gemini 2.5 Flash segmented narration into ~5-second shots and generated per-shot visual queries; Pixabay results relevance-scored by tags",scenes:selection},null,2)+"\n");
- await writeFile(path.join(root,"visual-assets.json"),JSON.stringify({projectId,source:"Pixabay API search; each image matched to an AI-planned narration excerpt",assetCount:assets.length,assets},null,2)+"\n");
+ const selectionManifest={projectId,title:script.title,source:"Narration segmented into ~5-second shots; Pixabay candidates must match at least one non-generic query term, are scored against scene visual requirements, and are globally de-duplicated.",scenes:selection};
+ const assetManifest={projectId,source:"Pixabay API search; unique assets matched to narration excerpts with query-term and visual-requirement relevance evidence.",assetCount:assets.length,uniqueAssetCount:new Set(assets.map(asset=>asset.sourcePage)).size,assets};
+ await writeFile(path.join(root,"visual-selection.json"),JSON.stringify(selectionManifest,null,2)+"\n");
+ await writeFile(path.join(root,"visual-assets.json"),JSON.stringify(assetManifest,null,2)+"\n");
+ await writeFile(path.join(out,"visual-selection.json"),JSON.stringify(selectionManifest,null,2)+"\n");
+ await writeFile(path.join(out,"visual-assets.json"),JSON.stringify(assetManifest,null,2)+"\n");
  const cols=5,cellW=320,cellH=180,labelH=48,gap=10,margin=10,rows=Math.ceil(sheetItems.length/cols);
  const parts=['<svg xmlns="http://www.w3.org/2000/svg" width="'+(margin*2+cols*cellW+(cols-1)*gap)+'" height="'+(margin*2+rows*(cellH+labelH)+(rows-1)*gap)+'">','<rect width="100%" height="100%" fill="#090b0e"/>'];
  for(let i=0;i<sheetItems.length;i++){
@@ -140,6 +151,6 @@ async function main(){
  await writeFile(svg,parts.join(""));
  await new Promise((resolve,reject)=>{const p=spawn("rsvg-convert",["-f","png","-o",path.join(out,"contact-sheet.png"),svg],{stdio:"inherit"});p.on("error",reject);p.on("close",c=>c===0?resolve():reject(new Error("rsvg-convert failed")));});
  await new Promise((resolve,reject)=>{const p=spawn("ffmpeg",["-y","-i",path.join(out,"contact-sheet.png"),"-frames:v","1","-q:v","2",path.join(out,"contact-sheet.jpg")],{stdio:"inherit"});p.on("error",reject);p.on("close",c=>c===0?resolve():reject(new Error("contact sheet JPEG failed")));});
- console.log("Prepared "+assets.length+" AI-selected, narration-matched images (target average 5 seconds) and contact sheet.");
+ const uniqueAssetCount=new Set(assets.map(asset=>asset.sourcePage)).size;\n if(uniqueAssetCount!==assets.length) throw new Error("Visual selection contains duplicate source pages: "+uniqueAssetCount+"/"+assets.length);\n console.log("Prepared "+assets.length+" unique AI-selected images with query relevance evidence (target average 5 seconds) and contact sheet.");
 }
 main().catch(e=>{console.error(e);process.exit(1);});
