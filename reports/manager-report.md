@@ -1,6 +1,6 @@
 # The Hidden Engine — Editorial Manager
 
-Generated: 2026-11-22T10:38:04.308Z
+Generated: 2026-11-22T11:06:24.558Z
 Articles assessed: 50
 Recommendations: 0
 
