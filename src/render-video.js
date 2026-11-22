@@ -307,6 +307,11 @@ async function main() {
     const selected = selection.scenes.find(item => item.scene === i+1)?.selectedImageIds || [];
     if (!selected.length) throw new Error("Scene " + (i+1) + " has no approved visual selections.");
     const renderIds = [...selected];
+    if (new Set(renderIds).size !== renderIds.length) throw new Error("Scene " + (i+1) + " repeats a selected image ID.");
+    const sceneAssets = renderIds.map(id => assetById.get(id));
+    if (sceneAssets.some(asset => !asset || asset.scene !== i+1 || Number(asset.relevanceScore || 0) < 3)) {
+      throw new Error("Scene " + (i+1) + " contains a missing, misassigned, or low-relevance visual asset.");
+    }
     const imageFiles = [];
     for (const id of renderIds) {
       const asset = assetById.get(id);
@@ -435,6 +440,9 @@ async function main() {
   await run("ffmpeg",["-y","-i",mixed,"-c","copy",output+".tmp.mp4"]);
   await writeFile(path.join(OUT,"visual-credits.json"),JSON.stringify(credits,null,2)+"\n");
   await (await import("node:fs/promises")).rename(output+".tmp.mp4",output);
+  const uniqueImageCount=new Set(credits.map(item=>item.imageId)).size;
+  if(uniqueImageCount!==credits.length) throw new Error("Visual QA failed: repeated source image IDs across scenes ("+uniqueImageCount+"/"+credits.length+").");
+  if(visualAudit.some(item=>new Set(item.selectedImageIds).size!==item.selectedImageIds.length||item.renderedImages<6)) throw new Error("Visual QA failed: every scene requires at least six distinct, narration-matched images.");
   await writeFile(path.join(OUT,"VISUAL-AUDIT.json"),JSON.stringify(visualAudit,null,2)+"\n");
   await writeFile(path.join(OUT,"CREDITS.md"),[
     "# Research sources","",
@@ -452,7 +460,7 @@ async function main() {
   await writeFile(path.join(OUT,"README.txt"),[
     "The Hidden Engine documentary render",
     "Narration: Local Piper neural TTS (no paid API quota required).",
-    "Visuals: individually selected narration-matched still images, with animated camera movement, crossfades, and original data overlays.",
+    "Visuals: unique narration-matched still images selected with query and scene-requirement relevance gates, with animated camera movement, crossfades, and original data overlays.",
     "Identity: near-black and charcoal, white/ivory typography, copper #C86D2D accents, restrained documentary-investigative overlays.",
     "Review all claims, pronunciations, visual relevance, licenses, and credits before publication.",
     "Audio: original low-level synthesized ambient underscore with restrained transition accents. No automatic YouTube upload."
@@ -463,7 +471,7 @@ async function main() {
   if (finalDuration < 13*60 || finalDuration > 18*60) throw new Error("Final runtime "+finalDuration.toFixed(1)+"s is outside the 13–18 minute documentary target.");
   if (visualAudit.some(x=>x.renderedImages < 1 || x.actualAverageShotDurationSeconds > 6.5)) throw new Error("Visual pacing QA failed: every scene needs distinct narration-matched shots averaging no more than 6.5 seconds.");
   await access(path.join(OUT,"contact-sheet.jpg")).catch(()=>{throw new Error("Final contact-sheet.jpg is missing.");});
-  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:finalDuration,targetDurationMinutes:15,acceptedDurationRangeMinutes:[13,18],audio:true,scenes:clips.length,selectedImages:credits.length,imagesPerScene:Math.min(...visualAudit.map(x=>x.renderedImages)),visualChangeTargetSeconds:5,animatedImageScenes:visualAudit.filter(x=>x.animated).length,originalMusic:true,ambientMusicBed:true,musicTargetDb:-28,transitionWhooshes:true,numberClicks:true,contactSheet:true},null,2)+"\n");
+  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:finalDuration,targetDurationMinutes:15,acceptedDurationRangeMinutes:[13,18],audio:true,scenes:clips.length,selectedImages:credits.length,uniqueImages:uniqueImageCount,uniqueImageRatio:Number((uniqueImageCount/Math.max(1,credits.length)).toFixed(3)),imagesPerScene:Math.min(...visualAudit.map(x=>x.renderedImages)),visualRelevanceGate:true,visualChangeTargetSeconds:5,animatedImageScenes:visualAudit.filter(x=>x.animated).length,originalMusic:true,ambientMusicBed:true,musicTargetDb:-28,transitionWhooshes:true,numberClicks:true,contactSheet:true},null,2)+"\n");
   console.log("Rendered and passed technical QA: "+output);
 }
 main().catch(error=>{console.error("Render failed:",error);process.exit(1);});
