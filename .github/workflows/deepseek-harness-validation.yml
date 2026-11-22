@@ -2,7 +2,7 @@ name: DeepSeek Harness Integration Validation
 
 on:
   push:
-    branches: [main, integration/deepseek-harness]
+    branches: [main]
     paths:
       - "integrations/deepseek-harness/**"
       - "package.json"
