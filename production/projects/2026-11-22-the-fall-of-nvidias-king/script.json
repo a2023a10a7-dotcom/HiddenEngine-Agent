@@ -1,0 +1,432 @@
+{
+  "title": "THE FALL OF NVIDIA'S KING: How Jensen Huang Lost the Company He Built",
+  "language": "en",
+  "voice": "en-us",
+  "target_duration_minutes": 15,
+  "description": "An evidence-led English-language corporate crisis documentary about Jensen Huang's resignation, NVIDIA's board decision not to reinstate him, export-control scrutiny, national-security questions, governance and succession. Allegations are attributed and unresolved questions remain clearly identified.",
+  "sources": [
+    {
+      "name": "NVIDIA / SEC Form 8-K",
+      "supports": "Accepted resignation and interim CEO appointment",
+      "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000082/nvda-20261111.htm"
+    },
+    {
+      "name": "NVIDIA Board statement, November 8, 2026",
+      "supports": "The board's stated independent investigation and its then-current position",
+      "url": "https://nvidianews.nvidia.com/news/statement-from-nvidia-board-of-directors"
+    },
+    {
+      "name": "NVIDIA CEO transition announcement",
+      "supports": "Official resignation and interim succession announcement",
+      "url": "https://nvidianews.nvidia.com/news/nvidia-announces-ceo-transition"
+    },
+    {
+      "name": "U.S. House Intelligence Committee",
+      "supports": "Announced transcribed interviews scheduled for December 1 and 2",
+      "url": "https://intelligence.house.gov/2026/11/17/jensen-huang-and-nvidia-agree-to-appear-before-congress/"
+    },
+    {
+      "name": "Associated Press",
+      "supports": "Board refusal to reinstate Huang and current developments",
+      "url": "https://apnews.com/article/3026bcbe04ab57b844884382e583422a"
+    },
+    {
+      "name": "Reuters Fact Check",
+      "supports": "Verification that viral purported employee letter was fabricated",
+      "url": "https://www.reuters.com/fact-check/fake-letter-calls-nvidia-boards-resignation-over-huang-exit-2026-11-20/"
+    }
+  ],
+  "scenes": [
+    {
+      "title": "THE FOUNDER IS GONE",
+      "subtitle": "NVIDIA • NOVEMBER 2026",
+      "narration": "For more than three decades, Jensen Huang was the public face of NVIDIA. The black leather jacket. The packed keynote arenas. The green logo. And behind that carefully recognizable image, a company that became one of the most important suppliers in the artificial intelligence economy. Its processors power data centers, train advanced models, and sit inside the infrastructure that technology companies are racing to build. Then, in November twenty twenty-six, NVIDIA announced that Huang had resigned as its president and chief executive officer, effective immediately. The board appointed its longtime finance chief, Colette Kress, as interim CEO. Five days later, the board delivered a second message: it did not intend to bring Huang back. This was not a routine retirement, and it was not simply a change of title. It was a sudden break between one of the most recognizable founders in technology and the company he had led since its creation. The story raises a much larger question. When a founder becomes inseparable from a corporation, who has the power to decide when the relationship is over? And can the company keep moving when the person who defined its identity is no longer in charge?",
+      "visual_queries": [
+        "Jensen Huang NVIDIA keynote stage official event",
+        "NVIDIA headquarters Santa Clara exterior",
+        "NVIDIA GPU data center server racks",
+        "NVIDIA logo corporate campus sign"
+      ],
+      "visual_requirements": [
+        [
+          "Jensen Huang",
+          "NVIDIA"
+        ],
+        [
+          "keynote",
+          "stage"
+        ],
+        [
+          "NVIDIA",
+          "headquarters"
+        ],
+        [
+          "GPU",
+          "data center"
+        ]
+      ],
+      "visual": {
+        "type": "timeline",
+        "source_label": "THE LEADERSHIP BREAK • NOVEMBER 2026",
+        "events": [
+          {
+            "date": "NOV 11",
+            "label": "RESIGNATION"
+          },
+          {
+            "date": "NOV 12",
+            "label": "ANNOUNCED"
+          },
+          {
+            "date": "NOV 17",
+            "label": "NO RETURN"
+          }
+        ]
+      },
+      "keywords": [
+        "FOUNDER",
+        "RESIGNATION",
+        "BOARD"
+      ]
+    },
+    {
+      "title": "THE OFFICIAL BREAK",
+      "subtitle": "A resignation accepted by the board",
+      "narration": "The formal record is unusually direct. In a filing with the United States Securities and Exchange Commission, NVIDIA said its board had accepted Huang's resignation as president, chief executive officer and a member of the board, effective immediately. The filing identifies November eleventh as the date of the board action. The company announced the transition publicly the following day. Colette Kress, NVIDIA's executive vice president and chief financial officer, was appointed interim chief executive while directors began a search for a permanent successor. Kress had been the company's finance chief since twenty thirteen. The board also appointed Harvey C. Jones as its chair. These details matter because they establish what actually happened, rather than what headlines or social media might imply. NVIDIA described the departure as a resignation. The board accepted it. The public filing does not describe a formal dismissal. But the distinction between a resignation and a board-approved exit does not make the transition ordinary. The timing, the speed of the announcement, and the board's later refusal to reinstate Huang show that directors were prepared to assert authority over the founder. For a company whose public identity had been built around one person, this was a defining governance moment.",
+      "visual_queries": [
+        "SEC EDGAR filing document computer screen",
+        "NVIDIA Colette Kress CFO official portrait",
+        "NVIDIA Harvey C Jones board chair portrait",
+        "NVIDIA board meeting corporate headquarters"
+      ],
+      "visual_requirements": [
+        [
+          "SEC",
+          "filing",
+          "document"
+        ],
+        [
+          "Colette Kress",
+          "NVIDIA"
+        ],
+        [
+          "Harvey Jones",
+          "NVIDIA"
+        ],
+        [
+          "board",
+          "corporate"
+        ]
+      ],
+      "visual": {
+        "type": "timeline",
+        "source_label": "OFFICIAL TRANSITION",
+        "events": [
+          {
+            "date": "NOV 11",
+            "label": "BOARD ACCEPTS"
+          },
+          {
+            "date": "NOV 12",
+            "label": "PUBLIC NOTICE"
+          },
+          {
+            "date": "INTERIM",
+            "label": "COLETTE KRESS"
+          }
+        ]
+      },
+      "keywords": [
+        "SEC FILING",
+        "INTERIM CEO",
+        "GOVERNANCE"
+      ]
+    },
+    {
+      "title": "THE CRISIS BEHIND THE HEADLINES",
+      "subtitle": "What is documented — and what remains unproven",
+      "narration": "The resignation followed a week of intense scrutiny over Huang's personal conduct and media reports involving a woman described as a suspected Chinese intelligence asset. Those descriptions require care. A reported suspicion is not proof of espionage. An allegation is not a finding that classified information was transferred. And a corporate investigation is not a criminal conviction. NVIDIA's board said it was initiating an independent investigation after recent reporting that Huang had been the target of a foreign intelligence effort. In the same statement, the board said it had no reason to believe that national security or NVIDIA secrets had been compromised. Huang separately acknowledged serious mistakes in his personal life. The company has not publicly established that an intelligence operation succeeded, or that company information was improperly disclosed. The central fact is narrower, but still consequential: the board opened an investigation, the CEO resigned, and NVIDIA entered a leadership transition. That is enough to make this a major corporate story without presenting unproven claims as fact. A responsible account must keep three categories separate: what the company has formally disclosed, what journalists have reported, and what investigators have yet to establish. When the stakes involve a global technology supplier and national security, precision is not a technicality. It is the difference between reporting and speculation.",
+      "visual_queries": [
+        "NVIDIA board statement official newsroom webpage",
+        "NVIDIA corporate headquarters exterior dusk",
+        "official news press conference microphones Washington",
+        "redacted regulatory document investigation paperwork"
+      ],
+      "visual_requirements": [
+        [
+          "NVIDIA",
+          "board statement"
+        ],
+        [
+          "corporate",
+          "headquarters"
+        ],
+        [
+          "press",
+          "conference"
+        ],
+        [
+          "document",
+          "investigation"
+        ]
+      ],
+      "visual": {
+        "type": "comparison",
+        "source_label": "EVIDENCE STATUS",
+        "items": [
+          {
+            "label": "Board investigation announced",
+            "percent": 100,
+            "value": "CONFIRMED"
+          },
+          {
+            "label": "Secrets compromised",
+            "percent": 0,
+            "value": "NOT ESTABLISHED"
+          }
+        ]
+      },
+      "keywords": [
+        "REPORTED",
+        "INVESTIGATED",
+        "NOT ESTABLISHED"
+      ]
+    },
+    {
+      "title": "WHY THE CHIPS MATTER",
+      "subtitle": "A commercial product with strategic consequences",
+      "narration": "To understand why this crisis reaches beyond the private life of one executive, look at what NVIDIA sells. Its advanced processors are central to the infrastructure used to train and run powerful artificial intelligence systems. They are among the most valuable components in the technology supply chain. That makes them commercial products, but also strategic assets. The United States has imposed export controls to restrict China's access to certain advanced computing chips. The policy is intended to limit the ability of foreign military and intelligence organizations to obtain computing power that could have national-security consequences. For NVIDIA, the rules create a difficult business environment. China is a major technology market, but the company must comply with restrictions on what products can be sold, to whom, and under what conditions. The questions now facing lawmakers are not abstract. How are end users verified? How do suppliers monitor intermediaries? What happens when a product is diverted after it leaves an authorized channel? And what responsibility does a chip designer have when its technology moves through a global network of distributors and cloud providers? These questions are bigger than one CEO. They go to the operating model of the entire advanced semiconductor industry. They also explain why a leadership crisis at NVIDIA quickly became a matter of national policy.",
+      "visual_queries": [
+        "NVIDIA Blackwell GPU chip close up official",
+        "NVIDIA AI data center rack systems",
+        "semiconductor wafer fabrication cleanroom",
+        "US China semiconductor export controls government building"
+      ],
+      "visual_requirements": [
+        [
+          "NVIDIA",
+          "GPU",
+          "chip"
+        ],
+        [
+          "data center",
+          "server"
+        ],
+        [
+          "semiconductor",
+          "wafer"
+        ],
+        [
+          "United States",
+          "China",
+          "government"
+        ]
+      ],
+      "visual": {
+        "type": "metric",
+        "source_label": "THE STRATEGIC ASSET",
+        "value": "AI GPUs",
+        "detail": "Advanced computing • Export-control scrutiny"
+      },
+      "keywords": [
+        "CHIPS",
+        "EXPORT CONTROLS",
+        "NATIONAL SECURITY"
+      ]
+    },
+    {
+      "title": "WASHINGTON WANTS ANSWERS",
+      "subtitle": "Congressional scrutiny moves to the next stage",
+      "narration": "The political response has moved beyond public statements. House committees announced that Huang had agreed to appear for a transcribed interview on December first. NVIDIA general counsel Tim Teter was scheduled to appear the following day. The committee chairmen said they wanted answers about the company's role in a potential breach of national security, including whether advanced chips reached restricted actors and what role a suspected intelligence asset may have played. Those are the lawmakers' stated concerns. They are not findings of wrongdoing. The interviews matter because they could clarify what the company knew, what controls it operated, and how officials assess the risk of diversion. Separately, reporting has described investigative scrutiny by California authorities concerning chip transfers and possible disclosures. The exact scope and outcome of those inquiries must be checked against official documents as they develop. For NVIDIA, the consequences may extend well beyond the CEO search. The company could face tougher compliance requirements, closer scrutiny of its sales channels, and new questions from customers and investors. For Washington, the case tests whether export controls can keep pace with a market where products are valuable, portable, and in extraordinary demand. The next stage is not a social-media argument. It is evidence, testimony and official findings.",
+      "visual_queries": [
+        "United States House of Representatives committee hearing room",
+        "US Capitol building exterior Washington DC",
+        "Congressional committee official press release webpage",
+        "semiconductor export control policy document"
+      ],
+      "visual_requirements": [
+        [
+          "United States",
+          "House",
+          "committee"
+        ],
+        [
+          "Capitol",
+          "Washington"
+        ],
+        [
+          "committee",
+          "press release"
+        ],
+        [
+          "export controls",
+          "document"
+        ]
+      ],
+      "visual": {
+        "type": "timeline",
+        "source_label": "ANNOUNCED CONGRESSIONAL INTERVIEWS",
+        "events": [
+          {
+            "date": "DEC 1",
+            "label": "JENSEN HUANG"
+          },
+          {
+            "date": "DEC 2",
+            "label": "TIM TETER"
+          }
+        ]
+      },
+      "keywords": [
+        "CONGRESS",
+        "DECEMBER 1",
+        "DECEMBER 2"
+      ]
+    },
+    {
+      "title": "THE RETURN THAT DID NOT HAPPEN",
+      "subtitle": "The board draws a line",
+      "narration": "After leaving, Huang made clear that he was willing to return. He said he had heard calls from employees, investors, business partners and customers, and that he would be honored to come back if the board decided it was in the best interests of the company and its shareholders. The response from the board was equally clear. Chairman Harvey Jones said directors had unanimously accepted the resignation and did not intend to reinstate Huang as CEO. That statement transformed the story. A resignation can sometimes be followed by a negotiated return. Here, the board publicly closed that door, at least under its stated position at the time. The episode also produced a wave of online campaigning. But not everything circulating was genuine. Reuters Fact Check examined a viral image that purported to show hundreds of employees demanding that the board resign. It found the image was fabricated. A separate open letter asking the board to give Huang a fair hearing was real. Those are not the same thing. In a crisis around a public company, false claims can distort the apparent mood inside the workforce, mislead investors, and turn a complicated governance dispute into a simple internet spectacle. The verified record is more revealing: Huang offered to return, the board said no, and the company began planning for a future without him at the top.",
+      "visual_queries": [
+        "Jensen Huang public statement social media post",
+        "NVIDIA board chairman Harvey Jones public statement",
+        "Reuters Fact Check article screenshot",
+        "NVIDIA campus exterior employees walking"
+      ],
+      "visual_requirements": [
+        [
+          "Jensen Huang",
+          "statement"
+        ],
+        [
+          "Harvey Jones",
+          "NVIDIA"
+        ],
+        [
+          "Reuters",
+          "fact check"
+        ],
+        [
+          "NVIDIA",
+          "campus"
+        ]
+      ],
+      "visual": {
+        "type": "comparison",
+        "source_label": "THE PUBLIC POSITION",
+        "items": [
+          {
+            "label": "Huang: willing to return",
+            "percent": 100,
+            "value": "OFFERED"
+          },
+          {
+            "label": "Board: intends to reinstate",
+            "percent": 0,
+            "value": "NO"
+          }
+        ]
+      },
+      "keywords": [
+        "RETURN OFFER",
+        "BOARD REFUSAL",
+        "FACT CHECK"
+      ]
+    },
+    {
+      "title": "THE COMPANY BENEATH THE FOUNDER",
+      "subtitle": "Can NVIDIA execute without its defining figure?",
+      "narration": "The next challenge is operational. NVIDIA must reassure customers that product roadmaps will continue, reassure investors that execution will not falter, and demonstrate that governance and compliance systems can withstand scrutiny. Colette Kress knows the company's finances and operations after more than a decade as chief financial officer. But taking over during a crisis is different from managing a normal succession. The board must identify a permanent leader while the company answers questions from lawmakers and regulators. The business itself remains enormous. NVIDIA's latest quarterly results show that demand for its computing infrastructure has not simply disappeared with its founder's departure. Its data-center business has become a central engine of the company's growth. Before this film is locked, the exact figures from the official third-quarter fiscal twenty twenty-seven earnings release must be inserted with the reporting period and source shown on screen. The key point is not a single revenue number. It is that NVIDIA is an ecosystem: software developers, cloud providers, chip designers, manufacturing partners, networking suppliers and customers. That ecosystem cannot be moved by a single executive. But leadership matters when decisions involve billions of dollars, long product cycles, geopolitical risk and intense competition. The real test for Kress and the board is whether the company's systems are strong enough to preserve momentum while restoring confidence in its oversight.",
+      "visual_queries": [
+        "NVIDIA data center GPU racks official press photo",
+        "NVIDIA financial earnings report quarterly charts",
+        "NVIDIA Blackwell GPU board close up",
+        "semiconductor supply chain advanced packaging facility"
+      ],
+      "visual_requirements": [
+        [
+          "NVIDIA",
+          "data center",
+          "GPU"
+        ],
+        [
+          "NVIDIA",
+          "earnings",
+          "financial"
+        ],
+        [
+          "Blackwell",
+          "GPU"
+        ],
+        [
+          "semiconductor",
+          "packaging"
+        ]
+      ],
+      "visual": {
+        "type": "metric",
+        "source_label": "THE BUSINESS QUESTION",
+        "value": "CONTINUITY",
+        "detail": "Product roadmap • Customers • Compliance • Succession"
+      },
+      "keywords": [
+        "BUSINESS CONTINUITY",
+        "CUSTOMERS",
+        "SUCCESSION"
+      ]
+    },
+    {
+      "title": "WHAT HAPPENS NEXT",
+      "subtitle": "A test of leadership — and of the institution",
+      "narration": "The next milestones are concrete. The board must choose a permanent chief executive. Investigators must establish what happened, and what did not. Congressional committees are scheduled to hear from Huang and NVIDIA's general counsel. The company must show that its export-control and compliance processes are credible. And investors will be watching whether customers, suppliers and developers continue to trust the company's roadmap. There is a deeper question for the technology industry. NVIDIA became one of the defining companies of the artificial-intelligence era under a founder whose personality became part of its brand. But a public company cannot depend on charisma alone. It needs durable systems, accountable leadership, independent oversight and controls that work even when the stakes are high. Huang built NVIDIA into an institution with global influence. Now that institution faces a test of its own. This is not the end of NVIDIA, and it is not proof that the company has lost its technological advantage. It is a moment when the world's attention has shifted from the products on stage to the decisions inside the boardroom. The question is no longer only whether NVIDIA can succeed without its founder standing at the keynote podium. It is whether the company can convince the world that its governance is as powerful as its technology.",
+      "visual_queries": [
+        "NVIDIA corporate headquarters night exterior",
+        "NVIDIA technology keynote stage empty after event",
+        "NVIDIA AI supercomputer data center cinematic",
+        "US Capitol building evening exterior"
+      ],
+      "visual_requirements": [
+        [
+          "NVIDIA",
+          "headquarters"
+        ],
+        [
+          "keynote",
+          "stage"
+        ],
+        [
+          "AI",
+          "supercomputer",
+          "data center"
+        ],
+        [
+          "Capitol",
+          "Washington"
+        ]
+      ],
+      "visual": {
+        "type": "timeline",
+        "source_label": "WHAT COMES NEXT",
+        "events": [
+          {
+            "date": "DEC 1",
+            "label": "HUANG INTERVIEW"
+          },
+          {
+            "date": "DEC 2",
+            "label": "NVIDIA COUNSEL"
+          },
+          {
+            "date": "TBD",
+            "label": "CEO SUCCESSOR"
+          }
+        ]
+      },
+      "keywords": [
+        "GOVERNANCE",
+        "ACCOUNTABILITY",
+        "THE NEXT CHAPTER"
+      ]
+    }
+  ]
+}
