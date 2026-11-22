@@ -286,8 +286,7 @@ async function main() {
     const imageFiles = [];
     for (const id of renderIds) {
       const asset = assetById.get(id);
-      const isHookRobotVisual = i===0 && hookIds.includes(id) && asset?.scene===7;
-      if (!asset || (asset.scene !== i+1 && !isHookRobotVisual)) throw new Error("Selected image " + id + " is missing or assigned to the wrong scene.");
+      if (!asset || asset.scene !== i+1) throw new Error("Selected image " + id + " is missing or assigned to the wrong scene.");
       const assetKey = asset.directUrl || asset.sourcePage;
       let imageFile = downloadedAssetFiles.get(assetKey);
       if (!imageFile) {
