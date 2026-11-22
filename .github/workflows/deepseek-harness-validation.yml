@@ -54,7 +54,7 @@ jobs:
                 name: '$PLUGIN_DIR/hiddenengine-tools.ts'
           YAML
           cd "$DSH_DIR"
-          pnpm dsh web --no-open --patch "$PATCH_FILE" > "$LOG_FILE" 2>&1 &
+          pnpm dsh web --patch "$PATCH_FILE" --no-open > "$LOG_FILE" 2>&1 &
           DSH_PID=$!
           cleanup() {
             kill "$DSH_PID" 2>/dev/null || true
