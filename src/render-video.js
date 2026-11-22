@@ -39,21 +39,21 @@ function visualMarkup(scene) {
   if (!v || !v.type) return "";
   const label = xml(v.source_label || "SOURCE NOT VERIFIED");
   if (v.type === "metric") {
-    return '<g transform="translate(1220 360)"><rect width="560" height="260" rx="8" fill="#111315" stroke="#A8794D" stroke-width="2"/><text x="36" y="54" class="visual-label">' + label + '</text><text x="36" y="218" class="visual-detail">' + xml(v.detail || "") + '</text></g>';
+    return '<g transform="translate(1220 360)"><rect width="560" height="260" rx="8" fill="#121212" stroke="#C86D2D" stroke-width="2"/><text x="36" y="54" class="visual-label">' + label + '</text><text x="36" y="218" class="visual-detail">' + xml(v.detail || "") + '</text></g>';
   }
   if (v.type === "comparison" && Array.isArray(v.items)) {
     const rows = v.items.slice(0,3).map((item,i) => {
       const y=92+i*72;
       return '<text x="32" y="'+y+'" class="visual-detail">'+xml(item.label)+'</text><rect x="32" y="'+(y+14)+'" width="380" height="16" fill="#292b2d"/><text x="430" y="'+(y+29)+'" class="visual-detail">'+xml(item.value)+'</text>';
     }).join("");
-    return '<g transform="translate(1190 330)"><rect width="590" height="330" rx="8" fill="#111315" stroke="#A8794D" stroke-width="2"/><text x="32" y="52" class="visual-label">'+label+'</text>'+rows+'</g>';
+    return '<g transform="translate(1190 330)"><rect width="590" height="330" rx="8" fill="#121212" stroke="#C86D2D" stroke-width="2"/><text x="32" y="52" class="visual-label">'+label+'</text>'+rows+'</g>';
   }
   if (v.type === "timeline" && Array.isArray(v.events)) {
     const events=v.events.slice(0,4).map((item,i) => {
       const x=42+i*132;
-      return '<circle cx="'+x+'" cy="150" r="8" fill="#C08A58"/><text x="'+x+'" y="116" text-anchor="middle" class="visual-label">'+xml(item.date)+'</text><text x="'+x+'" y="184" text-anchor="middle" class="visual-detail">'+xml(item.label)+'</text>';
+      return '<circle cx="'+x+'" cy="150" r="8" fill="#C86D2D"/><text x="'+x+'" y="116" text-anchor="middle" class="visual-label">'+xml(item.date)+'</text><text x="'+x+'" y="184" text-anchor="middle" class="visual-detail">'+xml(item.label)+'</text>';
     }).join("");
-    return '<g transform="translate(1060 390)"><rect width="650" height="250" rx="8" fill="#111315" stroke="#A8794D" stroke-width="2"/><text x="34" y="48" class="visual-label">'+label+'</text><path d="M42 150 H570" stroke="#777" stroke-width="3"/>'+events+'</g>';
+    return '<g transform="translate(1060 390)"><rect width="650" height="250" rx="8" fill="#121212" stroke="#C86D2D" stroke-width="2"/><text x="34" y="48" class="visual-label">'+label+'</text><path d="M42 150 H570" stroke="#777" stroke-width="3"/>'+events+'</g>';
   }
   return "";
 }
@@ -61,23 +61,26 @@ function visualMarkup(scene) {
 function overlaySvg(scene, index, total) {
   const title = lines((scene.title || "").toUpperCase(), 42).slice(0, 2)
     .map((s,i) => '<text x="120" y="' + (190 + i*76) + '" class="title">' + xml(s) + '</text>').join("");
+  const subtitle = scene.subtitle ? '<text x="120" y="340" class="sub">' + xml(scene.subtitle) + '</text>' : "";
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080">
-  <defs><linearGradient id="shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#08090b" stop-opacity=".25"/><stop offset=".48" stop-color="#08090b" stop-opacity=".05"/><stop offset="1" stop-color="#08090b" stop-opacity=".92"/></linearGradient></defs>
+  <defs><linearGradient id="shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0A0A0B" stop-opacity=".25"/><stop offset=".48" stop-color="#0A0A0B" stop-opacity=".05"/><stop offset="1" stop-color="#0A0A0B" stop-opacity=".92"/></linearGradient></defs>
   <rect width="1920" height="1080" fill="url(#shade)"/>
   <text x="120" y="112" class="eyebrow">THE INVESTIGATION / ${String(index+1).padStart(2,"0")}</text>
 
   ${title}
+  <rect x="120" y="300" width="78" height="5" fill="#C86D2D"/>
+  ${subtitle}
   ${visualMarkup(scene)}\n  <text x="1795" y="1010" text-anchor="end" class="page">${String(index+1).padStart(2,"0")} / ${total}</text>
   <style>
-  .brand{font:700 34px 'DejaVu Sans';letter-spacing:6px;fill:#F0EDE5}
+  .brand{font:700 34px 'DejaVu Sans';letter-spacing:6px;fill:#FFFFFF}
   .kicker{font:400 17px 'DejaVu Sans';letter-spacing:3px;fill:#C3B7A8}
-  .eyebrow{font:700 18px 'DejaVu Sans';letter-spacing:4px;fill:#C08A58}
-  .title{font:700 64px 'DejaVu Sans';fill:#F0EDE5}
-  .sub{font:400 27px 'DejaVu Sans';fill:#D5D1C8}
-  .visual-label{font:700 18px DejaVu Sans;letter-spacing:2px;fill:#C08A58}
-  .visual-value{font:700 82px DejaVu Sans;fill:#F0EDE5}
-  .visual-detail{font:400 20px DejaVu Sans;fill:#D5D1C8}
-  .page{font:400 20px 'DejaVu Sans';fill:#D5D1C8}
+  .eyebrow{font:700 18px 'DejaVu Sans';letter-spacing:4px;fill:#C86D2D}
+  .title{font:700 58px 'DejaVu Sans';letter-spacing:2px;fill:#FFFFFF}
+  .sub{font:400 25px 'DejaVu Sans';letter-spacing:0.5px;fill:#E5E5E5}
+  .visual-label{font:700 18px DejaVu Sans;letter-spacing:2px;fill:#C86D2D}
+  .visual-value{font:700 82px DejaVu Sans;fill:#FFFFFF}
+  .visual-detail{font:400 20px DejaVu Sans;fill:#E5E5E5}
+  .page{font:400 20px 'DejaVu Sans';fill:#E5E5E5}
   </style></svg>`;
 }
 async function capture(command, args) {
@@ -134,7 +137,7 @@ async function writeNarrationSubtitles(narration, duration, output) {
     cursor = end;
     return "Dialogue: 0," + assTimestamp(start) + "," + assTimestamp(end) + ",Default,,0,0,0,," + cue.text.replace(/[{}]/g, "");
   });
-  const header = ["[Script Info]","ScriptType: v4.00+","PlayResX: 1920","PlayResY: 1080","ScaledBorderAndShadow: yes","WrapStyle: 2","","[V4+ Styles]","Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding","Style: Default,DejaVu Sans,34,&H00FFFFFF,&H000000FF,&H80000000,&H80000000,0,0,3,0,0,2,144,144,92,1","","[Events]","Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"];
+  const header = ["[Script Info]","ScriptType: v4.00+","PlayResX: 1920","PlayResY: 1080","ScaledBorderAndShadow: yes","WrapStyle: 2","","[V4+ Styles]","Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding","Style: Default,DejaVu Sans,32,&H00FFFFFF,&H000000FF,&H80000000,&H80000000,0,0,1,2,1,2,144,144,88,1","","[Events]","Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"];
   await writeFile(output, header.concat(events).join("\n") + "\n");
 }
 async function piperTTS(text, output) {
@@ -361,11 +364,11 @@ async function main() {
   // Build the required review contact sheet from every distinct source image.
   const cols = 5, cellW = 320, cellH = 180, labelH = 36, gap = 10, margin = 10;
   const rows = Math.ceil(contactSheetItems.length / cols);
-  const sheetParts = ['<svg xmlns="http://www.w3.org/2000/svg" width="' + (margin*2+cols*cellW+(cols-1)*gap) + '" height="' + (margin*2+rows*(cellH+labelH)+(rows-1)*gap) + '">', '<rect width="100%" height="100%" fill="#090b0e"/>'];
+  const sheetParts = ['<svg xmlns="http://www.w3.org/2000/svg" width="' + (margin*2+cols*cellW+(cols-1)*gap) + '" height="' + (margin*2+rows*(cellH+labelH)+(rows-1)*gap) + '">', '<rect width="100%" height="100%" fill="#0A0A0B"/>'];
   for (let n = 0; n < contactSheetItems.length; n++) {
     const item = contactSheetItems[n], x = margin + (n % cols) * (cellW + gap), y = margin + Math.floor(n / cols) * (cellH + labelH + gap);
     const data = (await readFile(item.file)).toString("base64");
-    sheetParts.push('<rect x="' + x + '" y="' + y + '" width="' + cellW + '" height="' + (cellH + labelH) + '" fill="#171a1e"/>');
+    sheetParts.push('<rect x="' + x + '" y="' + y + '" width="' + cellW + '" height="' + (cellH + labelH) + '" fill="#1A1A1C"/>');
     sheetParts.push('<image x="' + x + '" y="' + y + '" width="' + cellW + '" height="' + cellH + '" preserveAspectRatio="xMidYMid slice" href="data:image/jpeg;base64,' + data + '"/>');
     sheetParts.push('<text x="' + (x + 10) + '" y="' + (y + cellH + 24) + '" fill="#f0ede5" font-family="DejaVu Sans" font-size="14">' + xml(item.id + " • SCENE " + item.scene) + '</text>');
   }
@@ -384,12 +387,15 @@ async function main() {
   const whoosh = path.join(OUT,"transition-whoosh.wav");
   const click = path.join(OUT,"number-click.wav");
   await run("ffmpeg",["-y","-f","lavfi","-i","anoisesrc=color=pink:sample_rate=22050:duration="+rawDuration,
-    "-af","highpass=f=250,lowpass=f=1800,volume='if(lt(mod(t,4.6),0.32),0.13,0)'",whoosh]);
+    "-af","highpass=f=250,lowpass=f=1800,volume='if(lt(mod(t,10.5),0.24),0.055,0)'",whoosh]);
   await run("ffmpeg",["-y","-f","lavfi","-i","sine=frequency=1650:sample_rate=22050:duration="+rawDuration,
-    "-af","volume='if(lt(mod(t,18),0.10),0.07,0)',afade=t=in:st=0:d=0.1",click]);
+    "-af","volume='if(lt(mod(t,36),0.08),0.025,0)',afade=t=in:st=0:d=0.1",click]);
+  const ambient = path.join(OUT,"original-ambient-bed.wav");
+  await run("ffmpeg",["-y","-f","lavfi","-i","aevalsrc=0.11*sin(2*PI*110*t)+0.08*sin(2*PI*164.81*t)+0.05*sin(2*PI*220*t)+0.03*sin(2*PI*329.63*t):s=44100:d="+rawDuration,
+    "-af","lowpass=f=1100,tremolo=f=0.08:d=0.22,volume=0.42,afade=t=in:st=0:d=4,afade=t=out:st="+Math.max(0,rawDuration-5)+":d=5",ambient]);
   const mixed = path.join(OUT,"mixed-final.mp4");
-  await run("ffmpeg",["-y","-i",output,"-i",whoosh,"-i",click,
-    "-filter_complex","[0:a]volume=1[voice];[1:a]volume=0.65[whoosh];[2:a]volume=0.55[click];[voice][whoosh][click]amix=inputs=3:duration=first:dropout_transition=3,loudnorm=I=-14:TP=-1.5:LRA=7[a]",
+  await run("ffmpeg",["-y","-i",output,"-i",whoosh,"-i",click,"-i",ambient,
+    "-filter_complex","[0:a]volume=1[voice];[1:a]volume=0.55[whoosh];[2:a]volume=0.45[click];[3:a]volume=0.18[bed];[voice][whoosh][click][bed]amix=inputs=4:duration=first:dropout_transition=3,loudnorm=I=-14:TP=-1.5:LRA=7[a]",
     "-map","0:v","-map","[a]","-c:v","copy","-c:a","aac","-b:a","192k","-movflags","+faststart",mixed]);
   await run("ffmpeg",["-y","-i",mixed,"-c","copy",output+".tmp.mp4"]);
   await writeFile(path.join(OUT,"visual-credits.json"),JSON.stringify(credits,null,2)+"\n");
@@ -408,10 +414,10 @@ async function main() {
   await writeFile(path.join(OUT,"README.txt"),[
     "The Hidden Engine documentary render",
     "Narration: Local Piper neural TTS (no paid API quota required).",
-    "Visuals: ChatGPT-curated still images matched to narration, with animated camera movement, crossfades, and original data overlays.",
-    "Identity: charcoal/black, ivory typography, restrained copper accents, documentary-investigative overlays.",
+    "Visuals: individually selected narration-matched still images, with animated camera movement, crossfades, and original data overlays.",
+    "Identity: near-black and charcoal, white/ivory typography, copper #C86D2D accents, restrained documentary-investigative overlays.",
     "Review all claims, pronunciations, visual relevance, licenses, and credits before publication.",
-    "No automatic YouTube upload."
+    "Audio: original low-level synthesized ambient underscore with restrained transition accents. No automatic YouTube upload."
   ].join("\n")+"\n");
   const qa = await new Promise((resolve,reject) => { const p=spawn("ffprobe",["-v","error","-show_entries","format=duration:stream=codec_type,width,height","-of","json",output]); let data=""; p.stdout.on("data",d=>data+=d); p.on("error",reject); p.on("close",code=>code===0?resolve(JSON.parse(data)):reject(new Error("ffprobe failed"))); });
   const finalDuration = Number(qa.format.duration);
@@ -419,7 +425,7 @@ async function main() {
   if (finalDuration < 13*60 || finalDuration > 18*60) throw new Error("Final runtime "+finalDuration.toFixed(1)+"s is outside the 13–18 minute documentary target.");
   if (visualAudit.some(x=>x.renderedImages < 1 || x.actualAverageShotDurationSeconds > 6.5)) throw new Error("Visual pacing QA failed: every scene needs distinct narration-matched shots averaging no more than 6.5 seconds.");
   await access(path.join(OUT,"contact-sheet.jpg")).catch(()=>{throw new Error("Final contact-sheet.jpg is missing.");});
-  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:finalDuration,targetDurationMinutes:15,acceptedDurationRangeMinutes:[13,18],audio:true,scenes:clips.length,selectedImages:credits.length,imagesPerScene:Math.min(...visualAudit.map(x=>x.renderedImages)),visualChangeTargetSeconds:5,animatedImageScenes:visualAudit.filter(x=>x.animated).length,originalMusic:false,musicTargetDb:null,transitionWhooshes:true,numberClicks:true,contactSheet:true},null,2)+"\n");
+  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:finalDuration,targetDurationMinutes:15,acceptedDurationRangeMinutes:[13,18],audio:true,scenes:clips.length,selectedImages:credits.length,imagesPerScene:Math.min(...visualAudit.map(x=>x.renderedImages)),visualChangeTargetSeconds:5,animatedImageScenes:visualAudit.filter(x=>x.animated).length,originalMusic:true,ambientMusicBed:true,musicTargetDb:-28,transitionWhooshes:true,numberClicks:true,contactSheet:true},null,2)+"\n");
   console.log("Rendered and passed technical QA: "+output);
 }
 main().catch(error=>{console.error("Render failed:",error);process.exit(1);});
