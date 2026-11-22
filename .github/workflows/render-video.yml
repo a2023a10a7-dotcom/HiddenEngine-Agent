@@ -6,6 +6,8 @@ on:
       - "production/projects/**/visual-links.json"
       - "production/projects/**/script.json"
       - "src/render-video.js"
+      - "src/prepare-project-assets.js"
+      - ".github/workflows/render-video.yml"
   workflow_dispatch:
     inputs:
       project_id:
@@ -98,6 +100,10 @@ jobs:
             dist/**/CREDITS.md
             dist/**/QA-REPORT.json
             dist/**/contact-sheet.jpg
+            dist/**/VISUAL-AUDIT.json
+            dist/**/visual-selection.json
+            dist/**/visual-assets.json
+            dist/**/visual-credits.json
             dist/**/README.txt
           if-no-files-found: error
           retention-days: 14
