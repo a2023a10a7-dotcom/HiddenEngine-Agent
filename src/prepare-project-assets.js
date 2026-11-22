@@ -14,7 +14,7 @@ const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function planNarrationShots(scene){
  const narration=String(scene.narration||"").trim();
  if(!narration) throw new Error("Scene has no narration for visual planning: "+scene.title);
- const words=narration.split(/\\s+/);
+ const words=narration.split(/\s+/);
  const targetCount=Math.max(1,Math.ceil(words.length/12.5));
  const queries=Array.isArray(scene.visual_queries)?scene.visual_queries.map(x=>String(x).trim()).filter(Boolean):[];
  if(!queries.length) throw new Error("Scene has no approved visual_queries: "+scene.title);
