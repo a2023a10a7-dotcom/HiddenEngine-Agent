@@ -9,6 +9,14 @@ if(!apiKey) throw new Error("PIXABAY_API_KEY is required");
 const root=path.join("production","projects",projectId);
 const out=path.join("dist",projectId);
 const stop=new Set(["with","from","that","this","into","over","under","china","modern","technology","factory","industrial","manufacturing","production","assembly","workers","equipment","plant","market","product","line","system","business","city","global","aerial","advanced","company","industry","facility","machine","machines","process"]);
+const synonyms={
+ automated:["automation","robotic","robot"],automation:["automated","robotic","robot"],robotics:["robotic","robot"],robot:["robotic","robotics"],
+ drone:["quadcopter","uav"],quadcopter:["drone","uav"],uav:["drone","quadcopter"],
+ semiconductor:["chip","microchip","wafer"],microchip:["chip","semiconductor"],chip:["microchip","semiconductor"],
+ laboratory:["lab","research"],researcher:["scientist","research"],scientist:["researcher","laboratory"],
+ battery:["cell","lithium"],lithium:["battery","cell"],photovoltaic:["solar","solar panel"],solar:["photovoltaic","solar panel"],
+ train:["railway","bullet train"],railway:["train","bullet train"]
+};
 function terms(s){return String(s||"").toLowerCase().split(/[^a-z0-9]+/).filter(x=>x.length>2&&!stop.has(x));}
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function planNarrationShots(scene){
@@ -92,27 +100,31 @@ async function main(){
   const plannedShots=await planNarrationShots(scene);
   const selectedShots=[];
   for(const shot of plannedShots){
-   const u=new URL("https://pixabay.com/api/");
-   u.searchParams.set("key",apiKey);u.searchParams.set("q",shot.visualQuery);
-   u.searchParams.set("image_type","photo");u.searchParams.set("orientation","horizontal");
-   u.searchParams.set("safesearch","true");u.searchParams.set("per_page","50");
-   const data=await fetchJson(u);
-   const tokens=terms(shot.visualQuery);
    const requirementGroups=Array.isArray(scene.visual_requirements)?scene.visual_requirements:[];
-   const candidates=(data.hits||[]).filter(hit=>hit.largeImageURL&&hit.webformatURL&&hit.pageURL&&!seen.has(hit.id)
-     &&(hit.imageWidth||0)>=1280&&(hit.imageHeight||0)>=720).map(hit=>{
-      const tags=String(hit.tags||"").toLowerCase();
-      const queryMatches=tokens.filter(t=>tags.includes(t));
-      const groupMatches=requirementGroups.map(group=>(Array.isArray(group)?group:[]).some(term=>{
-       const value=String(term||"").toLowerCase();
-       return value && (tags.includes(value)||terms(value).some(t=>tags.includes(t)));
-      }));
-      const score=queryMatches.reduce((n,t)=>n+(t.length>5?5:3),0)+groupMatches.filter(Boolean).length*2;
-      return {hit,score,queryMatches,groupMatches};
-     }).filter(x=>x.queryMatches.length>=1&&(!scene.requireAllVisualGroups||x.groupMatches.every(Boolean)))
-     .sort((a,b)=>b.score-a.score||(b.hit.imageWidth*b.hit.imageHeight)-(a.hit.imageWidth*a.hit.imageHeight));
-   const chosen=candidates[0];
-   if(!chosen) throw new Error("No relevant 1280x720+ Pixabay image for scene "+(i+1)+" shot "+shot.shot+": "+shot.visualQuery+". Retry with broader visual_queries.");
+   const queryOptions=[shot.visualQuery,...(Array.isArray(scene.visual_queries)?scene.visual_queries:[]).map(q=>String(q).trim()).filter(q=>q&&q!==shot.visualQuery)];
+   let chosen=null,selectedQuery=shot.visualQuery;
+   for(const query of queryOptions){
+    const u=new URL("https://pixabay.com/api/");
+    u.searchParams.set("key",apiKey);u.searchParams.set("q",query);
+    u.searchParams.set("image_type","photo");u.searchParams.set("orientation","horizontal");
+    u.searchParams.set("safesearch","true");u.searchParams.set("per_page","50");
+    const data=await fetchJson(u);
+    const tokens=terms(query);
+    const candidates=(data.hits||[]).filter(hit=>hit.largeImageURL&&hit.webformatURL&&hit.pageURL&&!seen.has(hit.id)
+      &&(hit.imageWidth||0)>=1280&&(hit.imageHeight||0)>=720).map(hit=>{
+       const tags=String(hit.tags||"").toLowerCase();
+       const queryMatches=tokens.filter(t=>[t,...(synonyms[t]||[])].some(term=>tags.includes(term)));
+       const groupMatches=requirementGroups.map(group=>(Array.isArray(group)?group:[]).some(term=>{
+        const value=String(term||"").toLowerCase();
+        return value&&(tags.includes(value)||terms(value).some(t=>[t,...(synonyms[t]||[])].some(term=>tags.includes(term))));
+       }));
+       const score=queryMatches.reduce((n,t)=>n+(t.length>5?5:3),0)+groupMatches.filter(Boolean).length*2;
+       return {hit,score,queryMatches,groupMatches};
+      }).filter(x=>x.queryMatches.length>=1&&(!scene.requireAllVisualGroups||x.groupMatches.every(Boolean)))
+      .sort((a,b)=>b.score-a.score||(b.hit.imageWidth*b.hit.imageHeight)-(a.hit.imageWidth*a.hit.imageHeight));
+    if(candidates.length){chosen=candidates[0];selectedQuery=query;break;}
+   }
+   if(!chosen) throw new Error("No relevant 1280x720+ Pixabay image for scene "+(i+1)+" shot "+shot.shot+" after trying "+queryOptions.length+" scene queries. Original query: "+shot.visualQuery);
    const h=chosen.hit,id="S"+String(i+1).padStart(2,"0")+"-SH"+String(shot.shot).padStart(3,"0");
    seen.add(h.id);
    const preview=path.join(out,id+".jpg");
@@ -123,9 +135,9 @@ async function main(){
    const item={id,scene:i+1,shot:shot.shot,creator:h.user||"Pixabay contributor",tags:h.tags||"",
     width:h.imageWidth,height:h.imageHeight,sourcePage:h.pageURL,previewFile:id+".jpg",
     largeImageURL:h.largeImageURL,license:"Pixabay Content License",licenseUrl:"https://pixabay.com/service/license-summary/",
-    searchQuery:shot.visualQuery,relevanceScore:chosen.score,matchedQueryTerms:chosen.queryMatches,matchedVisualRequirementGroups:chosen.groupMatches.map((matched,index)=>matched?index+1:null).filter(Boolean),narrationExcerpt:shot.narrationExcerpt,visualReason:shot.reason};
+    searchQuery:selectedQuery,originalSearchQuery:shot.visualQuery,usedFallbackQuery:selectedQuery!==shot.visualQuery,relevanceScore:chosen.score,matchedQueryTerms:chosen.queryMatches,matchedVisualRequirementGroups:chosen.groupMatches.map((matched,index)=>matched?index+1:null).filter(Boolean),narrationExcerpt:shot.narrationExcerpt,visualReason:shot.reason};
    assets.push(item);sheetItems.push({id,scene:i+1,tags:item.tags,file:preview});
-   selectedShots.push({...shot,imageId:id,relevanceScore:chosen.score,matchedQueryTerms:chosen.queryMatches});
+   selectedShots.push({...shot,visualQuery:selectedQuery,originalVisualQuery:shot.visualQuery,usedFallbackQuery:selectedQuery!==shot.visualQuery,imageId:id,relevanceScore:chosen.score,matchedQueryTerms:chosen.queryMatches});
   }
   selection.push({scene:i+1,title:scene.title,selectedImageIds:selectedShots.map(x=>x.imageId),shots:selectedShots});
   console.log("Scene "+(i+1)+": AI planned "+selectedShots.length+" narration-matched shots; target ~5 seconds each.");
