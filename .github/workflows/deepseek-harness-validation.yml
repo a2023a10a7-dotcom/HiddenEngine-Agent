@@ -27,7 +27,7 @@ jobs:
           node-version: 20
       - name: Check Harness plugin TypeScript syntax
         run: |
-          npx --yes esbuild@0.25.0 integrations/deepseek-harness/hiddenengine-tools.ts --format=esm --platform=node --external:@deepseek-ai/cordis --external:@deepseek-ai/dsh-tools --outfile=/tmp/hiddenengine-tools.js
+          npx --yes esbuild@0.25.0 integrations/deepseek-harness/hiddenengine-tools.ts --bundle --format=esm --platform=node --external:@deepseek-ai/cordis --external:@deepseek-ai/dsh-tools --outfile=/tmp/hiddenengine-tools.js
           node --check /tmp/hiddenengine-tools.js
       - name: Check launcher shell syntax
         run: bash -n integrations/deepseek-harness/launch.sh
