@@ -247,13 +247,36 @@ async function pixabayImageUrl(pageUrl) {
   return imageUrl;
 }
 async function download(url, dest) {
-  const response = await fetch(url);
-  if (!response.ok) throw new Error("Asset download failed (" + response.status + ").");
-  const contentType = response.headers.get("content-type") || "";
-  if (!contentType.toLowerCase().startsWith("image/")) throw new Error("The supplied visual URL did not return an image (content-type: " + contentType + "). Use a direct HTTPS image URL, not a webpage URL.");
-  const bytes = Buffer.from(await response.arrayBuffer());
-  if (bytes.length < 4096 || bytes.length > 25 * 1024 * 1024) throw new Error("The supplied image has an invalid file size.");
-  await writeFile(dest, bytes);
+  let lastError;
+  for (let attempt = 0; attempt < 6; attempt++) {
+    try {
+      const response = await fetch(url, { signal: AbortSignal.timeout(60000) });
+      if (!response.ok) {
+        const error = new Error("Asset download failed (" + response.status + ").");
+        if (response.status !== 429 && response.status < 500) throw error;
+        lastError = error;
+        const retryAfter = Number(response.headers.get("retry-after")) * 1000;
+        const delay = Number.isFinite(retryAfter) && retryAfter > 0
+          ? Math.min(retryAfter, 60000) : Math.min(30000, 2000 * (2 ** attempt));
+        console.warn(error.message + " Retrying in " + delay + "ms.");
+        await new Promise(resolve => setTimeout(resolve, delay));
+        continue;
+      }
+      const contentType = response.headers.get("content-type") || "";
+      if (!contentType.toLowerCase().startsWith("image/")) throw new Error("The supplied visual URL did not return an image (content-type: " + contentType + "). Use a direct HTTPS image URL, not a webpage URL.");
+      const bytes = Buffer.from(await response.arrayBuffer());
+      if (bytes.length < 4096 || bytes.length > 25 * 1024 * 1024) throw new Error("The supplied image has an invalid file size.");
+      await writeFile(dest, bytes);
+      return;
+    } catch (error) {
+      lastError = error;
+      if (attempt === 5 || !/fetch failed|timeout|network|Asset download failed \((429|5\d\d)\)/i.test(error.message)) throw error;
+      const delay = Math.min(30000, 2000 * (2 ** attempt));
+      console.warn("Visual download temporarily unavailable; retrying in " + delay + "ms: " + error.message);
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+  }
+  throw lastError || new Error("Visual asset download failed after retries.");
 }
 async function main() {
   if (!PIPER_EXECUTABLE || !PIPER_MODEL) throw new Error("Piper TTS is not configured.");
@@ -295,7 +318,16 @@ async function main() {
         imageFile = renderFile;
         if (!await stat(imageFile).then(()=>true).catch(()=>false)) {
           const imageUrl = asset.directUrl || asset.largeImageURL || await pixabayImageUrl(asset.sourcePage);
-          await download(imageUrl, imageFile);
+          try {
+            await download(imageUrl, imageFile);
+          } catch (error) {
+            if (asset.previewFile && await stat(previewFile).then(() => true).catch(() => false)) {
+              console.warn("Full-resolution visual unavailable for " + id + "; using the already verified downloaded preview instead. " + error.message);
+              await writeFile(imageFile, await readFile(previewFile));
+            } else {
+              throw error;
+            }
+          }
         }
         downloadedAssetFiles.set(assetKey, imageFile);
         contactSheetItems.push({ id, scene: asset.scene, file: previewFile });
