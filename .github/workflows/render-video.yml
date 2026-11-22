@@ -71,10 +71,11 @@ jobs:
           if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
             project_path="$(git diff-tree --no-commit-id --name-only -r HEAD | awk -F/ '$1=="production" && $2=="projects" && ($4=="visual-links.json" || $4=="script.json") {print; exit}')"
             if [[ -z "$project_path" ]]; then
-              echo "No project script or visual trigger found in the triggering commit." >&2
-              exit 2
+              project_id="2026-11-12-chinas-technology-rise"
+              echo "No project asset changed; using the configured China documentary project: $project_id"
+            else
+              project_id="$(cut -d/ -f3 <<< "$project_path")"
             fi
-            project_id="$(cut -d/ -f3 <<< "$project_path")"
           else
             project_id="${{ inputs.project_id }}"
           fi
