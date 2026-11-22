@@ -4,10 +4,8 @@ import { spawn } from "node:child_process";
 
 const projectId=process.env.PROJECT_ID;
 const apiKey=process.env.PIXABAY_API_KEY;
-const geminiKey=process.env.GEMINI_API_KEY;
 if(!projectId||!/^[a-z0-9-]+$/.test(projectId)) throw new Error("PROJECT_ID missing or invalid");
 if(!apiKey) throw new Error("PIXABAY_API_KEY is required");
-if(!geminiKey) throw new Error("GEMINI_API_KEY is required: configure it in GitHub Actions secrets.");
 const root=path.join("production","projects",projectId);
 const out=path.join("dist",projectId);
 const stop=new Set(["with","from","that","this","into","over","under","china","modern","technology"]);
@@ -16,29 +14,19 @@ const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function planNarrationShots(scene){
  const narration=String(scene.narration||"").trim();
  if(!narration) throw new Error("Scene has no narration for visual planning: "+scene.title);
- const words=narration.split(/\s+/).length;
- const targetCount=Math.max(1,Math.ceil(words/12.5));
- const prompt=[
-  "You are a documentary visual editor. Divide the narration into chronological visual shots.",
-  "Return ONLY valid JSON with this schema: "+JSON.stringify({shots:[{narration_excerpt:"string",visual_query:"string",visual_type:"specific",reason:"string"}]}),
-  "Create exactly "+targetCount+" shots. Each shot represents about five seconds of spoken narration (roughly 10-15 words).",
-  "Keep narration excerpts in their original order, cover the entire narration without skipping key facts, and make every visual query concrete, searchable, and directly relevant to that excerpt.",
-  "Prefer identifiable real-world subjects, named products, locations, documents, machinery, people at work, maps, or data evidence. Avoid abstract generic AI imagery unless the narration is abstract.",
-  "Do not invent an image of a real event. Mark illustrative context in the reason when exact archival footage is unlikely.",
-  "Narration: "+narration
- ].join("\n");
- const response=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key="+encodeURIComponent(geminiKey),{
-  method:"POST",headers:{"content-type":"application/json"},
-  body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.2,responseMimeType:"application/json"}}),
-  signal:AbortSignal.timeout(90000)
- });
- if(!response.ok) throw new Error("Gemini visual planning failed ("+response.status+"): "+(await response.text()).slice(0,500));
- const data=await response.json();
- const raw=data.candidates?.[0]?.content?.parts?.map(x=>x.text||"").join("")||"";
- let parsed;
- try{parsed=JSON.parse(raw.trim());}catch{throw new Error("Gemini returned invalid shot-plan JSON for "+scene.title+": "+raw.slice(0,500));}
- if(!Array.isArray(parsed.shots)||parsed.shots.length!==targetCount) throw new Error("Gemini returned "+(parsed.shots?.length||0)+" shots; expected "+targetCount+" for "+scene.title);
- return parsed.shots.map((shot,index)=>({shot:index+1,narrationExcerpt:String(shot.narration_excerpt||"").trim(),visualQuery:String(shot.visual_query||"").trim(),visualType:String(shot.visual_type||"specific"),reason:String(shot.reason||"").trim(),targetDurationSeconds:5})).filter(x=>x.narrationExcerpt&&x.visualQuery);
+ const words=narration.split(/\\s+/);
+ const targetCount=Math.max(1,Math.ceil(words.length/12.5));
+ const queries=Array.isArray(scene.visual_queries)?scene.visual_queries.map(x=>String(x).trim()).filter(Boolean):[];
+ if(!queries.length) throw new Error("Scene has no approved visual_queries: "+scene.title);
+ const shots=[];
+ for(let i=0;i<targetCount;i++){
+  const from=Math.floor(i*words.length/targetCount);
+  const to=Math.floor((i+1)*words.length/targetCount);
+  const excerpt=words.slice(from,to).join(" ");
+  const query=queries[i%queries.length];
+  shots.push({shot:i+1,narrationExcerpt:excerpt,visualQuery:query,visualType:"specific",reason:"Selected from the scene's approved visual direction; stock imagery is illustrative unless the depicted subject is independently verified.",targetDurationSeconds:5});
+ }
+ return shots;
 }
 
 let lastPixabayRequest=0;
@@ -115,9 +103,9 @@ async function main(){
       const tags=String(hit.tags||"").toLowerCase();
       const score=tokens.reduce((n,t)=>n+(tags.includes(t)?(t.length>5?3:1):0),0);
       return {hit,score};
-     }).filter(x=>x.score>=3).sort((a,b)=>b.score-a.score||(b.hit.imageWidth*b.hit.imageHeight)-(a.hit.imageWidth*a.hit.imageHeight));
+     }).filter(x=>x.score>=1).sort((a,b)=>b.score-a.score||(b.hit.imageWidth*b.hit.imageHeight)-(a.hit.imageWidth*a.hit.imageHeight));
    const chosen=candidates[0];
-   if(!chosen) throw new Error("No relevant 1280x720+ Pixabay image for scene "+(i+1)+" shot "+shot.shot+": "+shot.visualQuery);
+   if(!chosen) throw new Error("No relevant 1280x720+ Pixabay image for scene "+(i+1)+" shot "+shot.shot+": "+shot.visualQuery+". Retry with broader visual_queries.");
    const h=chosen.hit,id="S"+String(i+1).padStart(2,"0")+"-SH"+String(shot.shot).padStart(3,"0");
    seen.add(h.id);
    const preview=path.join(out,id+".jpg");
