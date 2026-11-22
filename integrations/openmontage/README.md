@@ -6,6 +6,8 @@ This integration evaluates the upstream [OpenMontage](https://github.com/OpenMon
 
 OpenMontage has a dedicated `documentary-montage` pipeline. Its documented workflow separates scene planning, footage retrieval, edit decisions, composition, color treatment, music mixing, and post-render review. Its editing guidance explicitly rejects slideshow-like pacing, uniform holds, and decorative transitions. It can retrieve real motion footage from open archives and free stock sources, rather than relying only on animated stills.
 
+Evaluated upstream revision: `OpenMontageInc/OpenMontage@2e003e65fa99a0f329478a2c1cdcf26bc481933a` (pinned in CI).
+
 ## Integration strategy
 
 - Keep HiddenEngine's research, evidence audit, script, narration, and current production records as the source of truth.
