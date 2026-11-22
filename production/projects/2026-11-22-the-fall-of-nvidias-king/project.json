@@ -1,0 +1,230 @@
+{
+  "project": "The Hidden Engine",
+  "projectId": "2026-11-22-the-fall-of-nvidias-king",
+  "status": "research_and_script_draft",
+  "generatedAt": "2026-11-22T16:41:00Z",
+  "selectedStory": {
+    "title": "The Fall of NVIDIA's King: How Jensen Huang Lost the Company He Built",
+    "category": "Business Stories",
+    "language": "en",
+    "targetDurationSeconds": 600,
+    "audience": "Western business and technology audience",
+    "editorialAngle": "A corporate governance and national-security crisis around the resignation of NVIDIA co-founder Jensen Huang, the board's refusal to reinstate him, and the challenge of leading the AI infrastructure giant without its iconic founder.",
+    "framing": "Huang resigned; the board accepted the resignation and later said it did not intend to reinstate him. Do not label the event a firing as an established fact."
+  },
+  "editorialRules": {
+    "independentVerificationRequired": true,
+    "primarySourcesRequired": true,
+    "noUnsupportedClaims": true,
+    "allegationsMustBeAttributed": true,
+    "counterEvidenceAndCompanyResponseRequired": true,
+    "ownerApprovalBeforePublishing": true,
+    "noAutomaticPublication": true
+  },
+  "research": {
+    "sources": [
+      {
+        "id": "SRC-001",
+        "publisher": "U.S. Securities and Exchange Commission",
+        "title": "NVIDIA Corporation Form 8-K, filed November 12, 2026",
+        "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000082/nvda-20261111.htm",
+        "publishedAt": "2026-11-12",
+        "type": "regulatory_filing",
+        "notes": "Primary filing: board accepted Jensen Huang's resignation effective immediately; Colette Kress appointed interim CEO; Harvey C. Jones appointed board chair."
+      },
+      {
+        "id": "SRC-002",
+        "publisher": "NVIDIA Newsroom",
+        "title": "NVIDIA Announces CEO Transition",
+        "url": "https://nvidianews.nvidia.com/news/nvidia-announces-ceo-transition",
+        "publishedAt": "2026-11-12",
+        "type": "company_statement",
+        "notes": "Company's official announcement and quoted board/interim CEO statements."
+      },
+      {
+        "id": "SRC-003",
+        "publisher": "NVIDIA Newsroom",
+        "title": "Statement From NVIDIA Board of Directors",
+        "url": "https://nvidianews.nvidia.com/news/statement-from-nvidia-board-of-directors",
+        "publishedAt": "2026-11-08",
+        "type": "company_statement",
+        "notes": "Board says it initiated an independent investigation after reporting that Huang had been the target of a foreign intelligence effort; says it had no reason to believe national security or NVIDIA secrets were compromised."
+      },
+      {
+        "id": "SRC-004",
+        "publisher": "NVIDIA Investor Relations",
+        "title": "Statement from NVIDIA Board of Directors",
+        "url": "https://investor.nvidia.com/news/press-release-details/2026/Statement-from-NVIDIA-Board-of-Directors/",
+        "publishedAt": "2026-11-08",
+        "type": "company_statement",
+        "notes": "Investor-relations mirror of the board statement."
+      },
+      {
+        "id": "SRC-005",
+        "publisher": "NVIDIA Newsroom",
+        "title": "A Message to Our Company",
+        "url": "https://nvidianews.nvidia.com/",
+        "publishedAt": "2026-11-08",
+        "type": "company_statement",
+        "notes": "Company newsroom index lists Huang's public apology; retrieve the exact canonical page before final script lock."
+      },
+      {
+        "id": "SRC-006",
+        "publisher": "Associated Press",
+        "title": "Nvidia rejects Jensen Huang's offer to return as CEO despite pressure from Silicon Valley",
+        "url": "https://apnews.com/article/3026bcbe04ab57b844884382e583422a",
+        "publishedAt": "2026-11-17",
+        "type": "secondary_reporting",
+        "notes": "Reports board unanimously accepted resignation and does not intend to reinstate; summarizes Huang's offer to return and current board position."
+      },
+      {
+        "id": "SRC-007",
+        "publisher": "TechCrunch",
+        "title": "Nvidia says it doesn't plan to reappoint Huang as CEO",
+        "url": "https://techcrunch.com/2026/11/17/nvidia-says-it-doesnt-plan-to-reappoint-huang-as-ceo/",
+        "publishedAt": "2026-11-17",
+        "type": "secondary_reporting",
+        "notes": "Quotes board chair's statement on earnings call and Huang's public willingness to return."
+      },
+      {
+        "id": "SRC-008",
+        "publisher": "U.S. House Permanent Select Committee on Intelligence",
+        "title": "Jensen Huang and Nvidia Agree to Appear Before Congress",
+        "url": "https://intelligence.house.gov/2026/11/17/jensen-huang-and-nvidia-agree-to-appear-before-congress/",
+        "publishedAt": "2026-11-17",
+        "type": "government_statement",
+        "notes": "Committee chairmen say Huang agreed to transcribed interview on Dec. 1 and NVIDIA General Counsel Tim Teter on Dec. 2; lawmakers describe questions they want answered. These are congressional concerns, not findings."
+      },
+      {
+        "id": "SRC-009",
+        "publisher": "Reuters",
+        "title": "Nvidia CEO Jensen Huang resigns in blow to AI boom he helped foster",
+        "url": "https://www.reuters.com/",
+        "publishedAt": "2026-11-12",
+        "type": "secondary_reporting",
+        "notes": "Contemporaneous reporting on resignation, reported personal relationships and potential implications for US chip-export policy; retrieve canonical article URL and full company response before final fact-check."
+      },
+      {
+        "id": "SRC-010",
+        "publisher": "Reuters Fact Check",
+        "title": "Fake letter calls for Nvidia board's resignation over Huang exit",
+        "url": "https://www.reuters.com/fact-check/fake-letter-calls-nvidia-boards-resignation-over-huang-exit-2026-11-20/",
+        "publishedAt": "2026-11-20",
+        "type": "fact_check",
+        "notes": "Important verification: viral purported employee letter demanding board resignation is fabricated; separate Stand With Jensen open letter is real."
+      },
+      {
+        "id": "SRC-011",
+        "publisher": "Associated Press",
+        "title": "California attorney general subpoenas Nvidia over chips, former CEO's affair",
+        "url": "https://apnews.com/article/94c179f5aed88c49b7f77670eae40013",
+        "publishedAt": "2026-11-20",
+        "type": "secondary_reporting",
+        "notes": "Reports California DOJ investigative subpoena and scope of inquiry; allegations remain under investigation."
+      },
+      {
+        "id": "SRC-012",
+        "publisher": "NVIDIA Investor Relations",
+        "title": "NVIDIA Announces Financial Results for Third Quarter Fiscal 2027",
+        "url": "https://investor.nvidia.com/",
+        "publishedAt": "2026-11-17",
+        "type": "company_filing",
+        "notes": "Use official earnings release for exact quarterly revenue, data-center revenue, outlook and reporting period. Retrieve canonical release URL and verify every figure before use."
+      }
+    ],
+    "claims": [
+      {
+        "id": "CLM-001",
+        "text": "NVIDIA disclosed that Jensen Huang resigned as president, CEO and board member effective immediately; the board accepted his resignation.",
+        "classification": "verified",
+        "sourceIds": [
+          "SRC-001",
+          "SRC-002"
+        ],
+        "confidence": "high",
+        "caveat": "The SEC filing dates the accepted resignation November 11; the company announcement was published November 12."
+      },
+      {
+        "id": "CLM-002",
+        "text": "Colette Kress was appointed interim CEO while the board searches for a permanent successor.",
+        "classification": "verified",
+        "sourceIds": [
+          "SRC-001",
+          "SRC-002"
+        ],
+        "confidence": "high"
+      },
+      {
+        "id": "CLM-003",
+        "text": "The board said it initiated an independent investigation after reports that Huang had been targeted by a foreign intelligence effort.",
+        "classification": "verified",
+        "sourceIds": [
+          "SRC-003",
+          "SRC-004"
+        ],
+        "confidence": "high",
+        "caveat": "This records what the board said, not proof that the reported effort occurred or succeeded."
+      },
+      {
+        "id": "CLM-004",
+        "text": "On November 17, the board chair said the board did not intend to reinstate Huang as CEO.",
+        "classification": "attributed",
+        "sourceIds": [
+          "SRC-006",
+          "SRC-007"
+        ],
+        "confidence": "high",
+        "caveat": "Attribute the statement to board chair Harvey Jones; do not imply a court or regulator made this determination."
+      },
+      {
+        "id": "CLM-005",
+        "text": "Huang publicly said he would be honored to return if the board determined it was in shareholders' and the company's best interest.",
+        "classification": "attributed",
+        "sourceIds": [
+          "SRC-006",
+          "SRC-007"
+        ],
+        "confidence": "high"
+      },
+      {
+        "id": "CLM-006",
+        "text": "Huang and NVIDIA's general counsel agreed to appear for transcribed congressional interviews scheduled for December 1 and 2.",
+        "classification": "verified",
+        "sourceIds": [
+          "SRC-008"
+        ],
+        "confidence": "high",
+        "caveat": "The committee's stated concerns are allegations/questions, not findings of wrongdoing."
+      },
+      {
+        "id": "CLM-007",
+        "text": "California's attorney general issued an investigative subpoena to NVIDIA concerning potential chip transfers, disclosures and related matters.",
+        "classification": "attributed",
+        "sourceIds": [
+          "SRC-011"
+        ],
+        "confidence": "medium",
+        "caveat": "Based on AP reporting; obtain the subpoena or official DOJ statement before final narration. An investigation is not proof of misconduct."
+      },
+      {
+        "id": "CLM-008",
+        "text": "A purported internal employee letter demanding the board resign was fabricated, according to Reuters Fact Check.",
+        "classification": "attributed",
+        "sourceIds": [
+          "SRC-010"
+        ],
+        "confidence": "high",
+        "caveat": "If included, distinguish the fake viral image from the separate genuine open letter supporting a fair hearing for Huang."
+      }
+    ],
+    "contradictions": [],
+    "openQuestions": [
+      "Obtain the canonical URL and exact text of Huang's November 8 company message/apology.",
+      "Obtain the exact November 17 earnings-call transcript and direct board-chair quote.",
+      "Obtain official California DOJ confirmation or subpoena details before stating its scope as fact.",
+      "Confirm whether any congressional or regulatory findings have been published after the announced interview dates; update immediately before voice recording.",
+      "Retrieve NVIDIA's official Q3 FY2027 earnings release and verify any revenue figures used.",
+      "Resolve canonical Reuters article URL and include NVIDIA's response to each material allegation."
+    ]
+  }
+}
