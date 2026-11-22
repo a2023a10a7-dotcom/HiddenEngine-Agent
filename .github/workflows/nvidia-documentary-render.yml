@@ -1,0 +1,73 @@
+name: NVIDIA Documentary Render
+on:
+  push:
+    branches:
+      - production/nvidia-jensen-huang-exit
+    paths:
+      - "production/projects/2026-11-22-the-fall-of-nvidias-king/**"
+      - ".github/workflows/nvidia-documentary-render.yml"
+      - "src/render-video.js"
+      - "src/prepare-project-assets.js"
+permissions:
+  contents: read
+concurrency:
+  group: nvidia-documentary-render
+  cancel-in-progress: false
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install FFmpeg and fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-dejavu-core librsvg2-bin
+      - name: Install free local Piper voice
+        env:
+          PIPER_VOICE: en_US-lessac-medium
+        run: |
+          set -euo pipefail
+          python3 -m venv .venv-piper
+          .venv-piper/bin/pip install --upgrade pip
+          .venv-piper/bin/pip install piper-tts
+          mkdir -p models
+          base="https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/lessac/medium/en_US-lessac-medium"
+          curl -fL "$base.onnx" -o models/en_US-lessac-medium.onnx
+          curl -fL "$base.onnx.json" -o models/en_US-lessac-medium.onnx.json
+          echo "PIPER_EXECUTABLE=$GITHUB_WORKSPACE/.venv-piper/bin/piper" >> "$GITHUB_ENV"
+          echo "PIPER_MODEL=$GITHUB_WORKSPACE/models/en_US-lessac-medium.onnx" >> "$GITHUB_ENV"
+      - name: Acquire unique narration-matched visuals
+        env:
+          PROJECT_ID: 2026-11-22-the-fall-of-nvidias-king
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${PIXABAY_API_KEY:-}" ]]; then
+            echo "::error::PIXABAY_API_KEY repository secret is not configured; visual acquisition cannot start."
+            exit 1
+          fi
+          node src/prepare-project-assets.js
+      - name: Render documentary and run technical and visual QA
+        env:
+          PROJECT_ID: 2026-11-22-the-fall-of-nvidias-king
+          PIPER_LENGTH_SCALE: "1.2"
+        run: node src/render-video.js
+      - name: Upload documentary and review evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: nvidia-jensen-huang-documentary
+          path: |
+            dist/2026-11-22-the-fall-of-nvidias-king/the-hidden-engine-documentary.mp4
+            dist/2026-11-22-the-fall-of-nvidias-king/QA-REPORT.json
+            dist/2026-11-22-the-fall-of-nvidias-king/VISUAL-AUDIT.json
+            dist/2026-11-22-the-fall-of-nvidias-king/contact-sheet.jpg
+            dist/2026-11-22-the-fall-of-nvidias-king/CREDITS.md
+            dist/2026-11-22-the-fall-of-nvidias-king/README.txt
+          if-no-files-found: error
+          retention-days: 7
