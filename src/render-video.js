@@ -391,7 +391,7 @@ async function main() {
     "-af","volume='if(lt(mod(t,36),0.08),0.025,0)',afade=t=in:st=0:d=0.1",click]);
   const ambient = path.join(OUT,"original-ambient-bed.wav");
   await run("ffmpeg",["-y","-f","lavfi","-i","aevalsrc=0.11*sin(2*PI*110*t)+0.08*sin(2*PI*164.81*t)+0.05*sin(2*PI*220*t)+0.03*sin(2*PI*329.63*t):s=44100:d="+rawDuration,
-    "-af","lowpass=f=1100,tremolo=f=0.08:d=0.22,volume=0.42,afade=t=in:st=0:d=4,afade=t=out:st="+Math.max(0,rawDuration-5)+":d=5",ambient]);
+    "-af","lowpass=f=1100,tremolo=f=0.12:d=0.22,volume=0.42,afade=t=in:st=0:d=4,afade=t=out:st="+Math.max(0,rawDuration-5)+":d=5",ambient]);
   const mixed = path.join(OUT,"mixed-final.mp4");
   await run("ffmpeg",["-y","-i",output,"-i",whoosh,"-i",click,"-i",ambient,
     "-filter_complex","[0:a]volume=1[voice];[1:a]volume=0.55[whoosh];[2:a]volume=0.45[click];[3:a]volume=0.18[bed];[voice][whoosh][click][bed]amix=inputs=4:duration=first:dropout_transition=3,loudnorm=I=-14:TP=-1.5:LRA=7[a]",
