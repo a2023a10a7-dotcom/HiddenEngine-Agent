@@ -288,15 +288,17 @@ async function main() {
       const asset = assetById.get(id);
       if (!asset || asset.scene !== i+1) throw new Error("Selected image " + id + " is missing or assigned to the wrong scene.");
       const assetKey = asset.directUrl || asset.sourcePage;
+      const previewFile = path.join(OUT, asset.previewFile || (id + ".jpg"));
+      const renderFile = path.join(OUT, asset.largeImageURL ? (id + "-full.jpg") : (id + ".jpg"));
       let imageFile = downloadedAssetFiles.get(assetKey);
       if (!imageFile) {
-        imageFile = path.join(OUT, id + ".jpg");
+        imageFile = renderFile;
         if (!await stat(imageFile).then(()=>true).catch(()=>false)) {
           const imageUrl = asset.directUrl || asset.largeImageURL || await pixabayImageUrl(asset.sourcePage);
           await download(imageUrl, imageFile);
         }
         downloadedAssetFiles.set(assetKey, imageFile);
-        contactSheetItems.push({ id, scene: asset.scene, file: imageFile });
+        contactSheetItems.push({ id, scene: asset.scene, file: previewFile });
       }
       imageFiles.push(imageFile);
       credits.push({ scene:i+1, sourceScene:asset.scene, imageId:id, provider:asset.provider || "Pixabay", page:asset.sourcePage, creator:asset.creator,
@@ -400,6 +402,9 @@ async function main() {
   await (await import("node:fs/promises")).rename(output+".tmp.mp4",output);
   await writeFile(path.join(OUT,"VISUAL-AUDIT.json"),JSON.stringify(visualAudit,null,2)+"\n");
   await writeFile(path.join(OUT,"CREDITS.md"),[
+    "# Research sources","",
+    ...(script.sources || []).map(source=>"- **"+source.name+"** — "+source.supports+" "+source.url),
+    "",
     "# Visual credits","",
     "Visuals were curated for this documentary from the linked source pages. Review the applicable license and credit requirements before publication.",
     "All selected stills are illustrative stock imagery, not evidence of a specific company, person, product, or event unless independently verified.",
