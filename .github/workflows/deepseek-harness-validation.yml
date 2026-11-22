@@ -29,6 +29,43 @@ jobs:
         run: |
           npx --yes esbuild@0.25.0 integrations/deepseek-harness/hiddenengine-tools.ts --bundle --format=esm --platform=node --external:@deepseek-ai/cordis --external:@deepseek-ai/dsh-tools --outfile=/tmp/hiddenengine-tools.js
           node --check /tmp/hiddenengine-tools.js
+      - name: Smoke-test the real DeepSeek Harness plugin loader
+        run: |
+          set -euo pipefail
+          PATCH_FILE="$(mktemp "${RUNNER_TEMP}/hiddenengine-dsh.XXXXXX.yml")"
+          LOG_FILE="${RUNNER_TEMP}/deepseek-harness.log"
+          cat > "$PATCH_FILE" <<YAML
+          - insert:
+              - id: hiddenengine-production-tools
+                name: '${GITHUB_WORKSPACE}/integrations/deepseek-harness/hiddenengine-tools.ts'
+          YAML
+          npx --yes @deepseek-ai/dsh web --no-open --patch "$PATCH_FILE" > "$LOG_FILE" 2>&1 &
+          DSH_PID=$!
+          cleanup() {
+            kill "$DSH_PID" 2>/dev/null || true
+            wait "$DSH_PID" 2>/dev/null || true
+            rm -f "$PATCH_FILE"
+          }
+          trap cleanup EXIT
+          loaded=0
+          for attempt in $(seq 1 90); do
+            if grep -q "DeepSeek Harness plugin loaded; four production tools registered" "$LOG_FILE"; then
+              loaded=1
+              break
+            fi
+            if ! kill -0 "$DSH_PID" 2>/dev/null; then
+              cat "$LOG_FILE"
+              echo "DeepSeek Harness exited before loading the HiddenEngine plugin." >&2
+              exit 1
+            fi
+            sleep 2
+          done
+          if [ "$loaded" -ne 1 ]; then
+            cat "$LOG_FILE"
+            echo "Timed out waiting for the HiddenEngine plugin to load in DeepSeek Harness." >&2
+            exit 1
+          fi
+          echo "DeepSeek Harness loaded the HiddenEngine plugin and registered its four tools."
       - name: Check launcher shell syntax
         run: bash -n integrations/deepseek-harness/launch.sh
       - name: Check package manifest
