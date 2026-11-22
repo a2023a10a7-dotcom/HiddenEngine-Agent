@@ -75,8 +75,8 @@ function overlaySvg(scene, index, total) {
   .brand{font:700 34px 'DejaVu Sans';letter-spacing:6px;fill:#FFFFFF}
   .kicker{font:400 17px 'DejaVu Sans';letter-spacing:3px;fill:#C3B7A8}
   .eyebrow{font:700 18px 'DejaVu Sans';letter-spacing:4px;fill:#C86D2D}
-  .title{font:700 58px 'DejaVu Sans';letter-spacing:2px;fill:#FFFFFF}
-  .sub{font:400 25px 'DejaVu Sans';letter-spacing:0.5px;fill:#E5E5E5}
+  .title{font:700 58px 'DejaVu Sans';letter-spacing:3px;fill:#FFFFFF}
+  .sub{font:400 24px 'DejaVu Sans';letter-spacing:0.4px;fill:#E5E5E5}
   .visual-label{font:700 18px DejaVu Sans;letter-spacing:2px;fill:#C86D2D}
   .visual-value{font:700 82px DejaVu Sans;fill:#FFFFFF}
   .visual-detail{font:400 20px DejaVu Sans;fill:#E5E5E5}
@@ -137,7 +137,7 @@ async function writeNarrationSubtitles(narration, duration, output) {
     cursor = end;
     return "Dialogue: 0," + assTimestamp(start) + "," + assTimestamp(end) + ",Default,,0,0,0,," + cue.text.replace(/[{}]/g, "");
   });
-  const header = ["[Script Info]","ScriptType: v4.00+","PlayResX: 1920","PlayResY: 1080","ScaledBorderAndShadow: yes","WrapStyle: 2","","[V4+ Styles]","Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding","Style: Default,DejaVu Sans,32,&H00FFFFFF,&H000000FF,&H80000000,&H80000000,0,0,1,2,1,2,144,144,88,1","","[Events]","Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"];
+  const header = ["[Script Info]","ScriptType: v4.00+","PlayResX: 1920","PlayResY: 1080","ScaledBorderAndShadow: yes","WrapStyle: 2","","[V4+ Styles]","Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding","Style: Default,DejaVu Sans,31,&H00FFFFFF,&H000000FF,&H00301A0E,&H990A0A0B,0,0,1,2,0,2,150,150,82,1","","[Events]","Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"];
   await writeFile(output, header.concat(events).join("\n") + "\n");
 }
 async function piperTTS(text, output) {
@@ -342,7 +342,7 @@ async function main() {
     }
     const keywords = (scene.keywords || []).slice(0,4).join("  •  ").replace(/:/g,"\\\\:");
     if (keywords) {
-      filters.push("["+finalVideoLabel+"]drawtext=text='"+keywords.replace(/'/g,"\\\\'")+"':fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:fontsize=27:fontcolor=0xC08A58:x=(w-text_w)/2:y=610:alpha='if(lt(t,0.45),t/0.45,if(lt(t,4.0),1,0))':enable='between(t,0,4.2)'[keyterms]");
+      filters.push("["+finalVideoLabel+"]drawtext=text='"+keywords.replace(/'/g,"\\\\'")+"':fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:fontsize=27:fontcolor=0xD97724:x=(w-text_w)/2:y=610:alpha='if(lt(t,0.45),t/0.45,if(lt(t,4.0),1,0))':enable='between(t,0,4.2)'[keyterms]");
       finalVideoLabel = "keyterms";
     }
     if (i===0) {
@@ -387,12 +387,14 @@ async function main() {
   const whoosh = path.join(OUT,"transition-whoosh.wav");
   const click = path.join(OUT,"number-click.wav");
   await run("ffmpeg",["-y","-f","lavfi","-i","anoisesrc=color=pink:sample_rate=22050:duration="+rawDuration,
-    "-af","highpass=f=250,lowpass=f=1800,volume='if(lt(mod(t,10.5),0.24),0.055,0)'",whoosh]);
+    "-af","highpass=f=320,lowpass=f=1500,volume='if(lt(mod(t,14),0.20),0.032,0)',afade=t=in:st=0:d=1,afade=t=out:st="+Math.max(0,rawDuration-2)+":d=2",whoosh]);
   await run("ffmpeg",["-y","-f","lavfi","-i","sine=frequency=1650:sample_rate=22050:duration="+rawDuration,
-    "-af","volume='if(lt(mod(t,36),0.08),0.025,0)',afade=t=in:st=0:d=0.1",click]);
+    "-af","volume='if(lt(mod(t,48),0.06),0.012,0)',afade=t=in:st=0:d=0.1",click]);
   const ambient = path.join(OUT,"original-ambient-bed.wav");
-  await run("ffmpeg",["-y","-f","lavfi","-i","aevalsrc=0.11*sin(2*PI*110*t)+0.08*sin(2*PI*164.81*t)+0.05*sin(2*PI*220*t)+0.03*sin(2*PI*329.63*t):s=44100:d="+rawDuration,
-    "-af","lowpass=f=1100,tremolo=f=0.12:d=0.22,volume=0.42,afade=t=in:st=0:d=4,afade=t=out:st="+Math.max(0,rawDuration-5)+":d=5",ambient]);
+  await run("ffmpeg",["-y","-f","lavfi","-i","aevalsrc=0.075*sin(2*PI*110*t)+0.055*sin(2*PI*164.81*t)+0.035*sin(2*PI*220*t)+0.018*sin(2*PI*329.63*t):s=44100:d="+rawDuration,
+    "-f","lavfi","-i","anoisesrc=color=pink:amplitude=0.018:sample_rate=44100:duration="+rawDuration,
+    "-filter_complex","[0:a]lowpass=f=900,volume=0.42[tone];[1:a]highpass=f=180,lowpass=f=1400,volume=0.20[air];[tone][air]amix=inputs=2:duration=longest,afade=t=in:st=0:d=5,afade=t=out:st="+Math.max(0,rawDuration-7)+":d=7[out]",
+    "-map","[out]",ambient]);
   const mixed = path.join(OUT,"mixed-final.mp4");
   await run("ffmpeg",["-y","-i",output,"-i",whoosh,"-i",click,"-i",ambient,
     "-filter_complex","[0:a]volume=1[voice];[1:a]volume=0.55[whoosh];[2:a]volume=0.45[click];[3:a]volume=0.18[bed];[voice][whoosh][click][bed]amix=inputs=4:duration=first:dropout_transition=3,loudnorm=I=-14:TP=-1.5:LRA=7[a]",
