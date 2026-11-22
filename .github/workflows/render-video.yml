@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - "production/projects/**/visual-links.json"
+      - "production/projects/**/script.json"
   workflow_dispatch:
     inputs:
       project_id:
@@ -60,15 +61,16 @@ jobs:
           curl -fL "$base.onnx.json" -o "models/${PIPER_VOICE}.onnx.json"
           echo "PIPER_MODEL=models/${PIPER_VOICE}.onnx" >> "$GITHUB_ENV"
           echo "PIPER_EXECUTABLE=$GITHUB_WORKSPACE/.venv-piper/bin/piper" >> "$GITHUB_ENV"
-      - name: Convert ChatGPT-curated links into render manifest
+      - name: Prepare unique narration-matched visuals
         env:
           PROJECT_ID: ${{ inputs.project_id }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
         run: |
           set -euo pipefail
           if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
-            project_path="$(git diff-tree --no-commit-id --name-only -r HEAD | awk -F/ '$1=="production" && $2=="projects" && $4=="visual-links.json" {print; exit}')"
+            project_path="$(git diff-tree --no-commit-id --name-only -r HEAD | awk -F/ '$1=="production" && $2=="projects" && ($4=="visual-links.json" || $4=="script.json") {print; exit}')"
             if [[ -z "$project_path" ]]; then
-              echo "No visual-links.json change found in the triggering commit." >&2
+              echo "No project script or visual trigger found in the triggering commit." >&2
               exit 2
             fi
             project_id="$(cut -d/ -f3 <<< "$project_path")"
@@ -76,8 +78,8 @@ jobs:
             project_id="${{ inputs.project_id }}"
           fi
           echo "PROJECT_ID=$project_id" >> "$GITHUB_ENV"
-          PROJECT_ID="$project_id" node src/import-visual-links.js
-      - name: Render using ChatGPT-curated images
+          PROJECT_ID="$project_id" node src/prepare-project-assets.js
+      - name: Render using narration-matched visuals
         env:
           PIPER_LENGTH_SCALE: ${{ inputs.speaking_rate || '1.0' }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
