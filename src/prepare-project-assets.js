@@ -151,6 +151,8 @@ async function main(){
  await writeFile(svg,parts.join(""));
  await new Promise((resolve,reject)=>{const p=spawn("rsvg-convert",["-f","png","-o",path.join(out,"contact-sheet.png"),svg],{stdio:"inherit"});p.on("error",reject);p.on("close",c=>c===0?resolve():reject(new Error("rsvg-convert failed")));});
  await new Promise((resolve,reject)=>{const p=spawn("ffmpeg",["-y","-i",path.join(out,"contact-sheet.png"),"-frames:v","1","-q:v","2",path.join(out,"contact-sheet.jpg")],{stdio:"inherit"});p.on("error",reject);p.on("close",c=>c===0?resolve():reject(new Error("contact sheet JPEG failed")));});
- const uniqueAssetCount=new Set(assets.map(asset=>asset.sourcePage)).size;\n if(uniqueAssetCount!==assets.length) throw new Error("Visual selection contains duplicate source pages: "+uniqueAssetCount+"/"+assets.length);\n console.log("Prepared "+assets.length+" unique AI-selected images with query relevance evidence (target average 5 seconds) and contact sheet.");
+ const uniqueAssetCount=new Set(assets.map(asset=>asset.sourcePage)).size;
+ if(uniqueAssetCount!==assets.length) throw new Error("Visual selection contains duplicate source pages: "+uniqueAssetCount+"/"+assets.length);
+ console.log("Prepared "+assets.length+" unique AI-selected images with query relevance evidence (target average 5 seconds) and contact sheet.");
 }
 main().catch(e=>{console.error(e);process.exit(1);});
