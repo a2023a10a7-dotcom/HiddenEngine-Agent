@@ -1,3 +1,4 @@
+// Retry transient visual downloads; verified previews remain a safe fallback.
 import { access, mkdir, readFile, writeFile, stat } from "node:fs/promises";
 import { spawn } from "node:child_process";
 import path from "node:path";
