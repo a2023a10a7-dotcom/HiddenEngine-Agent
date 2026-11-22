@@ -2,8 +2,8 @@
   "title": "THE FALL OF NVIDIA'S KING: How Jensen Huang Lost the Company He Built",
   "language": "en",
   "voice": "en-us",
-  "target_duration_minutes": 8,
-  "description": "A concise, evidence-led 7–9 minute English corporate investigation into Jensen Huang's November 2026 resignation, the board's refusal to reinstate him, export-control scrutiny, and NVIDIA's leadership transition. Allegations are clearly attributed and unresolved questions remain open.",
+  "target_duration_minutes": 5,
+  "description": "A concise, evidence-led approximately five-minute English corporate investigation into Jensen Huang's November 2026 resignation, the board's refusal to reinstate him, export-control scrutiny, and NVIDIA's leadership transition. Allegations are clearly attributed and unresolved questions remain open.",
   "sources": [
     {
       "name": "NVIDIA / SEC Form 8-K",
@@ -430,7 +430,7 @@
     }
   ],
   "accepted_duration_range_minutes": [
-    7,
-    9
+    4,
+    6
   ]
 }
