@@ -11,7 +11,7 @@ This integration adds a small, guarded GitHub toolset to DeepSeek Harness. It is
 
 ## Requirements
 
-- Node.js 20+
+- Node.js 24.22.3+ (24.x) or 26.13.1+; this follows the pinned DeepSeek Harness source runtime
 - A computer or server where DeepSeek Harness can run
 - A model provider configured in Harness under **Settings → Models** (DeepSeek API or another supported provider)
 - For rendering from Harness: a GitHub fine-grained personal access token supplied as `GITHUB_TOKEN` or `GH_TOKEN`, restricted to this repository, with **Contents: Read** and **Actions: Read and write**. Never commit the token.
@@ -32,7 +32,7 @@ Or:
 bash integrations/deepseek-harness/launch.sh
 ```
 
-The launcher creates a temporary Cordis overlay with the absolute plugin path and starts the official Harness Web UI. It does not install Harness as a permanent dependency of the video renderer.
+The launcher clones the official DeepSeek Harness source at a pinned commit into a separate cache directory, installs its pinned pnpm dependencies, builds it, copies the plugin into the Harness workspace (so its Cordis imports resolve correctly), creates a temporary Cordis overlay, and starts the Web UI. The first run is a substantial install/build and may take several minutes. Harness is not added to the video renderer's runtime dependencies.
 
 After the UI opens:
 1. Add this repository folder as the Harness workspace.
@@ -55,10 +55,19 @@ To start a render, the user must explicitly approve in the current Harness sessi
 
 - Harness is currently in developer preview; breaking changes are possible.
 - The toolset dispatches the existing renderer. It does not yet make every production stage autonomous.
-- The project owner must configure the model provider and GitHub token on the machine running Harness.
+- The project owner must configure the model provider and, for render dispatch, a GitHub token on the machine running Harness. The launcher requires a supported Node version and internet access to clone/build the pinned Harness source.
 - The plugin does not upload to YouTube, grant media rights, or guarantee that a source is accurate.
 - Do not use the older `production-sequence.yml` workflow until its referenced compile/gate scripts have been implemented and validated.
 
 ## Validation
 
-The `DeepSeek Harness Integration Validation` GitHub Actions workflow checks the TypeScript plugin syntax and launcher shell syntax on changes to this integration.
+The `DeepSeek Harness Integration Validation` GitHub Actions workflow checks TypeScript and shell syntax, installs/builds the pinned official Harness source, and smoke-tests that Harness loads the HiddenEngine plugin and registers its four tools.
+
+
+## Pinned upstream runtime
+
+- Repository: https://github.com/deepseek-ai/deepseek-harness
+- Branch at selection: `master`
+- Commit: `4b399c39a6d1479cd84ca591b4d7c88e24d38a96`
+- Root package declares pnpm `11.28.5` and Node.js `24.22.3+` in the 24.x line or `26.13.1+`.
+- To upgrade, update the pinned commit in both `launch.sh` and the validation workflow, then pass the full smoke test before merging.
