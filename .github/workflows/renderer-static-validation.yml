@@ -22,8 +22,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Validate renderer syntax
-        run: node --check src/render-video.js
+      - name: Validate renderer and visual planner syntax
+        run: |
+          node --check src/render-video.js
+          node --check src/prepare-project-assets.js
       - name: Validate 15-minute documentary script
         run: |
           node --input-type=module <<'NODE'
