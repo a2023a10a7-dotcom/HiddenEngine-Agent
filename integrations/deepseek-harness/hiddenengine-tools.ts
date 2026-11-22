@@ -42,7 +42,7 @@ async function github(path: string, options: GithubOptions = {}): Promise<any> {
 
 function decodeFile(file: any): string {
   if (!file?.content || file.encoding !== 'base64') throw new Error('GitHub did not return a base64 file.')
-  const binary = atob(String(file.content).replace(/\\n/g, ''))
+  const binary = atob(String(file.content).replace(/\n/g, ''))
   const bytes = Uint8Array.from(binary, char => char.charCodeAt(0))
   return new TextDecoder().decode(bytes)
 }
@@ -85,7 +85,7 @@ function register(ctx: Context) {
         if (!(error instanceof Error) || !error.message.includes('(404)')) throw error
       }
       const scenes = Array.isArray(script.scenes) ? script.scenes : []
-      const words = scenes.reduce((sum: number, scene: any) => sum + String(scene.narration || '').trim().split(/\\s+/).filter(Boolean).length, 0)
+      const words = scenes.reduce((sum: number, scene: any) => sum + String(scene.narration || '').trim().split(/\s+/).filter(Boolean).length, 0)
       const visualRows = Array.isArray(visualManifest?.scenes) ? visualManifest.scenes : []
       const visualCount = visualRows.reduce((sum: number, scene: any) => sum + (Array.isArray(scene.visuals) ? scene.visuals.length : 0), 0)
       return JSON.stringify({
