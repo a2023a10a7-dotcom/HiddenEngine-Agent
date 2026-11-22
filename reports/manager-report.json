@@ -1,19 +1,42 @@
 {
   "meta": {
-    "generatedAt": "2026-11-15T11:05:42.757Z",
+    "generatedAt": "2026-11-22T10:38:04.308Z",
     "total": 50,
     "selected": 0,
-    "sourceDate": "2026-11-15T10:32:07.775Z"
+    "sourceDate": "2026-11-22T10:37:51.032Z"
   },
   "selected": [],
   "backlog": [
     {
-      "title": "Jensen Huang and the decline of the visionary showman founder CEO",
-      "source": "The Verge",
-      "date": "2026-11-14T12:00:00.000Z",
-      "url": "https://www.theverge.com/tech/1033781/nvidia-jensen-huang-last-visionary-showman-founder-ceo",
-      "channelFit": 54,
-      "originalAutomatedScore": 53,
+      "title": "The AI Hype Index: AI is everywhere",
+      "source": "MIT Technology Review",
+      "date": "2026-11-18T14:42:44.000Z",
+      "url": "https://www.technologyreview.com/2026/11/18/1148650/ai-hype-index-ai-is-everywhere/",
+      "channelFit": 52,
+      "originalAutomatedScore": 45,
+      "angle": "Investigate the hidden business model: where the money comes from, cost structure, competitive advantage, and strategic trade-offs.",
+      "evidenceStatus": "Primary source still needed",
+      "coverageDomains": [],
+      "coverageCount": 0,
+      "warnings": [
+        "Fewer than two distinct matching coverage domains; corroboration is not established.",
+        "No primary-source link identified in the automated coverage leads."
+      ],
+      "decision": "BACKLOG",
+      "scoreSignals": {
+        "economics": 2,
+        "strategy": 2,
+        "infrastructure": 0,
+        "technology": 2
+      }
+    },
+    {
+      "title": "Anthropic’s 7 founders cashed out nearly $2B in record-breaking IPO",
+      "source": "TechCrunch",
+      "date": "2026-11-20T00:43:50.000Z",
+      "url": "https://techcrunch.com/2026/11/19/anthropics-7-founders-cashed-out-nearly-2b-in-record-breaking-ipo/",
+      "channelFit": 45,
+      "originalAutomatedScore": 49,
       "angle": "Investigate the hidden business model: where the money comes from, cost structure, competitive advantage, and strategic trade-offs.",
       "evidenceStatus": "Primary source still needed",
       "coverageDomains": [
@@ -28,88 +51,16 @@
       "scoreSignals": {
         "economics": 0,
         "strategy": 4,
-        "infrastructure": 1,
-        "technology": 1
-      }
-    },
-    {
-      "title": "Jensen Huang’s departure blasts big hole in AI startup funding, VCs and founders say",
-      "source": "TechCrunch",
-      "date": "2026-11-13T22:43:00.000Z",
-      "url": "https://techcrunch.com/2026/11/13/jensen-huangs-departure-blasts-big-hole-in-ai-startup-funding-vcs-and-founders-say/",
-      "channelFit": 47,
-      "originalAutomatedScore": 37,
-      "angle": "Investigate the hidden business model: where the money comes from, cost structure, competitive advantage, and strategic trade-offs.",
-      "evidenceStatus": "Primary source still needed",
-      "coverageDomains": [],
-      "coverageCount": 0,
-      "warnings": [
-        "Fewer than two distinct matching coverage domains; corroboration is not established.",
-        "No primary-source link identified in the automated coverage leads."
-      ],
-      "decision": "BACKLOG",
-      "scoreSignals": {
-        "economics": 1,
-        "strategy": 3,
         "infrastructure": 0,
-        "technology": 1
+        "technology": 0
       }
     },
     {
-      "title": "Tesla is inviting some people to buy a Cybercab ‘for personal use’ — but read the fine print",
+      "title": "Chess.com’s next move is a new hub for classic games, from mahjong to sudoku",
       "source": "The Verge",
-      "date": "2026-11-14T14:18:36.000Z",
-      "url": "https://www.theverge.com/transportation/1033844/tesla-personal-cybercab-orders-299-subscription-fine-print",
-      "channelFit": 45,
-      "originalAutomatedScore": 46,
-      "angle": "Investigate the hidden business model: where the money comes from, cost structure, competitive advantage, and strategic trade-offs.",
-      "evidenceStatus": "Primary source still needed",
-      "coverageDomains": [
-        "news.google.com"
-      ],
-      "coverageCount": 1,
-      "warnings": [
-        "Few matching coverage results found. Search for additional reporting and primary sources.",
-        "Fewer than two distinct matching coverage domains; corroboration is not established.",
-        "No primary-source link identified in the automated coverage leads."
-      ],
-      "decision": "BACKLOG",
-      "scoreSignals": {
-        "economics": 1,
-        "strategy": 2,
-        "infrastructure": 0,
-        "technology": 2
-      }
-    },
-    {
-      "title": "AI agent startup LangChain hits $3B valuation",
-      "source": "TechCrunch",
-      "date": "2026-11-13T19:37:57.000Z",
-      "url": "https://techcrunch.com/2026/11/13/ai-agent-startup-langchain-hits-3b-valuation/",
+      "date": "2026-11-21T14:00:00.000Z",
+      "url": "https://www.theverge.com/games/1038099/chess-classic-games-expansion-ai",
       "channelFit": 44,
-      "originalAutomatedScore": 38,
-      "angle": "Investigate the hidden business model: where the money comes from, cost structure, competitive advantage, and strategic trade-offs.",
-      "evidenceStatus": "Primary source still needed",
-      "coverageDomains": [],
-      "coverageCount": 0,
-      "warnings": [
-        "Fewer than two distinct matching coverage domains; corroboration is not established.",
-        "No primary-source link identified in the automated coverage leads."
-      ],
-      "decision": "BACKLOG",
-      "scoreSignals": {
-        "economics": 1,
-        "strategy": 2,
-        "infrastructure": 0,
-        "technology": 2
-      }
-    },
-    {
-      "title": "Where was Nvidia’s security team?",
-      "source": "TechCrunch",
-      "date": "2026-11-15T00:08:07.000Z",
-      "url": "https://techcrunch.com/2026/11/14/where-was-nvidias-security-team/",
-      "channelFit": 43,
       "originalAutomatedScore": 46,
       "angle": "Investigate the hidden business model: where the money comes from, cost structure, competitive advantage, and strategic trade-offs.",
       "evidenceStatus": "Primary source still needed",
@@ -125,46 +76,21 @@
       "scoreSignals": {
         "economics": 0,
         "strategy": 3,
-        "infrastructure": 1,
-        "technology": 0
+        "infrastructure": 0,
+        "technology": 2
       }
     },
     {
-      "title": "Asian governments react to Nvidia CEO Jensen Huang’s exit",
+      "title": "California AG subpoenas Nvidia over worries about Huang’s ties with China",
       "source": "TechCrunch",
-      "date": "2026-11-14T16:34:15.000Z",
-      "url": "https://techcrunch.com/2026/11/14/asian-governments-react-to-nvidia-ceo-jensen-huangs-exit/",
-      "channelFit": 43,
-      "originalAutomatedScore": 43,
+      "date": "2026-11-20T13:21:11.000Z",
+      "url": "https://techcrunch.com/2026/11/20/california-ag-subpoenas-nvidia-over-worries-about-huangs-ties-with-china/",
+      "channelFit": 40,
+      "originalAutomatedScore": 41,
       "angle": "Investigate the hidden business model: where the money comes from, cost structure, competitive advantage, and strategic trade-offs.",
       "evidenceStatus": "Primary source still needed",
       "coverageDomains": [],
       "coverageCount": 0,
-      "warnings": [
-        "Fewer than two distinct matching coverage domains; corroboration is not established.",
-        "No primary-source link identified in the automated coverage leads."
-      ],
-      "decision": "BACKLOG",
-      "scoreSignals": {
-        "economics": 0,
-        "strategy": 3,
-        "infrastructure": 1,
-        "technology": 0
-      }
-    },
-    {
-      "title": "Watch SpaceX successfully execute the first ‘chopstick’ catch of Starship",
-      "source": "The Verge",
-      "date": "2026-11-14T21:44:44.000Z",
-      "url": "https://www.theverge.com/science/1033930/spacex-chopstick-starship-catch",
-      "channelFit": 42,
-      "originalAutomatedScore": 48,
-      "angle": "Investigate the hidden business model: where the money comes from, cost structure, competitive advantage, and strategic trade-offs.",
-      "evidenceStatus": "Primary source still needed",
-      "coverageDomains": [
-        "news.google.com"
-      ],
-      "coverageCount": 1,
       "warnings": [
         "Fewer than two distinct matching coverage domains; corroboration is not established.",
         "No primary-source link identified in the automated coverage leads."
@@ -178,36 +104,12 @@
       }
     },
     {
-      "title": "Export-banned Nvidia chips are behind China’s most powerful AI models — uh-oh, Jensen!",
+      "title": "Daniel Ek backs AI researcher’s fusion power startup. Here’s what they’re building.",
       "source": "TechCrunch",
-      "date": "2026-11-13T18:40:30.000Z",
-      "url": "https://techcrunch.com/2026/11/13/export-banned-nvidia-chips-are-behind-chinas-most-powerful-ai-models-uh-oh-jensen/",
+      "date": "2026-11-20T19:53:41.000Z",
+      "url": "https://techcrunch.com/2026/11/20/daniel-ek-backs-ai-researchers-fusion-power-startup-heres-what-theyre-building/",
       "channelFit": 40,
-      "originalAutomatedScore": 44,
-      "angle": "Investigate the hidden business model: where the money comes from, cost structure, competitive advantage, and strategic trade-offs.",
-      "evidenceStatus": "Primary source still needed",
-      "coverageDomains": [],
-      "coverageCount": 0,
-      "warnings": [
-        "The available summary is short. Read the original article.",
-        "Fewer than two distinct matching coverage domains; corroboration is not established.",
-        "No primary-source link identified in the automated coverage leads."
-      ],
-      "decision": "BACKLOG",
-      "scoreSignals": {
-        "economics": 0,
-        "strategy": 2,
-        "infrastructure": 1,
-        "technology": 1
-      }
-    },
-    {
-      "title": "Microsoft’s latest email outage turned into a full-blown global cloud crisis",
-      "source": "TechCrunch",
-      "date": "2026-11-13T13:15:20.000Z",
-      "url": "https://techcrunch.com/2026/11/13/microsoft-latest-email-outage-turned-into-a-full-blown-global-cloud-crisis/",
-      "channelFit": 39,
-      "originalAutomatedScore": 40,
+      "originalAutomatedScore": 39,
       "angle": "Investigate the hidden business model: where the money comes from, cost structure, competitive advantage, and strategic trade-offs.",
       "evidenceStatus": "Primary source still needed",
       "coverageDomains": [],
@@ -219,16 +121,16 @@
       "decision": "BACKLOG",
       "scoreSignals": {
         "economics": 0,
-        "strategy": 2,
-        "infrastructure": 1,
+        "strategy": 3,
+        "infrastructure": 0,
         "technology": 1
       }
     },
     {
-      "title": "Uber confirms hackers stole thousands of drivers’ license information in data breach",
-      "source": "TechCrunch",
-      "date": "2026-11-13T14:57:55.000Z",
-      "url": "https://techcrunch.com/2026/11/13/uber-confirms-hackers-stole-thousands-of-drivers-license-information-in-data-breach/",
+      "title": "What a billion-dollar deal says about the US battery market",
+      "source": "MIT Technology Review",
+      "date": "2026-11-19T11:00:00.000Z",
+      "url": "https://www.technologyreview.com/2026/11/19/1148922/sila-panasonic-battery-deal/",
       "channelFit": 39,
       "originalAutomatedScore": 38,
       "angle": "Investigate the hidden business model: where the money comes from, cost structure, competitive advantage, and strategic trade-offs.",
