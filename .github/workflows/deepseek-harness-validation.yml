@@ -1,12 +1,6 @@
 name: DeepSeek Harness Integration Validation
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "integrations/deepseek-harness/**"
-      - "package.json"
-      - ".github/workflows/deepseek-harness-validation.yml"
   pull_request:
     paths:
       - "integrations/deepseek-harness/**"
@@ -24,27 +18,47 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24.22.3
       - name: Check Harness plugin TypeScript syntax
         run: |
           npx --yes esbuild@0.25.0 integrations/deepseek-harness/hiddenengine-tools.ts --bundle --format=esm --platform=node --external:@deepseek-ai/cordis --external:@deepseek-ai/dsh-tools --outfile=/tmp/hiddenengine-tools.js
           node --check /tmp/hiddenengine-tools.js
+      - name: Check launcher shell syntax
+        run: bash -n integrations/deepseek-harness/launch.sh
+      - name: Check package manifest
+        run: node -e "const p=require('./package.json'); if(p.scripts.harness!=='bash integrations/deepseek-harness/launch.sh') process.exit(1)"
+      - name: Install the pinned official Harness source and dependencies
+        run: |
+          set -euo pipefail
+          DSH_DIR="${RUNNER_TEMP}/deepseek-harness-source"
+          DSH_REF="4b399c39a6d1479cd84ca591b4d7c88e24d38a96"
+          git clone --no-checkout https://github.com/deepseek-ai/deepseek-harness.git "$DSH_DIR"
+          git -C "$DSH_DIR" fetch --depth=1 origin "$DSH_REF"
+          git -C "$DSH_DIR" checkout --detach "$DSH_REF"
+          npm install --global pnpm@11.28.5
+          cd "$DSH_DIR"
+          pnpm install --frozen-lockfile
+          pnpm run build
       - name: Smoke-test the real DeepSeek Harness plugin loader
         run: |
           set -euo pipefail
-          PATCH_FILE="$(mktemp "${RUNNER_TEMP}/hiddenengine-dsh.XXXXXX.yml")"
+          DSH_DIR="${RUNNER_TEMP}/deepseek-harness-source"
+          PLUGIN_DIR="$DSH_DIR/scratch-plugin/src"
+          PATCH_FILE="${RUNNER_TEMP}/hiddenengine-dsh.yml"
           LOG_FILE="${RUNNER_TEMP}/deepseek-harness.log"
+          mkdir -p "$PLUGIN_DIR"
+          cp integrations/deepseek-harness/hiddenengine-tools.ts "$PLUGIN_DIR/hiddenengine-tools.ts"
           cat > "$PATCH_FILE" <<YAML
           - insert:
               - id: hiddenengine-production-tools
-                name: '${GITHUB_WORKSPACE}/integrations/deepseek-harness/hiddenengine-tools.ts'
+                name: '$PLUGIN_DIR/hiddenengine-tools.ts'
           YAML
-          npx --yes @deepseek-ai/dsh web --no-open --patch "$PATCH_FILE" > "$LOG_FILE" 2>&1 &
+          cd "$DSH_DIR"
+          pnpm dsh web --no-open --patch "$PATCH_FILE" > "$LOG_FILE" 2>&1 &
           DSH_PID=$!
           cleanup() {
             kill "$DSH_PID" 2>/dev/null || true
             wait "$DSH_PID" 2>/dev/null || true
-            rm -f "$PATCH_FILE"
           }
           trap cleanup EXIT
           loaded=0
@@ -66,7 +80,3 @@ jobs:
             exit 1
           fi
           echo "DeepSeek Harness loaded the HiddenEngine plugin and registered its four tools."
-      - name: Check launcher shell syntax
-        run: bash -n integrations/deepseek-harness/launch.sh
-      - name: Check package manifest
-        run: node -e "const p=require('./package.json'); if(p.scripts.harness!=='bash integrations/deepseek-harness/launch.sh') process.exit(1)"
