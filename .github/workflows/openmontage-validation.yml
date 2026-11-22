@@ -1,0 +1,94 @@
+name: OpenMontage editor validation
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - experiment/openmontage-editor-pilot
+    paths:
+      - "integrations/openmontage/**"
+      - ".github/workflows/openmontage-validation.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate-openmontage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout HiddenEngine
+        uses: actions/checkout@v4
+
+      - name: Checkout pinned OpenMontage source
+        uses: actions/checkout@v4
+        with:
+          repository: OpenMontageInc/OpenMontage
+          ref: 2e003e65fa99a0f329478a2c1cdcf26bc481933a
+          path: .external/OpenMontage
+          persist-credentials: false
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-dejavu-core librsvg2-bin
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: .external/OpenMontage/requirements*.txt
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: .external/OpenMontage/remotion-composer/package-lock.json
+
+      - name: Install OpenMontage dependencies
+        working-directory: .external/OpenMontage
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-dev.txt
+          python -m pip install piper-tts
+          npm --version
+          node --version
+          cd remotion-composer
+          npm ci
+
+      - name: Run OpenMontage contract tests
+        working-directory: .external/OpenMontage
+        run: python -m pytest tests/contracts/ -q
+
+      - name: Render zero-key composition smoke test
+        working-directory: .external/OpenMontage
+        run: python render_demo.py world-in-numbers
+
+      - name: Verify rendered MP4
+        working-directory: .external/OpenMontage
+        run: |
+          set -euo pipefail
+          output="projects/demos/renders/world-in-numbers.mp4"
+          test -s "$output"
+          ffprobe -v error -show_entries format=duration:stream=codec_name,width,height -of json "$output" | tee /tmp/openmontage-ffprobe.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path("/tmp/openmontage-ffprobe.json").read_text())
+          video = next((s for s in data.get("streams", []) if s.get("codec_name") in {"h264", "hevc", "av1"}), None)
+          assert video, "No supported video stream found"
+          assert video.get("width") == 1920 and video.get("height") == 1080, f"Unexpected canvas: {video}"
+          duration = float(data["format"]["duration"])
+          assert duration > 5, f"Demo unexpectedly short: {duration}s"
+          print(f"OpenMontage smoke render passed: {duration:.1f}s, {video['width']}x{video['height']}")
+          PY
+
+      - name: Upload smoke-test video
+        uses: actions/upload-artifact@v4
+        with:
+          name: openmontage-zero-key-smoke-test
+          path: .external/OpenMontage/projects/demos/renders/world-in-numbers.mp4
+          if-no-files-found: error
+          retention-days: 7
