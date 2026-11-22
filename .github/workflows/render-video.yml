@@ -5,6 +5,7 @@ on:
     paths:
       - "production/projects/**/visual-links.json"
       - "production/projects/**/script.json"
+      - "src/render-video.js"
   workflow_dispatch:
     inputs:
       project_id:
