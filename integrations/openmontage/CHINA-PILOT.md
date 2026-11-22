@@ -1,8 +1,14 @@
-# China technology documentary — OpenMontage pilot brief
+# China technology documentary — OpenMontage hybrid-editing pilot
 
 ## Objective
 
-Re-edit the existing 15-minute English-language China technology documentary using OpenMontage's `documentary-montage` pipeline. This is an editorial pilot, not permission to rewrite the research or change the thesis.
+Re-edit the existing 15-minute English-language China technology documentary using OpenMontage's `hybrid` pipeline. This is an editorial pilot, not permission to rewrite the research or change the thesis.
+
+## Correct pipeline choice
+
+Use `pipeline_defs/hybrid.yaml`, not `documentary-montage.yaml`. OpenMontage describes the latter as a 30–180 second, non-narrative montage and explicitly excludes narrated explainers. The hybrid pipeline supports source footage plus designed support assets and a narration/dialogue plan, which matches this project.
+
+Borrow the documentary-montage edit discipline where useful: variable shot holds, motivated hard cuts, sparse dissolves, deliberate music sync, and a coherent grade.
 
 ## Inputs to preserve
 
@@ -12,7 +18,7 @@ Re-edit the existing 15-minute English-language China technology documentary usi
 - Structure: 15 narrative scenes/chapters
 - Preserve the approved narration and evidence-backed claims unless the evidence auditor flags a specific factual problem.
 - Preserve the existing voice track if technically usable; do not silently replace it.
-- Treat the existing visual audit and credits as source material for review, not as proof that every asset is suitable.
+- Treat existing visual links and credits as source material for review, not as proof that every asset is suitable.
 
 ## Creative direction
 
@@ -25,14 +31,14 @@ Re-edit the existing 15-minute English-language China technology documentary usi
 - Maintain deliberate rhythm: longer holds for important reveals, shorter cutaways for detail, motivated hard cuts, occasional dissolves, and purposeful act-break fades.
 - Music must remain subordinate to narration. Use restrained ambient texture and avoid distracting transition effects.
 
-## Required OpenMontage stages
+## Required stages
 
 1. Audit the current script, narration timings, project scene plan, visual audit, and credits.
 2. Build a scene/shot plan mapped to narration timecodes, not just chapter labels.
 3. Retrieve and inspect candidate footage; record source URL, provider, license, and retrieval date for every selected clip.
 4. Reject irrelevant, duplicate, low-resolution, watermarked, or rights-unclear assets.
 5. Create a concrete edit-decision timeline with in/out points, variable shot durations, transition choices, and reasons for every cut.
-6. Compose a 1920x1080, 25 fps master with consistent color treatment, narration-first audio mixing, subtitles only if they improve comprehension, and clean chapter cards.
+6. Compose a 1920x1080 master with consistent color treatment, narration-first audio mixing, subtitles only if they improve comprehension, and clean chapter cards.
 7. Run post-render checks: ffprobe, frame sampling, black-frame detection, audio peak/loudness review, subtitle timing, duration, and visual relevance.
 
 ## Acceptance criteria
