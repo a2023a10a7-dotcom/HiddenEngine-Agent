@@ -171,5 +171,16 @@ export const inject = ['tools']
 
 export function apply(ctx: Context): void {
   register(ctx)
+  ctx.on('tools/pre-execute', async (exec, next) => {
+    if (exec.name !== 'hiddenengine_start_render') return next()
+    return {
+      kind: 'ask',
+      reason: 'Rendering starts a GitHub Actions workflow and consumes CI resources. Obtain one-time approval before dispatch.',
+      displayReason: {
+        en: 'Approve starting the HiddenEngine documentary render?',
+        ar: 'هل توافق على بدء إنتاج الفيديو؟ سيؤدي ذلك إلى تشغيل مهمة إنتاج على GitHub.',
+      },
+    }
+  })
   console.info('[HiddenEngine] DeepSeek Harness plugin loaded; four production tools registered.')
 }
