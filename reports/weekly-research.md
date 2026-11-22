@@ -1,7 +1,7 @@
 # THE HIDDEN ENGINE
 ## Editorial Intelligence Report
 
-Date: 2026-11-15
+Date: 2026-11-22
 Articles analyzed: 50
 
 > Scores are automated editorial estimates, not facts or predictions of video performance.
@@ -18,31 +18,98 @@ Articles analyzed: 50
 
 ## TOP VIDEO OPPORTUNITIES
 
-### 1. The OpenAI board member who fired Sam Altman says we still can’t trust AI CEOs
+### 1. Can Anthropic afford to put safety first?
 
-- **Score:** 57/100
+- **Score:** 55/100
 - **Priority:** Medium
 - **Category:** AI & Technology
 - **Original source:** The Verge
-- **Publication date:** 2026-11-14T15:00:00.000Z
+- **Publication date:** 2026-11-21T15:00:00.000Z
+- **Matching coverage publishers:** 0
+- **Suggested format:** Explainer / Analysis
+- **Target audience:** General technology audience
+
+**Score breakdown**
+- Relevance: 15/25
+- Interest: 8/20
+- Technical depth: 4/15
+- Storytelling potential: 4/15
+- Freshness: 14/15
+- Specificity: 10/10
+
+**Why it matters:** Today, I’m talking with Hayden Field, The Verge’s senior AI reporter, about the Anthropic IPO for the third and final episode in our series about AI in real life. The AI lab behind Claude went public on the Nasdaq last Thursday. The numbers are gigantic, but not really that important for this conversation, except to say that Anthropic has become one of the most valuable companies on the planet. The real story is what happens now — and whether Anthropic can continue to thread the needle of caring about and investing in AI safety while also being a public company beholden to shareholders. Oh, and it also continuously growing the amount of money it makes so it can keep paying its ever-increasing compute bills, which total roughly $900 billion over the coming years. All of these ideas sit in a fascinating tension with one another, and so Hayden and I really tried to break down how we think this might play out as Anthropic navigates the pressures of the public markets. You’ll hear us talk about the company’s unique corporate governance structure, something that is especially relevant in the wake of the ongoing Jensen Huang saga. We also get into why OpenAI seems happy to have let Anthro
+
+**Suggested video angle:** Explain how the technology works, its capabilities, limitations, and future impact.
+
+**Coverage search**
+- No matching coverage results available.
+
+**Research warnings**
+- Few matching coverage results found. Search for additional reporting and primary sources.
+
+**Original article:** https://www.theverge.com/podcast/1038701/anthropic-ipo-ai-safety-openai-nvidia-structure
+
+---
+
+### 2. Anthropic’s 7 founders cashed out nearly $2B in record-breaking IPO
+
+- **Score:** 49/100
+- **Priority:** Low
+- **Category:** Business Stories
+- **Original source:** TechCrunch
+- **Publication date:** 2026-11-20T00:43:50.000Z
+- **Matching coverage publishers:** 2
+- **Suggested format:** Company story / Documentary
+- **Target audience:** Business and technology audience
+
+**Score breakdown**
+- Relevance: 15/25
+- Interest: 10/20
+- Technical depth: 2/15
+- Storytelling potential: 4/15
+- Freshness: 11/15
+- Specificity: 7/10
+
+**Why it matters:** At the upgraded $83/share IPO price, Anthropic's seven founders each pocketed $280 million, while the company nabbed nearly $105 billion.
+
+**Suggested video angle:** Tell the company's story: its rise, strategy, rivals, decisions, and challenges.
+
+**Coverage search**
+- TechCrunch: Anthropic’s 7 founders cashed out nearly $2B in record-breaking IPO — https://news.google.com/rss/articles/CBMiogFBVV95cUxPOXd3b1R3Vi1EQjRMUkFjTVh6N2pjOXRlQmNWSnd6WmlwOFlpejdwNXk0V281cllGSEc3YU1CNjRjWUhOUUZKcTNEN01ualBpTlppRFpnZGt4NlhvYjV3Z2w2TGtUUmJrN0RJWU1vT2o2ZmFUbk83WHlzUDlCSWpzUkJmS2N3YU90UmYwR0xnRU0tT0J2RG9FNkN0NjJIYjRnOXc?oc=5
+- Yahoo Finance: All 7 Anthropic founders will each cash out about $250M in IPO — https://news.google.com/rss/articles/CBMimgFBVV95cUxPeWRabGdiejE0cnR6SWhRczR3Y0F5dnhqTFdaNkk3aEJWQUJrWVItdlFrdjhIWHhuSmxYVXlOTzdwLXl5QWxIUTFneGVsV093ekxOaHF4NDVUMVdBcTlCeVdFVHp1d2RXVFE1aFRtRVJ4MUU1MGgyZzFvcklJRmlZdmF1Qk5tQzluUFVGdzhxS1pSSXJPTmRkRzZB?oc=5
+
+Distinct publisher identifiers: 2
+Note: Distinct publisher identifiers found; independence and factual accuracy are not verified.
+
+**Original article:** https://techcrunch.com/2026/11/19/anthropics-7-founders-cashed-out-nearly-2b-in-record-breaking-ipo/
+
+---
+
+### 3. The Xiaomi 18 Pro proves two screens aren’t better than one
+
+- **Score:** 48/100
+- **Priority:** Low
+- **Category:** Politics & Geopolitics
+- **Original source:** The Verge
+- **Publication date:** 2026-11-21T13:00:00.000Z
 - **Matching coverage publishers:** 1
 - **Suggested format:** Explainer / Analysis
 - **Target audience:** General technology audience
 
 **Score breakdown**
-- Relevance: 20/25
-- Interest: 6/20
-- Technical depth: 6/15
-- Storytelling potential: 4/15
+- Relevance: 10/25
+- Interest: 8/20
+- Technical depth: 4/15
+- Storytelling potential: 2/15
 - Freshness: 14/15
-- Specificity: 7/10
+- Specificity: 10/10
 
-**Why it matters:** Today, I’m talking with Helen Toner, the executive director of the Center for Security and Emerging Technology at Georgetown University. This episode is part two of our series on AI in real life. Helen is a well-known figure in the AI safety and policy community, though she is perhaps best known for having served on the board of OpenAI, when she was one of four board members who voted to fire Sam Altman. That incident, now sometimes referred to as “the blip,” ended with Sam coming back as CEO, Helen resigning, and a new board of directors. OpenAI has since restructured entirely. But it’s worth remembering what Helen and the board were supposed to do: OpenAI’s nonprofit board existed specifically to make sure the company didn’t betray its mission to build safe AI by prioritizing profit and growth over safety. When the board actually tried to pull the lever, that accountability mechanism broke, and here we are. Verge subscribers, don’t forget you get exclusive access to ad-free Decoder wherever you get your podcasts. Head here. Not a subscriber? You can sign up here. Now, the question of AI safety is everywhere. This summer, AI models from OpenAI and Anthropic broke out of their test
+**Why it matters:** Both 18 Pro phones feature rear displays used for selfies, notifications, and AI apps. Xiaomi introduced a second screen to its flagship phones with last year's 17 Pros, but didn't release them outside China. That means the new 18 Pro and Pro Max are the first chance I've had to find out if a screen on the back of a phone is any more useful now than it was when Xiaomi last tried it on 2021's Mi 11 Ultra - not to mention earlier efforts by the likes of Nubia and Vivo. After a week or two with both of Xiaomi's new Pro phones, I'm not entirely sold. The rear display has a single, obvious use case - it's helped me take some of the best selfies I've ever managed - but it isn't very useful otherwise. The rest of the phones are gre … Read the full story at The Verge.
 
-**Suggested video angle:** Explain how the technology works, its capabilities, limitations, and future impact.
+**Suggested video angle:** Explain the strategic interests, competing sides, and technological consequences.
 
 **Coverage search**
-- TechTimes Vietnam: Former OpenAI board member warns AI CEOs remain untrustworthy — https://news.google.com/rss/articles/CBMilAFBVV95cUxNbWlmYnBtNzBaYUNEc2Y2SkFPTTYxNmpOWnZsZEtwcGU1QzY4Y2J1UlMzS3dnUG9vWUFBcDBxQm1jbHNpd3Y4UXBWRTJJS0dFdWQwRzREaGNKcGNxVU9RWHpYUjhiOGhBN0JkbzRLWkQ2cGRNYzhUZldKdGJGR2FBRXo0UkJMcXJoeExOc25rT0pJMk9X?oc=5
+- The Verge: The Xiaomi 18 Pro proves two screens aren’t better than one — https://news.google.com/rss/articles/CBMib0FVX3lxTE4zbWQ0eUJhRUFhWFA0a3k0ZllFakpPSElCWkl2VEMwYkZfRzd1Qk90WXJjd0tremFsRm5HbTJZanVLVUtWN0k2WE5UY0xEQ3hCY1BDdVZkT0JmZUEyRGFnMTFlUU8tUDBXVkFROUhBZw?oc=5
 
 Distinct publisher identifiers: 1
 Note: Distinct publisher identifiers found; independence and factual accuracy are not verified.
@@ -50,53 +117,17 @@ Note: Distinct publisher identifiers found; independence and factual accuracy ar
 **Research warnings**
 - Few matching coverage results found. Search for additional reporting and primary sources.
 
-**Original article:** https://www.theverge.com/podcast/1032907/helen-toner-openai-cset-ai-safety-policy-interview
+**Original article:** https://www.theverge.com/tech/1038562/xiaomi-18-pro-max-review
 
 ---
 
-### 2. Jensen Huang and the decline of the visionary showman founder CEO
+### 4. The Download: AI learns to smell and hydropower struggles
 
-- **Score:** 53/100
-- **Priority:** Low
-- **Category:** Business Stories
-- **Original source:** The Verge
-- **Publication date:** 2026-11-14T12:00:00.000Z
-- **Matching coverage publishers:** 3
-- **Suggested format:** Company story / Documentary
-- **Target audience:** Business and technology audience
-
-**Score breakdown**
-- Relevance: 15/25
-- Interest: 6/20
-- Technical depth: 4/15
-- Storytelling potential: 4/15
-- Freshness: 14/15
-- Specificity: 10/10
-
-**Why it matters:** Nvidia CEO Jensen Huang at CES 2025 in Las Vegas, Nevada, on January 6, 2025. | Photo by Artur Widak/NurPhoto via Getty Images On January 6th, 2025, Nvidia CEO Jensen Huang got his rockstar moment at last. He strode triumphantly onstage, hand raised in the air, to the claps and cheers of a 14,000-person arena absolutely packed with influencers and fans, their faces awash in blue glow, as he made his entrance in a black leather jacket that shimmered in the stadium's lights. Few are cheering for Jensen Huang now. He has left Nvidia after seemingly enabling two chip smuggling scandals and allegedly having three extramarital affairs, including one with an alleged Chinese spy at the same time he was mingling with President Donald Trump. The world is watching to see if … Read the full story at The Verge.
-
-**Suggested video angle:** Tell the company's story: its rise, strategy, rivals, decisions, and challenges.
-
-**Coverage search**
-- The Verge: Jensen Huang and the decline of the visionary showman founder CEO — https://news.google.com/rss/articles/CBMilwFBVV95cUxPYVlXVmI5WWRFX3ZOM3pQSkxSVnpTT1NKX1pubzdyblQ2d0FfQ1ZoVGIzNnpJZXl1VWk5Sy1keWZmR2xvMUk5SnZoVnVSZW91ejR0Q1B5LXlQU2Y1T241aENRb29XRXJvMEN6U3lMR2t4amtiZ2pLRFBYV1RWcnpiWWdlbzBYUHVVdjYxb1VkaW9fMjRDOWxR?oc=5
-- Business Insider: The Cult of the Founder Will Resurrect Jensen Huang — https://news.google.com/rss/articles/CBMiigFBVV95cUxQSkJiOHI0MmFhX3cyUjFRMjI0aklydzBqSHc3Q0Y2Vk9makJ1ZlpJa0FBcGpLUjU3SHNnTl9hRHhRREM1QUpZSGE4REFsb25Ib2dlMmJkand5a0plREttWGFzZ19KNU5wamNsTklKaUVMbUNWblVSNGxvNk9ZWi1JYm9scUh6RlctTVE?oc=5
-- WIRED: Jensen Huang and the End of the Founder Fairy Tale — https://news.google.com/rss/articles/CBMihgFBVV95cUxPUTBQNkxCTEpOUDhRYVI5empSRVROZEVvNklTYS1TUDRMRHdKTVl6Mk5WTjVvSTBIOEJqLVZpOVB2MVVSNVBJRjIzNlJSbEVwTlJRSnAyU0trRFQ1UzRzMTBIY21kQ1BxUnEwXzU3ZXpoaUdGaFBRODdCRGdHaVZicmlZdlcxUQ?oc=5
-- The Verge: Nvidia CEO Jensen Huang has resigned. What happens next? — https://news.google.com/rss/articles/CBMiogFBVV95cUxOU2llVFEzTzBjQ2VGVjBFbTFScmR1NjVfbFY1MHc3eHFEc3NMWHIySnZZVEUtb2xKc0p5UmRoYkFSbWpuVldIMHNRVFJhc2tlaHUzVDNfZ3p6MkprcDZ4MTI5V2JrTDhXSG9Ja211enlHd201SmFxemZvbHF5ZTVMNHpYTmlRVDZMQmR1dG1fWGhXWnFqU1NLcy11WENrV3haVWc?oc=5
-
-Distinct publisher identifiers: 3
-Note: Distinct publisher identifiers found; independence and factual accuracy are not verified.
-
-**Original article:** https://www.theverge.com/tech/1033781/nvidia-jensen-huang-last-visionary-showman-founder-ceo
-
----
-
-### 3. The Download: Silicon Valley’s blind spot and Nvidia’s chip-tracking plan
-
-- **Score:** 50/100
+- **Score:** 47/100
 - **Priority:** Low
 - **Category:** AI & Technology
 - **Original source:** MIT Technology Review
-- **Publication date:** 2026-11-13T13:10:00.000Z
+- **Publication date:** 2026-11-18T13:10:00.000Z
 - **Matching coverage publishers:** 0
 - **Suggested format:** Explainer / Analysis
 - **Target audience:** General technology audience
@@ -106,10 +137,10 @@ Note: Distinct publisher identifiers found; independence and factual accuracy ar
 - Interest: 8/20
 - Technical depth: 6/15
 - Storytelling potential: 2/15
-- Freshness: 12/15
+- Freshness: 9/15
 - Specificity: 7/10
 
-**Why it matters:** This is today’s edition of The Download, our weekday newsletter that provides a daily dose of what’s going on in the world of technology. Silicon Valley claims to know the future. So why did it get the midterms so wrong? —Aaron Zamost, a tech communications consultant and a former executive at Square The self-styled visionaries…
+**Why it matters:** This is today’s edition of The Download, our weekday newsletter that provides a daily dose of what’s going on in the world of technology. This smell startup says its AI nose is as good as a human’s In a New Jersey lab, researchers are trying to sniff every odor on Earth. Their careful notes—“nutty,” “peachy,”…
 
 **Suggested video angle:** Explain how the technology works, its capabilities, limitations, and future impact.
 
@@ -119,91 +150,85 @@ Note: Distinct publisher identifiers found; independence and factual accuracy ar
 **Research warnings**
 - Few matching coverage results found. Search for additional reporting and primary sources.
 
-**Original article:** https://www.technologyreview.com/2026/11/13/1148551/the-download-silicon-valley-midterms-nvidia-chip-tracking/
+**Original article:** https://www.technologyreview.com/2026/11/18/1148845/the-download-ai-learns-to-smell-hydropower-struggles/
 
 ---
 
-### 4. Silicon Valley claims to know the future. So why did it get the midterms so wrong?
-
-- **Score:** 47/100
-- **Priority:** Low
-- **Category:** AI & Technology
-- **Original source:** MIT Technology Review
-- **Publication date:** 2026-11-13T10:00:00.000Z
-- **Matching coverage publishers:** 1
-- **Suggested format:** Explainer / Analysis
-- **Target audience:** General technology audience
-
-**Score breakdown**
-- Relevance: 15/25
-- Interest: 6/20
-- Technical depth: 2/15
-- Storytelling potential: 2/15
-- Freshness: 12/15
-- Specificity: 10/10
-
-**Why it matters:** The self-styled visionaries of Silicon Valley, leaders like OpenAI chief executive Sam Altman and SpaceX boss Elon Musk, have built careers claiming to see the future. Long-term vision is currency: Meta’s Mark Zuckerberg built a 10-year road map for Facebook in 2016, and Google famously told investors before its public offering that it was unconcerned…
-
-**Suggested video angle:** Explain how the technology works, its capabilities, limitations, and future impact.
-
-**Coverage search**
-- MIT Technology Review: Silicon Valley claims to know the future. So why did it get the midterms so wrong? — https://news.google.com/rss/articles/CBMizgFBVV95cUxPWGxOWlZzWlJZLU1FZzlHeUR4eU9XRFZ3bXF2RUM1czRONkg4N21yajRUT3I3Ykw2OGVVX092V1owYmo2M2t5Tnh6Vl9xS3lOUnRITTgwaVF0a1FhOERqQTY5NUJLSU1qRWwtRlYzV05YeHlKbzBvM1FIOWhNTkkxYV9RWE05LVF6WDZ6XzhDMEl6dXptLTF2cHB0N0E2TE9XRG1mOVlFelNhdU91azhGT1JhcEtRenRlaHdwRFNUbWFvUDNXOTZCWWU2YlRxd9IB0wFBVV95cUxPbHpJRHJGWnhaXzc4Y1VZekY4SGUxNUhWSFJnVjM0MUJTRkNzUWw4LWpXMFVQcHYweW1UZXZ4cFlLS1Z3bFRNZVNsd080cFR2Ukpqa2ZoTXdrWk5laVl6S0FnSkNzYWVjMEVkVWQxQmZ0LXpLRVhlVk54b25tekFqakwyYlBXT0d3Q3N3c1JqYlNtLXJ1NTJnQ0dYSnZyNC1SLTBjNHhsbUp1TkJKeU9naS1fM1dQOUlYcTdGZ2FqeXNvcmRYdTU0VWdLVUhkb21hN0pN?oc=5
-
-Distinct publisher identifiers: 1
-Note: Distinct publisher identifiers found; independence and factual accuracy are not verified.
-
-**Research warnings**
-- Few matching coverage results found. Search for additional reporting and primary sources.
-
-**Original article:** https://www.technologyreview.com/2026/11/13/1148498/silicon-valley-claims-to-know-the-future-so-why-did-it-get-the-midterms-so-wrong/
-
----
-
-### 5. Where was Nvidia’s security team?
+### 5. Anthropic becomes one of world's most valuable public companies in stock market debut
 
 - **Score:** 46/100
 - **Priority:** Low
 - **Category:** Business Stories
-- **Original source:** TechCrunch
-- **Publication date:** 2026-11-15T00:08:07.000Z
+- **Original source:** BBC Technology
+- **Publication date:** 2026-11-19T23:33:51.000Z
 - **Matching coverage publishers:** 3
 - **Suggested format:** Company story / Documentary
 - **Target audience:** Business and technology audience
 
 **Score breakdown**
 - Relevance: 15/25
-- Interest: 4/20
-- Technical depth: 2/15
+- Interest: 8/20
+- Technical depth: 4/15
 - Storytelling potential: 4/15
-- Freshness: 14/15
-- Specificity: 7/10
+- Freshness: 11/15
+- Specificity: 4/10
 
-**Why it matters:** Nvidia’s security chief quietly left in August, and now that CEO Jensen Huang has stepped down over his relationships, including one with an executive at a company suspected of funneling chips to China, a former intelligence officer says it’s the kind of leak that runs everyday conversations, which most corporate security teams are poorly equipped to catch.
+**Why it matters:** Anthropic is the first purely AI company to be publicly listed, creating a test for the entire industry.
 
 **Suggested video angle:** Tell the company's story: its rise, strategy, rivals, decisions, and challenges.
 
 **Coverage search**
-- TechCrunch: Where was Nvidia’s security team? — https://news.google.com/rss/articles/CBMidEFVX3lxTE00NFBKNVAtbmtnZUd0M3VkSGVvU0J5UjJEWWJnT21OWDQ2NzhOcUV6d3BUVk5JTUE0MzEzMi05ZTU5b1dEYklfMExMRzNIOGVhX3EzaHo1WV8tdUhWNWlHdTRfYzljeFFzQXhsOElEY2ZNRWcw?oc=5
-- Howl.Link: Where was Nvidia's security team? | TechCrunch — https://news.google.com/rss/articles/CBMiO0FVX3lxTFB5TzRjcDMyUmlTTFgyNGVNTDN3eERha1RlTW40RG5vMkxvYVlqS0t4WmVsNE5Ld0ozZlFv?oc=5
-- shattered.io: Where Was Nvidia’s Security Team? CSO Left After 7 Years — https://news.google.com/rss/articles/CBMihAFBVV95cUxNcUpPSWdsamliTFBtMk9CbjVMb1JsTkpsWFJOSXU2eTQ4N0NUdXRKU0tUWGFfX29DUlJRMWNVbmxEWS02OWRuT1lTSnpWNHpUTWV3R0xaTjl3Z19EMnFhVl9VYnJnNktOd0g2X29NLTBSdExMN2lZRmwxRVJhT3NsMjc1QkY?oc=5
+- BBC: Anthropic becomes one of world's most valuable public companies in stock market debut — https://news.google.com/rss/articles/CBMiXkFVX3lxTFA4bXR0SGt1c3FHQkZVY3AxVTdNODdtMHhVLWVkVU5DR0V0dHk3dGhaQzFBMWdwdXRhb1R6ZzlNRkc0UWxWMmdLQjBkMHlQdS1OdFJZUFRabU9nUDNCemc?oc=5
+- Nepal Samaj: Anthropic becomes one of world’s most valuable public companies in stock market debut — https://news.google.com/rss/articles/CBMisAFBVV95cUxNR2VoUTBfd3VxRUQ3R2dJaUpiak5KUzZ5RmhQRWc3c2tFbUpjM3hFcDZTSTliYjNPSVBoSWR1YmdKMDRVWWJ3SWNxaWJsc25UOV9uTl95MEQ5bjBZSDExeUNuRnRJay14R1VGcFBpSUktR0oybVBKSml1TGlaekw2cGdVU085SWU2NUt4ZEFBNFk5TDM5dEZqdVY2NWxoZE9QeFUybmR0WG9CTXlkemE3Mg?oc=5
+- Nilepost: Anthropic becomes one of world's most valuable public companies in stock market debut — https://news.google.com/rss/articles/CBMiwwFBVV95cUxPNEdUek5VUk5HX1FuOTFFUFNHZzhhRG45djVkOFpxaVROVWxyTDdoX2F3aVNKRTBCQU96VndsalNvZDFfdS1SY3Q1QUtzRFczQVlMVVlJOFBDcmNvWWpCNy1PV3JlVTY1V3NaSjNNZ3g0THlfa3FTMUVZYTVscUlYQktseFRWUkJlR1NwMk5ucERZREE5VDdNWjdYMld4YTduNC1JNnNnZVVNeXdieFVoUElSTGwzeElVX011bHFOOGpCdGvSAcMBQVVfeXFMTzRHVHpOVVJOR19RbjkxRVBTR2c4YURuOXY1ZDhacWlUTlVsckw3aF9hd2lTSkUwQkFPelZ3bGpTb2QxX3UtUmN0NUFLc0RXM0FZTFVZSThQQ3Jjb1lqQjctT1dyZVU2NVdzWkozTWd4NEx5X2txUzFFWWE1bHFJWEJLbHhUVlJCZUdTcDJObnBEWURBOVQ3TVo3WDJXeGE3bjQtSTZzZ2VVTXl3YnhVaFBJUkxsM3hJVV9NdWxxTjhqQnRr?oc=5
 
 Distinct publisher identifiers: 3
 Note: Distinct publisher identifiers found; independence and factual accuracy are not verified.
 
-**Original article:** https://techcrunch.com/2026/11/14/where-was-nvidias-security-team/
+**Original article:** https://www.bbc.co.uk/news/articles/c3x29ggenz12o?at_medium=RSS&at_campaign=rss
 
 ---
 
-### 6. The AI graveyard: a running list of projects and startups that didn’t make it
+### 6. The Download: a living liver, a billion-dollar battery deal, and AI hype
+
+- **Score:** 46/100
+- **Priority:** Low
+- **Category:** AI & Technology
+- **Original source:** MIT Technology Review
+- **Publication date:** 2026-11-19T13:10:00.000Z
+- **Matching coverage publishers:** 0
+- **Suggested format:** Explainer / Analysis
+- **Target audience:** General technology audience
+
+**Score breakdown**
+- Relevance: 10/25
+- Interest: 10/20
+- Technical depth: 6/15
+- Storytelling potential: 2/15
+- Freshness: 11/15
+- Specificity: 7/10
+
+**Why it matters:** This is today’s edition of The Download, our weekday newsletter that provides a daily dose of what’s going on in the world of technology. A human liver has been kept alive outside the body for a record seven weeks Researchers in Australia claim they’ve kept a human liver alive on life support outside the body…
+
+**Suggested video angle:** Explain how the technology works, its capabilities, limitations, and future impact.
+
+**Coverage search**
+- No matching coverage results available.
+
+**Original article:** https://www.technologyreview.com/2026/11/19/1148979/the-download-liver-kept-alive-sila-battery-deal-ai-hype/
+
+---
+
+### 7. Is selling an AI version of your face to this microdrama startup the future of Hollywood?
 
 - **Score:** 45/100
 - **Priority:** Low
-- **Category:** AI & Technology
+- **Category:** Business Stories
 - **Original source:** TechCrunch
-- **Publication date:** 2026-11-14T17:30:00.000Z
-- **Matching coverage publishers:** 2
-- **Suggested format:** Explainer / Analysis
-- **Target audience:** General technology audience
+- **Publication date:** 2026-11-21T16:00:00.000Z
+- **Matching coverage publishers:** 0
+- **Suggested format:** Company story / Documentary
+- **Target audience:** Business and technology audience
 
 **Score breakdown**
 - Relevance: 15/25
@@ -213,41 +238,37 @@ Note: Distinct publisher identifiers found; independence and factual accuracy ar
 - Freshness: 14/15
 - Specificity: 4/10
 
-**Why it matters:** From Apple's repeatedly delayed Siri AI to OpenAI's messy "super app" launch, here's a look at the AI projects that shut down or missed expectations.
+**Why it matters:** An actor has licensed his face to a microdrama startup — in a trend that's already popular in China. Experts question the long-term consequences if this becomes a trend in Hollywood, too.
 
-**Suggested video angle:** Explain how the technology works, its capabilities, limitations, and future impact.
+**Suggested video angle:** Tell the company's story: its rise, strategy, rivals, decisions, and challenges.
 
 **Coverage search**
-- TechCrunch: The AI graveyard: a running list of projects and startups that didn’t make it — https://news.google.com/rss/articles/CBMirwFBVV95cUxNNVRfXzM5NXVKbU5PVWZpQXBwNjBmaG9uLWstSHBPNWI5QVMwcW1OaUwzbkdpQUFkR1RST2dqVEFyMnZaenBmRjQ2MkJ1RmptYU82LTBKUTRDZk5zakViN2RsdU9HcWJGdVFUVzMyNFJfUG1jS2JOZTkxSU9tWkxQaHZORHlIUlp1dWFqWjJlTUFSSjdPMGZGb3VNajdUOWZtTEszdEZvYl9VbmozYmJn?oc=5
-- TechTimes Vietnam: AI graveyard: major projects and startups that have shut d… — https://news.google.com/rss/articles/CBMikwFBVV95cUxOTXpNWWZ5TlcxV20wVGlfQTVIckt2OEVJNzFmdkRVOXp0VlZBTXFqSEViQ1J5YUh5aWVZY181RU92SnpNVUVTa0NYcHJ6WlZxcmx4N0IyaTlReURUc25IVjBRc3d1RjlDMFAtSkZ0T2J4S1J0enUtVnF1a2htQjRmMEpuRzJ4bkRYdTBVYXpYYVcyUkE?oc=5
+- No matching coverage results available.
 
-Distinct publisher identifiers: 2
-Note: Distinct publisher identifiers found; independence and factual accuracy are not verified.
-
-**Original article:** https://techcrunch.com/2026/11/14/the-ai-graveyard-a-running-list-of-projects-and-startups-that-didnt-make-it/
+**Original article:** https://techcrunch.com/2026/11/21/is-selling-an-ai-version-of-your-face-to-this-microdrama-startup-the-future-of-hollywood/
 
 ---
 
-### 7. Starship flight 15 powers to orbit—setting up a possible catch on Saturday
+### 8. Anthropic raises $81bn in record-breaking stock market debut
 
-- **Score:** 40/100
+- **Score:** 44/100
 - **Priority:** Low
 - **Category:** Business Stories
-- **Original source:** Ars Technica
-- **Publication date:** 2026-11-14T00:49:13.000Z
+- **Original source:** BBC Technology
+- **Publication date:** 2026-11-19T15:58:58.000Z
 - **Matching coverage publishers:** 0
 - **Suggested format:** Company story / Documentary
 - **Target audience:** Business and technology audience
 
 **Score breakdown**
-- Relevance: 10/25
-- Interest: 4/20
+- Relevance: 15/25
+- Interest: 8/20
 - Technical depth: 2/15
 - Storytelling potential: 4/15
-- Freshness: 13/15
-- Specificity: 7/10
+- Freshness: 11/15
+- Specificity: 4/10
 
-**Why it matters:** One way or another, the company will get some more data on Saturday.
+**Why it matters:** The company behind the Claude chatbot will become one of the most valuable firms in the world.
 
 **Suggested video angle:** Tell the company's story: its rise, strategy, rivals, decisions, and challenges.
 
@@ -257,47 +278,17 @@ Note: Distinct publisher identifiers found; independence and factual accuracy ar
 **Research warnings**
 - The available summary is short. Read the original article.
 
-**Original article:** https://arstechnica.com/space/2026/11/starship-flight-15-powers-to-orbit-setting-up-a-possible-catch-on-saturday/
+**Original article:** https://www.bbc.co.uk/news/articles/c6742m39xgzxo?at_medium=RSS&at_campaign=rss
 
 ---
 
-### 8. Pressure grows on Trump's Commerce Secretary Lutnick in fallout from Nvidia scandal
-
-- **Score:** 40/100
-- **Priority:** Low
-- **Category:** Business Stories
-- **Original source:** BBC Technology
-- **Publication date:** 2026-11-13T19:53:57.000Z
-- **Matching coverage publishers:** 0
-- **Suggested format:** Company story / Documentary
-- **Target audience:** Business and technology audience
-
-**Score breakdown**
-- Relevance: 15/25
-- Interest: 4/20
-- Technical depth: 2/15
-- Storytelling potential: 2/15
-- Freshness: 13/15
-- Specificity: 4/10
-
-**Why it matters:** Scott Bessent told CNBC that several government agencies "were in favour of putting Megaspeed on the entity list for months".
-
-**Suggested video angle:** Tell the company's story: its rise, strategy, rivals, decisions, and challenges.
-
-**Coverage search**
-- No matching coverage results available.
-
-**Original article:** https://www.bbc.co.uk/news/articles/cqvg2d1eg7zro?at_medium=RSS&at_campaign=rss
-
----
-
-### 9. Ars Live: What drone attacks on data centers mean for modern life in the cloud
+### 9. Rocket Report: A weekend of ups and downs; Stoke celebrates engine milestone
 
 - **Score:** 38/100
 - **Priority:** Low
 - **Category:** Military Technology
 - **Original source:** Ars Technica
-- **Publication date:** 2026-11-12T19:59:59.000Z
+- **Publication date:** 2026-11-20T13:35:45.000Z
 - **Matching coverage publishers:** 0
 - **Suggested format:** Engineering analysis / Documentary
 - **Target audience:** Technology and defense enthusiasts
@@ -305,12 +296,12 @@ Note: Distinct publisher identifiers found; independence and factual accuracy ar
 **Score breakdown**
 - Relevance: 10/25
 - Interest: 4/20
-- Technical depth: 4/15
+- Technical depth: 6/15
 - Storytelling potential: 2/15
-- Freshness: 11/15
-- Specificity: 7/10
+- Freshness: 12/15
+- Specificity: 4/10
 
-**Why it matters:** A livestream Ars discussion is happening on November 17 at 1 pm Eastern Time.
+**Why it matters:** Russia launched a Soyuz rocket with satellites to help enable drone attacks over Ukraine.
 
 **Suggested video angle:** Explore the engineering, history, capabilities, limitations, and strategic role.
 
@@ -320,17 +311,17 @@ Note: Distinct publisher identifiers found; independence and factual accuracy ar
 **Research warnings**
 - The available summary is short. Read the original article.
 
-**Original article:** https://arstechnica.com/gadgets/2026/11/ars-live-can-the-cloud-survive-drone-strikes-on-data-centers/
+**Original article:** https://arstechnica.com/space/2026/11/rocket-report-a-weekend-of-ups-and-downs-stoke-celebrates-engine-milestone/
 
 ---
 
-### 10. Italy fines Meta €805m over accessing users' photos
+### 10. Meta reconsiders 2030 net-zero goal amid record emissions from AI data centers
 
-- **Score:** 36/100
+- **Score:** 37/100
 - **Priority:** Low
 - **Category:** General Technology
-- **Original source:** BBC Technology
-- **Publication date:** 2026-11-14T18:28:06.000Z
+- **Original source:** Ars Technica
+- **Publication date:** 2026-11-20T21:47:10.000Z
 - **Matching coverage publishers:** 0
 - **Suggested format:** Explainer / Analysis
 - **Target audience:** General technology audience
@@ -338,12 +329,12 @@ Note: Distinct publisher identifiers found; independence and factual accuracy ar
 **Score breakdown**
 - Relevance: 5/25
 - Interest: 6/20
-- Technical depth: 2/15
+- Technical depth: 4/15
 - Storytelling potential: 2/15
-- Freshness: 14/15
+- Freshness: 13/15
 - Specificity: 7/10
 
-**Why it matters:** The social media giant is accused of not informing 20 million users it had access to their photos.
+**Why it matters:** Meta is “re-evaluating” 2030 sustainability goals. Will others follow?
 
 **Suggested video angle:** Explain the idea, why it matters, and how it could affect the future.
 
@@ -353,412 +344,412 @@ Note: Distinct publisher identifiers found; independence and factual accuracy ar
 **Research warnings**
 - The available summary is short. Read the original article.
 
-**Original article:** https://www.bbc.co.uk/news/articles/cwn83gxemk35o?at_medium=RSS&at_campaign=rss
+**Original article:** https://arstechnica.com/ai/2026/11/meta-reconsiders-2030-net-zero-goal-amid-record-emissions-from-ai-data-centers/
 
 ---
 
 
 ## ALL ANALYZED STORIES
 
-1. **The OpenAI board member who fired Sam Altman says we still can’t trust AI CEOs**
+1. **Can Anthropic afford to put safety first?**
 
-- Score: 57/100
+- Score: 55/100
 - Category: AI & Technology
 - Source: The Verge
-- Matching coverage publishers: 1
-- Link: https://www.theverge.com/podcast/1032907/helen-toner-openai-cset-ai-safety-policy-interview
-
-2. **Jensen Huang and the decline of the visionary showman founder CEO**
-
-- Score: 53/100
-- Category: Business Stories
-- Source: The Verge
-- Matching coverage publishers: 3
-- Link: https://www.theverge.com/tech/1033781/nvidia-jensen-huang-last-visionary-showman-founder-ceo
-
-3. **The Download: Silicon Valley’s blind spot and Nvidia’s chip-tracking plan**
-
-- Score: 50/100
-- Category: AI & Technology
-- Source: MIT Technology Review
 - Matching coverage publishers: 0
-- Link: https://www.technologyreview.com/2026/11/13/1148551/the-download-silicon-valley-midterms-nvidia-chip-tracking/
+- Link: https://www.theverge.com/podcast/1038701/anthropic-ipo-ai-safety-openai-nvidia-structure
 
-4. **Watch SpaceX successfully execute the first ‘chopstick’ catch of Starship**
+2. **Anthropic’s 7 founders cashed out nearly $2B in record-breaking IPO**
+
+- Score: 49/100
+- Category: Business Stories
+- Source: TechCrunch
+- Matching coverage publishers: 2
+- Link: https://techcrunch.com/2026/11/19/anthropics-7-founders-cashed-out-nearly-2b-in-record-breaking-ipo/
+
+3. **The Xiaomi 18 Pro proves two screens aren’t better than one**
 
 - Score: 48/100
-- Category: Business Stories
+- Category: Politics & Geopolitics
 - Source: The Verge
-- Matching coverage publishers: 2
-- Link: https://www.theverge.com/science/1033930/spacex-chopstick-starship-catch
+- Matching coverage publishers: 1
+- Link: https://www.theverge.com/tech/1038562/xiaomi-18-pro-max-review
 
-5. **Silicon Valley claims to know the future. So why did it get the midterms so wrong?**
+4. **The Download: AI learns to smell and hydropower struggles**
 
 - Score: 47/100
 - Category: AI & Technology
 - Source: MIT Technology Review
-- Matching coverage publishers: 1
-- Link: https://www.technologyreview.com/2026/11/13/1148498/silicon-valley-claims-to-know-the-future-so-why-did-it-get-the-midterms-so-wrong/
+- Matching coverage publishers: 0
+- Link: https://www.technologyreview.com/2026/11/18/1148845/the-download-ai-learns-to-smell-hydropower-struggles/
 
-6. **Where was Nvidia’s security team?**
+5. **Amazon is complaining about NYC Council on shipping labels, too**
 
 - Score: 46/100
 - Category: Business Stories
-- Source: TechCrunch
-- Matching coverage publishers: 3
-- Link: https://techcrunch.com/2026/11/14/where-was-nvidias-security-team/
+- Source: The Verge
+- Matching coverage publishers: 2
+- Link: https://www.theverge.com/tech/1039564/amazon-nyc-council-packages-shipping-label
 
-7. **Tesla is inviting some people to buy a Cybercab ‘for personal use’ — but read the fine print**
+6. **Chess.com’s next move is a new hub for classic games, from mahjong to sudoku**
+
+- Score: 46/100
+- Category: Business Stories
+- Source: The Verge
+- Matching coverage publishers: 2
+- Link: https://www.theverge.com/games/1038099/chess-classic-games-expansion-ai
+
+7. **The game of the year is finally here**
 
 - Score: 46/100
 - Category: Business Stories
 - Source: The Verge
 - Matching coverage publishers: 1
-- Link: https://www.theverge.com/transportation/1033844/tesla-personal-cybercab-orders-299-subscription-fine-print
+- Link: https://www.theverge.com/tech/1039433/gta-vi-alfred-6-clockwisetv-installer
 
-8. **The AI graveyard: a running list of projects and startups that didn’t make it**
+8. **Anthropic becomes one of world's most valuable public companies in stock market debut**
 
-- Score: 45/100
-- Category: AI & Technology
-- Source: TechCrunch
-- Matching coverage publishers: 2
-- Link: https://techcrunch.com/2026/11/14/the-ai-graveyard-a-running-list-of-projects-and-startups-that-didnt-make-it/
+- Score: 46/100
+- Category: Business Stories
+- Source: BBC Technology
+- Matching coverage publishers: 3
+- Link: https://www.bbc.co.uk/news/articles/c3x29ggenz12o?at_medium=RSS&at_campaign=rss
 
-9. **Nvidia privately confirmed it could track chips to fight smuggling, even as industry publicly questioned feasibility**
+9. **The Download: a living liver, a billion-dollar battery deal, and AI hype**
 
-- Score: 45/100
+- Score: 46/100
 - Category: AI & Technology
 - Source: MIT Technology Review
 - Matching coverage publishers: 0
-- Link: https://www.technologyreview.com/2026/11/12/1148483/nvidia-chip-tracking/
+- Link: https://www.technologyreview.com/2026/11/19/1148979/the-download-liver-kept-alive-sila-battery-deal-ai-hype/
 
-10. **Export-banned Nvidia chips are behind China’s most powerful AI models — uh-oh, Jensen!**
+10. **Is selling an AI version of your face to this microdrama startup the future of Hollywood?**
+
+- Score: 45/100
+- Category: Business Stories
+- Source: TechCrunch
+- Matching coverage publishers: 0
+- Link: https://techcrunch.com/2026/11/21/is-selling-an-ai-version-of-your-face-to-this-microdrama-startup-the-future-of-hollywood/
+
+11. **The AI Hype Index: AI is everywhere**
+
+- Score: 45/100
+- Category: Business Stories
+- Source: MIT Technology Review
+- Matching coverage publishers: 0
+- Link: https://www.technologyreview.com/2026/11/18/1148650/ai-hype-index-ai-is-everywhere/
+
+12. **This smell startup says its AI nose is as good as a human’s**
+
+- Score: 45/100
+- Category: Business Stories
+- Source: MIT Technology Review
+- Matching coverage publishers: 0
+- Link: https://www.technologyreview.com/2026/11/18/1148816/smell-startup-osmo-ai-nose-good-as-humans/
+
+13. **Amazon’s first digital photo frame is up to 50 percent off for Black Friday**
 
 - Score: 44/100
 - Category: Business Stories
-- Source: TechCrunch
-- Matching coverage publishers: 0
-- Link: https://techcrunch.com/2026/11/13/export-banned-nvidia-chips-are-behind-chinas-most-powerful-ai-models-uh-oh-jensen/
-
-11. **Asian governments react to Nvidia CEO Jensen Huang’s exit**
-
-- Score: 43/100
-- Category: Business Stories
-- Source: TechCrunch
-- Matching coverage publishers: 0
-- Link: https://techcrunch.com/2026/11/14/asian-governments-react-to-nvidia-ceo-jensen-huangs-exit/
-
-12. **A gadget to make your dumb house smarter**
-
-- Score: 43/100
-- Category: General Technology
 - Source: The Verge
 - Matching coverage publishers: 0
-- Link: https://www.theverge.com/tech/1033761/home-assistant-tk-tripod-tabletop-installer
+- Link: https://www.theverge.com/gadgets/1038762/amazon-alexa-photo-frame-black-friday-2026-deal-sale
 
-13. **What we know so far about the Microsoft outage**
+14. **Our go-to earbuds for taking calls have fallen to their lowest price to date**
 
-- Score: 43/100
-- Category: AI & Technology
-- Source: BBC Technology
-- Matching coverage publishers: 0
-- Link: https://www.bbc.co.uk/news/videos/cqzjr903n01po?at_medium=RSS&at_campaign=rss
-
-14. **What happened overnight with the Microsoft global outage?**
-
-- Score: 43/100
-- Category: AI & Technology
-- Source: BBC Technology
-- Matching coverage publishers: 0
-- Link: https://www.bbc.co.uk/news/videos/cwm2591k27e2o?at_medium=RSS&at_campaign=rss
-
-15. **The Download: preserving minds and weighing open AI risks**
-
-- Score: 43/100
-- Category: AI & Technology
-- Source: MIT Technology Review
-- Matching coverage publishers: 0
-- Link: https://www.technologyreview.com/2026/11/11/1148424/the-download-preserving-minds-open-ai-risks/
-
-16. **How the Jensen Huang scandal created a headache for business-friendly Singapore**
-
-- Score: 42/100
-- Category: AI & Technology
-- Source: BBC Technology
-- Matching coverage publishers: 0
-- Link: https://www.bbc.co.uk/news/articles/ck1exevgql4qo?at_medium=RSS&at_campaign=rss
-
-17. **The backlash about data centers might really just be about electricity**
-
-- Score: 42/100
-- Category: AI & Technology
-- Source: MIT Technology Review
-- Matching coverage publishers: 0
-- Link: https://www.technologyreview.com/2026/11/09/1148194/the-backlash-about-data-centers-might-really-just-be-about-electricity/
-
-18. **The unfolding Jensen Huang scandal: a timeline**
-
-- Score: 41/100
-- Category: Politics & Geopolitics
-- Source: TechCrunch
-- Matching coverage publishers: 0
-- Link: https://techcrunch.com/2026/11/13/nvidia-ceo-jensen-huangs-affair-with-alleged-chinese-spy-a-timeline/
-
-19. **Microsoft’s latest email outage turned into a full-blown global cloud crisis**
-
-- Score: 40/100
+- Score: 44/100
 - Category: Business Stories
-- Source: TechCrunch
+- Source: The Verge
 - Matching coverage publishers: 0
-- Link: https://techcrunch.com/2026/11/13/microsoft-latest-email-outage-turned-into-a-full-blown-global-cloud-crisis/
+- Link: https://www.theverge.com/gadgets/1039160/anker-soundcore-liberty-5-pro-black-friday-2026-deal-sale
 
-20. **Starship flight 15 powers to orbit—setting up a possible catch on Saturday**
+15. **Anthropic raises $81bn in record-breaking stock market debut**
 
-- Score: 40/100
+- Score: 44/100
+- Category: Business Stories
+- Source: BBC Technology
+- Matching coverage publishers: 0
+- Link: https://www.bbc.co.uk/news/articles/c6742m39xgzxo?at_medium=RSS&at_campaign=rss
+
+16. **SpaceX's Starshield troubles in Ukraine could threaten its broader military business**
+
+- Score: 43/100
 - Category: Business Stories
 - Source: Ars Technica
 - Matching coverage publishers: 0
-- Link: https://arstechnica.com/space/2026/11/starship-flight-15-powers-to-orbit-setting-up-a-possible-catch-on-saturday/
+- Link: https://arstechnica.com/space/2026/11/incoming-house-chair-threatens-spacex-funding-over-ukraine-controversy/
 
-21. **Pressure grows on Trump's Commerce Secretary Lutnick in fallout from Nvidia scandal**
+17. **Experts warn: Nearly everyone in AI is susceptible to a honey-trap scheme right now**
 
-- Score: 40/100
-- Category: Business Stories
-- Source: BBC Technology
+- Score: 41/100
+- Category: AI & Technology
+- Source: TechCrunch
 - Matching coverage publishers: 0
-- Link: https://www.bbc.co.uk/news/articles/cqvg2d1eg7zro?at_medium=RSS&at_campaign=rss
+- Link: https://techcrunch.com/2026/11/20/experts-warn-nearly-everyone-in-ai-is-susceptible-to-a-honey-trap-scheme-right-now/
 
-22. **The Download: COP31’s climate challenge and the quest for immortality**
+18. **Bending Spoons buys Mailchimp for $3.68B**
 
-- Score: 40/100
+- Score: 41/100
+- Category: Business Stories
+- Source: TechCrunch
+- Matching coverage publishers: 0
+- Link: https://techcrunch.com/2026/11/20/bending-spoons-buys-mailchimp-for-3-68-billion/
+
+19. **California AG subpoenas Nvidia over worries about Huang’s ties with China**
+
+- Score: 41/100
+- Category: Business Stories
+- Source: TechCrunch
+- Matching coverage publishers: 0
+- Link: https://techcrunch.com/2026/11/20/california-ag-subpoenas-nvidia-over-worries-about-huangs-ties-with-china/
+
+20. **Google rolls out new search homepage with AI chat history and no search button**
+
+- Score: 41/100
+- Category: Business Stories
+- Source: Ars Technica
+- Matching coverage publishers: 0
+- Link: https://arstechnica.com/ai/2026/11/googles-latest-search-page-redesign-drops-the-search-button-adds-ai-sidebar/
+
+21. **The Download: inside the quest to make our minds immortal**
+
+- Score: 41/100
 - Category: AI & Technology
 - Source: MIT Technology Review
 - Matching coverage publishers: 0
-- Link: https://www.technologyreview.com/2026/11/12/1148444/the-download-cop31-climate-talks-cognitive-immortality/
+- Link: https://www.technologyreview.com/2026/11/20/1149371/the-download-quest-to-make-minds-immortal/
 
-23. **Elon Musk, other tech execs sign petition calling on Nvidia to reinstate Jensen Huang**
+22. **Startup sues Apple in India over tap-to-share contacts feature**
 
-- Score: 39/100
+- Score: 40/100
 - Category: Business Stories
 - Source: TechCrunch
 - Matching coverage publishers: 0
-- Link: https://techcrunch.com/2026/11/14/elon-musk-other-tech-execs-sign-petition-calling-on-nvidia-to-reinstate-jensen-huang/
+- Link: https://techcrunch.com/2026/11/20/startup-sues-apple-in-india-over-tap-to-share-contacts-feature/
 
-24. **Tesla opens Cybercab pre-orders ‘for personal use,’ with geo restrictions and a $299 monthly fee**
+23. **Apple may be developing its own AI agent that runs your Mac**
 
-- Score: 39/100
-- Category: Business Stories
-- Source: TechCrunch
-- Matching coverage publishers: 0
-- Link: https://techcrunch.com/2026/11/14/tesla-opens-cybercab-pre-orders-for-personal-use-with-geo-restrictions-and-a-299-monthly-fee/
-
-25. **Got an iPhone Duo? These 9 settings make it easier to use**
-
-- Score: 39/100
-- Category: Business Stories
-- Source: TechCrunch
-- Matching coverage publishers: 0
-- Link: https://techcrunch.com/2026/11/14/got-an-iphone-duo-these-9-settings-make-it-easier-to-use/
-
-26. **Amazon’s new Kindle Colorsoft is a premium e-reader with a premium price**
-
-- Score: 39/100
-- Category: Business Stories
-- Source: TechCrunch
-- Matching coverage publishers: 0
-- Link: https://techcrunch.com/2026/11/13/amazons-new-kindle-colorsoft-is-a-premium-e-reader-with-a-premium-price/
-
-27. **Magic: The Gathering is getting a Netflix animated series. For real this time.**
-
-- Score: 39/100
-- Category: General Technology
-- Source: The Verge
-- Matching coverage publishers: 0
-- Link: https://www.theverge.com/entertainment/1033909/magic-the-gathering-netflix-series
-
-28. **This tiny gamepad with dual analog thumbsticks pushes the limits of portable controllers**
-
-- Score: 39/100
-- Category: General Technology
-- Source: The Verge
-- Matching coverage publishers: 0
-- Link: https://www.theverge.com/tech/1013985/crkd-atom-plus-tmr-analog-thumbstick-controller-gamepad-switch-ios-android-hands-on
-
-29. **Microsoft outage 'stark reminder' of how much we rely on tech**
-
-- Score: 39/100
-- Category: Business Stories
-- Source: BBC Technology
-- Matching coverage publishers: 0
-- Link: https://www.bbc.co.uk/news/articles/cxzd9171m51qo?at_medium=RSS&at_campaign=rss
-
-30. **NHS, schools and police forces hit by Microsoft outage**
-
-- Score: 39/100
-- Category: Business Stories
-- Source: BBC Technology
-- Matching coverage publishers: 0
-- Link: https://www.bbc.co.uk/news/articles/c6vg2ljjpj32o?at_medium=RSS&at_campaign=rss
-
-31. **The Download: Pelosi’s successor targets AI and data centers face power woes**
-
-- Score: 39/100
-- Category: AI & Technology
-- Source: MIT Technology Review
-- Matching coverage publishers: 0
-- Link: https://www.technologyreview.com/2026/11/10/1148150/the-download-pelosi-successor-ai-regulation-data-center-backlash/
-
-32. **AI agent startup LangChain hits $3B valuation**
-
-- Score: 38/100
-- Category: Business Stories
-- Source: TechCrunch
-- Matching coverage publishers: 0
-- Link: https://techcrunch.com/2026/11/13/ai-agent-startup-langchain-hits-3b-valuation/
-
-33. **ChatGPT’s new Wallet lets AI agents shop and check out for you**
-
-- Score: 38/100
+- Score: 40/100
 - Category: AI & Technology
 - Source: TechCrunch
 - Matching coverage publishers: 0
-- Link: https://techcrunch.com/2026/11/13/chatgpts-new-wallet-lets-ai-agents-shop-and-check-out-for-you/
+- Link: https://techcrunch.com/2026/11/19/apple-may-be-developing-its-own-ai-agent-that-runs-your-mac/
 
-34. **Uber confirms hackers stole thousands of drivers’ license information in data breach**
+24. **Daniel Ek backs AI researcher’s fusion power startup. Here’s what they’re building.**
+
+- Score: 39/100
+- Category: Business Stories
+- Source: TechCrunch
+- Matching coverage publishers: 0
+- Link: https://techcrunch.com/2026/11/20/daniel-ek-backs-ai-researchers-fusion-power-startup-heres-what-theyre-building/
+
+25. **GTA 6 sales hit $3.8bn in a single day - the biggest entertainment launch in history**
+
+- Score: 39/100
+- Category: General Technology
+- Source: BBC Technology
+- Matching coverage publishers: 0
+- Link: https://www.bbc.co.uk/news/articles/c9zr5nyv5dj2o?at_medium=RSS&at_campaign=rss
+
+26. **Trump threatens ban on US firms building AI data centres overseas**
+
+- Score: 39/100
+- Category: Politics & Geopolitics
+- Source: BBC Technology
+- Matching coverage publishers: 0
+- Link: https://www.bbc.co.uk/news/articles/cmde1lw9y54ko?at_medium=RSS&at_campaign=rss
+
+27. **A tale of two Nvidias**
 
 - Score: 38/100
 - Category: Business Stories
 - Source: TechCrunch
 - Matching coverage publishers: 0
-- Link: https://techcrunch.com/2026/11/13/uber-confirms-hackers-stole-thousands-of-drivers-license-information-in-data-breach/
+- Link: https://techcrunch.com/2026/11/21/a-tale-of-two-nvidias/
 
-35. **Ars Live: What drone attacks on data centers mean for modern life in the cloud**
+28. **Rocket Report: A weekend of ups and downs; Stoke celebrates engine milestone**
 
 - Score: 38/100
 - Category: Military Technology
 - Source: Ars Technica
 - Matching coverage publishers: 0
-- Link: https://arstechnica.com/gadgets/2026/11/ars-live-can-the-cloud-survive-drone-strikes-on-data-centers/
+- Link: https://arstechnica.com/space/2026/11/rocket-report-a-weekend-of-ups-and-downs-stoke-celebrates-engine-milestone/
 
-36. **How a sex scandal at Nvidia is putting pressure on the White House**
+29. **John Roberts, the voice of Linda Belcher, is just happy to finish a thing**
+
+- Score: 38/100
+- Category: General Technology
+- Source: The Verge
+- Matching coverage publishers: 0
+- Link: https://www.theverge.com/report/1038463/john-roberts-linda-belcher-bobs-burgers-interview
+
+30. **Tech stock sell-off drags markets down as Anthropic shares slide**
+
+- Score: 38/100
+- Category: AI & Technology
+- Source: BBC Technology
+- Matching coverage publishers: 0
+- Link: https://www.bbc.co.uk/news/articles/c6808ym10vzgo?at_medium=RSS&at_campaign=rss
+
+31. **What a billion-dollar deal says about the US battery market**
 
 - Score: 38/100
 - Category: Business Stories
-- Source: BBC Technology
+- Source: MIT Technology Review
 - Matching coverage publishers: 0
-- Link: https://www.bbc.co.uk/news/articles/c67429m3vem3o?at_medium=RSS&at_campaign=rss
+- Link: https://www.technologyreview.com/2026/11/19/1148922/sila-panasonic-battery-deal/
 
-37. **Jensen Huang’s departure blasts big hole in AI startup funding, VCs and founders say**
-
-- Score: 37/100
-- Category: Business Stories
-- Source: TechCrunch
-- Matching coverage publishers: 0
-- Link: https://techcrunch.com/2026/11/13/jensen-huangs-departure-blasts-big-hole-in-ai-startup-funding-vcs-and-founders-say/
-
-38. **This young startup wants to power floating data centers with the ocean’s heat, and investors are already on board**
-
-- Score: 37/100
-- Category: Business Stories
-- Source: TechCrunch
-- Matching coverage publishers: 0
-- Link: https://techcrunch.com/2026/11/13/this-young-startup-wants-to-power-floating-data-centers-with-the-oceans-heat-and-investors-are-already-on-board/
-
-39. **Work to replace old copper wire led to the FAA’s ground stop**
+32. **Meta reconsiders 2030 net-zero goal amid record emissions from AI data centers**
 
 - Score: 37/100
 - Category: General Technology
-- Source: The Verge
-- Matching coverage publishers: 0
-- Link: https://www.theverge.com/transportation/1033898/faa-ground-stop-sean-duffy-faa-copper-wire
-
-40. **Here are our favorite deals from REI’s giant Holiday Sale**
-
-- Score: 37/100
-- Category: General Technology
-- Source: The Verge
-- Matching coverage publishers: 0
-- Link: https://www.theverge.com/gadgets/1032500/best-deals-rei-holiday-sale-2026
-
-41. **Israel’s VCs see opportunity for challengers in Nvidia’s turmoil**
-
-- Score: 36/100
-- Category: Business Stories
-- Source: TechCrunch
-- Matching coverage publishers: 0
-- Link: https://techcrunch.com/2026/11/13/israels-vcs-see-opportunity-for-challengers-in-nvidias-turmoil/
-
-42. **Winemakers are learning that conservation can be good for business**
-
-- Score: 36/100
-- Category: Business Stories
 - Source: Ars Technica
 - Matching coverage publishers: 0
-- Link: https://arstechnica.com/science/2026/11/winemakers-are-learning-that-conservation-can-be-good-for-business/
+- Link: https://arstechnica.com/ai/2026/11/meta-reconsiders-2030-net-zero-goal-amid-record-emissions-from-ai-data-centers/
 
-43. **OpenAI board member worries an AI "takeover" of society could be months away**
+33. **In a year of AI solving maths problems, an Anthropic worker says he may have cracked the biggest**
+
+- Score: 37/100
+- Category: AI & Technology
+- Source: BBC Technology
+- Matching coverage publishers: 0
+- Link: https://www.bbc.co.uk/news/articles/c6pqr2g7w059o?at_medium=RSS&at_campaign=rss
+
+34. **A human liver has been kept alive outside the body for a record seven weeks**
+
+- Score: 37/100
+- Category: General Technology
+- Source: MIT Technology Review
+- Matching coverage publishers: 0
+- Link: https://www.technologyreview.com/2026/11/19/1148934/a-human-liver-has-been-kept-alive-outside-the-body-for-seven-weeks-setting-a-record/
+
+35. **Super-hot rock geothermal could end data center energy woes**
+
+- Score: 36/100
+- Category: AI & Technology
+- Source: TechCrunch
+- Matching coverage publishers: 0
+- Link: https://techcrunch.com/2026/11/20/super-hot-rock-geothermal-could-end-data-center-energy-woes/
+
+36. **SpaceX lenders don’t want Elon Musk launching their collateral into space**
 
 - Score: 36/100
 - Category: AI & Technology
 - Source: Ars Technica
 - Matching coverage publishers: 0
-- Link: https://arstechnica.com/ai/2026/11/ai-is-the-most-likely-reason-youll-die-openai-board-member-warns/
+- Link: https://arstechnica.com/space/2026/11/spacex-lenders-dont-want-elon-musk-launching-their-collateral-into-space/
 
-44. **FAA lifts nationwide ground stop that blocked takeoffs for hours**
+37. **The FBI and USDA were reportedly hacked**
 
 - Score: 36/100
 - Category: General Technology
 - Source: The Verge
 - Matching coverage publishers: 0
-- Link: https://www.theverge.com/news/1033489/faa-ground-stop
+- Link: https://www.theverge.com/tech/1039543/fbi-usda-hacked
 
-45. **Italy fines Meta €805m over accessing users' photos**
+38. **The most misunderstood graph in AI just got a major update**
 
 - Score: 36/100
 - Category: General Technology
-- Source: BBC Technology
+- Source: MIT Technology Review
 - Matching coverage publishers: 0
-- Link: https://www.bbc.co.uk/news/articles/cwn83gxemk35o?at_medium=RSS&at_campaign=rss
+- Link: https://www.technologyreview.com/2026/11/20/1149399/the-most-misunderstood-graph-in-ai-just-got-a-major-update/
 
-46. **Courts, spies and MPs: How the Microsoft outage has been felt around the world**
-
-- Score: 36/100
-- Category: Business Stories
-- Source: BBC Technology
-- Matching coverage publishers: 0
-- Link: https://www.bbc.co.uk/news/articles/cqp9d58eldlro?at_medium=RSS&at_campaign=rss
-
-47. **US government grounds all flights across the United States ‘due to extraordinary circumstances’**
+39. **AI claimed a solution to the 167-year-old Riemann hypothesis — and a human did, too**
 
 - Score: 35/100
-- Category: Politics & Geopolitics
+- Category: General Technology
 - Source: TechCrunch
 - Matching coverage publishers: 0
-- Link: https://techcrunch.com/2026/11/13/u-s-government-grounds-all-flights-across-the-united-states-due-to-extraordinary-cirumstances/
+- Link: https://techcrunch.com/2026/11/20/ai-claimed-a-solution-to-the-167-year-old-riemann-hypothesis-and-a-human-did-too/
 
-48. **With Starship catch, SpaceX still shows it can dazzle the world**
+40. **Hydropower hit record lows in the US Southwest this summer**
 
 - Score: 35/100
 - Category: General Technology
-- Source: Ars Technica
+- Source: MIT Technology Review
 - Matching coverage publishers: 0
-- Link: https://arstechnica.com/space/2026/11/with-starship-catch-spacex-still-shows-it-can-dazzle-the-world/
+- Link: https://www.technologyreview.com/2026/11/17/1148742/hydropower-drought-colorado-river/
 
-49. **Kalshi ditches Trump Jr. as advisor; CEO admitted "optics" weren't good**
+41. **Alaska, your next governor is a Wikipedia nerd**
 
-- Score: 35/100
-- Category: Business Stories
-- Source: Ars Technica
+- Score: 34/100
+- Category: General Technology
+- Source: TechCrunch
 - Matching coverage publishers: 0
-- Link: https://arstechnica.com/tech-policy/2026/11/trump-jr-out-as-kalshi-advisor-after-his-firms-big-investment-in-polymarket/
+- Link: https://techcrunch.com/2026/11/21/alaska-your-next-governor-is-a-wikipedia-nerd/
 
-50. **Microsoft says services fully restored after day-long global outage**
+42. **Behind Jensen Huang’s exit, questions about a management style reportedly built on fear**
 
-- Score: 35/100
+- Score: 34/100
 - Category: Business Stories
+- Source: TechCrunch
+- Matching coverage publishers: 0
+- Link: https://techcrunch.com/2026/11/20/behind-jensen-huangs-exit-questions-about-a-management-style-reportedly-built-on-fear/
+
+43. **The UN fails to agree on rules regulating ‘killer robots’**
+
+- Score: 34/100
+- Category: General Technology
+- Source: The Verge
+- Matching coverage publishers: 0
+- Link: https://www.theverge.com/tech/1039554/un-regulations-killer-robots
+
+44. **Can AI really help spot Black Friday deals? We put it to the test**
+
+- Score: 34/100
+- Category: General Technology
 - Source: BBC Technology
 - Matching coverage publishers: 0
-- Link: https://www.bbc.co.uk/news/articles/c6rrg51rkz09o?at_medium=RSS&at_campaign=rss
+- Link: https://www.bbc.co.uk/news/articles/cw8dv4jmnle2o?at_medium=RSS&at_campaign=rss
+
+45. **Signal restricts mobile screenshots as it confronts ‘existential threat’ of AI surveillance**
+
+- Score: 33/100
+- Category: General Technology
+- Source: TechCrunch
+- Matching coverage publishers: 0
+- Link: https://techcrunch.com/2026/11/21/signal-restricts-mobile-screenshots-as-it-confronts-existential-threat-of-ai-surveillance/
+
+46. **Here are the top AI agents that can live in your text messages**
+
+- Score: 33/100
+- Category: General Technology
+- Source: TechCrunch
+- Matching coverage publishers: 0
+- Link: https://techcrunch.com/2026/11/21/all-the-ai-agents-that-can-live-in-your-text-messages/
+
+47. **“Race realism” isn’t realistic—and it isn’t good science**
+
+- Score: 33/100
+- Category: General Technology
+- Source: Ars Technica
+- Matching coverage publishers: 0
+- Link: https://arstechnica.com/science/2026/11/race-realism-isnt-realistic-and-it-isnt-good-science/
+
+48. **Army delays detonating "catastrophically hazardous" lead azide amid fear, anger**
+
+- Score: 33/100
+- Category: General Technology
+- Source: Ars Technica
+- Matching coverage publishers: 0
+- Link: https://arstechnica.com/science/2026/11/outrage-questions-swirl-as-army-delays-blowing-up-stockpile-of-toxic-lead-azide/
+
+49. **Amazon fights the Delivery Protection Act with homepage banner, in-app pop-up**
+
+- Score: 33/100
+- Category: Business Stories
+- Source: Ars Technica
+- Matching coverage publishers: 0
+- Link: https://arstechnica.com/tech-policy/2026/11/amazon-takes-its-fight-against-nyc-delivery-bill-to-shoppers-with-in-app-pop-up/
+
+50. **UK joins in GTA 6 frenzy as game becomes available worldwide**
+
+- Score: 33/100
+- Category: General Technology
+- Source: BBC Technology
+- Matching coverage publishers: 0
+- Link: https://www.bbc.co.uk/news/articles/c6z74ep2n17zo?at_medium=RSS&at_campaign=rss
 
 
 ## NEXT RESEARCH STEPS

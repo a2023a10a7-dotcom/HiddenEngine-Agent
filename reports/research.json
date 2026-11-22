@@ -1,7 +1,7 @@
 {
   "project": "The Hidden Engine",
-  "generatedAt": "2026-11-15T10:32:07.775Z",
-  "date": "2026-11-15",
+  "generatedAt": "2026-11-22T10:37:51.032Z",
+  "date": "2026-11-22",
   "configuration": {
     "maxArticles": 50,
     "topOpportunities": 10,
@@ -44,58 +44,45 @@
   ],
   "totalArticles": 50,
   "topOpportunities": [
-    "The OpenAI board member who fired Sam Altman says we still can’t trust AI CEOs",
-    "Jensen Huang and the decline of the visionary showman founder CEO",
-    "The Download: Silicon Valley’s blind spot and Nvidia’s chip-tracking plan",
-    "Silicon Valley claims to know the future. So why did it get the midterms so wrong?",
-    "Where was Nvidia’s security team?",
-    "The AI graveyard: a running list of projects and startups that didn’t make it",
-    "Starship flight 15 powers to orbit—setting up a possible catch on Saturday",
-    "Pressure grows on Trump's Commerce Secretary Lutnick in fallout from Nvidia scandal",
-    "Ars Live: What drone attacks on data centers mean for modern life in the cloud",
-    "Italy fines Meta €805m over accessing users' photos"
+    "Can Anthropic afford to put safety first?",
+    "Anthropic’s 7 founders cashed out nearly $2B in record-breaking IPO",
+    "The Xiaomi 18 Pro proves two screens aren’t better than one",
+    "The Download: AI learns to smell and hydropower struggles",
+    "Anthropic becomes one of world's most valuable public companies in stock market debut",
+    "The Download: a living liver, a billion-dollar battery deal, and AI hype",
+    "Is selling an AI version of your face to this microdrama startup the future of Hollywood?",
+    "Anthropic raises $81bn in record-breaking stock market debut",
+    "Rocket Report: A weekend of ups and downs; Stoke celebrates engine milestone",
+    "Meta reconsiders 2030 net-zero goal amid record emissions from AI data centers"
   ],
   "articles": [
     {
       "source": "The Verge",
-      "title": "The OpenAI board member who fired Sam Altman says we still can’t trust AI CEOs",
-      "link": "https://www.theverge.com/podcast/1032907/helen-toner-openai-cset-ai-safety-policy-interview",
-      "date": "2026-11-14T15:00:00.000Z",
-      "summary": "Today, I’m talking with Helen Toner, the executive director of the Center for Security and Emerging Technology at Georgetown University. This episode is part two of our series on AI in real life. Helen is a well-known figure in the AI safety and policy community, though she is perhaps best known for having served on the board of OpenAI, when she was one of four board members who voted to fire Sam Altman. That incident, now sometimes referred to as “the blip,” ended with Sam coming back as CEO, Helen resigning, and a new board of directors. OpenAI has since restructured entirely. But it’s worth remembering what Helen and the board were supposed to do: OpenAI’s nonprofit board existed specifically to make sure the company didn’t betray its mission to build safe AI by prioritizing profit and growth over safety. When the board actually tried to pull the lever, that accountability mechanism broke, and here we are. Verge subscribers, don’t forget you get exclusive access to ad-free Decoder wherever you get your podcasts. Head here. Not a subscriber? You can sign up here. Now, the question of AI safety is everywhere. This summer, AI models from OpenAI and Anthropic broke out of their test",
+      "title": "Can Anthropic afford to put safety first?",
+      "link": "https://www.theverge.com/podcast/1038701/anthropic-ipo-ai-safety-openai-nvidia-structure",
+      "date": "2026-11-21T15:00:00.000Z",
+      "summary": "Today, I’m talking with Hayden Field, The Verge’s senior AI reporter, about the Anthropic IPO for the third and final episode in our series about AI in real life. The AI lab behind Claude went public on the Nasdaq last Thursday. The numbers are gigantic, but not really that important for this conversation, except to say that Anthropic has become one of the most valuable companies on the planet. The real story is what happens now — and whether Anthropic can continue to thread the needle of caring about and investing in AI safety while also being a public company beholden to shareholders. Oh, and it also continuously growing the amount of money it makes so it can keep paying its ever-increasing compute bills, which total roughly $900 billion over the coming years. All of these ideas sit in a fascinating tension with one another, and so Hayden and I really tried to break down how we think this might play out as Anthropic navigates the pressures of the public markets. You’ll hear us talk about the company’s unique corporate governance structure, something that is especially relevant in the wake of the ongoing Jensen Huang saga. We also get into why OpenAI seems happy to have let Anthro",
       "category": "AI & Technology",
       "matchedCategories": [
         "AI & Technology",
-        "Business Stories",
-        "Politics & Geopolitics"
+        "Business Stories"
       ],
       "dateValid": true,
-      "score": 57,
+      "score": 55,
       "scoreBreakdown": {
-        "relevance": 20,
-        "interest": 6,
-        "technical": 6,
+        "relevance": 15,
+        "interest": 8,
+        "technical": 4,
         "storytelling": 4,
         "freshness": 14,
-        "specificity": 7
+        "specificity": 10
       },
       "angle": "Explain how the technology works, its capabilities, limitations, and future impact.",
       "coverage": {
         "status": "searched",
-        "reports": [
-          {
-            "title": "Former OpenAI board member warns AI CEOs remain untrustworthy",
-            "publisher": "TechTimes Vietnam",
-            "publisherUrl": "https://www.techtimes.vn",
-            "publisherDomain": "techtimes.vn",
-            "link": "https://news.google.com/rss/articles/CBMilAFBVV95cUxNbWlmYnBtNzBaYUNEc2Y2SkFPTTYxNmpOWnZsZEtwcGU1QzY4Y2J1UlMzS3dnUG9vWUFBcDBxQm1jbHNpd3Y4UXBWRTJJS0dFdWQwRzREaGNKcGNxVU9RWHpYUjhiOGhBN0JkbzRLWkQ2cGRNYzhUZldKdGJGR2FBRXo0UkJMcXJoeExOc25rT0pJMk9X?oc=5",
-            "date": "2026-11-14T15:03:49.000Z",
-            "relevance": 0.383
-          }
-        ],
-        "publisherCount": 1,
-        "publishers": [
-          "TechTimes Vietnam"
-        ],
+        "reports": [],
+        "publisherCount": 0,
+        "publishers": [],
         "note": "Distinct publisher identifiers found; independence and factual accuracy are not verified."
       },
       "recommendation": {
@@ -108,72 +95,53 @@
       }
     },
     {
-      "source": "The Verge",
-      "title": "Jensen Huang and the decline of the visionary showman founder CEO",
-      "link": "https://www.theverge.com/tech/1033781/nvidia-jensen-huang-last-visionary-showman-founder-ceo",
-      "date": "2026-11-14T12:00:00.000Z",
-      "summary": "Nvidia CEO Jensen Huang at CES 2025 in Las Vegas, Nevada, on January 6, 2025. | Photo by Artur Widak/NurPhoto via Getty Images On January 6th, 2025, Nvidia CEO Jensen Huang got his rockstar moment at last. He strode triumphantly onstage, hand raised in the air, to the claps and cheers of a 14,000-person arena absolutely packed with influencers and fans, their faces awash in blue glow, as he made his entrance in a black leather jacket that shimmered in the stadium's lights. Few are cheering for Jensen Huang now. He has left Nvidia after seemingly enabling two chip smuggling scandals and allegedly having three extramarital affairs, including one with an alleged Chinese spy at the same time he was mingling with President Donald Trump. The world is watching to see if … Read the full story at The Verge.",
+      "source": "TechCrunch",
+      "title": "Anthropic’s 7 founders cashed out nearly $2B in record-breaking IPO",
+      "link": "https://techcrunch.com/2026/11/19/anthropics-7-founders-cashed-out-nearly-2b-in-record-breaking-ipo/",
+      "date": "2026-11-20T00:43:50.000Z",
+      "summary": "At the upgraded $83/share IPO price, Anthropic's seven founders each pocketed $280 million, while the company nabbed nearly $105 billion.",
       "category": "Business Stories",
       "matchedCategories": [
         "Business Stories",
         "AI & Technology"
       ],
       "dateValid": true,
-      "score": 53,
+      "score": 49,
       "scoreBreakdown": {
         "relevance": 15,
-        "interest": 6,
-        "technical": 4,
+        "interest": 10,
+        "technical": 2,
         "storytelling": 4,
-        "freshness": 14,
-        "specificity": 10
+        "freshness": 11,
+        "specificity": 7
       },
       "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
       "coverage": {
         "status": "searched",
         "reports": [
           {
-            "title": "Jensen Huang and the decline of the visionary showman founder CEO",
-            "publisher": "The Verge",
-            "publisherUrl": "https://www.theverge.com",
-            "publisherDomain": "theverge.com",
-            "link": "https://news.google.com/rss/articles/CBMilwFBVV95cUxPYVlXVmI5WWRFX3ZOM3pQSkxSVnpTT1NKX1pubzdyblQ2d0FfQ1ZoVGIzNnpJZXl1VWk5Sy1keWZmR2xvMUk5SnZoVnVSZW91ejR0Q1B5LXlQU2Y1T241aENRb29XRXJvMEN6U3lMR2t4amtiZ2pLRFBYV1RWcnpiWWdlbzBYUHVVdjYxb1VkaW9fMjRDOWxR?oc=5",
-            "date": "2026-11-14T12:00:00.000Z",
+            "title": "Anthropic’s 7 founders cashed out nearly $2B in record-breaking IPO",
+            "publisher": "TechCrunch",
+            "publisherUrl": "https://techcrunch.com",
+            "publisherDomain": "techcrunch.com",
+            "link": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPOXd3b1R3Vi1EQjRMUkFjTVh6N2pjOXRlQmNWSnd6WmlwOFlpejdwNXk0V281cllGSEc3YU1CNjRjWUhOUUZKcTNEN01ualBpTlppRFpnZGt4NlhvYjV3Z2w2TGtUUmJrN0RJWU1vT2o2ZmFUbk83WHlzUDlCSWpzUkJmS2N3YU90UmYwR0xnRU0tT0J2RG9FNkN0NjJIYjRnOXc?oc=5",
+            "date": "2026-11-20T00:43:50.000Z",
             "relevance": 1
           },
           {
-            "title": "The Cult of the Founder Will Resurrect Jensen Huang",
-            "publisher": "Business Insider",
-            "publisherUrl": "https://www.businessinsider.com",
-            "publisherDomain": "businessinsider.com",
-            "link": "https://news.google.com/rss/articles/CBMiigFBVV95cUxQSkJiOHI0MmFhX3cyUjFRMjI0aklydzBqSHc3Q0Y2Vk9makJ1ZlpJa0FBcGpLUjU3SHNnTl9hRHhRREM1QUpZSGE4REFsb25Ib2dlMmJkand5a0plREttWGFzZ19KNU5wamNsTklKaUVMbUNWblVSNGxvNk9ZWi1JYm9scUh6RlctTVE?oc=5",
-            "date": "2026-11-15T09:37:00.000Z",
-            "relevance": 0.45
-          },
-          {
-            "title": "Jensen Huang and the End of the Founder Fairy Tale",
-            "publisher": "WIRED",
-            "publisherUrl": "https://www.wired.com",
-            "publisherDomain": "wired.com",
-            "link": "https://news.google.com/rss/articles/CBMihgFBVV95cUxPUTBQNkxCTEpOUDhRYVI5empSRVROZEVvNklTYS1TUDRMRHdKTVl6Mk5WTjVvSTBIOEJqLVZpOVB2MVVSNVBJRjIzNlJSbEVwTlJRSnAyU0trRFQ1UzRzMTBIY21kQ1BxUnEwXzU3ZXpoaUdGaFBRODdCRGdHaVZicmlZdlcxUQ?oc=5",
-            "date": "2026-11-13T16:00:00.000Z",
-            "relevance": 0.45
-          },
-          {
-            "title": "Nvidia CEO Jensen Huang has resigned. What happens next?",
-            "publisher": "The Verge",
-            "publisherUrl": "https://www.theverge.com",
-            "publisherDomain": "theverge.com",
-            "link": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOU2llVFEzTzBjQ2VGVjBFbTFScmR1NjVfbFY1MHc3eHFEc3NMWHIySnZZVEUtb2xKc0p5UmRoYkFSbWpuVldIMHNRVFJhc2tlaHUzVDNfZ3p6MkprcDZ4MTI5V2JrTDhXSG9Ja211enlHd201SmFxemZvbHF5ZTVMNHpYTmlRVDZMQmR1dG1fWGhXWnFqU1NLcy11WENrV3haVWc?oc=5",
-            "date": "2026-11-14T14:44:29.000Z",
-            "relevance": 0.4
+            "title": "All 7 Anthropic founders will each cash out about $250M in IPO",
+            "publisher": "Yahoo Finance",
+            "publisherUrl": "https://finance.yahoo.com",
+            "publisherDomain": "finance.yahoo.com",
+            "link": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPeWRabGdiejE0cnR6SWhRczR3Y0F5dnhqTFdaNkk3aEJWQUJrWVItdlFrdjhIWHhuSmxYVXlOTzdwLXl5QWxIUTFneGVsV093ekxOaHF4NDVUMVdBcTlCeVdFVHp1d2RXVFE1aFRtRVJ4MUU1MGgyZzFvcklJRmlZdmF1Qk5tQzluUFVGdzhxS1pSSXJPTmRkRzZB?oc=5",
+            "date": "2026-11-10T08:00:00.000Z",
+            "relevance": 0.47
           }
         ],
-        "publisherCount": 3,
+        "publisherCount": 2,
         "publishers": [
-          "The Verge",
-          "Business Insider",
-          "WIRED"
+          "TechCrunch",
+          "Yahoo Finance"
         ],
         "note": "Distinct publisher identifiers found; independence and factual accuracy are not verified."
       },
@@ -185,24 +153,73 @@
       }
     },
     {
+      "source": "The Verge",
+      "title": "The Xiaomi 18 Pro proves two screens aren’t better than one",
+      "link": "https://www.theverge.com/tech/1038562/xiaomi-18-pro-max-review",
+      "date": "2026-11-21T13:00:00.000Z",
+      "summary": "Both 18 Pro phones feature rear displays used for selfies, notifications, and AI apps. Xiaomi introduced a second screen to its flagship phones with last year's 17 Pros, but didn't release them outside China. That means the new 18 Pro and Pro Max are the first chance I've had to find out if a screen on the back of a phone is any more useful now than it was when Xiaomi last tried it on 2021's Mi 11 Ultra - not to mention earlier efforts by the likes of Nubia and Vivo. After a week or two with both of Xiaomi's new Pro phones, I'm not entirely sold. The rear display has a single, obvious use case - it's helped me take some of the best selfies I've ever managed - but it isn't very useful otherwise. The rest of the phones are gre … Read the full story at The Verge.",
+      "category": "Politics & Geopolitics",
+      "matchedCategories": [
+        "Politics & Geopolitics"
+      ],
+      "dateValid": true,
+      "score": 48,
+      "scoreBreakdown": {
+        "relevance": 10,
+        "interest": 8,
+        "technical": 4,
+        "storytelling": 2,
+        "freshness": 14,
+        "specificity": 10
+      },
+      "angle": "Explain the strategic interests, competing sides, and technological consequences.",
+      "coverage": {
+        "status": "searched",
+        "reports": [
+          {
+            "title": "The Xiaomi 18 Pro proves two screens aren’t better than one",
+            "publisher": "The Verge",
+            "publisherUrl": "https://www.theverge.com",
+            "publisherDomain": "theverge.com",
+            "link": "https://news.google.com/rss/articles/CBMib0FVX3lxTE4zbWQ0eUJhRUFhWFA0a3k0ZllFakpPSElCWkl2VEMwYkZfRzd1Qk90WXJjd0tremFsRm5HbTJZanVLVUtWN0k2WE5UY0xEQ3hCY1BDdVZkT0JmZUEyRGFnMTFlUU8tUDBXVkFROUhBZw?oc=5",
+            "date": "2026-11-21T13:00:00.000Z",
+            "relevance": 1
+          }
+        ],
+        "publisherCount": 1,
+        "publishers": [
+          "The Verge"
+        ],
+        "note": "Distinct publisher identifiers found; independence and factual accuracy are not verified."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "General technology audience",
+        "format": "Explainer / Analysis",
+        "warnings": [
+          "Few matching coverage results found. Search for additional reporting and primary sources."
+        ]
+      }
+    },
+    {
       "source": "MIT Technology Review",
-      "title": "The Download: Silicon Valley’s blind spot and Nvidia’s chip-tracking plan",
-      "link": "https://www.technologyreview.com/2026/11/13/1148551/the-download-silicon-valley-midterms-nvidia-chip-tracking/",
-      "date": "2026-11-13T13:10:00.000Z",
-      "summary": "This is today’s edition of The Download, our weekday newsletter that provides a daily dose of what’s going on in the world of technology. Silicon Valley claims to know the future. So why did it get the midterms so wrong? —Aaron Zamost, a tech communications consultant and a former executive at Square The self-styled visionaries…",
+      "title": "The Download: AI learns to smell and hydropower struggles",
+      "link": "https://www.technologyreview.com/2026/11/18/1148845/the-download-ai-learns-to-smell-hydropower-struggles/",
+      "date": "2026-11-18T13:10:00.000Z",
+      "summary": "This is today’s edition of The Download, our weekday newsletter that provides a daily dose of what’s going on in the world of technology. This smell startup says its AI nose is as good as a human’s In a New Jersey lab, researchers are trying to sniff every odor on Earth. Their careful notes—“nutty,” “peachy,”…",
       "category": "AI & Technology",
       "matchedCategories": [
         "AI & Technology",
         "Business Stories"
       ],
       "dateValid": true,
-      "score": 50,
+      "score": 47,
       "scoreBreakdown": {
         "relevance": 15,
         "interest": 8,
         "technical": 6,
         "storytelling": 2,
-        "freshness": 12,
+        "freshness": 9,
         "specificity": 7
       },
       "angle": "Explain how the technology works, its capabilities, limitations, and future impact.",
@@ -224,19 +241,19 @@
     },
     {
       "source": "The Verge",
-      "title": "Watch SpaceX successfully execute the first ‘chopstick’ catch of Starship",
-      "link": "https://www.theverge.com/science/1033930/spacex-chopstick-starship-catch",
-      "date": "2026-11-14T21:44:44.000Z",
-      "summary": "After aborting a planned catch of Starship Flight 15's booster, SpaceX successfully captured Starship with its \"Mechazilla\" launch and catch tower for the first time. The company has performed 'chopstick' catches of its boosters before, but this is the first time the maneuver has successfully been executed on the Starship vehicle itself. SpaceX CEO Elon Musk said during the company's third-quarter earnings call that \"success is not guaranteed on these first flights, but I'd say it's more likely than not that this succeeds next flight.\" While not a complete success, in that the company was unable to recover the entire launch vehicle, it sti … Read the full story at The Verge.",
+      "title": "Amazon is complaining about NYC Council on shipping labels, too",
+      "link": "https://www.theverge.com/tech/1039564/amazon-nyc-council-packages-shipping-label",
+      "date": "2026-11-21T21:59:31.000Z",
+      "summary": "Amazon is getting increasingly aggressive about not wanting to employ its army of delivery workers. | Photo: The Verge Amazon is leaving no venue unexplored in its fight against the New York City Council and the Delivery Protection Act. The company is now putting labels on shipments claiming that the Council could add up to $5 to any Amazon order. The Delivery Protection Act would effectively ban the sort of third-party arrangements Amazon currently uses to deliver many packages, including small companies and independent contractors. Last-mile delivery firms operating warehouses would need to be licensed by the city and directly employ their workers. Earlier this week, Amazon started showing notifications in its mobile app and on its website reading \"Attent … Read the full story at The Verge.",
       "category": "Business Stories",
       "matchedCategories": [
         "Business Stories"
       ],
       "dateValid": true,
-      "score": 48,
+      "score": 46,
       "scoreBreakdown": {
         "relevance": 10,
-        "interest": 8,
+        "interest": 6,
         "technical": 2,
         "storytelling": 4,
         "freshness": 14,
@@ -247,146 +264,28 @@
         "status": "searched",
         "reports": [
           {
-            "title": "Watch SpaceX successfully execute the first ‘chopstick’ catch of Starship",
+            "title": "Amazon is complaining about NYC Council on shipping labels, too",
             "publisher": "The Verge",
             "publisherUrl": "https://www.theverge.com",
             "publisherDomain": "theverge.com",
-            "link": "https://news.google.com/rss/articles/CBMifEFVX3lxTE9pYlVsTDU0cUsxTkJla2VGX2pyZ042eWhaVzg4alNXYlRKZ1dRSUZ2UkxCWVFURUQtcC1ybWpLWU84MFFvM0tuOEFWQk9CQlpoYkgtNEtzVmJORHRWTGxOMzVDcEItX3R5VWRQb2txRDZDQWZLblQ2cE5Oc0M?oc=5",
-            "date": "2026-11-14T21:44:44.000Z",
+            "link": "https://news.google.com/rss/articles/CBMihwFBVV95cUxPSFNpRmk2WVltNjIwTVJvdHJLMl8yay04ZjRmVWF1VDg5WF9kckpFcHRTYkZEanlWMDM5Z3JMd2ZQdVNnVlVvTHpQRXo4T0Nua0JaMnRXVmV0MjA0WGc3LTJsMUtlSE5YSmRyRnpCVlNaNV9QS2dScVFKNmhRc1U1UVh3TWtyZTA?oc=5",
+            "date": "2026-11-21T21:59:31.000Z",
             "relevance": 1
           },
           {
-            "title": "SpaceX catches Starship from space for the first time",
-            "publisher": "Inquisitr",
-            "publisherUrl": "https://www.inquisitr.com",
-            "publisherDomain": "inquisitr.com",
-            "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE00bkNKbmFfTHp2LU1jbWNxZEk4NHVjRjRZZUJFcXVVY0VqWDZIMXRqOGZJNkU5UmNpVmFYUVlyRDJXNWlqenRNNmVvbExuVGZRR2h6SWdjY3RLeDF1bDk3RzFabk0?oc=5",
-            "date": "2026-11-14T22:03:10.000Z",
-            "relevance": 0.412
+            "title": "Amazon is complaining about NYC Council on shipping labels, too",
+            "publisher": "CediRates",
+            "publisherUrl": "https://cedirates.com",
+            "publisherDomain": "cedirates.com",
+            "link": "https://news.google.com/rss/articles/CBMikwFBVV95cUxPTXczNmlHTXNFa2FBTTYyNFNmODgzX2VycTRjTE8ydDF3YlhaUG5RRGxMdmZvbVBONzNrdDRjN2E3Sk1PMHBXWnpDcWNBdnEzMzM1QjJYTm9uNnExallhVUFFVVJUeW01bUZBQ04tN3FpcDJQeDJpTGw3d0ZpM0lodS1qdHlva1U3eXNpaWpfemtVZ28?oc=5",
+            "date": "2026-11-22T07:27:40.000Z",
+            "relevance": 1
           }
         ],
         "publisherCount": 2,
         "publishers": [
           "The Verge",
-          "Inquisitr"
-        ],
-        "note": "Distinct publisher identifiers found; independence and factual accuracy are not verified."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "Business and technology audience",
-        "format": "Company story / Documentary",
-        "warnings": []
-      }
-    },
-    {
-      "source": "MIT Technology Review",
-      "title": "Silicon Valley claims to know the future. So why did it get the midterms so wrong?",
-      "link": "https://www.technologyreview.com/2026/11/13/1148498/silicon-valley-claims-to-know-the-future-so-why-did-it-get-the-midterms-so-wrong/",
-      "date": "2026-11-13T10:00:00.000Z",
-      "summary": "The self-styled visionaries of Silicon Valley, leaders like OpenAI chief executive Sam Altman and SpaceX boss Elon Musk, have built careers claiming to see the future. Long-term vision is currency: Meta’s Mark Zuckerberg built a 10-year road map for Facebook in 2016, and Google famously told investors before its public offering that it was unconcerned…",
-      "category": "AI & Technology",
-      "matchedCategories": [
-        "AI & Technology",
-        "Business Stories"
-      ],
-      "dateValid": true,
-      "score": 47,
-      "scoreBreakdown": {
-        "relevance": 15,
-        "interest": 6,
-        "technical": 2,
-        "storytelling": 2,
-        "freshness": 12,
-        "specificity": 10
-      },
-      "angle": "Explain how the technology works, its capabilities, limitations, and future impact.",
-      "coverage": {
-        "status": "searched",
-        "reports": [
-          {
-            "title": "Silicon Valley claims to know the future. So why did it get the midterms so wrong?",
-            "publisher": "MIT Technology Review",
-            "publisherUrl": "https://www.technologyreview.com",
-            "publisherDomain": "technologyreview.com",
-            "link": "https://news.google.com/rss/articles/CBMizgFBVV95cUxPWGxOWlZzWlJZLU1FZzlHeUR4eU9XRFZ3bXF2RUM1czRONkg4N21yajRUT3I3Ykw2OGVVX092V1owYmo2M2t5Tnh6Vl9xS3lOUnRITTgwaVF0a1FhOERqQTY5NUJLSU1qRWwtRlYzV05YeHlKbzBvM1FIOWhNTkkxYV9RWE05LVF6WDZ6XzhDMEl6dXptLTF2cHB0N0E2TE9XRG1mOVlFelNhdU91azhGT1JhcEtRenRlaHdwRFNUbWFvUDNXOTZCWWU2YlRxd9IB0wFBVV95cUxPbHpJRHJGWnhaXzc4Y1VZekY4SGUxNUhWSFJnVjM0MUJTRkNzUWw4LWpXMFVQcHYweW1UZXZ4cFlLS1Z3bFRNZVNsd080cFR2Ukpqa2ZoTXdrWk5laVl6S0FnSkNzYWVjMEVkVWQxQmZ0LXpLRVhlVk54b25tekFqakwyYlBXT0d3Q3N3c1JqYlNtLXJ1NTJnQ0dYSnZyNC1SLTBjNHhsbUp1TkJKeU9naS1fM1dQOUlYcTdGZ2FqeXNvcmRYdTU0VWdLVUhkb21hN0pN?oc=5",
-            "date": "2026-11-13T10:00:00.000Z",
-            "relevance": 1
-          }
-        ],
-        "publisherCount": 1,
-        "publishers": [
-          "MIT Technology Review"
-        ],
-        "note": "Distinct publisher identifiers found; independence and factual accuracy are not verified."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "General technology audience",
-        "format": "Explainer / Analysis",
-        "warnings": [
-          "Few matching coverage results found. Search for additional reporting and primary sources."
-        ]
-      }
-    },
-    {
-      "source": "TechCrunch",
-      "title": "Where was Nvidia’s security team?",
-      "link": "https://techcrunch.com/2026/11/14/where-was-nvidias-security-team/",
-      "date": "2026-11-15T00:08:07.000Z",
-      "summary": "Nvidia’s security chief quietly left in August, and now that CEO Jensen Huang has stepped down over his relationships, including one with an executive at a company suspected of funneling chips to China, a former intelligence officer says it’s the kind of leak that runs everyday conversations, which most corporate security teams are poorly equipped to catch.",
-      "category": "Business Stories",
-      "matchedCategories": [
-        "Business Stories",
-        "Politics & Geopolitics"
-      ],
-      "dateValid": true,
-      "score": 46,
-      "scoreBreakdown": {
-        "relevance": 15,
-        "interest": 4,
-        "technical": 2,
-        "storytelling": 4,
-        "freshness": 14,
-        "specificity": 7
-      },
-      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
-      "coverage": {
-        "status": "searched",
-        "reports": [
-          {
-            "title": "Where was Nvidia’s security team?",
-            "publisher": "TechCrunch",
-            "publisherUrl": "https://techcrunch.com",
-            "publisherDomain": "techcrunch.com",
-            "link": "https://news.google.com/rss/articles/CBMidEFVX3lxTE00NFBKNVAtbmtnZUd0M3VkSGVvU0J5UjJEWWJnT21OWDQ2NzhOcUV6d3BUVk5JTUE0MzEzMi05ZTU5b1dEYklfMExMRzNIOGVhX3EzaHo1WV8tdUhWNWlHdTRfYzljeFFzQXhsOElEY2ZNRWcw?oc=5",
-            "date": "2026-11-15T00:08:07.000Z",
-            "relevance": 1
-          },
-          {
-            "title": "Where was Nvidia's security team? | TechCrunch",
-            "publisher": "Howl.Link",
-            "publisherUrl": "https://t.co",
-            "publisherDomain": "t.co",
-            "link": "https://news.google.com/rss/articles/CBMiO0FVX3lxTFB5TzRjcDMyUmlTTFgyNGVNTDN3eERha1RlTW40RG5vMkxvYVlqS0t4WmVsNE5Ld0ozZlFv?oc=5",
-            "date": "2026-11-15T00:08:07.000Z",
-            "relevance": 0.95
-          },
-          {
-            "title": "Where Was Nvidia’s Security Team? CSO Left After 7 Years",
-            "publisher": "shattered.io",
-            "publisherUrl": "https://shattered.io",
-            "publisherDomain": "shattered.io",
-            "link": "https://news.google.com/rss/articles/CBMihAFBVV95cUxNcUpPSWdsamliTFBtMk9CbjVMb1JsTkpsWFJOSXU2eTQ4N0NUdXRKU0tUWGFfX29DUlJRMWNVbmxEWS02OWRuT1lTSnpWNHpUTWV3R0xaTjl3Z19EMnFhVl9VYnJnNktOd0g2X29NLTBSdExMN2lZRmwxRVJhT3NsMjc1QkY?oc=5",
-            "date": "2026-11-15T02:20:16.000Z",
-            "relevance": 0.867
-          }
-        ],
-        "publisherCount": 3,
-        "publishers": [
-          "TechCrunch",
-          "Howl.Link",
-          "shattered.io"
+          "CediRates"
         ],
         "note": "Distinct publisher identifiers found; independence and factual accuracy are not verified."
       },
@@ -399,10 +298,76 @@
     },
     {
       "source": "The Verge",
-      "title": "Tesla is inviting some people to buy a Cybercab ‘for personal use’ — but read the fine print",
-      "link": "https://www.theverge.com/transportation/1033844/tesla-personal-cybercab-orders-299-subscription-fine-print",
-      "date": "2026-11-14T14:18:36.000Z",
-      "summary": "Tesla is doubling, or perhaps tripling down on its bold claims of an autonomous future with the offer to \"select customers\" to purchase a Cybercab for \"personal use.\" But the gilded, steering-wheel-free two-seater will \"only be available in supported service areas\" - meaning you'll only be able to buy one if you live in one of the cities where Tesla currently operates its Robotaxi service. The price of a Cybercab is listed at $29,990, plus a mandatory $299-a-month \"Autonomy Subscription.\" Tesla's Robotaxi account on X announced the new offer, including screenshots of the order page and the invite email. But don't expect a fleet of personal … Read the full story at The Verge.",
+      "title": "Chess.com’s next move is a new hub for classic games, from mahjong to sudoku",
+      "link": "https://www.theverge.com/games/1038099/chess-classic-games-expansion-ai",
+      "date": "2026-11-21T14:00:00.000Z",
+      "summary": "Chess.com is ready to go a lot bigger than chess. After launching Gambit, a gambling-free poker site, earlier this year, the company is now adding 10 more games: backgammon, checkers, go, hearts, mahjong, shogi, sudoku, solitaire, xiangqi, and a Scrabble alternative called word. They're all part of Chess's new Classic Games platform, which is launching its public beta on Saturday on the web and through a new app for iOS and Android. \"Our cofounders have had many people come up to them and say, 'Hey, I run a mahjong night on Wednesdays' or 'I go to this local bar in Chicago with like five people, and we love playing go, but we lack a Chess.c … Read the full story at The Verge.",
+      "category": "Business Stories",
+      "matchedCategories": [
+        "Business Stories"
+      ],
+      "dateValid": true,
+      "score": 46,
+      "scoreBreakdown": {
+        "relevance": 10,
+        "interest": 6,
+        "technical": 2,
+        "storytelling": 4,
+        "freshness": 14,
+        "specificity": 10
+      },
+      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
+      "coverage": {
+        "status": "searched",
+        "reports": [
+          {
+            "title": "Chess.com’s next move is a new hub for classic games, from mahjong to sudoku",
+            "publisher": "The Verge",
+            "publisherUrl": "https://www.theverge.com",
+            "publisherDomain": "theverge.com",
+            "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTFByblVyUWY3VE10UEhOeFBiclh5YTBydmVrcFRUeWhQZUtDZFBHbi1HSGxodnNqVUd6aFZaOXBKRG81RGc2di1JOGxBTVNDVEhrVktSYnpZaGpOb3ZDNXAzOF9CbjNYbW9PcVNOVEExX2ZMZGU3MTE4SURhTQ?oc=5",
+            "date": "2026-11-21T14:00:00.000Z",
+            "relevance": 1
+          },
+          {
+            "title": "Chess.com’s next move is a new hub for classic games, from mahjong to sudoku",
+            "publisher": "Mezha.net",
+            "publisherUrl": "https://mezha.net",
+            "publisherDomain": "mezha.net",
+            "link": "https://news.google.com/rss/articles/CBMihwFBVV95cUxPMlJpeWZrb0M1NWFibFhIeFVtMzNPUWt0UFZNYjFuek9laGJEbDh6cmg4V2oxMWtFOERRb3dRUFd2ZjFXOWp0b0FkT0pyaU16Y0pXZTNIeTRrdUJvSldQajFoUlc3OXJqbUV3eWI0QTBYeEtoMWFaVDNTTmZZdDdxWUZVWW9mM1k?oc=5",
+            "date": "2026-11-21T14:06:13.000Z",
+            "relevance": 1
+          },
+          {
+            "title": "Chess.com launched a poker site, and it’s planning even more classic games",
+            "publisher": "The Verge",
+            "publisherUrl": "https://www.theverge.com",
+            "publisherDomain": "theverge.com",
+            "link": "https://news.google.com/rss/articles/CBMidEFVX3lxTFBTdHZLckNkTDdoZjV6SGgwaEVEYk84S0xaQlJPV3N0Sjc4enVfUXFkQ1p2QWw1MHJJSngzdnp4Rm5mUVNnalRwb0RtMTZMQ2tHZFp5Tm03VFFpTktmVXlDWFlCVi1sWjJyVVhjZWlQMWItbEZw?oc=5",
+            "date": "2026-08-30T07:00:00.000Z",
+            "relevance": 0.4
+          }
+        ],
+        "publisherCount": 2,
+        "publishers": [
+          "The Verge",
+          "Mezha.net"
+        ],
+        "note": "Distinct publisher identifiers found; independence and factual accuracy are not verified."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "Business and technology audience",
+        "format": "Company story / Documentary",
+        "warnings": []
+      }
+    },
+    {
+      "source": "The Verge",
+      "title": "The game of the year is finally here",
+      "link": "https://www.theverge.com/tech/1039433/gta-vi-alfred-6-clockwisetv-installer",
+      "date": "2026-11-21T13:00:00.000Z",
+      "summary": "Hi, friends! Welcome to Installer No. 153, your guide to the best and Verge-iest stuff in the world. (If you're new here, welcome, thank you for tearing yourself away from GTA to be here, and also you can read all the old editions at the Installer homepage.) This week, I've been reading about nuclear radiation and F1 brains and phone scammers, watching about 10 minutes of Madden before bailing, playing a lot of Madden NFL instead, learning my way around Instagram Edits on the Mac, trying the 12-3-30 workout while watching Mission: Impossible movies in half-hour increments, getting my new Apple HomeView up and running (still don't know why I … Read the full story at The Verge.",
       "category": "Business Stories",
       "matchedCategories": [
         "Business Stories"
@@ -422,13 +387,31 @@
         "status": "searched",
         "reports": [
           {
-            "title": "Tesla is inviting some people to buy a Cybercab ‘for personal use’ — but read the fine print",
+            "title": "The game of the year is finally here",
             "publisher": "The Verge",
             "publisherUrl": "https://www.theverge.com",
             "publisherDomain": "theverge.com",
-            "link": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNcHNvWnNROEliNGFNNUNHR1ptc3hPLXVRWUYwRjl3dmM5aC1pYVBmOURoZk1Hanh6cEp0eG1LWUh5bDUwRXpnVFlWMFNpQzBVVWdrX2FUcXdydzJHTnd5dV9RbDZOYlk4U2V5UTRSazRVZ3BvR1dZVlUxSkFBUFhhblNydnhJcm1FbDcwY1JFYUNVRTZtbWVvaWRGa01WNkY5QVJudEE1VkZydw?oc=5",
-            "date": "2026-11-14T14:18:36.000Z",
+            "link": "https://news.google.com/rss/articles/CBMigAFBVV95cUxOanQyTWU5UDQ1OXdrQngwVTY2TFY5VExCeHphSEJSVndPU05Tcms3X3d0cEFlUWp1Z2hualVzN1psT0tnRVFPTkZ3M21zU2k4RGVmRDFaS3YtZWJ1Yjg2MDJ0RGRBNUItaVZpVUZCU0xueFo0UVpkaFV5V1JZd0lyLQ?oc=5",
+            "date": "2026-11-21T13:00:00.000Z",
             "relevance": 1
+          },
+          {
+            "title": "The smart lock standard that could replace your keys is finally here",
+            "publisher": "The Verge",
+            "publisherUrl": "https://www.theverge.com",
+            "publisherDomain": "theverge.com",
+            "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxNa0tPNEdHNWp4d1VTZk5EMWxlZ3BWX1hSM2NGN1hIRUQ3SDFucFgwbTBBZFNEak4xSnZiWjd5VFI3LWlMYXV4NE9WTjBVaVZkcGladDRtZDJzYU5femJZem4xUTJDenZFOUEzXzVIRUxHZnpMcTBoNXlUQjFobmJjcGM1bzNtTkxMQk5ZMDRvMHItVXBlS3czcElFbTBCYTIyS01RM24zX1JHc0ls?oc=5",
+            "date": "2026-02-26T08:00:00.000Z",
+            "relevance": 0.425
+          },
+          {
+            "title": "Intel’s Panther Lake is finally here: These are the Core Ultra 3 chips",
+            "publisher": "The Verge",
+            "publisherUrl": "https://www.theverge.com",
+            "publisherDomain": "theverge.com",
+            "link": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNeENyb3ZVUjc0ZmFVY1F3VmxzY3hUUmFIeXZ6Y1hxTFpTekNPenNVRHZOdlBIN2JudDQyNW05TGl2UUNPSFRiOENqZWJhVE16VzhCaDB1TGlCTTNNMVVpVktQc1NJVGlOZVlhZzhmeXptOUVYRE9YTGdfNWd2bEItUkZWWnl0a3FKZHJveW9oQ3I4YjJBaFJ6RlVNZUo2TzBH?oc=5",
+            "date": "2026-01-05T08:00:00.000Z",
+            "relevance": 0.425
           }
         ],
         "publisherCount": 1,
@@ -447,79 +430,88 @@
       }
     },
     {
-      "source": "TechCrunch",
-      "title": "The AI graveyard: a running list of projects and startups that didn’t make it",
-      "link": "https://techcrunch.com/2026/11/14/the-ai-graveyard-a-running-list-of-projects-and-startups-that-didnt-make-it/",
-      "date": "2026-11-14T17:30:00.000Z",
-      "summary": "From Apple's repeatedly delayed Siri AI to OpenAI's messy \"super app\" launch, here's a look at the AI projects that shut down or missed expectations.",
-      "category": "AI & Technology",
+      "source": "BBC Technology",
+      "title": "Anthropic becomes one of world's most valuable public companies in stock market debut",
+      "link": "https://www.bbc.co.uk/news/articles/c3x29ggenz12o?at_medium=RSS&at_campaign=rss",
+      "date": "2026-11-19T23:33:51.000Z",
+      "summary": "Anthropic is the first purely AI company to be publicly listed, creating a test for the entire industry.",
+      "category": "Business Stories",
       "matchedCategories": [
-        "AI & Technology",
-        "Business Stories"
+        "Business Stories",
+        "AI & Technology"
       ],
       "dateValid": true,
-      "score": 45,
+      "score": 46,
       "scoreBreakdown": {
         "relevance": 15,
-        "interest": 6,
+        "interest": 8,
         "technical": 4,
-        "storytelling": 2,
-        "freshness": 14,
+        "storytelling": 4,
+        "freshness": 11,
         "specificity": 4
       },
-      "angle": "Explain how the technology works, its capabilities, limitations, and future impact.",
+      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
       "coverage": {
         "status": "searched",
         "reports": [
           {
-            "title": "The AI graveyard: a running list of projects and startups that didn’t make it",
-            "publisher": "TechCrunch",
-            "publisherUrl": "https://techcrunch.com",
-            "publisherDomain": "techcrunch.com",
-            "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNNVRfXzM5NXVKbU5PVWZpQXBwNjBmaG9uLWstSHBPNWI5QVMwcW1OaUwzbkdpQUFkR1RST2dqVEFyMnZaenBmRjQ2MkJ1RmptYU82LTBKUTRDZk5zakViN2RsdU9HcWJGdVFUVzMyNFJfUG1jS2JOZTkxSU9tWkxQaHZORHlIUlp1dWFqWjJlTUFSSjdPMGZGb3VNajdUOWZtTEszdEZvYl9VbmozYmJn?oc=5",
-            "date": "2026-11-14T17:30:00.000Z",
+            "title": "Anthropic becomes one of world's most valuable public companies in stock market debut",
+            "publisher": "BBC",
+            "publisherUrl": "https://www.bbc.co.uk",
+            "publisherDomain": "bbc.co.uk",
+            "link": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFA4bXR0SGt1c3FHQkZVY3AxVTdNODdtMHhVLWVkVU5DR0V0dHk3dGhaQzFBMWdwdXRhb1R6ZzlNRkc0UWxWMmdLQjBkMHlQdS1OdFJZUFRabU9nUDNCemc?oc=5",
+            "date": "2026-11-19T21:38:42.000Z",
             "relevance": 1
           },
           {
-            "title": "AI graveyard: major projects and startups that have shut d…",
-            "publisher": "TechTimes Vietnam",
-            "publisherUrl": "https://www.techtimes.vn",
-            "publisherDomain": "techtimes.vn",
-            "link": "https://news.google.com/rss/articles/CBMikwFBVV95cUxOTXpNWWZ5TlcxV20wVGlfQTVIckt2OEVJNzFmdkRVOXp0VlZBTXFqSEViQ1J5YUh5aWVZY181RU92SnpNVUVTa0NYcHJ6WlZxcmx4N0IyaTlReURUc25IVjBRc3d1RjlDMFAtSkZ0T2J4S1J0enUtVnF1a2htQjRmMEpuRzJ4bkRYdTBVYXpYYVcyUkE?oc=5",
-            "date": "2026-11-14T19:00:57.000Z",
-            "relevance": 0.521
+            "title": "Anthropic becomes one of world’s most valuable public companies in stock market debut",
+            "publisher": "Nepal Samaj",
+            "publisherUrl": "https://nepalsamaj.com",
+            "publisherDomain": "nepalsamaj.com",
+            "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNR2VoUTBfd3VxRUQ3R2dJaUpiak5KUzZ5RmhQRWc3c2tFbUpjM3hFcDZTSTliYjNPSVBoSWR1YmdKMDRVWWJ3SWNxaWJsc25UOV9uTl95MEQ5bjBZSDExeUNuRnRJay14R1VGcFBpSUktR0oybVBKSml1TGlaekw2cGdVU085SWU2NUt4ZEFBNFk5TDM5dEZqdVY2NWxoZE9QeFUybmR0WG9CTXlkemE3Mg?oc=5",
+            "date": "2026-11-20T03:14:10.000Z",
+            "relevance": 1
+          },
+          {
+            "title": "Anthropic becomes one of world's most valuable public companies in stock market debut",
+            "publisher": "Nilepost",
+            "publisherUrl": "https://nilepost.co.ug",
+            "publisherDomain": "nilepost.co.ug",
+            "link": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxPNEdUek5VUk5HX1FuOTFFUFNHZzhhRG45djVkOFpxaVROVWxyTDdoX2F3aVNKRTBCQU96VndsalNvZDFfdS1SY3Q1QUtzRFczQVlMVVlJOFBDcmNvWWpCNy1PV3JlVTY1V3NaSjNNZ3g0THlfa3FTMUVZYTVscUlYQktseFRWUkJlR1NwMk5ucERZREE5VDdNWjdYMld4YTduNC1JNnNnZVVNeXdieFVoUElSTGwzeElVX011bHFOOGpCdGvSAcMBQVVfeXFMTzRHVHpOVVJOR19RbjkxRVBTR2c4YURuOXY1ZDhacWlUTlVsckw3aF9hd2lTSkUwQkFPelZ3bGpTb2QxX3UtUmN0NUFLc0RXM0FZTFVZSThQQ3Jjb1lqQjctT1dyZVU2NVdzWkozTWd4NEx5X2txUzFFWWE1bHFJWEJLbHhUVlJCZUdTcDJObnBEWURBOVQ3TVo3WDJXeGE3bjQtSTZzZ2VVTXl3YnhVaFBJUkxsM3hJVV9NdWxxTjhqQnRr?oc=5",
+            "date": "2026-11-19T19:03:30.000Z",
+            "relevance": 1
           }
         ],
-        "publisherCount": 2,
+        "publisherCount": 3,
         "publishers": [
-          "TechCrunch",
-          "TechTimes Vietnam"
+          "BBC",
+          "Nepal Samaj",
+          "Nilepost"
         ],
         "note": "Distinct publisher identifiers found; independence and factual accuracy are not verified."
       },
       "recommendation": {
         "priority": "Low",
-        "audience": "General technology audience",
-        "format": "Explainer / Analysis",
+        "audience": "Business and technology audience",
+        "format": "Company story / Documentary",
         "warnings": []
       }
     },
     {
       "source": "MIT Technology Review",
-      "title": "Nvidia privately confirmed it could track chips to fight smuggling, even as industry publicly questioned feasibility",
-      "link": "https://www.technologyreview.com/2026/11/12/1148483/nvidia-chip-tracking/",
-      "date": "2026-11-12T20:16:24.000Z",
-      "summary": "Representatives from Nvidia told Illinois representative Bill Foster that it would be technically possible to implement the anti-smuggling measures called for in the Chip Security Act, Foster told MIT Technology Review in an interview on Thursday, even while an industry group claimed they were “potentially infeasible.” Foster, a Democrat who serves on the Committee on…",
+      "title": "The Download: a living liver, a billion-dollar battery deal, and AI hype",
+      "link": "https://www.technologyreview.com/2026/11/19/1148979/the-download-liver-kept-alive-sila-battery-deal-ai-hype/",
+      "date": "2026-11-19T13:10:00.000Z",
+      "summary": "This is today’s edition of The Download, our weekday newsletter that provides a daily dose of what’s going on in the world of technology. A human liver has been kept alive outside the body for a record seven weeks Researchers in Australia claim they’ve kept a human liver alive on life support outside the body…",
       "category": "AI & Technology",
       "matchedCategories": [
-        "AI & Technology",
-        "Business Stories"
+        "AI & Technology"
       ],
       "dateValid": true,
-      "score": 45,
+      "score": 46,
       "scoreBreakdown": {
-        "relevance": 15,
-        "interest": 4,
+        "relevance": 10,
+        "interest": 10,
         "technical": 6,
         "storytelling": 2,
         "freshness": 11,
@@ -542,24 +534,239 @@
     },
     {
       "source": "TechCrunch",
-      "title": "Export-banned Nvidia chips are behind China’s most powerful AI models — uh-oh, Jensen!",
-      "link": "https://techcrunch.com/2026/11/13/export-banned-nvidia-chips-are-behind-chinas-most-powerful-ai-models-uh-oh-jensen/",
-      "date": "2026-11-13T18:40:30.000Z",
-      "summary": "New research shows the most advanced AI models from China were trained on banned Nvidia chips.",
+      "title": "Is selling an AI version of your face to this microdrama startup the future of Hollywood?",
+      "link": "https://techcrunch.com/2026/11/21/is-selling-an-ai-version-of-your-face-to-this-microdrama-startup-the-future-of-hollywood/",
+      "date": "2026-11-21T16:00:00.000Z",
+      "summary": "An actor has licensed his face to a microdrama startup — in a trend that's already popular in China. Experts question the long-term consequences if this becomes a trend in Hollywood, too.",
       "category": "Business Stories",
       "matchedCategories": [
         "Business Stories",
         "Politics & Geopolitics"
       ],
       "dateValid": true,
-      "score": 44,
+      "score": 45,
       "scoreBreakdown": {
         "relevance": 15,
         "interest": 6,
         "technical": 4,
         "storytelling": 2,
-        "freshness": 13,
+        "freshness": 14,
         "specificity": 4
+      },
+      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
+      "coverage": {
+        "status": "not_checked",
+        "publisherCount": 0,
+        "publishers": [],
+        "reports": [],
+        "note": "Coverage was not searched for this article."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "Business and technology audience",
+        "format": "Company story / Documentary",
+        "warnings": []
+      }
+    },
+    {
+      "source": "MIT Technology Review",
+      "title": "The AI Hype Index: AI is everywhere",
+      "link": "https://www.technologyreview.com/2026/11/18/1148650/ai-hype-index-ai-is-everywhere/",
+      "date": "2026-11-18T14:42:44.000Z",
+      "summary": "Like a nasty rash, AI seems to spread everywhere. Google crams AI Overviews down your throat even though it costs the company billions of dollars in lost ad revenue. Leave your apartment, and you might pass two people heaving an AI-powered humanoid robot up the stairs to clean someone’s rooms. Go to the supermarket, and…",
+      "category": "Business Stories",
+      "matchedCategories": [
+        "Business Stories",
+        "AI & Technology"
+      ],
+      "dateValid": true,
+      "score": 45,
+      "scoreBreakdown": {
+        "relevance": 15,
+        "interest": 4,
+        "technical": 6,
+        "storytelling": 4,
+        "freshness": 9,
+        "specificity": 7
+      },
+      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
+      "coverage": {
+        "status": "not_checked",
+        "publisherCount": 0,
+        "publishers": [],
+        "reports": [],
+        "note": "Coverage was not searched for this article."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "Business and technology audience",
+        "format": "Company story / Documentary",
+        "warnings": []
+      }
+    },
+    {
+      "source": "MIT Technology Review",
+      "title": "This smell startup says its AI nose is as good as a human’s",
+      "link": "https://www.technologyreview.com/2026/11/18/1148816/smell-startup-osmo-ai-nose-good-as-humans/",
+      "date": "2026-11-18T10:20:30.000Z",
+      "summary": "In a lab near Newark Airport in New Jersey, a team of around 30 experienced human sniffers are slowly working their way through every odor on Earth. Their careful notes—“nutty,” “peachy,” “marine”—are cross-referenced with a chemical analysis to create a rich set of training data for what AI startup Osmo calls the world’s first foundation…",
+      "category": "Business Stories",
+      "matchedCategories": [
+        "Business Stories"
+      ],
+      "dateValid": true,
+      "score": 45,
+      "scoreBreakdown": {
+        "relevance": 10,
+        "interest": 10,
+        "technical": 4,
+        "storytelling": 2,
+        "freshness": 9,
+        "specificity": 10
+      },
+      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
+      "coverage": {
+        "status": "not_checked",
+        "publisherCount": 0,
+        "publishers": [],
+        "reports": [],
+        "note": "Coverage was not searched for this article."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "Business and technology audience",
+        "format": "Company story / Documentary",
+        "warnings": []
+      }
+    },
+    {
+      "source": "The Verge",
+      "title": "Amazon’s first digital photo frame is up to 50 percent off for Black Friday",
+      "link": "https://www.theverge.com/gadgets/1038762/amazon-alexa-photo-frame-black-friday-2026-deal-sale",
+      "date": "2026-11-21T16:00:00.000Z",
+      "summary": "Amazon only announced its first digital photo frame less than a month ago, but it’s already getting a sizable discount for Black Friday. You can currently grab the Alexa Photo Frame at Amazon and Best Buy starting at $114 ($115 off), making it a great holiday gift for anyone who loves displaying family photos. If you prefer the walnut trim over the birch or standard black models, it’s also on sale at Best Buy for $134.99 ($95 off) — which, like with the others, is the first discount we’ve seen. Amazon Alexa Photo Frame Where to Buy: $229.99 $114.99 at Amazon (birch) $199.99 $114.99 at Best Buy (black) $229.99 $134.99 at Best Buy (walnut) The Alexa Photo Frame features a 10-inch, semi-matte touchscreen that’s designed to make digital photos look more natural, with built-in light sensors that automatically adjust brightness throughout the day. It displays images from Amazon Photos, which supports uploads from both iOS and Android devices, including photos stored in iCloud. You can choose which people or albums to display, or let Alexa Plus do the work, which often results in photos based on your facial expression, the season, and even the lighting. You can also search for specific ph",
+      "category": "Business Stories",
+      "matchedCategories": [
+        "Business Stories"
+      ],
+      "dateValid": true,
+      "score": 44,
+      "scoreBreakdown": {
+        "relevance": 10,
+        "interest": 6,
+        "technical": 2,
+        "storytelling": 2,
+        "freshness": 14,
+        "specificity": 10
+      },
+      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
+      "coverage": {
+        "status": "not_checked",
+        "publisherCount": 0,
+        "publishers": [],
+        "reports": [],
+        "note": "Coverage was not searched for this article."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "Business and technology audience",
+        "format": "Company story / Documentary",
+        "warnings": []
+      }
+    },
+    {
+      "source": "The Verge",
+      "title": "Our go-to earbuds for taking calls have fallen to their lowest price to date",
+      "link": "https://www.theverge.com/gadgets/1039160/anker-soundcore-liberty-5-pro-black-friday-2026-deal-sale",
+      "date": "2026-11-21T14:55:28.000Z",
+      "summary": "The Liberty 5 Pro are Soundcore’s most ambitious earbuds to date. | Photo: John Higgins / The Verge If you’re looking for a new pair of earbuds, the Soundcore Liberty 5 Pro are on sale for $129.99 at Amazon, Best Buy, and Walmart right now. That’s the lowest price we’ve seen for Anker’s excellent wireless earbuds, which normally retail for $169.99 and come in four colors (black, white, blue, and pink) all of which are discounted through November 30th as part of Anker’s ongoing Black Friday promo. Soundcore Liberty 5 Pro Where to Buy: $169.99 $129.99 at Amazon $169.99 $129.99 at Walmart $169.99 $129.99 at Best Buy While the Liberty 5 Pro have a number of great features — including support LDAC for high-res audio and an IP55 dust and water resistance rating — the call quality is what stands out. The microphone does an impressive job cutting out background noise, and my colleague John Higgins praised the Liberty 5 Pro for filtering out emergency vehicles, arborists cutting tree branches, and even loud children. The active noise cancellation is excellent, which helps when you’re trying to hear someone on the other end of the phone whose earbuds aren’t as clear as yours. The charging ca",
+      "category": "Business Stories",
+      "matchedCategories": [
+        "Business Stories"
+      ],
+      "dateValid": true,
+      "score": 44,
+      "scoreBreakdown": {
+        "relevance": 10,
+        "interest": 6,
+        "technical": 2,
+        "storytelling": 2,
+        "freshness": 14,
+        "specificity": 10
+      },
+      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
+      "coverage": {
+        "status": "not_checked",
+        "publisherCount": 0,
+        "publishers": [],
+        "reports": [],
+        "note": "Coverage was not searched for this article."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "Business and technology audience",
+        "format": "Company story / Documentary",
+        "warnings": []
+      }
+    },
+    {
+      "source": "BBC Technology",
+      "title": "Anthropic raises $81bn in record-breaking stock market debut",
+      "link": "https://www.bbc.co.uk/news/articles/c6742m39xgzxo?at_medium=RSS&at_campaign=rss",
+      "date": "2026-11-19T15:58:58.000Z",
+      "summary": "The company behind the Claude chatbot will become one of the most valuable firms in the world.",
+      "category": "Business Stories",
+      "matchedCategories": [
+        "Business Stories",
+        "AI & Technology"
+      ],
+      "dateValid": true,
+      "score": 44,
+      "scoreBreakdown": {
+        "relevance": 15,
+        "interest": 8,
+        "technical": 2,
+        "storytelling": 4,
+        "freshness": 11,
+        "specificity": 4
+      },
+      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
+      "coverage": {
+        "status": "not_checked",
+        "publisherCount": 0,
+        "publishers": [],
+        "reports": [],
+        "note": "Coverage was not searched for this article."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "Business and technology audience",
+        "format": "Company story / Documentary",
+        "warnings": [
+          "The available summary is short. Read the original article."
+        ]
+      }
+    },
+    {
+      "source": "Ars Technica",
+      "title": "SpaceX's Starshield troubles in Ukraine could threaten its broader military business",
+      "link": "https://arstechnica.com/space/2026/11/incoming-house-chair-threatens-spacex-funding-over-ukraine-controversy/",
+      "date": "2026-11-20T22:16:51.000Z",
+      "summary": "\"Explain the changes that were made to the Starshield service in October 2026.\"",
+      "category": "Business Stories",
+      "matchedCategories": [
+        "Business Stories",
+        "Military Technology"
+      ],
+      "dateValid": true,
+      "score": 43,
+      "scoreBreakdown": {
+        "relevance": 15,
+        "interest": 4,
+        "technical": 2,
+        "storytelling": 2,
+        "freshness": 13,
+        "specificity": 7
       },
       "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
       "coverage": {
@@ -580,199 +787,20 @@
     },
     {
       "source": "TechCrunch",
-      "title": "Asian governments react to Nvidia CEO Jensen Huang’s exit",
-      "link": "https://techcrunch.com/2026/11/14/asian-governments-react-to-nvidia-ceo-jensen-huangs-exit/",
-      "date": "2026-11-14T16:34:15.000Z",
-      "summary": "Some governments moved to confirm chip supply commitments, while others are monitoring the impact on local projects or addressing ongoing investigations.",
-      "category": "Business Stories",
-      "matchedCategories": [
-        "Business Stories",
-        "AI & Technology"
-      ],
-      "dateValid": true,
-      "score": 43,
-      "scoreBreakdown": {
-        "relevance": 15,
-        "interest": 4,
-        "technical": 4,
-        "storytelling": 2,
-        "freshness": 14,
-        "specificity": 4
-      },
-      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
-      "coverage": {
-        "status": "not_checked",
-        "publisherCount": 0,
-        "publishers": [],
-        "reports": [],
-        "note": "Coverage was not searched for this article."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "Business and technology audience",
-        "format": "Company story / Documentary",
-        "warnings": []
-      }
-    },
-    {
-      "source": "The Verge",
-      "title": "A gadget to make your dumb house smarter",
-      "link": "https://www.theverge.com/tech/1033761/home-assistant-tk-tripod-tabletop-installer",
-      "date": "2026-11-14T13:00:00.000Z",
-      "summary": "Hi, friends! Welcome to Installer No. 152, your guide to the best and Verge-iest stuff in the world. (If you're new here, welcome, thank you for taking time away from Zelda to be here, and also you can read all the old editions at the Installer homepage.) This week, I've been reading about school apps and AI benches and sports gambling and Megaspeed, watching the surprisingly emotional Dane Cook documentary, learning way more than I ever expected about dial-up sounds, digging out my old Xbox One since it's apparently my best shot at playing GTA VI, seeing what I can get done with Claude Duet, and trying a bunch of third-party iPhone keyboar … Read the full story at The Verge.",
-      "category": "General Technology",
-      "matchedCategories": [],
-      "dateValid": true,
-      "score": 43,
-      "scoreBreakdown": {
-        "relevance": 5,
-        "interest": 8,
-        "technical": 4,
-        "storytelling": 2,
-        "freshness": 14,
-        "specificity": 10
-      },
-      "angle": "Explain the idea, why it matters, and how it could affect the future.",
-      "coverage": {
-        "status": "not_checked",
-        "publisherCount": 0,
-        "publishers": [],
-        "reports": [],
-        "note": "Coverage was not searched for this article."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "General technology audience",
-        "format": "Explainer / Analysis",
-        "warnings": []
-      }
-    },
-    {
-      "source": "BBC Technology",
-      "title": "What we know so far about the Microsoft outage",
-      "link": "https://www.bbc.co.uk/news/videos/cqzjr903n01po?at_medium=RSS&at_campaign=rss",
-      "date": "2026-11-13T11:43:27.000Z",
-      "summary": "A Microsoft outage is affecting services including Teams, Outlook and AI software Copilot.",
-      "category": "AI & Technology",
-      "matchedCategories": [
-        "AI & Technology",
-        "Business Stories"
-      ],
-      "dateValid": true,
-      "score": 43,
-      "scoreBreakdown": {
-        "relevance": 15,
-        "interest": 4,
-        "technical": 6,
-        "storytelling": 2,
-        "freshness": 12,
-        "specificity": 4
-      },
-      "angle": "Explain how the technology works, its capabilities, limitations, and future impact.",
-      "coverage": {
-        "status": "not_checked",
-        "publisherCount": 0,
-        "publishers": [],
-        "reports": [],
-        "note": "Coverage was not searched for this article."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "General technology audience",
-        "format": "Explainer / Analysis",
-        "warnings": [
-          "The available summary is short. Read the original article."
-        ]
-      }
-    },
-    {
-      "source": "BBC Technology",
-      "title": "What happened overnight with the Microsoft global outage?",
-      "link": "https://www.bbc.co.uk/news/videos/cwm2591k27e2o?at_medium=RSS&at_campaign=rss",
-      "date": "2026-11-13T07:18:17.000Z",
-      "summary": "Microsoft is struggling to fix a global outage, with services including Teams, Outlook and AI software Copilot affected by \"connectivity problems\".",
-      "category": "AI & Technology",
-      "matchedCategories": [
-        "AI & Technology",
-        "Business Stories"
-      ],
-      "dateValid": true,
-      "score": 43,
-      "scoreBreakdown": {
-        "relevance": 15,
-        "interest": 4,
-        "technical": 6,
-        "storytelling": 2,
-        "freshness": 12,
-        "specificity": 4
-      },
-      "angle": "Explain how the technology works, its capabilities, limitations, and future impact.",
-      "coverage": {
-        "status": "not_checked",
-        "publisherCount": 0,
-        "publishers": [],
-        "reports": [],
-        "note": "Coverage was not searched for this article."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "General technology audience",
-        "format": "Explainer / Analysis",
-        "warnings": []
-      }
-    },
-    {
-      "source": "MIT Technology Review",
-      "title": "The Download: preserving minds and weighing open AI risks",
-      "link": "https://www.technologyreview.com/2026/11/11/1148424/the-download-preserving-minds-open-ai-risks/",
-      "date": "2026-11-11T13:10:00.000Z",
-      "summary": "This is today’s edition of The Download, our weekday newsletter that provides a daily dose of what’s going on in the world of technology. Six wild ideas for perpetuating your mind As we age, we forget most of what we’ve experienced, yet there’s still undeniable continuity: At 30, or 50, or 70, you will still…",
+      "title": "Experts warn: Nearly everyone in AI is susceptible to a honey-trap scheme right now",
+      "link": "https://techcrunch.com/2026/11/20/experts-warn-nearly-everyone-in-ai-is-susceptible-to-a-honey-trap-scheme-right-now/",
+      "date": "2026-11-20T20:58:29.000Z",
+      "summary": "Techies are building technology that can advance all aspects of the world — but can they protect their hearts? That's the vulnerability that honey pots exploit.",
       "category": "AI & Technology",
       "matchedCategories": [
         "AI & Technology"
       ],
       "dateValid": true,
-      "score": 43,
+      "score": 41,
       "scoreBreakdown": {
         "relevance": 10,
         "interest": 6,
         "technical": 6,
-        "storytelling": 2,
-        "freshness": 9,
-        "specificity": 10
-      },
-      "angle": "Explain how the technology works, its capabilities, limitations, and future impact.",
-      "coverage": {
-        "status": "not_checked",
-        "publisherCount": 0,
-        "publishers": [],
-        "reports": [],
-        "note": "Coverage was not searched for this article."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "General technology audience",
-        "format": "Explainer / Analysis",
-        "warnings": []
-      }
-    },
-    {
-      "source": "BBC Technology",
-      "title": "How the Jensen Huang scandal created a headache for business-friendly Singapore",
-      "link": "https://www.bbc.co.uk/news/articles/ck1exevgql4qo?at_medium=RSS&at_campaign=rss",
-      "date": "2026-11-13T23:00:31.000Z",
-      "summary": "The scandal has cast a spotlight on Singapore's success as a chip hub - and a location for alleged illicit trade.",
-      "category": "AI & Technology",
-      "matchedCategories": [
-        "AI & Technology",
-        "Business Stories"
-      ],
-      "dateValid": true,
-      "score": 42,
-      "scoreBreakdown": {
-        "relevance": 15,
-        "interest": 4,
-        "technical": 4,
         "storytelling": 2,
         "freshness": 13,
         "specificity": 4
@@ -793,23 +821,131 @@
       }
     },
     {
+      "source": "TechCrunch",
+      "title": "Bending Spoons buys Mailchimp for $3.68B",
+      "link": "https://techcrunch.com/2026/11/20/bending-spoons-buys-mailchimp-for-3-68-billion/",
+      "date": "2026-11-20T16:16:06.000Z",
+      "summary": "Intuit acquired the company in 2021 for roughly $12 billion, so it looks like Bending Spoons is getting quite a bargain.",
+      "category": "Business Stories",
+      "matchedCategories": [
+        "Business Stories"
+      ],
+      "dateValid": true,
+      "score": 41,
+      "scoreBreakdown": {
+        "relevance": 10,
+        "interest": 6,
+        "technical": 2,
+        "storytelling": 4,
+        "freshness": 12,
+        "specificity": 7
+      },
+      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
+      "coverage": {
+        "status": "not_checked",
+        "publisherCount": 0,
+        "publishers": [],
+        "reports": [],
+        "note": "Coverage was not searched for this article."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "Business and technology audience",
+        "format": "Company story / Documentary",
+        "warnings": []
+      }
+    },
+    {
+      "source": "TechCrunch",
+      "title": "California AG subpoenas Nvidia over worries about Huang’s ties with China",
+      "link": "https://techcrunch.com/2026/11/20/california-ag-subpoenas-nvidia-over-worries-about-huangs-ties-with-china/",
+      "date": "2026-11-20T13:21:11.000Z",
+      "summary": "\"The conduct of Nvidia and its former CEO raises bright red flags, including about the ways in which the company may have misled investors,\" California AG Rob Bonta said.",
+      "category": "Business Stories",
+      "matchedCategories": [
+        "Business Stories",
+        "Politics & Geopolitics"
+      ],
+      "dateValid": true,
+      "score": 41,
+      "scoreBreakdown": {
+        "relevance": 15,
+        "interest": 4,
+        "technical": 2,
+        "storytelling": 4,
+        "freshness": 12,
+        "specificity": 4
+      },
+      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
+      "coverage": {
+        "status": "not_checked",
+        "publisherCount": 0,
+        "publishers": [],
+        "reports": [],
+        "note": "Coverage was not searched for this article."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "Business and technology audience",
+        "format": "Company story / Documentary",
+        "warnings": []
+      }
+    },
+    {
+      "source": "Ars Technica",
+      "title": "Google rolls out new search homepage with AI chat history and no search button",
+      "link": "https://arstechnica.com/ai/2026/11/googles-latest-search-page-redesign-drops-the-search-button-adds-ai-sidebar/",
+      "date": "2026-11-20T21:58:29.000Z",
+      "summary": "Google search is making it even easier to access AI tools on the search page.",
+      "category": "Business Stories",
+      "matchedCategories": [
+        "Business Stories"
+      ],
+      "dateValid": true,
+      "score": 41,
+      "scoreBreakdown": {
+        "relevance": 10,
+        "interest": 6,
+        "technical": 4,
+        "storytelling": 4,
+        "freshness": 13,
+        "specificity": 4
+      },
+      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
+      "coverage": {
+        "status": "not_checked",
+        "publisherCount": 0,
+        "publishers": [],
+        "reports": [],
+        "note": "Coverage was not searched for this article."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "Business and technology audience",
+        "format": "Company story / Documentary",
+        "warnings": [
+          "The available summary is short. Read the original article."
+        ]
+      }
+    },
+    {
       "source": "MIT Technology Review",
-      "title": "The backlash about data centers might really just be about electricity",
-      "link": "https://www.technologyreview.com/2026/11/09/1148194/the-backlash-about-data-centers-might-really-just-be-about-electricity/",
-      "date": "2026-11-09T19:35:33.000Z",
-      "summary": "This story originally appeared in The Algorithm, our weekly newsletter on AI. To get stories like this in your inbox first, sign up here. As voters went to the polls across the US last week, I was in Ashburn, Virginia, part of what’s known as Data Center Alley—the world’s largest data center hub. It’s also where…",
+      "title": "The Download: inside the quest to make our minds immortal",
+      "link": "https://www.technologyreview.com/2026/11/20/1149371/the-download-quest-to-make-minds-immortal/",
+      "date": "2026-11-20T13:10:00.000Z",
+      "summary": "This is today’s edition of The Download, our weekday newsletter that provides a daily dose of what’s going on in the world of technology. What we learned when our Roundtables explored the quest to make minds immortal To preserve our sense of self, some scientists are working on ways to keep our brains going—even beyond…",
       "category": "AI & Technology",
       "matchedCategories": [
         "AI & Technology"
       ],
       "dateValid": true,
-      "score": 42,
+      "score": 41,
       "scoreBreakdown": {
         "relevance": 10,
-        "interest": 10,
-        "technical": 6,
+        "interest": 6,
+        "technical": 4,
         "storytelling": 2,
-        "freshness": 7,
+        "freshness": 12,
         "specificity": 7
       },
       "angle": "Explain how the technology works, its capabilities, limitations, and future impact.",
@@ -829,23 +965,163 @@
     },
     {
       "source": "TechCrunch",
-      "title": "The unfolding Jensen Huang scandal: a timeline",
-      "link": "https://techcrunch.com/2026/11/13/nvidia-ceo-jensen-huangs-affair-with-alleged-chinese-spy-a-timeline/",
-      "date": "2026-11-13T15:58:00.000Z",
-      "summary": "Jensen Huang has resigned from Nvidia following an affair, which could have ramifications for national security as the U.S. and China race to develop the most advanced AI infrastructure.",
-      "category": "Politics & Geopolitics",
+      "title": "Startup sues Apple in India over tap-to-share contacts feature",
+      "link": "https://techcrunch.com/2026/11/20/startup-sues-apple-in-india-over-tap-to-share-contacts-feature/",
+      "date": "2026-11-21T04:00:00.000Z",
+      "summary": "A U.S. startup is seeking $162 million in damages and an injunction to impact iPhone and Apple Watch imports to India.",
+      "category": "Business Stories",
       "matchedCategories": [
-        "Politics & Geopolitics",
         "Business Stories"
       ],
       "dateValid": true,
-      "score": 41,
+      "score": 40,
+      "scoreBreakdown": {
+        "relevance": 10,
+        "interest": 6,
+        "technical": 2,
+        "storytelling": 2,
+        "freshness": 13,
+        "specificity": 7
+      },
+      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
+      "coverage": {
+        "status": "not_checked",
+        "publisherCount": 0,
+        "publishers": [],
+        "reports": [],
+        "note": "Coverage was not searched for this article."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "Business and technology audience",
+        "format": "Company story / Documentary",
+        "warnings": []
+      }
+    },
+    {
+      "source": "TechCrunch",
+      "title": "Apple may be developing its own AI agent that runs your Mac",
+      "link": "https://techcrunch.com/2026/11/19/apple-may-be-developing-its-own-ai-agent-that-runs-your-mac/",
+      "date": "2026-11-20T00:56:01.000Z",
+      "summary": "The iPhone maker appears to be building agents that can compete with the likes of Meta Muse, Instinct, Claude, and OpenAI Dots.",
+      "category": "AI & Technology",
+      "matchedCategories": [
+        "AI & Technology",
+        "Business Stories"
+      ],
+      "dateValid": true,
+      "score": 40,
       "scoreBreakdown": {
         "relevance": 15,
         "interest": 4,
         "technical": 4,
         "storytelling": 2,
-        "freshness": 12,
+        "freshness": 11,
+        "specificity": 4
+      },
+      "angle": "Explain how the technology works, its capabilities, limitations, and future impact.",
+      "coverage": {
+        "status": "not_checked",
+        "publisherCount": 0,
+        "publishers": [],
+        "reports": [],
+        "note": "Coverage was not searched for this article."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "General technology audience",
+        "format": "Explainer / Analysis",
+        "warnings": []
+      }
+    },
+    {
+      "source": "TechCrunch",
+      "title": "Daniel Ek backs AI researcher’s fusion power startup. Here’s what they’re building.",
+      "link": "https://techcrunch.com/2026/11/20/daniel-ek-backs-ai-researchers-fusion-power-startup-heres-what-theyre-building/",
+      "date": "2026-11-20T19:53:41.000Z",
+      "summary": "Spotify founder Daniel Ek is backing Europa Fusion, a fusion power startup founded by an AI researcher. Here's what the startup is building.",
+      "category": "Business Stories",
+      "matchedCategories": [
+        "Business Stories"
+      ],
+      "dateValid": true,
+      "score": 39,
+      "scoreBreakdown": {
+        "relevance": 10,
+        "interest": 4,
+        "technical": 4,
+        "storytelling": 4,
+        "freshness": 13,
+        "specificity": 4
+      },
+      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
+      "coverage": {
+        "status": "not_checked",
+        "publisherCount": 0,
+        "publishers": [],
+        "reports": [],
+        "note": "Coverage was not searched for this article."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "Business and technology audience",
+        "format": "Company story / Documentary",
+        "warnings": []
+      }
+    },
+    {
+      "source": "BBC Technology",
+      "title": "GTA 6 sales hit $3.8bn in a single day - the biggest entertainment launch in history",
+      "link": "https://www.bbc.co.uk/news/articles/c9zr5nyv5dj2o?at_medium=RSS&at_campaign=rss",
+      "date": "2026-11-20T22:53:24.000Z",
+      "summary": "The mammoth figure surpasses every video game launch and single-day film box office record.",
+      "category": "General Technology",
+      "matchedCategories": [],
+      "dateValid": true,
+      "score": 39,
+      "scoreBreakdown": {
+        "relevance": 5,
+        "interest": 8,
+        "technical": 2,
+        "storytelling": 4,
+        "freshness": 13,
+        "specificity": 7
+      },
+      "angle": "Explain the idea, why it matters, and how it could affect the future.",
+      "coverage": {
+        "status": "not_checked",
+        "publisherCount": 0,
+        "publishers": [],
+        "reports": [],
+        "note": "Coverage was not searched for this article."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "General technology audience",
+        "format": "Explainer / Analysis",
+        "warnings": [
+          "The available summary is short. Read the original article."
+        ]
+      }
+    },
+    {
+      "source": "BBC Technology",
+      "title": "Trump threatens ban on US firms building AI data centres overseas",
+      "link": "https://www.bbc.co.uk/news/articles/cmde1lw9y54ko?at_medium=RSS&at_campaign=rss",
+      "date": "2026-11-20T20:54:12.000Z",
+      "summary": "The US president provided little detail on the potential policy, saying others in his team were hearing about it for the first time.",
+      "category": "Politics & Geopolitics",
+      "matchedCategories": [
+        "Politics & Geopolitics"
+      ],
+      "dateValid": true,
+      "score": 39,
+      "scoreBreakdown": {
+        "relevance": 10,
+        "interest": 6,
+        "technical": 4,
+        "storytelling": 2,
+        "freshness": 13,
         "specificity": 4
       },
       "angle": "Explain the strategic interests, competing sides, and technological consequences.",
@@ -865,22 +1141,22 @@
     },
     {
       "source": "TechCrunch",
-      "title": "Microsoft’s latest email outage turned into a full-blown global cloud crisis",
-      "link": "https://techcrunch.com/2026/11/13/microsoft-latest-email-outage-turned-into-a-full-blown-global-cloud-crisis/",
-      "date": "2026-11-13T13:15:20.000Z",
-      "summary": "Microsoft's daylong outage began with Outlook and Teams and ended up taking much of the company's cloud services offline. Microsoft says it's gradually restoring service.",
+      "title": "A tale of two Nvidias",
+      "link": "https://techcrunch.com/2026/11/21/a-tale-of-two-nvidias/",
+      "date": "2026-11-21T21:07:42.000Z",
+      "summary": "We got two very different pictures of Nvidia — the company’s latest earnings report vs. the tech executives loudly calling for Jensen Huang’s return.",
       "category": "Business Stories",
       "matchedCategories": [
         "Business Stories"
       ],
       "dateValid": true,
-      "score": 40,
+      "score": 38,
       "scoreBreakdown": {
         "relevance": 10,
-        "interest": 6,
+        "interest": 4,
         "technical": 2,
-        "storytelling": 6,
-        "freshness": 12,
+        "storytelling": 4,
+        "freshness": 14,
         "specificity": 4
       },
       "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
@@ -900,541 +1176,10 @@
     },
     {
       "source": "Ars Technica",
-      "title": "Starship flight 15 powers to orbit—setting up a possible catch on Saturday",
-      "link": "https://arstechnica.com/space/2026/11/starship-flight-15-powers-to-orbit-setting-up-a-possible-catch-on-saturday/",
-      "date": "2026-11-14T00:49:13.000Z",
-      "summary": "One way or another, the company will get some more data on Saturday.",
-      "category": "Business Stories",
-      "matchedCategories": [
-        "Business Stories"
-      ],
-      "dateValid": true,
-      "score": 40,
-      "scoreBreakdown": {
-        "relevance": 10,
-        "interest": 4,
-        "technical": 2,
-        "storytelling": 4,
-        "freshness": 13,
-        "specificity": 7
-      },
-      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
-      "coverage": {
-        "status": "not_checked",
-        "publisherCount": 0,
-        "publishers": [],
-        "reports": [],
-        "note": "Coverage was not searched for this article."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "Business and technology audience",
-        "format": "Company story / Documentary",
-        "warnings": [
-          "The available summary is short. Read the original article."
-        ]
-      }
-    },
-    {
-      "source": "BBC Technology",
-      "title": "Pressure grows on Trump's Commerce Secretary Lutnick in fallout from Nvidia scandal",
-      "link": "https://www.bbc.co.uk/news/articles/cqvg2d1eg7zro?at_medium=RSS&at_campaign=rss",
-      "date": "2026-11-13T19:53:57.000Z",
-      "summary": "Scott Bessent told CNBC that several government agencies \"were in favour of putting Megaspeed on the entity list for months\".",
-      "category": "Business Stories",
-      "matchedCategories": [
-        "Business Stories",
-        "Politics & Geopolitics"
-      ],
-      "dateValid": true,
-      "score": 40,
-      "scoreBreakdown": {
-        "relevance": 15,
-        "interest": 4,
-        "technical": 2,
-        "storytelling": 2,
-        "freshness": 13,
-        "specificity": 4
-      },
-      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
-      "coverage": {
-        "status": "not_checked",
-        "publisherCount": 0,
-        "publishers": [],
-        "reports": [],
-        "note": "Coverage was not searched for this article."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "Business and technology audience",
-        "format": "Company story / Documentary",
-        "warnings": []
-      }
-    },
-    {
-      "source": "MIT Technology Review",
-      "title": "The Download: COP31’s climate challenge and the quest for immortality",
-      "link": "https://www.technologyreview.com/2026/11/12/1148444/the-download-cop31-climate-talks-cognitive-immortality/",
-      "date": "2026-11-12T13:10:00.000Z",
-      "summary": "This is today’s edition of The Download, our weekday newsletter that provides a daily dose of what’s going on in the world of technology. What to know about this year’s UN climate talks Thousands of delegates, lobbyists, and journalists have gathered in Antalya, Turkey, for COP31, the annual UN climate talks. But this year’s negotiations…",
-      "category": "AI & Technology",
-      "matchedCategories": [
-        "AI & Technology"
-      ],
-      "dateValid": true,
-      "score": 40,
-      "scoreBreakdown": {
-        "relevance": 10,
-        "interest": 6,
-        "technical": 4,
-        "storytelling": 2,
-        "freshness": 11,
-        "specificity": 7
-      },
-      "angle": "Explain how the technology works, its capabilities, limitations, and future impact.",
-      "coverage": {
-        "status": "not_checked",
-        "publisherCount": 0,
-        "publishers": [],
-        "reports": [],
-        "note": "Coverage was not searched for this article."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "General technology audience",
-        "format": "Explainer / Analysis",
-        "warnings": []
-      }
-    },
-    {
-      "source": "TechCrunch",
-      "title": "Elon Musk, other tech execs sign petition calling on Nvidia to reinstate Jensen Huang",
-      "link": "https://techcrunch.com/2026/11/14/elon-musk-other-tech-execs-sign-petition-calling-on-nvidia-to-reinstate-jensen-huang/",
-      "date": "2026-11-14T21:41:22.000Z",
-      "summary": "The petition had attracted more than 115,000 signatures as of Saturday afternoon.",
-      "category": "Business Stories",
-      "matchedCategories": [
-        "Business Stories"
-      ],
-      "dateValid": true,
-      "score": 39,
-      "scoreBreakdown": {
-        "relevance": 10,
-        "interest": 4,
-        "technical": 2,
-        "storytelling": 2,
-        "freshness": 14,
-        "specificity": 7
-      },
-      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
-      "coverage": {
-        "status": "not_checked",
-        "publisherCount": 0,
-        "publishers": [],
-        "reports": [],
-        "note": "Coverage was not searched for this article."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "Business and technology audience",
-        "format": "Company story / Documentary",
-        "warnings": [
-          "The available summary is short. Read the original article."
-        ]
-      }
-    },
-    {
-      "source": "TechCrunch",
-      "title": "Tesla opens Cybercab pre-orders ‘for personal use,’ with geo restrictions and a $299 monthly fee",
-      "link": "https://techcrunch.com/2026/11/14/tesla-opens-cybercab-pre-orders-for-personal-use-with-geo-restrictions-and-a-299-monthly-fee/",
-      "date": "2026-11-14T20:04:44.000Z",
-      "summary": "Even Elon Musk said the monthly fee is \"too high.\"",
-      "category": "Business Stories",
-      "matchedCategories": [
-        "Business Stories"
-      ],
-      "dateValid": true,
-      "score": 39,
-      "scoreBreakdown": {
-        "relevance": 10,
-        "interest": 4,
-        "technical": 2,
-        "storytelling": 2,
-        "freshness": 14,
-        "specificity": 7
-      },
-      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
-      "coverage": {
-        "status": "not_checked",
-        "publisherCount": 0,
-        "publishers": [],
-        "reports": [],
-        "note": "Coverage was not searched for this article."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "Business and technology audience",
-        "format": "Company story / Documentary",
-        "warnings": [
-          "The available summary is short. Read the original article."
-        ]
-      }
-    },
-    {
-      "source": "TechCrunch",
-      "title": "Got an iPhone Duo? These 9 settings make it easier to use",
-      "link": "https://techcrunch.com/2026/11/14/got-an-iphone-duo-these-9-settings-make-it-easier-to-use/",
-      "date": "2026-11-14T18:00:00.000Z",
-      "summary": "From Touch ID shortcuts to smarter volume buttons and camera tricks, these tweaks make Apple's foldable iPhone easier to use every day.",
-      "category": "Business Stories",
-      "matchedCategories": [
-        "Business Stories"
-      ],
-      "dateValid": true,
-      "score": 39,
-      "scoreBreakdown": {
-        "relevance": 10,
-        "interest": 4,
-        "technical": 2,
-        "storytelling": 2,
-        "freshness": 14,
-        "specificity": 7
-      },
-      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
-      "coverage": {
-        "status": "not_checked",
-        "publisherCount": 0,
-        "publishers": [],
-        "reports": [],
-        "note": "Coverage was not searched for this article."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "Business and technology audience",
-        "format": "Company story / Documentary",
-        "warnings": []
-      }
-    },
-    {
-      "source": "TechCrunch",
-      "title": "Amazon’s new Kindle Colorsoft is a premium e-reader with a premium price",
-      "link": "https://techcrunch.com/2026/11/13/amazons-new-kindle-colorsoft-is-a-premium-e-reader-with-a-premium-price/",
-      "date": "2026-11-13T23:00:00.000Z",
-      "summary": "The latest model is lighter and thinner than its predecessor and features an edge-to-edge display. But if you already own the first-generation Colorsoft, there’s little reason to upgrade.",
-      "category": "Business Stories",
-      "matchedCategories": [
-        "Business Stories"
-      ],
-      "dateValid": true,
-      "score": 39,
-      "scoreBreakdown": {
-        "relevance": 10,
-        "interest": 8,
-        "technical": 2,
-        "storytelling": 2,
-        "freshness": 13,
-        "specificity": 4
-      },
-      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
-      "coverage": {
-        "status": "not_checked",
-        "publisherCount": 0,
-        "publishers": [],
-        "reports": [],
-        "note": "Coverage was not searched for this article."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "Business and technology audience",
-        "format": "Company story / Documentary",
-        "warnings": []
-      }
-    },
-    {
-      "source": "The Verge",
-      "title": "Magic: The Gathering is getting a Netflix animated series. For real this time.",
-      "link": "https://www.theverge.com/entertainment/1033909/magic-the-gathering-netflix-series",
-      "date": "2026-11-14T19:47:40.000Z",
-      "summary": "\"It's really happening. I promise. For real.\" Those are the first words from Roy Graham, Head of Story at Magic: The Gathering, in a video posted yesterday announcing Planeswalker, the animated series heading to Netflix in 2027. An animated Magic: The Gathering series was first teased back in 2019 with Joe and Anthony Russo at the helm. But that fell apart. In 2024, Netflix announced it still planned to make a series based on the game, but it decided to rework it from the ground up. Now fans are finally getting their first glimpse of the show, which will be called Planeswalker. According to the sneak peek, because each plane exists in its … Read the full story at The Verge.",
-      "category": "General Technology",
-      "matchedCategories": [],
-      "dateValid": true,
-      "score": 39,
-      "scoreBreakdown": {
-        "relevance": 5,
-        "interest": 6,
-        "technical": 2,
-        "storytelling": 2,
-        "freshness": 14,
-        "specificity": 10
-      },
-      "angle": "Explain the idea, why it matters, and how it could affect the future.",
-      "coverage": {
-        "status": "not_checked",
-        "publisherCount": 0,
-        "publishers": [],
-        "reports": [],
-        "note": "Coverage was not searched for this article."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "General technology audience",
-        "format": "Explainer / Analysis",
-        "warnings": []
-      }
-    },
-    {
-      "source": "The Verge",
-      "title": "This tiny gamepad with dual analog thumbsticks pushes the limits of portable controllers",
-      "link": "https://www.theverge.com/tech/1013985/crkd-atom-plus-tmr-analog-thumbstick-controller-gamepad-switch-ios-android-hands-on",
-      "date": "2026-11-14T14:00:00.000Z",
-      "summary": "As much as I appreciate the ingenious design of the Nintendo Switch's Joy-Con, my family and I can't stand using them as standalone gamepads. So when we travel with the Switch 2, we always bring at least one full-size gamepad, plus a couple of 8BitDo's Zero 2 controllers for games that don't use analog thumbsticks. I've spent years hunting for an alternative that pairs the size of the Zero 2 with as much of the functionality of a larger controller as I can get, and CRKD's new Atom Plus is nearly exactly that. But if you have larger hands like I do, you may find the gamepad's focus on portability a struggle. CRKD Atom Plus Where to Buy: $29. … Read the full story at The Verge.",
-      "category": "General Technology",
-      "matchedCategories": [],
-      "dateValid": true,
-      "score": 39,
-      "scoreBreakdown": {
-        "relevance": 5,
-        "interest": 6,
-        "technical": 2,
-        "storytelling": 2,
-        "freshness": 14,
-        "specificity": 10
-      },
-      "angle": "Explain the idea, why it matters, and how it could affect the future.",
-      "coverage": {
-        "status": "not_checked",
-        "publisherCount": 0,
-        "publishers": [],
-        "reports": [],
-        "note": "Coverage was not searched for this article."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "General technology audience",
-        "format": "Explainer / Analysis",
-        "warnings": []
-      }
-    },
-    {
-      "source": "BBC Technology",
-      "title": "Microsoft outage 'stark reminder' of how much we rely on tech",
-      "link": "https://www.bbc.co.uk/news/articles/cxzd9171m51qo?at_medium=RSS&at_campaign=rss",
-      "date": "2026-11-13T21:15:41.000Z",
-      "summary": "Microsoft has apologised for the issue, which it said was due to a technical failure.",
-      "category": "Business Stories",
-      "matchedCategories": [
-        "Business Stories"
-      ],
-      "dateValid": true,
-      "score": 39,
-      "scoreBreakdown": {
-        "relevance": 10,
-        "interest": 6,
-        "technical": 2,
-        "storytelling": 4,
-        "freshness": 13,
-        "specificity": 4
-      },
-      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
-      "coverage": {
-        "status": "not_checked",
-        "publisherCount": 0,
-        "publishers": [],
-        "reports": [],
-        "note": "Coverage was not searched for this article."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "Business and technology audience",
-        "format": "Company story / Documentary",
-        "warnings": [
-          "The available summary is short. Read the original article."
-        ]
-      }
-    },
-    {
-      "source": "BBC Technology",
-      "title": "NHS, schools and police forces hit by Microsoft outage",
-      "link": "https://www.bbc.co.uk/news/articles/c6vg2ljjpj32o?at_medium=RSS&at_campaign=rss",
-      "date": "2026-11-13T13:41:25.000Z",
-      "summary": "Major airports and intelligence services are unaffected, while the government is still assessing the impact.",
-      "category": "Business Stories",
-      "matchedCategories": [
-        "Business Stories",
-        "Politics & Geopolitics"
-      ],
-      "dateValid": true,
-      "score": 39,
-      "scoreBreakdown": {
-        "relevance": 15,
-        "interest": 4,
-        "technical": 2,
-        "storytelling": 2,
-        "freshness": 12,
-        "specificity": 4
-      },
-      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
-      "coverage": {
-        "status": "not_checked",
-        "publisherCount": 0,
-        "publishers": [],
-        "reports": [],
-        "note": "Coverage was not searched for this article."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "Business and technology audience",
-        "format": "Company story / Documentary",
-        "warnings": []
-      }
-    },
-    {
-      "source": "MIT Technology Review",
-      "title": "The Download: Pelosi’s successor targets AI and data centers face power woes",
-      "link": "https://www.technologyreview.com/2026/11/10/1148150/the-download-pelosi-successor-ai-regulation-data-center-backlash/",
-      "date": "2026-11-10T13:10:00.000Z",
-      "summary": "This is today’s edition of The Download, our weekday newsletter that provides a daily dose of what’s going on in the world of technology. Nancy Pelosi’s replacement is ready to regulate AI —Grace Huckins As a California state senator, Scott Wiener authored legislation aimed at curbing the risks of advanced AI. Now, after winning a…",
-      "category": "AI & Technology",
-      "matchedCategories": [
-        "AI & Technology"
-      ],
-      "dateValid": true,
-      "score": 39,
-      "scoreBreakdown": {
-        "relevance": 10,
-        "interest": 6,
-        "technical": 6,
-        "storytelling": 2,
-        "freshness": 8,
-        "specificity": 7
-      },
-      "angle": "Explain how the technology works, its capabilities, limitations, and future impact.",
-      "coverage": {
-        "status": "not_checked",
-        "publisherCount": 0,
-        "publishers": [],
-        "reports": [],
-        "note": "Coverage was not searched for this article."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "General technology audience",
-        "format": "Explainer / Analysis",
-        "warnings": []
-      }
-    },
-    {
-      "source": "TechCrunch",
-      "title": "AI agent startup LangChain hits $3B valuation",
-      "link": "https://techcrunch.com/2026/11/13/ai-agent-startup-langchain-hits-3b-valuation/",
-      "date": "2026-11-13T19:37:57.000Z",
-      "summary": "LangChain now claims 7,000 customers of its model and platform agnostic agent management tool LangSmith.",
-      "category": "Business Stories",
-      "matchedCategories": [
-        "Business Stories"
-      ],
-      "dateValid": true,
-      "score": 38,
-      "scoreBreakdown": {
-        "relevance": 10,
-        "interest": 4,
-        "technical": 4,
-        "storytelling": 2,
-        "freshness": 13,
-        "specificity": 5
-      },
-      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
-      "coverage": {
-        "status": "not_checked",
-        "publisherCount": 0,
-        "publishers": [],
-        "reports": [],
-        "note": "Coverage was not searched for this article."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "Business and technology audience",
-        "format": "Company story / Documentary",
-        "warnings": []
-      }
-    },
-    {
-      "source": "TechCrunch",
-      "title": "ChatGPT’s new Wallet lets AI agents shop and check out for you",
-      "link": "https://techcrunch.com/2026/11/13/chatgpts-new-wallet-lets-ai-agents-shop-and-check-out-for-you/",
-      "date": "2026-11-13T16:00:12.000Z",
-      "summary": "ChatGPT Wallet lets AI agents shop and check out on users' behalf, starting with a limited rollout to U.S. Pro subscribers.",
-      "category": "AI & Technology",
-      "matchedCategories": [
-        "AI & Technology"
-      ],
-      "dateValid": true,
-      "score": 38,
-      "scoreBreakdown": {
-        "relevance": 10,
-        "interest": 6,
-        "technical": 4,
-        "storytelling": 2,
-        "freshness": 12,
-        "specificity": 4
-      },
-      "angle": "Explain how the technology works, its capabilities, limitations, and future impact.",
-      "coverage": {
-        "status": "not_checked",
-        "publisherCount": 0,
-        "publishers": [],
-        "reports": [],
-        "note": "Coverage was not searched for this article."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "General technology audience",
-        "format": "Explainer / Analysis",
-        "warnings": []
-      }
-    },
-    {
-      "source": "TechCrunch",
-      "title": "Uber confirms hackers stole thousands of drivers’ license information in data breach",
-      "link": "https://techcrunch.com/2026/11/13/uber-confirms-hackers-stole-thousands-of-drivers-license-information-in-data-breach/",
-      "date": "2026-11-13T14:57:55.000Z",
-      "summary": "The ridesharing giant said drivers' license information stored by AI cloud company Fireworks AI was stolen during a security incident.",
-      "category": "Business Stories",
-      "matchedCategories": [
-        "Business Stories"
-      ],
-      "dateValid": true,
-      "score": 38,
-      "scoreBreakdown": {
-        "relevance": 10,
-        "interest": 4,
-        "technical": 4,
-        "storytelling": 4,
-        "freshness": 12,
-        "specificity": 4
-      },
-      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
-      "coverage": {
-        "status": "not_checked",
-        "publisherCount": 0,
-        "publishers": [],
-        "reports": [],
-        "note": "Coverage was not searched for this article."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "Business and technology audience",
-        "format": "Company story / Documentary",
-        "warnings": []
-      }
-    },
-    {
-      "source": "Ars Technica",
-      "title": "Ars Live: What drone attacks on data centers mean for modern life in the cloud",
-      "link": "https://arstechnica.com/gadgets/2026/11/ars-live-can-the-cloud-survive-drone-strikes-on-data-centers/",
-      "date": "2026-11-12T19:59:59.000Z",
-      "summary": "A livestream Ars discussion is happening on November 17 at 1 pm Eastern Time.",
+      "title": "Rocket Report: A weekend of ups and downs; Stoke celebrates engine milestone",
+      "link": "https://arstechnica.com/space/2026/11/rocket-report-a-weekend-of-ups-and-downs-stoke-celebrates-engine-milestone/",
+      "date": "2026-11-20T13:35:45.000Z",
+      "summary": "Russia launched a Soyuz rocket with satellites to help enable drone attacks over Ukraine.",
       "category": "Military Technology",
       "matchedCategories": [
         "Military Technology"
@@ -1444,10 +1189,10 @@
       "scoreBreakdown": {
         "relevance": 10,
         "interest": 4,
-        "technical": 4,
+        "technical": 6,
         "storytelling": 2,
-        "freshness": 11,
-        "specificity": 7
+        "freshness": 12,
+        "specificity": 4
       },
       "angle": "Explore the engineering, history, capabilities, limitations, and strategic role.",
       "coverage": {
@@ -1467,11 +1212,79 @@
       }
     },
     {
+      "source": "The Verge",
+      "title": "John Roberts, the voice of Linda Belcher, is just happy to finish a thing",
+      "link": "https://www.theverge.com/report/1038463/john-roberts-linda-belcher-bobs-burgers-interview",
+      "date": "2026-11-21T16:00:00.000Z",
+      "summary": "You probably know John Roberts best as the voice of Linda Belcher on Bob's Burgers. The show just wrapped up its 16th season and shows no signs of slowing down anytime soon. The show remains a reliable source of laughs, top-notch puns, and frankly wholesome fun. Comedy is just part of Roberts' life, however. In addition to his appearances on Gravity Falls and Comedy Bang! Bang!, he's also a musician with deep roots in New York City's queer nightlife scene. He just released his latest record, I Am, on Friday, and it dabbles in '80s pop, '90s house, and even dashes of '00s rave. But while the record sounds made for the dance floor, it actuall … Read the full story at The Verge.",
+      "category": "General Technology",
+      "matchedCategories": [],
+      "dateValid": true,
+      "score": 38,
+      "scoreBreakdown": {
+        "relevance": 5,
+        "interest": 8,
+        "technical": 2,
+        "storytelling": 2,
+        "freshness": 14,
+        "specificity": 7
+      },
+      "angle": "Explain the idea, why it matters, and how it could affect the future.",
+      "coverage": {
+        "status": "not_checked",
+        "publisherCount": 0,
+        "publishers": [],
+        "reports": [],
+        "note": "Coverage was not searched for this article."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "General technology audience",
+        "format": "Explainer / Analysis",
+        "warnings": []
+      }
+    },
+    {
       "source": "BBC Technology",
-      "title": "How a sex scandal at Nvidia is putting pressure on the White House",
-      "link": "https://www.bbc.co.uk/news/articles/c67429m3vem3o?at_medium=RSS&at_campaign=rss",
-      "date": "2026-11-13T12:22:30.000Z",
-      "summary": "Jensen Huang's personal life may have triggered the crisis, but the questions now reach into the White House itself.",
+      "title": "Tech stock sell-off drags markets down as Anthropic shares slide",
+      "link": "https://www.bbc.co.uk/news/articles/c6808ym10vzgo?at_medium=RSS&at_campaign=rss",
+      "date": "2026-11-20T22:42:47.000Z",
+      "summary": "Pressures weighed on US markets, with the S&P 500 and the Dow Jones Industrial Average pushed into correction territory.",
+      "category": "AI & Technology",
+      "matchedCategories": [
+        "AI & Technology"
+      ],
+      "dateValid": true,
+      "score": 38,
+      "scoreBreakdown": {
+        "relevance": 10,
+        "interest": 4,
+        "technical": 2,
+        "storytelling": 2,
+        "freshness": 13,
+        "specificity": 7
+      },
+      "angle": "Explain how the technology works, its capabilities, limitations, and future impact.",
+      "coverage": {
+        "status": "not_checked",
+        "publisherCount": 0,
+        "publishers": [],
+        "reports": [],
+        "note": "Coverage was not searched for this article."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "General technology audience",
+        "format": "Explainer / Analysis",
+        "warnings": []
+      }
+    },
+    {
+      "source": "MIT Technology Review",
+      "title": "What a billion-dollar deal says about the US battery market",
+      "link": "https://www.technologyreview.com/2026/11/19/1148922/sila-panasonic-battery-deal/",
+      "date": "2026-11-19T11:00:00.000Z",
+      "summary": "After a tough few years littered with some high-profile failures, there’s some positive news for next-generation batteries in the US. Sila just signed an agreement with Panasonic Energy, a global battery manufacturer, to supply silicon-carbon anode material, a possible key to smaller, lighter batteries. It’s a deal that Sila says could be worth more than…",
       "category": "Business Stories",
       "matchedCategories": [
         "Business Stories"
@@ -1482,180 +1295,9 @@
         "relevance": 10,
         "interest": 6,
         "technical": 2,
-        "storytelling": 4,
-        "freshness": 12,
-        "specificity": 4
-      },
-      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
-      "coverage": {
-        "status": "not_checked",
-        "publisherCount": 0,
-        "publishers": [],
-        "reports": [],
-        "note": "Coverage was not searched for this article."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "Business and technology audience",
-        "format": "Company story / Documentary",
-        "warnings": []
-      }
-    },
-    {
-      "source": "TechCrunch",
-      "title": "Jensen Huang’s departure blasts big hole in AI startup funding, VCs and founders say",
-      "link": "https://techcrunch.com/2026/11/13/jensen-huangs-departure-blasts-big-hole-in-ai-startup-funding-vcs-and-founders-say/",
-      "date": "2026-11-13T22:43:00.000Z",
-      "summary": "Nvidia poured tens of billions into AI startups under Huang. Without him at the helm, founders and VCs are bracing for smaller checks and lower valuations.",
-      "category": "Business Stories",
-      "matchedCategories": [
-        "Business Stories"
-      ],
-      "dateValid": true,
-      "score": 37,
-      "scoreBreakdown": {
-        "relevance": 10,
-        "interest": 4,
-        "technical": 4,
         "storytelling": 2,
-        "freshness": 13,
-        "specificity": 4
-      },
-      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
-      "coverage": {
-        "status": "not_checked",
-        "publisherCount": 0,
-        "publishers": [],
-        "reports": [],
-        "note": "Coverage was not searched for this article."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "Business and technology audience",
-        "format": "Company story / Documentary",
-        "warnings": []
-      }
-    },
-    {
-      "source": "TechCrunch",
-      "title": "This young startup wants to power floating data centers with the ocean’s heat, and investors are already on board",
-      "link": "https://techcrunch.com/2026/11/13/this-young-startup-wants-to-power-floating-data-centers-with-the-oceans-heat-and-investors-are-already-on-board/",
-      "date": "2026-11-13T20:07:24.000Z",
-      "summary": "Drogue is harvesting heat from the ocean to power data centers on floating vessels. The first prototype should be bobbing around the ocean, crunching bits, in less than two years.",
-      "category": "Business Stories",
-      "matchedCategories": [
-        "Business Stories"
-      ],
-      "dateValid": true,
-      "score": 37,
-      "scoreBreakdown": {
-        "relevance": 10,
-        "interest": 6,
-        "technical": 2,
-        "storytelling": 2,
-        "freshness": 13,
-        "specificity": 4
-      },
-      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
-      "coverage": {
-        "status": "not_checked",
-        "publisherCount": 0,
-        "publishers": [],
-        "reports": [],
-        "note": "Coverage was not searched for this article."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "Business and technology audience",
-        "format": "Company story / Documentary",
-        "warnings": []
-      }
-    },
-    {
-      "source": "The Verge",
-      "title": "Work to replace old copper wire led to the FAA’s ground stop",
-      "link": "https://www.theverge.com/transportation/1033898/faa-ground-stop-sean-duffy-faa-copper-wire",
-      "date": "2026-11-14T17:44:28.000Z",
-      "summary": "A view of an information board at the Chicago O'Hare International Airport, filled with waiting passengers on November 13, 2026. | Anadolu via Getty Images At a press conference today, Transportation Secretary Sean Duffy said that Friday's nationwide ground stop ordered by the FAA was related to work replacing outdated copper wire with a fiber optic line at a \"remote FAA facility.\" The secretary said that this was \"routine maintenance,\" rather than the result of a major modernization effort. He told reporters that it was \"such an old wire that it was being discontinued, meaning that line was going to get shut down,\" necessitating the upgrade. What wasn't clear, according to Secretary Duffy, was the root cause of the problem. He said that it could have been faulty hardware, a misconfigured rout … Read the full story at The Verge.",
-      "category": "General Technology",
-      "matchedCategories": [],
-      "dateValid": true,
-      "score": 37,
-      "scoreBreakdown": {
-        "relevance": 5,
-        "interest": 4,
-        "technical": 2,
-        "storytelling": 2,
-        "freshness": 14,
-        "specificity": 10
-      },
-      "angle": "Explain the idea, why it matters, and how it could affect the future.",
-      "coverage": {
-        "status": "not_checked",
-        "publisherCount": 0,
-        "publishers": [],
-        "reports": [],
-        "note": "Coverage was not searched for this article."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "General technology audience",
-        "format": "Explainer / Analysis",
-        "warnings": []
-      }
-    },
-    {
-      "source": "The Verge",
-      "title": "Here are our favorite deals from REI’s giant Holiday Sale",
-      "link": "https://www.theverge.com/gadgets/1032500/best-deals-rei-holiday-sale-2026",
-      "date": "2026-11-14T15:00:00.000Z",
-      "summary": "Black Friday has become a shopping season of its own, with retailers once again offering discounts well ahead of the actual shopping holiday. We’ve already rounded up some of the best early Black Friday deals we’ve come across, but if you’re looking to save on outdoor gear or pick up something for an upcoming trip, REI’s annual Holiday Sale, which runs through November 23rd, is worth checking out. As usual, the outdoor retailer is offering discounts on everything from smartwatches to camping equipment. In some cases, we’re seeing some of the lowest prices we’ve seen on our favorite wearables, including Garmin’s Forerunner 570, while gadgets like the InReach Mini 3 are also receiving sizable discounts. REI members can also use promo code HOLIDAY2026 to save 20 percent on one full-price item, plus an additional 20 percent on one REI Outlet item. To save you time, we’ve sifted through the deluge of discounts to find an assortment of deals we recommend here at The Verge. We’ve also noted when competing retailers are offering lower prices on the same items, so you can be sure you’re getting the best deal possible. Smartwatches and fitness tech Garmin Forerunner 570 Garmin’s Forerunner 5",
-      "category": "General Technology",
-      "matchedCategories": [],
-      "dateValid": true,
-      "score": 37,
-      "scoreBreakdown": {
-        "relevance": 5,
-        "interest": 4,
-        "technical": 2,
-        "storytelling": 2,
-        "freshness": 14,
-        "specificity": 10
-      },
-      "angle": "Explain the idea, why it matters, and how it could affect the future.",
-      "coverage": {
-        "status": "not_checked",
-        "publisherCount": 0,
-        "publishers": [],
-        "reports": [],
-        "note": "Coverage was not searched for this article."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "General technology audience",
-        "format": "Explainer / Analysis",
-        "warnings": []
-      }
-    },
-    {
-      "source": "TechCrunch",
-      "title": "Israel’s VCs see opportunity for challengers in Nvidia’s turmoil",
-      "link": "https://techcrunch.com/2026/11/13/israels-vcs-see-opportunity-for-challengers-in-nvidias-turmoil/",
-      "date": "2026-11-13T12:52:19.000Z",
-      "summary": "Given Nvidia’s stronghold on AI and its importance in Israel, many in the country's startup ecosystem are worried about the impact of his departure.",
-      "category": "Business Stories",
-      "matchedCategories": [
-        "Business Stories"
-      ],
-      "dateValid": true,
-      "score": 36,
-      "scoreBreakdown": {
-        "relevance": 10,
-        "interest": 4,
-        "technical": 4,
-        "storytelling": 2,
-        "freshness": 12,
-        "specificity": 4
+        "freshness": 11,
+        "specificity": 7
       },
       "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
       "coverage": {
@@ -1674,25 +1316,23 @@
     },
     {
       "source": "Ars Technica",
-      "title": "Winemakers are learning that conservation can be good for business",
-      "link": "https://arstechnica.com/science/2026/11/winemakers-are-learning-that-conservation-can-be-good-for-business/",
-      "date": "2026-11-14T12:05:51.000Z",
-      "summary": "Healthy soils, native plants, and fewer chemicals are helping vineyards adapt.",
-      "category": "Business Stories",
-      "matchedCategories": [
-        "Business Stories"
-      ],
+      "title": "Meta reconsiders 2030 net-zero goal amid record emissions from AI data centers",
+      "link": "https://arstechnica.com/ai/2026/11/meta-reconsiders-2030-net-zero-goal-amid-record-emissions-from-ai-data-centers/",
+      "date": "2026-11-20T21:47:10.000Z",
+      "summary": "Meta is “re-evaluating” 2030 sustainability goals. Will others follow?",
+      "category": "General Technology",
+      "matchedCategories": [],
       "dateValid": true,
-      "score": 36,
+      "score": 37,
       "scoreBreakdown": {
-        "relevance": 10,
-        "interest": 4,
-        "technical": 2,
+        "relevance": 5,
+        "interest": 6,
+        "technical": 4,
         "storytelling": 2,
-        "freshness": 14,
-        "specificity": 4
+        "freshness": 13,
+        "specificity": 7
       },
-      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
+      "angle": "Explain the idea, why it matters, and how it could affect the future.",
       "coverage": {
         "status": "not_checked",
         "publisherCount": 0,
@@ -1702,19 +1342,122 @@
       },
       "recommendation": {
         "priority": "Low",
-        "audience": "Business and technology audience",
-        "format": "Company story / Documentary",
+        "audience": "General technology audience",
+        "format": "Explainer / Analysis",
         "warnings": [
           "The available summary is short. Read the original article."
         ]
       }
     },
     {
+      "source": "BBC Technology",
+      "title": "In a year of AI solving maths problems, an Anthropic worker says he may have cracked the biggest",
+      "link": "https://www.bbc.co.uk/news/articles/c6pqr2g7w059o?at_medium=RSS&at_campaign=rss",
+      "date": "2026-11-20T23:08:57.000Z",
+      "summary": "A mathematician at Anthropic says he used an AI to prove the famed Riemann hypothesis, though verification will take some time.",
+      "category": "AI & Technology",
+      "matchedCategories": [
+        "AI & Technology"
+      ],
+      "dateValid": true,
+      "score": 37,
+      "scoreBreakdown": {
+        "relevance": 10,
+        "interest": 4,
+        "technical": 4,
+        "storytelling": 2,
+        "freshness": 13,
+        "specificity": 4
+      },
+      "angle": "Explain how the technology works, its capabilities, limitations, and future impact.",
+      "coverage": {
+        "status": "not_checked",
+        "publisherCount": 0,
+        "publishers": [],
+        "reports": [],
+        "note": "Coverage was not searched for this article."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "General technology audience",
+        "format": "Explainer / Analysis",
+        "warnings": []
+      }
+    },
+    {
+      "source": "MIT Technology Review",
+      "title": "A human liver has been kept alive outside the body for a record seven weeks",
+      "link": "https://www.technologyreview.com/2026/11/19/1148934/a-human-liver-has-been-kept-alive-outside-the-body-for-seven-weeks-setting-a-record/",
+      "date": "2026-11-19T12:00:00.000Z",
+      "summary": "Researchers in Australia claim they’ve kept a human liver alive, on life support, outside the body for seven weeks, opening up speculative new possibilities in biomedical engineering. The feat, whose details are pending publication, was carried out in Sydney after a team led by surgeon and inventor Carlo Pulitano connected a donated liver to a…",
+      "category": "General Technology",
+      "matchedCategories": [],
+      "dateValid": true,
+      "score": 37,
+      "scoreBreakdown": {
+        "relevance": 5,
+        "interest": 8,
+        "technical": 4,
+        "storytelling": 2,
+        "freshness": 11,
+        "specificity": 7
+      },
+      "angle": "Explain the idea, why it matters, and how it could affect the future.",
+      "coverage": {
+        "status": "not_checked",
+        "publisherCount": 0,
+        "publishers": [],
+        "reports": [],
+        "note": "Coverage was not searched for this article."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "General technology audience",
+        "format": "Explainer / Analysis",
+        "warnings": []
+      }
+    },
+    {
+      "source": "TechCrunch",
+      "title": "Super-hot rock geothermal could end data center energy woes",
+      "link": "https://techcrunch.com/2026/11/20/super-hot-rock-geothermal-could-end-data-center-energy-woes/",
+      "date": "2026-11-20T18:34:00.000Z",
+      "summary": "New geothermal startups are betting that they can leapfrog today's leaders to deliver terawatts of electricity nearly anywhere.",
+      "category": "AI & Technology",
+      "matchedCategories": [
+        "AI & Technology"
+      ],
+      "dateValid": true,
+      "score": 36,
+      "scoreBreakdown": {
+        "relevance": 10,
+        "interest": 6,
+        "technical": 2,
+        "storytelling": 2,
+        "freshness": 12,
+        "specificity": 4
+      },
+      "angle": "Explain how the technology works, its capabilities, limitations, and future impact.",
+      "coverage": {
+        "status": "not_checked",
+        "publisherCount": 0,
+        "publishers": [],
+        "reports": [],
+        "note": "Coverage was not searched for this article."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "General technology audience",
+        "format": "Explainer / Analysis",
+        "warnings": []
+      }
+    },
+    {
       "source": "Ars Technica",
-      "title": "OpenAI board member worries an AI \"takeover\" of society could be months away",
-      "link": "https://arstechnica.com/ai/2026/11/ai-is-the-most-likely-reason-youll-die-openai-board-member-warns/",
-      "date": "2026-11-13T17:25:45.000Z",
-      "summary": "Researcher traces a path from AI reward hacking to potential human extinction.",
+      "title": "SpaceX lenders don’t want Elon Musk launching their collateral into space",
+      "link": "https://arstechnica.com/space/2026/11/spacex-lenders-dont-want-elon-musk-launching-their-collateral-into-space/",
+      "date": "2026-11-20T14:15:21.000Z",
+      "summary": "Bondholders want SpaceX’s valuable chip collateral kept on Earth and within reach.",
       "category": "AI & Technology",
       "matchedCategories": [
         "AI & Technology"
@@ -1748,43 +1491,10 @@
     },
     {
       "source": "The Verge",
-      "title": "FAA lifts nationwide ground stop that blocked takeoffs for hours",
-      "link": "https://www.theverge.com/news/1033489/faa-ground-stop",
-      "date": "2026-11-14T01:53:04.000Z",
-      "summary": "A view of an information board at the Chicago O'Hare International Airport, filled with waiting passengers on November 13, 2026. Photo by Jacek Boczarski/Anadolu via Getty Images) | Anadolu via Getty Images Takeoffs from airports throughout the US largely stopped on Friday after the FAA issued a national ground stop at 3:44PM ET \"due to extraordinary circumstances and for reasons of safety.\" More than four hours after the stop was issued, officials announced it was lifted at 8:15PM ET and that flights will resume. It's unclear how many flights will be able to take off and when, as they now face problems of overloaded airports and flight crews that have run out of time to operate the planes, meaning many people will be stuck where they are for the time being and more flights will be delayed or canceled. In a White House press conference annou … Read the full story at The Verge.",
-      "category": "General Technology",
-      "matchedCategories": [],
-      "dateValid": true,
-      "score": 36,
-      "scoreBreakdown": {
-        "relevance": 5,
-        "interest": 4,
-        "technical": 2,
-        "storytelling": 2,
-        "freshness": 13,
-        "specificity": 10
-      },
-      "angle": "Explain the idea, why it matters, and how it could affect the future.",
-      "coverage": {
-        "status": "not_checked",
-        "publisherCount": 0,
-        "publishers": [],
-        "reports": [],
-        "note": "Coverage was not searched for this article."
-      },
-      "recommendation": {
-        "priority": "Low",
-        "audience": "General technology audience",
-        "format": "Explainer / Analysis",
-        "warnings": []
-      }
-    },
-    {
-      "source": "BBC Technology",
-      "title": "Italy fines Meta €805m over accessing users' photos",
-      "link": "https://www.bbc.co.uk/news/articles/cwn83gxemk35o?at_medium=RSS&at_campaign=rss",
-      "date": "2026-11-14T18:28:06.000Z",
-      "summary": "The social media giant is accused of not informing 20 million users it had access to their photos.",
+      "title": "The FBI and USDA were reportedly hacked",
+      "link": "https://www.theverge.com/tech/1039543/fbi-usda-hacked",
+      "date": "2026-11-21T17:42:27.000Z",
+      "summary": "Friday, it was reported that both the US Department of Agriculture (USDA) and the FBI were hacked. In reporting on the FBI hack, CNN noted that this is the second such attack on the agency in the last few months, this time targeting the National Crime Information Center (NCIC), which federal, state, and local law enforcement use to share information, including warrants and missing persons. President Donald Trump later confirmed the hack in an interview with Fox News. NBC first reported the USDA hack on Friday. According to Reuters: While the payments ​database is the known extent ​of the intrusion so far, the former ‌officials ⁠warned that … Read the full story at The Verge.",
       "category": "General Technology",
       "matchedCategories": [],
       "dateValid": true,
@@ -1809,26 +1519,158 @@
         "priority": "Low",
         "audience": "General technology audience",
         "format": "Explainer / Analysis",
+        "warnings": []
+      }
+    },
+    {
+      "source": "MIT Technology Review",
+      "title": "The most misunderstood graph in AI just got a major update",
+      "link": "https://www.technologyreview.com/2026/11/20/1149399/the-most-misunderstood-graph-in-ai-just-got-a-major-update/",
+      "date": "2026-11-20T18:15:15.000Z",
+      "summary": "A new report from the AI evaluation nonprofit METR finds that some AI capabilities are continuing to improve along an exponential trajectory—but it also indicates that models aren’t quite as good at tasks that require judgment as they are at coding. The report is an update to the organization’s time horizon plot, which was widely…",
+      "category": "General Technology",
+      "matchedCategories": [],
+      "dateValid": true,
+      "score": 36,
+      "scoreBreakdown": {
+        "relevance": 5,
+        "interest": 6,
+        "technical": 4,
+        "storytelling": 2,
+        "freshness": 12,
+        "specificity": 7
+      },
+      "angle": "Explain the idea, why it matters, and how it could affect the future.",
+      "coverage": {
+        "status": "not_checked",
+        "publisherCount": 0,
+        "publishers": [],
+        "reports": [],
+        "note": "Coverage was not searched for this article."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "General technology audience",
+        "format": "Explainer / Analysis",
+        "warnings": []
+      }
+    },
+    {
+      "source": "TechCrunch",
+      "title": "AI claimed a solution to the 167-year-old Riemann hypothesis — and a human did, too",
+      "link": "https://techcrunch.com/2026/11/20/ai-claimed-a-solution-to-the-167-year-old-riemann-hypothesis-and-a-human-did-too/",
+      "date": "2026-11-20T19:32:08.000Z",
+      "summary": "Mathematicians are having their minds blown by the latest AI-driven result — and there's a competing human solution, too.",
+      "category": "General Technology",
+      "matchedCategories": [],
+      "dateValid": true,
+      "score": 35,
+      "scoreBreakdown": {
+        "relevance": 5,
+        "interest": 4,
+        "technical": 4,
+        "storytelling": 2,
+        "freshness": 13,
+        "specificity": 7
+      },
+      "angle": "Explain the idea, why it matters, and how it could affect the future.",
+      "coverage": {
+        "status": "not_checked",
+        "publisherCount": 0,
+        "publishers": [],
+        "reports": [],
+        "note": "Coverage was not searched for this article."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "General technology audience",
+        "format": "Explainer / Analysis",
+        "warnings": []
+      }
+    },
+    {
+      "source": "MIT Technology Review",
+      "title": "Hydropower hit record lows in the US Southwest this summer",
+      "link": "https://www.technologyreview.com/2026/11/17/1148742/hydropower-drought-colorado-river/",
+      "date": "2026-11-17T17:52:10.000Z",
+      "summary": "The US Southwest generated 28% less electricity via hydropower between April and August than the 10-year average, according to new data from the US Energy Information Administration. Most hydropower plants in the US rely on dams to hold back water, creating reservoirs. The water can be released through turbines, generating electricity on demand. But an…",
+      "category": "General Technology",
+      "matchedCategories": [],
+      "dateValid": true,
+      "score": 35,
+      "scoreBreakdown": {
+        "relevance": 5,
+        "interest": 8,
+        "technical": 2,
+        "storytelling": 2,
+        "freshness": 8,
+        "specificity": 10
+      },
+      "angle": "Explain the idea, why it matters, and how it could affect the future.",
+      "coverage": {
+        "status": "not_checked",
+        "publisherCount": 0,
+        "publishers": [],
+        "reports": [],
+        "note": "Coverage was not searched for this article."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "General technology audience",
+        "format": "Explainer / Analysis",
+        "warnings": []
+      }
+    },
+    {
+      "source": "TechCrunch",
+      "title": "Alaska, your next governor is a Wikipedia nerd",
+      "link": "https://techcrunch.com/2026/11/21/alaska-your-next-governor-is-a-wikipedia-nerd/",
+      "date": "2026-11-21T15:18:29.000Z",
+      "summary": "Jonathan Kreiss-Tomkins, Alaska's governor-elect, has made more than 13,000 WIkipedia edits.",
+      "category": "General Technology",
+      "matchedCategories": [],
+      "dateValid": true,
+      "score": 34,
+      "scoreBreakdown": {
+        "relevance": 5,
+        "interest": 4,
+        "technical": 2,
+        "storytelling": 2,
+        "freshness": 14,
+        "specificity": 7
+      },
+      "angle": "Explain the idea, why it matters, and how it could affect the future.",
+      "coverage": {
+        "status": "not_checked",
+        "publisherCount": 0,
+        "publishers": [],
+        "reports": [],
+        "note": "Coverage was not searched for this article."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "General technology audience",
+        "format": "Explainer / Analysis",
         "warnings": [
           "The available summary is short. Read the original article."
         ]
       }
     },
     {
-      "source": "BBC Technology",
-      "title": "Courts, spies and MPs: How the Microsoft outage has been felt around the world",
-      "link": "https://www.bbc.co.uk/news/articles/cqp9d58eldlro?at_medium=RSS&at_campaign=rss",
-      "date": "2026-11-13T17:34:58.000Z",
-      "summary": "From city governments in the US to spy agencies in Australia, the Microsoft outage is being felt around the world.",
+      "source": "TechCrunch",
+      "title": "Behind Jensen Huang’s exit, questions about a management style reportedly built on fear",
+      "link": "https://techcrunch.com/2026/11/20/behind-jensen-huangs-exit-questions-about-a-management-style-reportedly-built-on-fear/",
+      "date": "2026-11-20T13:25:00.000Z",
+      "summary": "Elon Musk may have been overstating it when he said Nvidia’s employees “love” the ousted Jensen Huang.",
       "category": "Business Stories",
       "matchedCategories": [
         "Business Stories"
       ],
       "dateValid": true,
-      "score": 36,
+      "score": 34,
       "scoreBreakdown": {
         "relevance": 10,
-        "interest": 6,
+        "interest": 4,
         "technical": 2,
         "storytelling": 2,
         "freshness": 12,
@@ -1850,26 +1692,127 @@
       }
     },
     {
-      "source": "TechCrunch",
-      "title": "US government grounds all flights across the United States ‘due to extraordinary circumstances’",
-      "link": "https://techcrunch.com/2026/11/13/u-s-government-grounds-all-flights-across-the-united-states-due-to-extraordinary-cirumstances/",
-      "date": "2026-11-13T21:44:38.000Z",
-      "summary": "A spokesperson for the FAA told TechCrunch that it issued the ground stop \"following communication issues impacting multiple Air Route Traffic Control Centers,\" which manage the airspace across the United States.",
-      "category": "Politics & Geopolitics",
-      "matchedCategories": [
-        "Politics & Geopolitics"
-      ],
+      "source": "The Verge",
+      "title": "The UN fails to agree on rules regulating ‘killer robots’",
+      "link": "https://www.theverge.com/tech/1039554/un-regulations-killer-robots",
+      "date": "2026-11-21T20:03:37.000Z",
+      "summary": "One of the items on the agenda for UN diplomats meeting in Geneva this week was working towards rules regarding the use of autonomous weapons, or so-called \"killer robots.\" Eventually, representatives left the meetings agreeing to \"start discussing options\" after a largely fruitless week of negotiations. According to NPR: Before the negotiations got underway, the International Committee of the Red Cross, the guardian of the Geneva Conventions, said it was urgent for legally binding rules to be drafted within a year. That call was backed by the U.N. secretary-general and by Pope Leo. The compromise reached was that countries would inste … Read the full story at The Verge.",
+      "category": "General Technology",
+      "matchedCategories": [],
       "dateValid": true,
-      "score": 35,
+      "score": 34,
       "scoreBreakdown": {
-        "relevance": 10,
+        "relevance": 5,
         "interest": 4,
         "technical": 2,
+        "storytelling": 2,
+        "freshness": 14,
+        "specificity": 7
+      },
+      "angle": "Explain the idea, why it matters, and how it could affect the future.",
+      "coverage": {
+        "status": "not_checked",
+        "publisherCount": 0,
+        "publishers": [],
+        "reports": [],
+        "note": "Coverage was not searched for this article."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "General technology audience",
+        "format": "Explainer / Analysis",
+        "warnings": []
+      }
+    },
+    {
+      "source": "BBC Technology",
+      "title": "Can AI really help spot Black Friday deals? We put it to the test",
+      "link": "https://www.bbc.co.uk/news/articles/cw8dv4jmnle2o?at_medium=RSS&at_campaign=rss",
+      "date": "2026-11-21T00:06:11.000Z",
+      "summary": "We put four AI models to the test to see if they could save us money on a new TV.",
+      "category": "General Technology",
+      "matchedCategories": [],
+      "dateValid": true,
+      "score": 34,
+      "scoreBreakdown": {
+        "relevance": 5,
+        "interest": 6,
+        "technical": 4,
         "storytelling": 2,
         "freshness": 13,
         "specificity": 4
       },
-      "angle": "Explain the strategic interests, competing sides, and technological consequences.",
+      "angle": "Explain the idea, why it matters, and how it could affect the future.",
+      "coverage": {
+        "status": "not_checked",
+        "publisherCount": 0,
+        "publishers": [],
+        "reports": [],
+        "note": "Coverage was not searched for this article."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "General technology audience",
+        "format": "Explainer / Analysis",
+        "warnings": [
+          "The available summary is short. Read the original article."
+        ]
+      }
+    },
+    {
+      "source": "TechCrunch",
+      "title": "Signal restricts mobile screenshots as it confronts ‘existential threat’ of AI surveillance",
+      "link": "https://techcrunch.com/2026/11/21/signal-restricts-mobile-screenshots-as-it-confronts-existential-threat-of-ai-surveillance/",
+      "date": "2026-11-21T21:37:10.000Z",
+      "summary": "Signal is limiting users' ability to take screenshots in both its Android and iOS apps.",
+      "category": "General Technology",
+      "matchedCategories": [],
+      "dateValid": true,
+      "score": 33,
+      "scoreBreakdown": {
+        "relevance": 5,
+        "interest": 4,
+        "technical": 4,
+        "storytelling": 2,
+        "freshness": 14,
+        "specificity": 4
+      },
+      "angle": "Explain the idea, why it matters, and how it could affect the future.",
+      "coverage": {
+        "status": "not_checked",
+        "publisherCount": 0,
+        "publishers": [],
+        "reports": [],
+        "note": "Coverage was not searched for this article."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "General technology audience",
+        "format": "Explainer / Analysis",
+        "warnings": [
+          "The available summary is short. Read the original article."
+        ]
+      }
+    },
+    {
+      "source": "TechCrunch",
+      "title": "Here are the top AI agents that can live in your text messages",
+      "link": "https://techcrunch.com/2026/11/21/all-the-ai-agents-that-can-live-in-your-text-messages/",
+      "date": "2026-11-21T17:00:00.000Z",
+      "summary": "We created a list of the most notable AI agents that can live in your text messages, from general assistants to agents designed for families, travel, and work.",
+      "category": "General Technology",
+      "matchedCategories": [],
+      "dateValid": true,
+      "score": 33,
+      "scoreBreakdown": {
+        "relevance": 5,
+        "interest": 4,
+        "technical": 4,
+        "storytelling": 2,
+        "freshness": 14,
+        "specificity": 4
+      },
+      "angle": "Explain the idea, why it matters, and how it could affect the future.",
       "coverage": {
         "status": "not_checked",
         "publisherCount": 0,
@@ -1886,18 +1829,18 @@
     },
     {
       "source": "Ars Technica",
-      "title": "With Starship catch, SpaceX still shows it can dazzle the world",
-      "link": "https://arstechnica.com/space/2026/11/with-starship-catch-spacex-still-shows-it-can-dazzle-the-world/",
-      "date": "2026-11-15T00:40:59.000Z",
-      "summary": "It felt like stepping into the future.",
+      "title": "“Race realism” isn’t realistic—and it isn’t good science",
+      "link": "https://arstechnica.com/science/2026/11/race-realism-isnt-realistic-and-it-isnt-good-science/",
+      "date": "2026-11-21T12:01:13.000Z",
+      "summary": "Modern genetics does not support claims of innate racial differences in intelligence.",
       "category": "General Technology",
       "matchedCategories": [],
       "dateValid": true,
-      "score": 35,
+      "score": 33,
       "scoreBreakdown": {
         "relevance": 5,
-        "interest": 8,
-        "technical": 2,
+        "interest": 4,
+        "technical": 4,
         "storytelling": 2,
         "freshness": 14,
         "specificity": 4
@@ -1921,22 +1864,57 @@
     },
     {
       "source": "Ars Technica",
-      "title": "Kalshi ditches Trump Jr. as advisor; CEO admitted \"optics\" weren't good",
-      "link": "https://arstechnica.com/tech-policy/2026/11/trump-jr-out-as-kalshi-advisor-after-his-firms-big-investment-in-polymarket/",
-      "date": "2026-11-13T19:49:16.000Z",
-      "summary": "Trump son advised Kalshi and got equity while Trump admin helped Kalshi in lawsuits.",
+      "title": "Army delays detonating \"catastrophically hazardous\" lead azide amid fear, anger",
+      "link": "https://arstechnica.com/science/2026/11/outrage-questions-swirl-as-army-delays-blowing-up-stockpile-of-toxic-lead-azide/",
+      "date": "2026-11-20T19:21:50.000Z",
+      "summary": "Modeling predicts plume of neurotoxic lead could reach up to 100 miles away.",
+      "category": "General Technology",
+      "matchedCategories": [],
+      "dateValid": true,
+      "score": 33,
+      "scoreBreakdown": {
+        "relevance": 5,
+        "interest": 4,
+        "technical": 2,
+        "storytelling": 2,
+        "freshness": 13,
+        "specificity": 7
+      },
+      "angle": "Explain the idea, why it matters, and how it could affect the future.",
+      "coverage": {
+        "status": "not_checked",
+        "publisherCount": 0,
+        "publishers": [],
+        "reports": [],
+        "note": "Coverage was not searched for this article."
+      },
+      "recommendation": {
+        "priority": "Low",
+        "audience": "General technology audience",
+        "format": "Explainer / Analysis",
+        "warnings": [
+          "The available summary is short. Read the original article."
+        ]
+      }
+    },
+    {
+      "source": "Ars Technica",
+      "title": "Amazon fights the Delivery Protection Act with homepage banner, in-app pop-up",
+      "link": "https://arstechnica.com/tech-policy/2026/11/amazon-takes-its-fight-against-nyc-delivery-bill-to-shoppers-with-in-app-pop-up/",
+      "date": "2026-11-19T22:16:37.000Z",
+      "summary": "Amazon now uses its shopping platform for political purposes.",
       "category": "Business Stories",
       "matchedCategories": [
         "Business Stories"
       ],
       "dateValid": true,
-      "score": 35,
+      "score": 33,
       "scoreBreakdown": {
         "relevance": 10,
         "interest": 4,
         "technical": 2,
         "storytelling": 2,
-        "freshness": 13,
+        "freshness": 11,
         "specificity": 4
       },
       "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
@@ -1958,25 +1936,23 @@
     },
     {
       "source": "BBC Technology",
-      "title": "Microsoft says services fully restored after day-long global outage",
-      "link": "https://www.bbc.co.uk/news/articles/c6rrg51rkz09o?at_medium=RSS&at_campaign=rss",
-      "date": "2026-11-14T06:42:27.000Z",
-      "summary": "Efforts to address the underlying problem with Outlook, Teams and Copilot are complete, the tech firm says.",
-      "category": "Business Stories",
-      "matchedCategories": [
-        "Business Stories"
-      ],
+      "title": "UK joins in GTA 6 frenzy as game becomes available worldwide",
+      "link": "https://www.bbc.co.uk/news/articles/c6z74ep2n17zo?at_medium=RSS&at_campaign=rss",
+      "date": "2026-11-19T12:26:39.000Z",
+      "summary": "The game, which was in development for 13 years, is set become one of the world's most popular entertainment products ever.",
+      "category": "General Technology",
+      "matchedCategories": [],
       "dateValid": true,
-      "score": 35,
+      "score": 33,
       "scoreBreakdown": {
-        "relevance": 10,
-        "interest": 4,
+        "relevance": 5,
+        "interest": 6,
         "technical": 2,
         "storytelling": 2,
-        "freshness": 13,
-        "specificity": 4
+        "freshness": 11,
+        "specificity": 7
       },
-      "angle": "Tell the company's story: its rise, strategy, rivals, decisions, and challenges.",
+      "angle": "Explain the idea, why it matters, and how it could affect the future.",
       "coverage": {
         "status": "not_checked",
         "publisherCount": 0,
@@ -1986,8 +1962,8 @@
       },
       "recommendation": {
         "priority": "Low",
-        "audience": "Business and technology audience",
-        "format": "Company story / Documentary",
+        "audience": "General technology audience",
+        "format": "Explainer / Analysis",
         "warnings": []
       }
     }
