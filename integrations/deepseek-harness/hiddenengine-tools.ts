@@ -171,4 +171,5 @@ export const inject = ['tools']
 
 export function apply(ctx: Context): void {
   register(ctx)
+  console.info('[HiddenEngine] DeepSeek Harness plugin loaded; four production tools registered.')
 }
