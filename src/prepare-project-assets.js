@@ -8,7 +8,9 @@ if(!projectId||!/^[a-z0-9-]+$/.test(projectId)) throw new Error("PROJECT_ID miss
 if(!apiKey) throw new Error("PIXABAY_API_KEY is required");
 const root=path.join("production","projects",projectId);
 const out=path.join("dist",projectId);
-const stop=new Set(["with","from","that","this","into","over","under","china","modern","technology","factory","industrial","manufacturing","production","assembly","workers","equipment","plant","market","product","line","system","business","city","global","aerial","advanced","company","industry","facility","machine","machines","process"]);
+const stop=new Set(["with","from","that","this","into","over","under","china","modern","technology","factory","industrial","manufacturing","production","assembly","workers","worker","equipment","plant","market","product","products","line","system","business","city","global","aerial","advanced","company","companies","industry","facility","machine","machines","process",
+ "the","and","for","are","was","were","has","have","had","not","but","can","could","would","should","will","its","their","them","they","there","here","then","than","when","while","where","which","who","what","how","why","also","often","very","more","most","some","many","several","each","every","other","same","such","only","just","still","yet","both","either","neither","all","any","own","out","off","up","down","about","around","across","along","between","behind","before","after","through","during","because","without","within","near","far","onto","upon","against","toward","towards","although","though","if","as","at","by","of","on","in","to","a","an","is","it","be","being","been","do","does","did","doing","done","he","she","we","you","i","me","my","our","your","his","her","these","those","whom","whose","again","once","ever","never","always","sometimes","usually","maybe","perhaps","almost","quite","rather","too","so","since","until","unless","whether","whereas","like",
+ "look","looks","looked","looking","simple","outside","inside","deeper","story","stories","sits","sitting","complicated","described","describes","learned","learn","make","made","makes","rise","need","needs","follow","understand","means","mean","shows","show","visible","results","create","creates","created","permanent","leadership","profits","profit","guarantee","guaranteed","depends","dependent","illustrates","illustrate","including","part","parts","one","two","three","first","second","third","decades","laid","opened","country","markets","foreign","international","buyers","connected","coastal","economic","economics","investment","reduced","cost","costs","moving","goods","linked","foundations","early","focused","focus","skills","workforce","experienced","quality","control","infrastructure","power","networks","parks","trade","local","governments","competed","attract","attracting","sometimes","providing","land","training","brought","capital","access","customers","uneven","wasteful","shift","simply","hosting","developing","domestic","capable","designing","increasingly","sophisticated","supplier","suppliers","specialist","tooling","phone","mechanism","competition","invention","position","scale","home","money","focused","businesswoman"]);
 const synonyms={
  automated:["automation","robotic","robot"],automation:["automated","robotic","robot"],robotics:["robotic","robot"],robot:["robotic","robotics"],
  drone:["quadcopter","uav"],quadcopter:["drone","uav"],uav:["drone","quadcopter"],
@@ -17,24 +19,65 @@ const synonyms={
  battery:["cell","lithium"],lithium:["battery","cell"],photovoltaic:["solar","solar panel"],solar:["photovoltaic","solar panel"],
  train:["railway","bullet train"],railway:["train","bullet train"]
 };
+function synonymTerms(term){return Array.isArray(synonyms[term])?synonyms[term]:[];}
+const strongVisualTerms=new Set(["shenzhen","byd","catl","nio","xpeng","tesla","semiconductor","microchip","chip","wafer","lithography","battery","batteries","lithium","solar","photovoltaic","robot","robotic","robotics","automation","automated","drone","uav","railway","train","port","container","shipping","freight","circuit","electronics","laboratory","cleanroom","satellite","turbine","charger","charging","electric","vehicle","car","ev","wind"]); 
+function hasStrongVisualMatch(matches){return matches.length>=2||matches.some(term=>strongVisualTerms.has(term));}
 function terms(s){return String(s||"").toLowerCase().split(/[^a-z0-9]+/).filter(x=>x.length>2&&!stop.has(x));}
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+const seenVideoIds=new Set();
+function relevance(query, excerpt, requirements=[]){
+ const q=terms(query), e=new Set(terms(excerpt));
+ const overlap=q.filter(t=>e.has(t)||[...synonymTerms(t)].some(s=>e.has(s)));
+ const groups=requirements.map(group=>(Array.isArray(group)?group:[]).some(term=>{
+  const ts=terms(term); return ts.some(t=>e.has(t)||[...synonymTerms(t)].some(s=>e.has(s)));
+ }));
+ return {score:overlap.reduce((n,t)=>n+(t.length>5?5:3),0)+groups.filter(Boolean).length*2,overlap,groups};
+}
 async function planNarrationShots(scene){
  const narration=String(scene.narration||"").trim();
  if(!narration) throw new Error("Scene has no narration for visual planning: "+scene.title);
- const words=narration.split(/\s+/);
- const targetCount=Math.max(1,Math.ceil(words.length/12.5));
  const queries=Array.isArray(scene.visual_queries)?scene.visual_queries.map(x=>String(x).trim()).filter(Boolean):[];
  if(!queries.length) throw new Error("Scene has no approved visual_queries: "+scene.title);
- const shots=[];
- for(let i=0;i<targetCount;i++){
-  const from=Math.floor(i*words.length/targetCount);
-  const to=Math.floor((i+1)*words.length/targetCount);
-  const excerpt=words.slice(from,to).join(" ");
-  const query=queries[i%queries.length];
-  shots.push({shot:i+1,narrationExcerpt:excerpt,visualQuery:query,visualType:"specific",reason:"Selected from the scene's approved visual direction; stock imagery is illustrative unless the depicted subject is independently verified.",targetDurationSeconds:5});
+ const sentences=(narration.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[narration]).map(s=>s.trim()).filter(Boolean);
+ const units=[];
+ for(const sentence of sentences){
+  const clauses=sentence.split(/(?<=[,;:—])\s+/).filter(Boolean);
+  for(const clause of clauses){
+   const words=clause.split(/\s+/);
+   if(words.length<=14) units.push(clause);
+   else for(let start=0;start<words.length;start+=14) units.push(words.slice(start,start+14).join(" "));
+  }
  }
- return shots;
+ const shots=[]; let chunk=[],count=0;
+ for(const unit of units){
+  const n=unit.split(/\s+/).length;
+  if(chunk.length && count+n>14){shots.push(chunk.join(" "));chunk=[];count=0;}
+  chunk.push(unit);count+=n;
+ }
+ if(chunk.length) shots.push(chunk.join(" "));
+ return shots.map((excerpt,i)=>{
+  const ranked=queries.map(query=>({query,...relevance(query,excerpt,scene.visual_requirements||[])})).sort((a,b)=>b.score-a.score);
+  const best=ranked[0];
+  const excerptTerms=terms(excerpt).filter(t=>!stop.has(t)).slice(0,5);
+  const query=[...excerptTerms,best.query].filter(Boolean).join(" ").slice(0,95);
+  return {shot:i+1,narrationExcerpt:excerpt,visualQuery:query,approvedVisualQuery:best.query,visualType:"narration_matched",reason:"Shot boundaries follow sentence meaning; query is selected by overlap with the actual narration and scene requirements.",targetDurationSeconds:Math.max(3,Math.min(8,excerpt.split(/\s+/).length/2.5))};
+ });
+}
+async function searchPixabayVideo(query, excerpt, requirements=[]){
+ const u=new URL("https://pixabay.com/api/videos/");
+ u.searchParams.set("key",apiKey);u.searchParams.set("q",query);
+ u.searchParams.set("safesearch","true");u.searchParams.set("per_page","50");
+ const data=await fetchJson(u);
+ return (data.hits||[]).filter(hit=>hit.pageURL&&!seenVideoIds.has(hit.id)&&hit.videos)
+  .map(hit=>{
+   const medium=hit.videos?.medium;
+   const small=hit.videos?.small;
+   const file=medium?.url&&medium.width>=1280&&medium.height>=720?medium:
+    (small?.url&&small.width>=1280&&small.height>=720?small:null);
+   const match=relevance(hit.tags||"",query,requirements);
+   return {hit,file,score:match.score,matched:match.overlap};
+  }).filter(x=>x.file&&Number(x.hit.duration||0)>=5&&Number(x.hit.duration||0)<=90&&hasStrongVisualMatch(x.matched))
+  .sort((a,b)=>b.score-a.score||(b.file.width*b.file.height)-(a.file.width*a.file.height))[0]||null;
 }
 
 let lastPixabayRequest=0;
@@ -101,8 +144,30 @@ async function main(){
   const selectedShots=[];
   for(const shot of plannedShots){
    const requirementGroups=Array.isArray(scene.visual_requirements)?scene.visual_requirements:[];
-   const queryOptions=[shot.visualQuery,...(Array.isArray(scene.visual_queries)?scene.visual_queries:[]).map(q=>String(q).trim()).filter(q=>q&&q!==shot.visualQuery)];
+   const queryOptions=[shot.visualQuery,shot.approvedVisualQuery,...(Array.isArray(scene.visual_queries)?scene.visual_queries:[]).map(q=>String(q).trim())].filter((q,index,all)=>q&&all.indexOf(q)===index);
    let chosen=null,selectedQuery=shot.visualQuery;
+   const videoQueryOptions=[shot.visualQuery,shot.approvedVisualQuery].filter((q,index,all)=>q&&all.indexOf(q)===index);
+   let selectedVideo=null,selectedVideoQuery=shot.visualQuery;
+   for(const query of videoQueryOptions){
+    try{
+     const candidate=await searchPixabayVideo(query,shot.narrationExcerpt,requirementGroups);
+     if(candidate){selectedVideo=candidate;selectedVideoQuery=query;break;}
+    }catch(error){console.warn("Pixabay video search unavailable for "+query+": "+error.message);}
+   }
+   if(selectedVideo){
+    const h=selectedVideo.hit,v=selectedVideo.file,id="S"+String(i+1).padStart(2,"0")+"-SH"+String(shot.shot).padStart(3,"0");
+    seenVideoIds.add(h.id);
+    const thumbnail=h.videos?.medium?.thumbnail||h.videos?.large?.thumbnail||h.videos?.small?.thumbnail;
+    let preview=path.join(out,id+".jpg");
+    if(thumbnail){try{await download(thumbnail,preview);}catch(e){console.warn("Video thumbnail unavailable for "+id+": "+e.message);preview=null;}}
+    const item={id,scene:i+1,shot:shot.shot,mediaType:"video",creator:h.user||"Pixabay contributor",tags:h.tags||"",width:v.width,height:v.height,duration:h.duration,
+     sourcePage:h.pageURL,previewFile:preview?path.basename(preview):null,videoUrl:v.url,license:"Pixabay Content License",licenseUrl:"https://pixabay.com/service/license-summary/",
+     searchQuery:selectedVideoQuery,originalSearchQuery:shot.visualQuery,usedFallbackQuery:selectedVideoQuery!==shot.visualQuery,relevanceScore:selectedVideo.score,matchedQueryTerms:selectedVideo.matched,
+     narrationExcerpt:shot.narrationExcerpt,visualReason:"Real stock video selected against the narration excerpt and scene requirements; illustrative footage, never presented as proof of a specific event."};
+    assets.push(item);if(preview)sheetItems.push({id,scene:i+1,tags:item.tags,file:preview});
+    selectedShots.push({...shot,visualQuery:selectedVideoQuery,mediaType:"video",originalVisualQuery:shot.visualQuery,imageId:id,relevanceScore:selectedVideo.score,matchedQueryTerms:selectedVideo.matched});
+    continue;
+   }
    for(const query of queryOptions){
     const u=new URL("https://pixabay.com/api/");
     u.searchParams.set("key",apiKey);u.searchParams.set("q",query);
@@ -113,14 +178,14 @@ async function main(){
     const candidates=(data.hits||[]).filter(hit=>hit.largeImageURL&&hit.webformatURL&&hit.pageURL&&!seen.has(hit.id)
       &&(hit.imageWidth||0)>=1280&&(hit.imageHeight||0)>=720).map(hit=>{
        const tags=String(hit.tags||"").toLowerCase();
-       const queryMatches=tokens.filter(t=>[t,...(synonyms[t]||[])].some(term=>tags.includes(term)));
+       const queryMatches=tokens.filter(t=>[t,...synonymTerms(t)].some(term=>tags.includes(term)));
        const groupMatches=requirementGroups.map(group=>(Array.isArray(group)?group:[]).some(term=>{
         const value=String(term||"").toLowerCase();
-        return value&&(tags.includes(value)||terms(value).some(t=>[t,...(synonyms[t]||[])].some(term=>tags.includes(term))));
+        return value&&(tags.includes(value)||terms(value).some(t=>[t,...synonymTerms(t)].some(term=>tags.includes(term))));
        }));
        const score=queryMatches.reduce((n,t)=>n+(t.length>5?5:3),0)+groupMatches.filter(Boolean).length*2;
        return {hit,score,queryMatches,groupMatches};
-      }).filter(x=>x.queryMatches.length>=1&&(!scene.requireAllVisualGroups||x.groupMatches.every(Boolean)))
+      }).filter(x=>hasStrongVisualMatch(x.queryMatches)&&(!scene.requireAllVisualGroups||x.groupMatches.every(Boolean)))
       .sort((a,b)=>b.score-a.score||(b.hit.imageWidth*b.hit.imageHeight)-(a.hit.imageWidth*a.hit.imageHeight));
     if(candidates.length){chosen=candidates[0];selectedQuery=query;break;}
    }
@@ -132,7 +197,7 @@ async function main(){
     console.warn(id+": preview download failed; trying original. "+primaryError.message);
     await download(h.largeImageURL,preview);
    }
-   const item={id,scene:i+1,shot:shot.shot,creator:h.user||"Pixabay contributor",tags:h.tags||"",
+   const item={id,scene:i+1,shot:shot.shot,mediaType:"image",creator:h.user||"Pixabay contributor",tags:h.tags||"",
     width:h.imageWidth,height:h.imageHeight,sourcePage:h.pageURL,previewFile:id+".jpg",
     largeImageURL:h.largeImageURL,license:"Pixabay Content License",licenseUrl:"https://pixabay.com/service/license-summary/",
     searchQuery:selectedQuery,originalSearchQuery:shot.visualQuery,usedFallbackQuery:selectedQuery!==shot.visualQuery,relevanceScore:chosen.score,matchedQueryTerms:chosen.queryMatches,matchedVisualRequirementGroups:chosen.groupMatches.map((matched,index)=>matched?index+1:null).filter(Boolean),narrationExcerpt:shot.narrationExcerpt,visualReason:shot.reason};
@@ -142,8 +207,8 @@ async function main(){
   selection.push({scene:i+1,title:scene.title,selectedImageIds:selectedShots.map(x=>x.imageId),shots:selectedShots});
   console.log("Scene "+(i+1)+": AI planned "+selectedShots.length+" narration-matched shots; target ~5 seconds each.");
  }
- const selectionManifest={projectId,title:script.title,source:"Narration segmented into ~5-second shots; Pixabay candidates must match at least one non-generic query term, are scored against scene visual requirements, and are globally de-duplicated.",scenes:selection};
- const assetManifest={projectId,source:"Pixabay API search; unique assets matched to narration excerpts with query-term and visual-requirement relevance evidence.",assetCount:assets.length,uniqueAssetCount:new Set(assets.map(asset=>asset.sourcePage)).size,assets};
+ const selectionManifest={projectId,title:script.title,source:"Narration is segmented at sentence boundaries into short semantic shots; each query is ranked against its actual excerpt and scene requirements. Pixabay video is preferred when a relevant 720p+ clip exists; unique still imagery is the fallback.",scenes:selection};
+ const assetManifest={projectId,source:"Pixabay API video and image search; assets are selected against narration excerpts and scene requirements, with source and license metadata retained.",assetCount:assets.length,uniqueAssetCount:new Set(assets.map(asset=>asset.sourcePage)).size,assets};
  await writeFile(path.join(root,"visual-selection.json"),JSON.stringify(selectionManifest,null,2)+"\n");
  await writeFile(path.join(root,"visual-assets.json"),JSON.stringify(assetManifest,null,2)+"\n");
  await writeFile(path.join(out,"visual-selection.json"),JSON.stringify(selectionManifest,null,2)+"\n");
@@ -165,6 +230,6 @@ async function main(){
  await new Promise((resolve,reject)=>{const p=spawn("ffmpeg",["-y","-i",path.join(out,"contact-sheet.png"),"-frames:v","1","-q:v","2",path.join(out,"contact-sheet.jpg")],{stdio:"inherit"});p.on("error",reject);p.on("close",c=>c===0?resolve():reject(new Error("contact sheet JPEG failed")));});
  const uniqueAssetCount=new Set(assets.map(asset=>asset.sourcePage)).size;
  if(uniqueAssetCount!==assets.length) throw new Error("Visual selection contains duplicate source pages: "+uniqueAssetCount+"/"+assets.length);
- console.log("Prepared "+assets.length+" unique AI-selected images with query relevance evidence (target average 5 seconds) and contact sheet.");
+ console.log("Prepared "+assets.length+" unique narration-matched visuals ("+assets.filter(x=>x.mediaType==="video").length+" video clips, "+assets.filter(x=>x.mediaType==="image").length+" stills) and contact sheet.");
 }
 main().catch(e=>{console.error(e);process.exit(1);});
