@@ -46,7 +46,7 @@ async function planNarrationShots(scene){
   const best=ranked[0];
   const excerptTerms=terms(excerpt).filter(t=>!stop.has(t)).slice(0,5);
   const query=[...excerptTerms,best.query].filter(Boolean).join(" ");
-  return {shot:i+1,narrationExcerpt:excerpt,visualQuery:query,approvedVisualQuery:best.query,visualType:"narration_matched",reason:"Shot boundaries follow sentence meaning; query is selected by overlap with the actual narration and scene requirements.",targetDurationSeconds:Math.max(3,Math.min(8,excerpt.split(/\\s+/).length/2.5))};
+  return {shot:i+1,narrationExcerpt:excerpt,visualQuery:query,approvedVisualQuery:best.query,visualType:"narration_matched",reason:"Shot boundaries follow sentence meaning; query is selected by overlap with the actual narration and scene requirements.",targetDurationSeconds:Math.max(3,Math.min(8,excerpt.split(/\s+/).length/2.5))};
  });
 }
 async function searchPixabayVideo(query, excerpt, requirements=[]){
