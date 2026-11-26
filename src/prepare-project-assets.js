@@ -58,7 +58,7 @@ async function searchPixabayVideo(query, excerpt, requirements=[]){
   .map(hit=>{
    const variants=Object.values(hit.videos||{}).filter(v=>v&&v.url&&v.width>=1280&&v.height>=720);
    const file=variants.sort((a,b)=>(b.width*b.height)-(a.width*a.height))[0];
-   const match=relevance(query+" "+(hit.tags||""),excerpt,requirements);
+   const match=relevance(hit.tags||"",excerpt,requirements);
    return {hit,file,score:match.score,matched:match.overlap};
   }).filter(x=>x.file&&Number(x.hit.duration||0)>=5&&x.matched.length>0)
   .sort((a,b)=>b.score-a.score||(b.file.width*b.file.height)-(a.file.width*a.file.height))[0]||null;
