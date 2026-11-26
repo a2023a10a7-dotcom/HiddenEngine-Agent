@@ -1,16 +1,25 @@
 const apiKey = process.env.GEMINI_API_KEY;
 const model = process.env.GEMINI_VISION_MODEL || "gemini-2.5-flash";
 
-if (!apiKey) {
-  throw new Error("GEMINI_API_KEY is required. Visual selection is fail-closed: no image may be selected by tags alone.");
-}
-
-function extractJson(text) {
+export function extractJson(text) {
   const clean = String(text || "").trim().replace(/^\x60\x60\x60(?:json)?\s*/i, "").replace(/\s*\x60\x60\x60$/, "");
   return JSON.parse(clean);
 }
 
+export function validateVisualDecision(value, candidateCount) {
+  const index = Number(value?.selectedIndex);
+  if (!Number.isInteger(index) || index < -1 || index >= candidateCount) throw new Error("Gemini visual review returned an invalid candidate index.");
+  const confidence = Number(value?.confidence);
+  const rationale = String(value?.rationale || "");
+  const visibleSubject = String(value?.visibleSubject || "");
+  if (index === -1 || !Number.isFinite(confidence) || confidence < 0.72) {
+    return { accepted: false, rationale: index === -1 ? (rationale || "No suitable image.") : "Rejected: visual confidence below 0.72. " + rationale, confidence: Number.isFinite(confidence) ? confidence : 0, visibleSubject };
+  }
+  return { accepted: true, selectedIndex: index, rationale, confidence, visibleSubject };
+}
+
 export async function selectVisualCandidate({ narrationExcerpt, sceneTitle, visualQuery, candidates }) {
+  if (!apiKey) throw new Error("GEMINI_API_KEY is required. Visual selection is fail-closed: no image may be selected by tags alone.");
   if (!Array.isArray(candidates) || candidates.length === 0) return null;
   const parts = [{
     text: [
