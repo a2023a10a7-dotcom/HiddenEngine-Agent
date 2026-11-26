@@ -1,6 +1,14 @@
 name: Documentary Renderer Static Validation
 
 on:
+  pull_request:
+    paths:
+      - "src/render-video.js"
+      - "src/prepare-project-assets.js"
+      - "production/projects/2026-11-12-chinas-technology-rise/script.json"
+      - "production/projects/**/visual-selection.json"
+      - "production/projects/**/visual-assets.json"
+      - ".github/workflows/renderer-static-validation.yml"
   push:
     branches: [main]
     paths:
