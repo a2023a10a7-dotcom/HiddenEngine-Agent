@@ -424,7 +424,7 @@ async function main() {
       "-t",audioDuration.toFixed(3),"-shortest","-movflags","+faststart",rendered);
     await run("ffmpeg",args);
     visualAudit.push({scene:i+1,selectedVisualIds:renderIds,selectedImageIds:renderIds,renderedVisuals:mediaFiles.length,renderedImages:mediaFiles.length,videoClips:mediaTypes.filter(x=>x==="video").length,stillImages:mediaTypes.filter(x=>x==="image").length,animated:true,
-      targetShotDurationSeconds:5,actualAverageShotDurationSeconds:Number((audioDuration/imageFiles.length).toFixed(2)),
+      targetShotDurationSeconds:5,actualAverageShotDurationSeconds:Number((audioDuration/mediaFiles.length).toFixed(2)),
       narrationMatchedShots:selection.scenes.find(item=>item.scene===i+1)?.shots||[],
       sourceTags:selected.map(id=>assetById.get(id).tags)});
     clips.push(rendered);
