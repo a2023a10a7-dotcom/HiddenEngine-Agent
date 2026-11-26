@@ -21,7 +21,7 @@ export function scoreVisualCandidate({ query, tags, requirementGroups = [], syno
     })
   );
   const specificSingleTerm = matchedTokens.length === 1 && matchedTokens[0].length >= 10;
-  const queryIsSpecificEnough = matchedTokens.length >= 2 || specificSingleTerm;
+  const queryIsSpecificEnough = matchedTokens.length >= 2 || specificSingleTerm || matchedGroups.filter(Boolean).length >= 2;
   const requiredGroupsSatisfied = requirementGroups.length === 0 || matchedGroups.some(Boolean);
   const score = matchedTokens.reduce((total, token) => total + (token.length > 5 ? 5 : 3), 0)
     + matchedGroups.filter(Boolean).length * 3;
