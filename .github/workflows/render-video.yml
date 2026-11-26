@@ -12,6 +12,7 @@ on:
       - "production/projects/**/script.json"
       - "src/render-video.js"
       - "src/prepare-project-assets.js"
+      - "src/ai-visual-selection.js"
       - ".github/workflows/render-video.yml"
   workflow_dispatch:
     inputs:
