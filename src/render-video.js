@@ -138,7 +138,7 @@ async function writeNarrationSubtitles(narration, duration, output) {
     cursor = end;
     return "Dialogue: 0," + assTimestamp(start) + "," + assTimestamp(end) + ",Default,,0,0,0,," + cue.text.replace(/[{}]/g, "");
   });
-  const header = ["[Script Info]","ScriptType: v4.00+","PlayResX: 1920","PlayResY: 1080","ScaledBorderAndShadow: yes","WrapStyle: 2","","[V4+ Styles]","Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding","Style: Default,DejaVu Sans,31,&H00FFFFFF,&H000000FF,&H00301A0E,&H990A0A0B,0,0,1,2,0,2,150,150,82,1","","[Events]","Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"];
+  const header = ["[Script Info]","ScriptType: v4.00+","PlayResX: 1920","PlayResY: 1080","ScaledBorderAndShadow: yes","WrapStyle: 2","","[V4+ Styles]","Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding","Style: Default,DejaVu Sans,34,&H00FFFFFF,&H000000FF,&H00301A0E,&H990A0A0B,-1,0,1,2.5,1,2,150,150,86,1","","[Events]","Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"];
   await writeFile(output, header.concat(events).join("\n") + "\n");
 }
 async function piperTTS(text, output) {
@@ -416,10 +416,45 @@ async function main() {
   await run("rsvg-convert", ["-f", "png", "-o", path.join(OUT, "contact-sheet.png"), contactSvg]);
   await run("ffmpeg", ["-y", "-i", path.join(OUT, "contact-sheet.png"), "-frames:v", "1", "-q:v", "2", path.join(OUT, "contact-sheet.jpg")]);
 
-  const list = path.join(OUT,"concat.txt");
-  await writeFile(list, clips.map(f=>"file '"+path.basename(f)+"'").join("\n")+"\n");
+  // Join complete scenes with real video and narration crossfades. The
+  // previous concat-demuxer/-c copy path cut both picture and dialogue abruptly.
   const output = path.join(OUT,"the-hidden-engine-documentary.mp4");
-  await run("ffmpeg",["-y","-f","concat","-safe","0","-i",list,"-c","copy","-movflags","+faststart",output]);
+  const sceneDurations = await Promise.all(clips.map(probeDuration));
+  if (sceneDurations.some(duration => !Number.isFinite(duration) || duration <= 0.8)) {
+    throw new Error("Scene transition QA failed: every rendered scene must exceed 0.8 seconds.");
+  }
+  const videoFade = Math.min(0.65, Math.min(...sceneDurations) * 0.15);
+  const audioFade = Math.min(0.45, Math.min(...sceneDurations) * 0.10);
+  const transitionInputs = clips.flatMap(file => ["-i", file]);
+  const transitionFilters = [];
+  for (let n = 0; n < clips.length; n++) {
+    transitionFilters.push("[" + n + ":v]settb=AVTB,setpts=PTS-STARTPTS,fps=25,format=yuv420p[vscene" + n + "]");
+    transitionFilters.push("[" + n + ":a]aresample=44100,asetpts=PTS-STARTPTS[ascene" + n + "]");
+  }
+  let videoLabel = "vscene0";
+  let audioLabel = "ascene0";
+  let elapsedVideo = sceneDurations[0];
+  for (let n = 1; n < clips.length; n++) {
+    const nextVideo = "vtransition" + n;
+    const nextAudio = "atransition" + n;
+    const offset = Math.max(0, elapsedVideo - videoFade);
+    transitionFilters.push("[" + videoLabel + "][vscene" + n + "]xfade=transition=fade:duration=" + videoFade.toFixed(3) + ":offset=" + offset.toFixed(3) + "[" + nextVideo + "]");
+    transitionFilters.push("[" + audioLabel + "][ascene" + n + "]acrossfade=d=" + audioFade.toFixed(3) + ":c1=tri:c2=tri[" + nextAudio + "]");
+    videoLabel = nextVideo;
+    audioLabel = nextAudio;
+    elapsedVideo += sceneDurations[n] - videoFade;
+  }
+  const finalTransitionVideo = "vtransition-final";
+  const finalTransitionAudio = "atransition-final";
+  transitionFilters.push("[" + videoLabel + "]format=yuv420p[" + finalTransitionVideo + "]");
+  transitionFilters.push("[" + audioLabel + "]anull[" + finalTransitionAudio + "]");
+  await run("ffmpeg",[
+    "-y",...transitionInputs,
+    "-filter_complex",transitionFilters.join(";"),
+    "-map","[" + finalTransitionVideo + "]","-map","[" + finalTransitionAudio + "]",
+    "-c:v","libx264","-preset","veryfast","-crf","20",
+    "-c:a","aac","-b:a","192k","-movflags","+faststart",output
+  ]);
   const rawProbe = await capture("ffprobe", ["-v","error","-show_entries","format=duration","-of","default=noprint_wrappers=1:nokey=1",output]);
   const rawDuration = Number(rawProbe.stdout.trim());
   const whoosh = path.join(OUT,"transition-whoosh.wav");
@@ -471,7 +506,7 @@ async function main() {
   if (finalDuration < 13*60 || finalDuration > 18*60) throw new Error("Final runtime "+finalDuration.toFixed(1)+"s is outside the 13–18 minute documentary target.");
   if (visualAudit.some(x=>x.renderedImages < 1 || x.actualAverageShotDurationSeconds > 6.5)) throw new Error("Visual pacing QA failed: every scene needs distinct narration-matched shots averaging no more than 6.5 seconds.");
   await access(path.join(OUT,"contact-sheet.jpg")).catch(()=>{throw new Error("Final contact-sheet.jpg is missing.");});
-  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:finalDuration,targetDurationMinutes:15,acceptedDurationRangeMinutes:[13,18],audio:true,scenes:clips.length,selectedImages:credits.length,uniqueImages:uniqueImageCount,uniqueImageRatio:Number((uniqueImageCount/Math.max(1,credits.length)).toFixed(3)),imagesPerScene:Math.min(...visualAudit.map(x=>x.renderedImages)),visualRelevanceGate:true,visualChangeTargetSeconds:5,animatedImageScenes:visualAudit.filter(x=>x.animated).length,originalMusic:true,ambientMusicBed:true,musicTargetDb:-28,transitionWhooshes:true,numberClicks:true,contactSheet:true},null,2)+"\n");
+  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:finalDuration,targetDurationMinutes:15,acceptedDurationRangeMinutes:[13,18],audio:true,scenes:clips.length,selectedImages:credits.length,uniqueImages:uniqueImageCount,uniqueImageRatio:Number((uniqueImageCount/Math.max(1,credits.length)).toFixed(3)),imagesPerScene:Math.min(...visualAudit.map(x=>x.renderedImages)),visualRelevanceGate:true,visualChangeTargetSeconds:5,animatedImageScenes:visualAudit.filter(x=>x.animated).length,originalMusic:true,ambientMusicBed:true,musicTargetDb:-28,transitionWhooshes:true,numberClicks:true,sceneVideoCrossfadeSeconds:Number(videoFade.toFixed(3)),sceneAudioCrossfadeSeconds:Number(audioFade.toFixed(3)),sceneTransitions:Math.max(0,clips.length-1),contactSheet:true},null,2)+"\n");
   console.log("Rendered and passed technical QA: "+output);
 }
 main().catch(error=>{console.error("Render failed:",error);process.exit(1);});
