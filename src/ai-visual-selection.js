@@ -69,14 +69,7 @@ export async function selectVisualCandidate({ narrationExcerpt, sceneTitle, visu
   const text = payload.candidates?.[0]?.content?.parts?.map(part => part.text || "").join("");
   if (!text) throw new Error("Gemini visual review returned no structured decision.");
   const decision = extractJson(text);
-  const index = Number(decision.selectedIndex);
-  if (!Number.isInteger(index) || index < -1 || index >= candidates.length) {
-    throw new Error("Gemini visual review returned an invalid candidate index.");
-  }
-  if (index === -1) return { accepted: false, rationale: String(decision.rationale || "No suitable image."), confidence: Number(decision.confidence) || 0, visibleSubject: String(decision.visibleSubject || "") };
-  const confidence = Number(decision.confidence);
-  if (!Number.isFinite(confidence) || confidence < 0.72) {
-    return { accepted: false, rationale: "Rejected: visual confidence below 0.72. " + String(decision.rationale || ""), confidence: Number.isFinite(confidence) ? confidence : 0, visibleSubject: String(decision.visibleSubject || "") };
-  }
-  return { accepted: true, candidate: candidates[index], rationale: String(decision.rationale || ""), confidence, visibleSubject: String(decision.visibleSubject || "") };
+  const validated = validateVisualDecision(decision, candidates.length);
+  if (!validated.accepted) return validated;
+  return { ...validated, candidate: candidates[validated.selectedIndex] };
 }
