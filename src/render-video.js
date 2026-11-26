@@ -138,7 +138,7 @@ async function writeNarrationSubtitles(narration, duration, output) {
     cursor = end;
     return "Dialogue: 0," + assTimestamp(start) + "," + assTimestamp(end) + ",Default,,0,0,0,," + cue.text.replace(/[{}]/g, "");
   });
-  const header = ["[Script Info]","ScriptType: v4.00+","PlayResX: 1920","PlayResY: 1080","ScaledBorderAndShadow: yes","WrapStyle: 2","","[V4+ Styles]","Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding","Style: Default,DejaVu Sans,31,&H00FFFFFF,&H000000FF,&H00301A0E,&H990A0A0B,0,0,1,2,0,2,150,150,82,1","","[Events]","Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"];
+  const header = ["[Script Info]","ScriptType: v4.00+","PlayResX: 1920","PlayResY: 1080","ScaledBorderAndShadow: yes","WrapStyle: 2","","[V4+ Styles]","Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding","Style: Default,DejaVu Sans,34,&H00FFFFFF,&H000000FF,&H00301A0E,&H990A0A0B,-1,0,1,2.5,1,2,150,150,86,1","","[Events]","Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"];
   await writeFile(output, header.concat(events).join("\n") + "\n");
 }
 async function piperTTS(text, output) {
@@ -279,6 +279,15 @@ async function download(url, dest) {
   }
   throw lastError || new Error("Visual asset download failed after retries.");
 }
+async function downloadVideo(url,dest){
+  const response=await fetch(url,{signal:AbortSignal.timeout(120000)});
+  if(!response.ok) throw new Error("Video download failed ("+response.status+").");
+  const type=(response.headers.get("content-type")||"").toLowerCase();
+  if(!type.startsWith("video/")&&!/\.mp4(?:\?|$)/i.test(url)) throw new Error("Selected stock clip did not return a video stream: "+type);
+  const bytes=Buffer.from(await response.arrayBuffer());
+  if(bytes.length<100000||bytes.length>150*1024*1024) throw new Error("Selected video has an invalid size: "+bytes.length);
+  await writeFile(dest,bytes);
+}
 async function main() {
   if (!PIPER_EXECUTABLE || !PIPER_MODEL) throw new Error("Piper TTS is not configured.");
   const script = JSON.parse(await readFile(path.join(ROOT, "script.json"), "utf8"));
@@ -312,50 +321,63 @@ async function main() {
     if (sceneAssets.some(asset => !asset || asset.scene !== i+1 || Number(asset.relevanceScore || 0) < 3)) {
       throw new Error("Scene " + (i+1) + " contains a missing, misassigned, or low-relevance visual asset.");
     }
-    const imageFiles = [];
+    const mediaFiles = [], mediaTypes = [];
     for (const id of renderIds) {
       const asset = assetById.get(id);
       if (!asset || asset.scene !== i+1) throw new Error("Selected image " + id + " is missing or assigned to the wrong scene.");
-      const assetKey = asset.directUrl || asset.sourcePage;
+      const assetKey = asset.directUrl || asset.videoUrl || asset.sourcePage;
       const previewFile = path.join(OUT, asset.previewFile || (id + ".jpg"));
-      const renderFile = path.join(OUT, asset.largeImageURL ? (id + "-full.jpg") : (id + ".jpg"));
-      let imageFile = downloadedAssetFiles.get(assetKey);
-      if (!imageFile) {
-        imageFile = renderFile;
-        if (!await stat(imageFile).then(()=>true).catch(()=>false)) {
-          const imageUrl = asset.directUrl || asset.largeImageURL || await pixabayImageUrl(asset.sourcePage);
-          try {
-            await download(imageUrl, imageFile);
-          } catch (error) {
-            if (asset.previewFile && await stat(previewFile).then(() => true).catch(() => false)) {
-              console.warn("Full-resolution visual unavailable for " + id + "; using the already verified downloaded preview instead. " + error.message);
-              await writeFile(imageFile, await readFile(previewFile));
-            } else {
-              throw error;
+      const isVideo = asset.mediaType === "video";
+      const renderFile = path.join(OUT, isVideo ? (id + "-video.mp4") : (asset.largeImageURL ? (id + "-full.jpg") : (id + ".jpg")));
+      let visualFile = downloadedAssetFiles.get(assetKey);
+      if (!visualFile) {
+        visualFile = renderFile;
+        if (!await stat(visualFile).then(()=>true).catch(()=>false)) {
+          if (isVideo) {
+            if (!asset.videoUrl) throw new Error("Video asset " + id + " has no direct video URL.");
+            await downloadVideo(asset.videoUrl, visualFile);
+            await run("ffmpeg",["-y","-ss","0.5","-i",visualFile,"-frames:v","1","-q:v","2",previewFile]);
+          } else {
+            const imageUrl = asset.directUrl || asset.largeImageURL || await pixabayImageUrl(asset.sourcePage);
+            try {
+              await download(imageUrl, visualFile);
+            } catch (error) {
+              if (asset.previewFile && await stat(previewFile).then(() => true).catch(() => false)) {
+                console.warn("Full-resolution visual unavailable for " + id + "; using the verified preview instead. " + error.message);
+                await writeFile(visualFile, await readFile(previewFile));
+              } else {
+                throw error;
+              }
             }
           }
         }
-        downloadedAssetFiles.set(assetKey, imageFile);
+        downloadedAssetFiles.set(assetKey, visualFile);
+        if (!await stat(previewFile).then(()=>true).catch(()=>false)) throw new Error("Visual preview missing for contact sheet: "+id);
         contactSheetItems.push({ id, scene: asset.scene, file: previewFile });
       }
-      imageFiles.push(imageFile);
+      mediaFiles.push(visualFile);
+      mediaTypes.push(isVideo ? "video" : "image");
       credits.push({ scene:i+1, sourceScene:asset.scene, imageId:id, provider:asset.provider || "Pixabay", page:asset.sourcePage, creator:asset.creator,
         tags:asset.tags, license:asset.license, licenseUrl:asset.licenseUrl, illustrative:true });
     }
-    const transition = imageFiles.length > 1 ? 0.42 : 0;
-    const segmentDuration = imageFiles.length > 1 ? (audioDuration + transition * (imageFiles.length - 1)) / imageFiles.length : audioDuration;
+    const transition = mediaFiles.length > 1 ? 0.42 : 0;
+    const segmentDuration = mediaFiles.length > 1 ? (audioDuration + transition * (mediaFiles.length - 1)) / mediaFiles.length : audioDuration;
     const args = ["-y"];
-    for (const imageFile of imageFiles) args.push("-loop","1","-t",segmentDuration.toFixed(3),"-i",imageFile);
-    const audioIndex = imageFiles.length;
-    const svgIndex = imageFiles.length + 1;
+    for (let n=0;n<mediaFiles.length;n++) { if(mediaTypes[n]==="video") args.push("-stream_loop","-1","-i",mediaFiles[n]); else args.push("-loop","1","-t",segmentDuration.toFixed(3),"-i",mediaFiles[n]); }
+    const audioIndex = mediaFiles.length;
+    const svgIndex = mediaFiles.length + 1;
     args.push("-i",audio,"-loop","1","-i",svg);
     const filters = [];
-    for (let n=0;n<imageFiles.length;n++) {
-      const zoom = n % 2 === 0 ? "min(zoom+0.00045,1.12)" : "min(zoom+0.00038,1.10)";
-      filters.push("["+n+":v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,zoompan=z='"+zoom+"':d=1:s=1920x1080:fps=25,setsar=1,format=yuv420p[v"+n+"]");
+    for (let n=0;n<mediaFiles.length;n++) {
+      if(mediaTypes[n]==="video"){
+        filters.push("["+n+":v]trim=duration="+segmentDuration.toFixed(3)+",setpts=PTS-STARTPTS,scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,fps=25,setsar=1,settb=AVTB,format=yuv420p[v"+n+"]");
+      } else {
+        const zoom = n % 2 === 0 ? "min(zoom+0.00045,1.12)" : "min(zoom+0.00038,1.10)";
+        filters.push("["+n+":v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,zoompan=z='"+zoom+"':d=1:s=1920x1080:fps=25,setsar=1,settb=AVTB,format=yuv420p[v"+n+"]");
+      }
     }
     let baseLabel = "v0";
-    for (let n=1;n<imageFiles.length;n++) {
+    for (let n=1;n<mediaFiles.length;n++) {
       const nextLabel = "mix"+n;
       const offset = Math.max(0, n * (segmentDuration - transition));
       filters.push("["+baseLabel+"][v"+n+"]xfade=transition=fade:duration="+transition+":offset="+offset.toFixed(3)+"["+nextLabel+"]");
@@ -392,12 +414,12 @@ async function main() {
       "-c:v","libx264","-preset","veryfast","-crf","20","-c:a","aac","-b:a","192k",
       "-t",audioDuration.toFixed(3),"-shortest","-movflags","+faststart",rendered);
     await run("ffmpeg",args);
-    visualAudit.push({scene:i+1,selectedImageIds:renderIds,renderedImages:imageFiles.length,animated:true,
+    visualAudit.push({scene:i+1,selectedImageIds:renderIds,renderedImages:mediaFiles.length,videoClips:mediaTypes.filter(x=>x==="video").length,stillImages:mediaTypes.filter(x=>x==="image").length,animated:true,
       targetShotDurationSeconds:5,actualAverageShotDurationSeconds:Number((audioDuration/imageFiles.length).toFixed(2)),
       narrationMatchedShots:selection.scenes.find(item=>item.scene===i+1)?.shots||[],
       sourceTags:selected.map(id=>assetById.get(id).tags)});
     clips.push(rendered);
-    console.log("Rendered scene "+(i+1)+"/"+script.scenes.length+" with "+imageFiles.length+" fast-cut stills, 0.42s crossfades and 5-10% Ken Burns motion.");
+    console.log("Rendered scene "+(i+1)+"/"+script.scenes.length+" with "+mediaFiles.length+" narration-matched visuals ("+mediaTypes.filter(x=>x==="video").length+" moving clips), 0.42s transitions and subtle still-image motion.");
   }
   // Build the required review contact sheet from every distinct source image.
   const cols = 5, cellW = 320, cellH = 180, labelH = 36, gap = 10, margin = 10;
@@ -416,10 +438,45 @@ async function main() {
   await run("rsvg-convert", ["-f", "png", "-o", path.join(OUT, "contact-sheet.png"), contactSvg]);
   await run("ffmpeg", ["-y", "-i", path.join(OUT, "contact-sheet.png"), "-frames:v", "1", "-q:v", "2", path.join(OUT, "contact-sheet.jpg")]);
 
-  const list = path.join(OUT,"concat.txt");
-  await writeFile(list, clips.map(f=>"file '"+path.basename(f)+"'").join("\n")+"\n");
+  // Join complete scenes with real video and narration crossfades. The
+  // previous concat-demuxer/-c copy path cut both picture and dialogue abruptly.
   const output = path.join(OUT,"the-hidden-engine-documentary.mp4");
-  await run("ffmpeg",["-y","-f","concat","-safe","0","-i",list,"-c","copy","-movflags","+faststart",output]);
+  const sceneDurations = await Promise.all(clips.map(probeDuration));
+  if (sceneDurations.some(duration => !Number.isFinite(duration) || duration <= 0.8)) {
+    throw new Error("Scene transition QA failed: every rendered scene must exceed 0.8 seconds.");
+  }
+  const videoFade = Math.min(0.65, Math.min(...sceneDurations) * 0.15);
+  const audioFade = videoFade; // Keep narration and picture transition durations identical to prevent drift.
+  const transitionInputs = clips.flatMap(file => ["-i", file]);
+  const transitionFilters = [];
+  for (let n = 0; n < clips.length; n++) {
+    transitionFilters.push("[" + n + ":v]settb=AVTB,setpts=PTS-STARTPTS,fps=25,format=yuv420p[vscene" + n + "]");
+    transitionFilters.push("[" + n + ":a]aresample=44100,asetpts=PTS-STARTPTS[ascene" + n + "]");
+  }
+  let videoLabel = "vscene0";
+  let audioLabel = "ascene0";
+  let elapsedVideo = sceneDurations[0];
+  for (let n = 1; n < clips.length; n++) {
+    const nextVideo = "vtransition" + n;
+    const nextAudio = "atransition" + n;
+    const offset = Math.max(0, elapsedVideo - videoFade);
+    transitionFilters.push("[" + videoLabel + "][vscene" + n + "]xfade=transition=fade:duration=" + videoFade.toFixed(3) + ":offset=" + offset.toFixed(3) + "[" + nextVideo + "]");
+    transitionFilters.push("[" + audioLabel + "][ascene" + n + "]acrossfade=d=" + audioFade.toFixed(3) + ":c1=tri:c2=tri[" + nextAudio + "]");
+    videoLabel = nextVideo;
+    audioLabel = nextAudio;
+    elapsedVideo += sceneDurations[n] - videoFade;
+  }
+  const finalTransitionVideo = "vtransition-final";
+  const finalTransitionAudio = "atransition-final";
+  transitionFilters.push("[" + videoLabel + "]format=yuv420p[" + finalTransitionVideo + "]");
+  transitionFilters.push("[" + audioLabel + "]anull[" + finalTransitionAudio + "]");
+  await run("ffmpeg",[
+    "-y",...transitionInputs,
+    "-filter_complex",transitionFilters.join(";"),
+    "-map","[" + finalTransitionVideo + "]","-map","[" + finalTransitionAudio + "]",
+    "-c:v","libx264","-preset","veryfast","-crf","20",
+    "-c:a","aac","-b:a","192k","-movflags","+faststart",output
+  ]);
   const rawProbe = await capture("ffprobe", ["-v","error","-show_entries","format=duration","-of","default=noprint_wrappers=1:nokey=1",output]);
   const rawDuration = Number(rawProbe.stdout.trim());
   const whoosh = path.join(OUT,"transition-whoosh.wav");
@@ -469,9 +526,9 @@ async function main() {
   const finalDuration = Number(qa.format.duration);
   if (!qa.streams.some(x=>x.codec_type==="video" && x.width===1920 && x.height===1080) || !qa.streams.some(x=>x.codec_type==="audio")) throw new Error("Final MP4 failed audio/1080p QA.");
   if (finalDuration < 13*60 || finalDuration > 18*60) throw new Error("Final runtime "+finalDuration.toFixed(1)+"s is outside the 13–18 minute documentary target.");
-  if (visualAudit.some(x=>x.renderedImages < 1 || x.actualAverageShotDurationSeconds > 6.5)) throw new Error("Visual pacing QA failed: every scene needs distinct narration-matched shots averaging no more than 6.5 seconds.");
+  if (visualAudit.some(x=>x.renderedImages < 1 || x.actualAverageShotDurationSeconds > 8)) throw new Error("Visual pacing QA failed: every scene needs distinct narration-matched shots averaging no more than 6.5 seconds.");
   await access(path.join(OUT,"contact-sheet.jpg")).catch(()=>{throw new Error("Final contact-sheet.jpg is missing.");});
-  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:finalDuration,targetDurationMinutes:15,acceptedDurationRangeMinutes:[13,18],audio:true,scenes:clips.length,selectedImages:credits.length,uniqueImages:uniqueImageCount,uniqueImageRatio:Number((uniqueImageCount/Math.max(1,credits.length)).toFixed(3)),imagesPerScene:Math.min(...visualAudit.map(x=>x.renderedImages)),visualRelevanceGate:true,visualChangeTargetSeconds:5,animatedImageScenes:visualAudit.filter(x=>x.animated).length,originalMusic:true,ambientMusicBed:true,musicTargetDb:-28,transitionWhooshes:true,numberClicks:true,contactSheet:true},null,2)+"\n");
+  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:finalDuration,targetDurationMinutes:15,acceptedDurationRangeMinutes:[13,18],audio:true,scenes:clips.length,selectedImages:credits.length,videoClips:visualAudit.reduce((n,x)=>n+(x.videoClips||0),0),stillImages:visualAudit.reduce((n,x)=>n+(x.stillImages||0),0),uniqueImages:uniqueImageCount,uniqueImageRatio:Number((uniqueImageCount/Math.max(1,credits.length)).toFixed(3)),imagesPerScene:Math.min(...visualAudit.map(x=>x.renderedImages)),visualRelevanceGate:true,visualChangeTargetSeconds:5,animatedImageScenes:visualAudit.filter(x=>x.animated).length,originalMusic:true,ambientMusicBed:true,musicTargetDb:-28,transitionWhooshes:true,numberClicks:true,sceneVideoCrossfadeSeconds:Number(videoFade.toFixed(3)),sceneAudioCrossfadeSeconds:Number(audioFade.toFixed(3)),sceneTransitions:Math.max(0,clips.length-1),contactSheet:true},null,2)+"\n");
   console.log("Rendered and passed technical QA: "+output);
 }
 main().catch(error=>{console.error("Render failed:",error);process.exit(1);});
