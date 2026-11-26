@@ -5,6 +5,8 @@ on:
     paths:
       - "src/render-video.js"
       - "src/prepare-project-assets.js"
+      - "src/ai-visual-selection.js"
+      - "tests/ai-visual-selection.test.js"
       - "production/projects/2026-11-12-chinas-technology-rise/script.json"
       - ".github/workflows/renderer-static-validation.yml"
   push:
@@ -32,6 +34,8 @@ jobs:
         run: |
           node --check src/render-video.js
           node --check src/prepare-project-assets.js
+          node --check src/ai-visual-selection.js
+          node --test tests/ai-visual-selection.test.js
       - name: Test semantic visual relevance gate
         run: node --test tests/visual-relevance.test.js
       - name: Validate 15-minute documentary script
