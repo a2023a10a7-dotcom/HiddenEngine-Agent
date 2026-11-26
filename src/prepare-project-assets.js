@@ -35,11 +35,20 @@ async function planNarrationShots(scene){
  const queries=Array.isArray(scene.visual_queries)?scene.visual_queries.map(x=>String(x).trim()).filter(Boolean):[];
  if(!queries.length) throw new Error("Scene has no approved visual_queries: "+scene.title);
  const sentences=(narration.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[narration]).map(s=>s.trim()).filter(Boolean);
- const shots=[]; let chunk=[],count=0;
+ const units=[];
  for(const sentence of sentences){
-  const n=sentence.split(/\s+/).length;
-  if(chunk.length && count+n>22){shots.push(chunk.join(" "));chunk=[];count=0;}
-  chunk.push(sentence);count+=n;
+  const clauses=sentence.split(/(?<=[,;:—])\s+/).filter(Boolean);
+  for(const clause of clauses){
+   const words=clause.split(/\s+/);
+   if(words.length<=14) units.push(clause);
+   else for(let start=0;start<words.length;start+=14) units.push(words.slice(start,start+14).join(" "));
+  }
+ }
+ const shots=[]; let chunk=[],count=0;
+ for(const unit of units){
+  const n=unit.split(/\s+/).length;
+  if(chunk.length && count+n>14){shots.push(chunk.join(" "));chunk=[];count=0;}
+  chunk.push(unit);count+=n;
  }
  if(chunk.length) shots.push(chunk.join(" "));
  return shots.map((excerpt,i)=>{
