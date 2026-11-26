@@ -5,15 +5,14 @@ on:
       - "production/projects/**/visual-links.json"
       - "production/projects/**/script.json"
       - "src/render-video.js"
-      - "src/prepare-project-assets.js"
-      - ".github/workflows/render-video.yml"
   push:
-    branches: [main]
+    branches: [main, fix/narration-visual-relevance]
     paths:
       - "production/projects/**/visual-links.json"
       - "production/projects/**/script.json"
       - "src/render-video.js"
       - "src/prepare-project-assets.js"
+      - "src/ai-visual-selection.js"
       - ".github/workflows/render-video.yml"
   workflow_dispatch:
     inputs:
@@ -75,6 +74,8 @@ jobs:
         env:
           PROJECT_ID: ${{ inputs.project_id }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_VISION_MODEL: ${{ vars.GEMINI_VISION_MODEL || 'gemini-3.8-flash' }}
         run: |
           set -euo pipefail
           if [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
