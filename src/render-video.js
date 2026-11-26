@@ -285,7 +285,7 @@ async function downloadVideo(url,dest){
   const type=(response.headers.get("content-type")||"").toLowerCase();
   if(!type.startsWith("video/")&&!/\.mp4(?:\?|$)/i.test(url)) throw new Error("Selected stock clip did not return a video stream: "+type);
   const bytes=Buffer.from(await response.arrayBuffer());
-  if(bytes.length<100000||bytes.length>150*1024*1024) throw new Error("Selected video has an invalid size: "+bytes.length);
+  if(bytes.length<4096||bytes.length>150*1024*1024) throw new Error("Selected video has an invalid size: "+bytes.length);
   await writeFile(dest,bytes);
 }
 async function main() {
