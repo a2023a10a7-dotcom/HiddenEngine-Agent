@@ -140,9 +140,9 @@ async function main(){
   const selectedShots=[];
   for(const shot of plannedShots){
    const requirementGroups=Array.isArray(scene.visual_requirements)?scene.visual_requirements:[];
-   const queryOptions=[shot.visualQuery,shot.approvedVisualQuery].filter((q,index,all)=>q&&all.indexOf(q)===index);
+   const queryOptions=[shot.visualQuery,shot.approvedVisualQuery,...(Array.isArray(scene.visual_queries)?scene.visual_queries:[]).map(q=>String(q).trim())].filter((q,index,all)=>q&&all.indexOf(q)===index);
    let chosen=null,selectedQuery=shot.visualQuery;
-   const videoQueryOptions=[shot.visualQuery];
+   const videoQueryOptions=[shot.visualQuery,shot.approvedVisualQuery].filter((q,index,all)=>q&&all.indexOf(q)===index);
    let selectedVideo=null,selectedVideoQuery=shot.visualQuery;
    for(const query of videoQueryOptions){
     try{
