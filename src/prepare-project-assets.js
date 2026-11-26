@@ -17,14 +17,15 @@ const synonyms={
  battery:["cell","lithium"],lithium:["battery","cell"],photovoltaic:["solar","solar panel"],solar:["photovoltaic","solar panel"],
  train:["railway","bullet train"],railway:["train","bullet train"]
 };
+function synonymTerms(term){return Array.isArray(synonyms[term])?synonyms[term]:[];}
 function terms(s){return String(s||"").toLowerCase().split(/[^a-z0-9]+/).filter(x=>x.length>2&&!stop.has(x));}
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 const seenVideoIds=new Set();
 function relevance(query, excerpt, requirements=[]){
  const q=terms(query), e=new Set(terms(excerpt));
- const overlap=q.filter(t=>e.has(t)||[...(synonyms[t]||[])].some(s=>e.has(s)));
+ const overlap=q.filter(t=>e.has(t)||[...synonymTerms(t)].some(s=>e.has(s)));
  const groups=requirements.map(group=>(Array.isArray(group)?group:[]).some(term=>{
-  const ts=terms(term); return ts.some(t=>e.has(t)||[...(synonyms[t]||[])].some(s=>e.has(s)));
+  const ts=terms(term); return ts.some(t=>e.has(t)||[...synonymTerms(t)].some(s=>e.has(s)));
  }));
  return {score:overlap.reduce((n,t)=>n+(t.length>5?4:2),0)+groups.filter(Boolean).length*3,overlap,groups};
 }
@@ -164,10 +165,10 @@ async function main(){
     const candidates=(data.hits||[]).filter(hit=>hit.largeImageURL&&hit.webformatURL&&hit.pageURL&&!seen.has(hit.id)
       &&(hit.imageWidth||0)>=1280&&(hit.imageHeight||0)>=720).map(hit=>{
        const tags=String(hit.tags||"").toLowerCase();
-       const queryMatches=tokens.filter(t=>[t,...(synonyms[t]||[])].some(term=>tags.includes(term)));
+       const queryMatches=tokens.filter(t=>[t,...synonymTerms(t)].some(term=>tags.includes(term)));
        const groupMatches=requirementGroups.map(group=>(Array.isArray(group)?group:[]).some(term=>{
         const value=String(term||"").toLowerCase();
-        return value&&(tags.includes(value)||terms(value).some(t=>[t,...(synonyms[t]||[])].some(term=>tags.includes(term))));
+        return value&&(tags.includes(value)||terms(value).some(t=>[t,...synonymTerms(t)].some(term=>tags.includes(term))));
        }));
        const score=queryMatches.reduce((n,t)=>n+(t.length>5?5:3),0)+groupMatches.filter(Boolean).length*2;
        return {hit,score,queryMatches,groupMatches};
