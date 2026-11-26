@@ -1,6 +1,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { spawn } from "node:child_process";
+import { scoreVisualCandidate } from "./visual-relevance.js";
 
 const projectId=process.env.PROJECT_ID;
 const apiKey=process.env.PIXABAY_API_KEY;
@@ -109,18 +110,11 @@ async function main(){
     u.searchParams.set("image_type","photo");u.searchParams.set("orientation","horizontal");
     u.searchParams.set("safesearch","true");u.searchParams.set("per_page","50");
     const data=await fetchJson(u);
-    const tokens=terms(query);
     const candidates=(data.hits||[]).filter(hit=>hit.largeImageURL&&hit.webformatURL&&hit.pageURL&&!seen.has(hit.id)
       &&(hit.imageWidth||0)>=1280&&(hit.imageHeight||0)>=720).map(hit=>{
-       const tags=String(hit.tags||"").toLowerCase();
-       const queryMatches=tokens.filter(t=>[t,...(synonyms[t]||[])].some(term=>tags.includes(term)));
-       const groupMatches=requirementGroups.map(group=>(Array.isArray(group)?group:[]).some(term=>{
-        const value=String(term||"").toLowerCase();
-        return value&&(tags.includes(value)||terms(value).some(t=>[t,...(synonyms[t]||[])].some(term=>tags.includes(term))));
-       }));
-       const score=queryMatches.reduce((n,t)=>n+(t.length>5?5:3),0)+groupMatches.filter(Boolean).length*2;
-       return {hit,score,queryMatches,groupMatches};
-      }).filter(x=>x.queryMatches.length>=1&&(!scene.requireAllVisualGroups||x.groupMatches.every(Boolean)))
+       const relevance=scoreVisualCandidate({query,tags:hit.tags,requirementGroups,synonyms});
+       return {hit,score:relevance.score,queryMatches:relevance.matchedTokens,groupMatches:relevance.matchedGroups,accepted:relevance.accepted};
+      }).filter(x=>x.accepted&&(!scene.requireAllVisualGroups||x.groupMatches.every(Boolean)))
       .sort((a,b)=>b.score-a.score||(b.hit.imageWidth*b.hit.imageHeight)-(a.hit.imageWidth*a.hit.imageHeight));
     if(candidates.length){chosen=candidates[0];selectedQuery=query;break;}
    }
