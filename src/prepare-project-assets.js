@@ -63,7 +63,7 @@ async function searchPixabayVideo(query, excerpt, requirements=[]){
     (small?.url&&small.width>=1280&&small.height>=720?small:null);
    const match=relevance(hit.tags||"",excerpt,requirements);
    return {hit,file,score:match.score,matched:match.overlap};
-  }).filter(x=>x.file&&Number(x.hit.duration||0)>=5&&Number(x.hit.duration||0)<=90&&x.matched.length>0)
+  }).filter(x=>x.file&&Number(x.hit.duration||0)>=5&&Number(x.hit.duration||0)<=90&&(x.matched.length>=2||x.matched.some(term=>term.length>=6)))
   .sort((a,b)=>b.score-a.score||(b.file.width*b.file.height)-(a.file.width*a.file.height))[0]||null;
 }
 
@@ -172,7 +172,7 @@ async function main(){
        }));
        const score=queryMatches.reduce((n,t)=>n+(t.length>5?5:3),0)+groupMatches.filter(Boolean).length*2;
        return {hit,score,queryMatches,groupMatches};
-      }).filter(x=>x.queryMatches.length>=1&&(!scene.requireAllVisualGroups||x.groupMatches.every(Boolean)))
+      }).filter(x=>(x.queryMatches.length>=2||x.queryMatches.some(term=>term.length>=6))&&(!scene.requireAllVisualGroups||x.groupMatches.every(Boolean)))
       .sort((a,b)=>b.score-a.score||(b.hit.imageWidth*b.hit.imageHeight)-(a.hit.imageWidth*a.hit.imageHeight));
     if(candidates.length){chosen=candidates[0];selectedQuery=query;break;}
    }
