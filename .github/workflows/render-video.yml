@@ -6,7 +6,7 @@ on:
       - "production/projects/**/script.json"
       - "src/render-video.js"
   push:
-    branches: [main]
+    branches: [main, fix/narration-visual-relevance]
     paths:
       - "production/projects/**/visual-links.json"
       - "production/projects/**/script.json"
