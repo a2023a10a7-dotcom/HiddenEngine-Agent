@@ -19,6 +19,7 @@ const synonyms={
 };
 function terms(s){return String(s||"").toLowerCase().split(/[^a-z0-9]+/).filter(x=>x.length>2&&!stop.has(x));}
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+const seenVideoIds=new Set();
 function relevance(query, excerpt, requirements=[]){
  const q=terms(query), e=new Set(terms(excerpt));
  const overlap=q.filter(t=>e.has(t)||[...(synonyms[t]||[])].some(s=>e.has(s)));
@@ -45,7 +46,7 @@ async function planNarrationShots(scene){
   const best=ranked[0];
   const excerptTerms=terms(excerpt).filter(t=>!stop.has(t)).slice(0,5);
   const query=[...excerptTerms,best.query].filter(Boolean).join(" ");
-  return {shot:i+1,narrationExcerpt:excerpt,visualQuery:query,approvedVisualQuery:best.query,visualType:"narration_matched",reason:"Shot boundaries follow sentence meaning; query is selected by overlap with the actual narration and scene requirements.",targetDurationSeconds:Math.max(3,Math.min(8,count/2.5))};
+  return {shot:i+1,narrationExcerpt:excerpt,visualQuery:query,approvedVisualQuery:best.query,visualType:"narration_matched",reason:"Shot boundaries follow sentence meaning; query is selected by overlap with the actual narration and scene requirements.",targetDurationSeconds:Math.max(3,Math.min(8,excerpt.split(/\\s+/).length/2.5))};
  });
 }
 async function searchPixabayVideo(query, excerpt, requirements=[]){
@@ -120,7 +121,7 @@ async function main(){
  const script=JSON.parse(await readFile(path.join(root,"script.json"),"utf8"));
  await mkdir(out,{recursive:true});
 
- const assets=[],selection=[],seen=new Set(),seenVideoIds=new Set(),sheetItems=[];
+ const assets=[],selection=[],seen=new Set(),sheetItems=[];
  for(let i=0;i<script.scenes.length;i++){
   const scene=script.scenes[i];
   const plannedShots=await planNarrationShots(scene);
