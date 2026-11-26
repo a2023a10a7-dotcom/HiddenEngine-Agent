@@ -48,32 +48,42 @@ export async function selectVisualCandidate({ narrationExcerpt, sceneTitle, visu
   }
 
   const endpoint = "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(model) + ":generateContent?key=" + encodeURIComponent(apiKey);
-  const response = await fetch(endpoint, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    signal: AbortSignal.timeout(90000),
-    body: JSON.stringify({
-      contents: [{ role: "user", parts }],
-      generationConfig: {
-        temperature: 0.1,
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: "OBJECT",
-          properties: {
-            selectedIndex: { type: "INTEGER" },
-            rationale: { type: "STRING" },
-            confidence: { type: "NUMBER" },
-            visibleSubject: { type: "STRING" }
-          },
-          required: ["selectedIndex", "rationale", "confidence", "visibleSubject"]
-        }
+  const requestBody = JSON.stringify({
+    contents: [{ role: "user", parts }],
+    generationConfig: {
+      temperature: 0.1,
+      responseMimeType: "application/json",
+      responseSchema: {
+        type: "OBJECT",
+        properties: {
+          selectedIndex: { type: "INTEGER" },
+          rationale: { type: "STRING" },
+          confidence: { type: "NUMBER" },
+          visibleSubject: { type: "STRING" }
+        },
+        required: ["selectedIndex", "rationale", "confidence", "visibleSubject"]
       }
-    })
+    }
   });
-  if (!response.ok) {
-    const detail = await response.text();
-    throw new Error("Gemini visual review failed (HTTP " + response.status + "): " + detail.slice(0, 500));
+  let response;
+  let lastDetail = "";
+  for (let attempt = 0; attempt < 4; attempt++) {
+    response = await fetch(endpoint, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      signal: AbortSignal.timeout(90000),
+      body: requestBody
+    });
+    if (response.ok) break;
+    lastDetail = await response.text();
+    if (![429, 500, 502, 503, 504].includes(response.status) || attempt === 3) {
+      throw new Error("Gemini visual review failed (HTTP " + response.status + "): " + lastDetail.slice(0, 500));
+    }
+    const delayMs = Math.min(20000, 2000 * (2 ** attempt));
+    console.warn("Gemini temporary HTTP " + response.status + "; retry " + (attempt + 1) + "/3 in " + delayMs + "ms.");
+    await new Promise(resolve => setTimeout(resolve, delayMs));
   }
+  if (!response?.ok) throw new Error("Gemini visual review failed after retries: " + lastDetail.slice(0, 500));
   const payload = await response.json();
   const text = payload.candidates?.[0]?.content?.parts?.map(part => part.text || "").join("");
   if (!text) throw new Error("Gemini visual review returned no structured decision.");
