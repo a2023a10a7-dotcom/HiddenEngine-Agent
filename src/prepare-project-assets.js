@@ -19,22 +19,49 @@ const synonyms={
 };
 function terms(s){return String(s||"").toLowerCase().split(/[^a-z0-9]+/).filter(x=>x.length>2&&!stop.has(x));}
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+const seenVideoIds=new Set();
+function relevance(query, excerpt, requirements=[]){
+ const q=terms(query), e=new Set(terms(excerpt));
+ const overlap=q.filter(t=>e.has(t)||[...(synonyms[t]||[])].some(s=>e.has(s)));
+ const groups=requirements.map(group=>(Array.isArray(group)?group:[]).some(term=>{
+  const ts=terms(term); return ts.some(t=>e.has(t)||[...(synonyms[t]||[])].some(s=>e.has(s)));
+ }));
+ return {score:overlap.reduce((n,t)=>n+(t.length>5?4:2),0)+groups.filter(Boolean).length*3,overlap,groups};
+}
 async function planNarrationShots(scene){
  const narration=String(scene.narration||"").trim();
  if(!narration) throw new Error("Scene has no narration for visual planning: "+scene.title);
- const words=narration.split(/\s+/);
- const targetCount=Math.max(1,Math.ceil(words.length/12.5));
  const queries=Array.isArray(scene.visual_queries)?scene.visual_queries.map(x=>String(x).trim()).filter(Boolean):[];
  if(!queries.length) throw new Error("Scene has no approved visual_queries: "+scene.title);
- const shots=[];
- for(let i=0;i<targetCount;i++){
-  const from=Math.floor(i*words.length/targetCount);
-  const to=Math.floor((i+1)*words.length/targetCount);
-  const excerpt=words.slice(from,to).join(" ");
-  const query=queries[i%queries.length];
-  shots.push({shot:i+1,narrationExcerpt:excerpt,visualQuery:query,visualType:"specific",reason:"Selected from the scene's approved visual direction; stock imagery is illustrative unless the depicted subject is independently verified.",targetDurationSeconds:5});
+ const sentences=(narration.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[narration]).map(s=>s.trim()).filter(Boolean);
+ const shots=[]; let chunk=[],count=0;
+ for(const sentence of sentences){
+  const n=sentence.split(/\s+/).length;
+  if(chunk.length && count+n>22){shots.push(chunk.join(" "));chunk=[];count=0;}
+  chunk.push(sentence);count+=n;
  }
- return shots;
+ if(chunk.length) shots.push(chunk.join(" "));
+ return shots.map((excerpt,i)=>{
+  const ranked=queries.map(query=>({query,...relevance(query,excerpt,scene.visual_requirements||[])})).sort((a,b)=>b.score-a.score);
+  const best=ranked[0];
+  const excerptTerms=terms(excerpt).filter(t=>!stop.has(t)).slice(0,5);
+  const query=[...excerptTerms,best.query].filter(Boolean).join(" ");
+  return {shot:i+1,narrationExcerpt:excerpt,visualQuery:query,approvedVisualQuery:best.query,visualType:"narration_matched",reason:"Shot boundaries follow sentence meaning; query is selected by overlap with the actual narration and scene requirements.",targetDurationSeconds:Math.max(3,Math.min(8,excerpt.split(/\\s+/).length/2.5))};
+ });
+}
+async function searchPixabayVideo(query, excerpt, requirements=[]){
+ const u=new URL("https://pixabay.com/api/videos/");
+ u.searchParams.set("key",apiKey);u.searchParams.set("q",query);
+ u.searchParams.set("safesearch","true");u.searchParams.set("per_page","50");
+ const data=await fetchJson(u);
+ return (data.hits||[]).filter(hit=>hit.pageURL&&!seenVideoIds.has(hit.id)&&hit.videos)
+  .map(hit=>{
+   const variants=Object.values(hit.videos||{}).filter(v=>v&&v.url&&v.width>=1280&&v.height>=720);
+   const file=variants.sort((a,b)=>(b.width*b.height)-(a.width*a.height))[0];
+   const match=relevance(query+" "+(hit.tags||""),excerpt,requirements);
+   return {hit,file,score:match.score,matched:match.overlap};
+  }).filter(x=>x.file&&Number(x.hit.duration||0)>=5&&x.matched.length>0)
+  .sort((a,b)=>b.score-a.score||(b.file.width*b.file.height)-(a.file.width*a.file.height))[0]||null;
 }
 
 let lastPixabayRequest=0;
@@ -103,6 +130,28 @@ async function main(){
    const requirementGroups=Array.isArray(scene.visual_requirements)?scene.visual_requirements:[];
    const queryOptions=[shot.visualQuery,...(Array.isArray(scene.visual_queries)?scene.visual_queries:[]).map(q=>String(q).trim()).filter(q=>q&&q!==shot.visualQuery)];
    let chosen=null,selectedQuery=shot.visualQuery;
+   const videoQueryOptions=[shot.visualQuery,shot.approvedVisualQuery,...queryOptions].filter((q,index,all)=>q&&all.indexOf(q)===index);
+   let selectedVideo=null,selectedVideoQuery=shot.visualQuery;
+   for(const query of videoQueryOptions){
+    try{
+     const candidate=await searchPixabayVideo(query,shot.narrationExcerpt,requirementGroups);
+     if(candidate){selectedVideo=candidate;selectedVideoQuery=query;break;}
+    }catch(error){console.warn("Pixabay video search unavailable for "+query+": "+error.message);}
+   }
+   if(selectedVideo){
+    const h=selectedVideo.hit,v=selectedVideo.file,id="S"+String(i+1).padStart(2,"0")+"-SH"+String(shot.shot).padStart(3,"0");
+    seenVideoIds.add(h.id);
+    const thumbnail=h.videos?.medium?.thumbnail||h.videos?.large?.thumbnail||h.videos?.small?.thumbnail;
+    let preview=path.join(out,id+".jpg");
+    if(thumbnail){try{await download(thumbnail,preview);}catch(e){console.warn("Video thumbnail unavailable for "+id+": "+e.message);preview=null;}}
+    const item={id,scene:i+1,shot:shot.shot,mediaType:"video",creator:h.user||"Pixabay contributor",tags:h.tags||"",width:v.width,height:v.height,duration:h.duration,
+     sourcePage:h.pageURL,previewFile:preview?path.basename(preview):null,videoUrl:v.url,license:"Pixabay Content License",licenseUrl:"https://pixabay.com/service/license-summary/",
+     searchQuery:selectedVideoQuery,originalSearchQuery:shot.visualQuery,usedFallbackQuery:selectedVideoQuery!==shot.visualQuery,relevanceScore:selectedVideo.score,matchedQueryTerms:selectedVideo.matched,
+     narrationExcerpt:shot.narrationExcerpt,visualReason:"Real stock video selected against the narration excerpt and scene requirements; illustrative footage, never presented as proof of a specific event."};
+    assets.push(item);if(preview)sheetItems.push({id,scene:i+1,tags:item.tags,file:preview});
+    selectedShots.push({...shot,visualQuery:selectedVideoQuery,mediaType:"video",originalVisualQuery:shot.visualQuery,imageId:id,relevanceScore:selectedVideo.score,matchedQueryTerms:selectedVideo.matched});
+    continue;
+   }
    for(const query of queryOptions){
     const u=new URL("https://pixabay.com/api/");
     u.searchParams.set("key",apiKey);u.searchParams.set("q",query);
@@ -132,7 +181,7 @@ async function main(){
     console.warn(id+": preview download failed; trying original. "+primaryError.message);
     await download(h.largeImageURL,preview);
    }
-   const item={id,scene:i+1,shot:shot.shot,creator:h.user||"Pixabay contributor",tags:h.tags||"",
+   const item={id,scene:i+1,shot:shot.shot,mediaType:"image",creator:h.user||"Pixabay contributor",tags:h.tags||"",
     width:h.imageWidth,height:h.imageHeight,sourcePage:h.pageURL,previewFile:id+".jpg",
     largeImageURL:h.largeImageURL,license:"Pixabay Content License",licenseUrl:"https://pixabay.com/service/license-summary/",
     searchQuery:selectedQuery,originalSearchQuery:shot.visualQuery,usedFallbackQuery:selectedQuery!==shot.visualQuery,relevanceScore:chosen.score,matchedQueryTerms:chosen.queryMatches,matchedVisualRequirementGroups:chosen.groupMatches.map((matched,index)=>matched?index+1:null).filter(Boolean),narrationExcerpt:shot.narrationExcerpt,visualReason:shot.reason};
@@ -142,8 +191,8 @@ async function main(){
   selection.push({scene:i+1,title:scene.title,selectedImageIds:selectedShots.map(x=>x.imageId),shots:selectedShots});
   console.log("Scene "+(i+1)+": AI planned "+selectedShots.length+" narration-matched shots; target ~5 seconds each.");
  }
- const selectionManifest={projectId,title:script.title,source:"Narration segmented into ~5-second shots; Pixabay candidates must match at least one non-generic query term, are scored against scene visual requirements, and are globally de-duplicated.",scenes:selection};
- const assetManifest={projectId,source:"Pixabay API search; unique assets matched to narration excerpts with query-term and visual-requirement relevance evidence.",assetCount:assets.length,uniqueAssetCount:new Set(assets.map(asset=>asset.sourcePage)).size,assets};
+ const selectionManifest={projectId,title:script.title,source:"Narration is segmented at sentence boundaries into short semantic shots; each query is ranked against its actual excerpt and scene requirements. Pixabay video is preferred when a relevant 720p+ clip exists; unique still imagery is the fallback.",scenes:selection};
+ const assetManifest={projectId,source:"Pixabay API video and image search; assets are selected against narration excerpts and scene requirements, with source and license metadata retained.",assetCount:assets.length,uniqueAssetCount:new Set(assets.map(asset=>asset.sourcePage)).size,assets};
  await writeFile(path.join(root,"visual-selection.json"),JSON.stringify(selectionManifest,null,2)+"\n");
  await writeFile(path.join(root,"visual-assets.json"),JSON.stringify(assetManifest,null,2)+"\n");
  await writeFile(path.join(out,"visual-selection.json"),JSON.stringify(selectionManifest,null,2)+"\n");
@@ -165,6 +214,6 @@ async function main(){
  await new Promise((resolve,reject)=>{const p=spawn("ffmpeg",["-y","-i",path.join(out,"contact-sheet.png"),"-frames:v","1","-q:v","2",path.join(out,"contact-sheet.jpg")],{stdio:"inherit"});p.on("error",reject);p.on("close",c=>c===0?resolve():reject(new Error("contact sheet JPEG failed")));});
  const uniqueAssetCount=new Set(assets.map(asset=>asset.sourcePage)).size;
  if(uniqueAssetCount!==assets.length) throw new Error("Visual selection contains duplicate source pages: "+uniqueAssetCount+"/"+assets.length);
- console.log("Prepared "+assets.length+" unique AI-selected images with query relevance evidence (target average 5 seconds) and contact sheet.");
+ console.log("Prepared "+assets.length+" unique narration-matched visuals ("+assets.filter(x=>x.mediaType==="video").length+" video clips, "+assets.filter(x=>x.mediaType==="image").length+" stills) and contact sheet.");
 }
 main().catch(e=>{console.error(e);process.exit(1);});
