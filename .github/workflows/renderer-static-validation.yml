@@ -32,6 +32,8 @@ jobs:
         run: |
           node --check src/render-video.js
           node --check src/prepare-project-assets.js
+      - name: Test semantic visual relevance gate
+        run: node --test tests/visual-relevance.test.js
       - name: Validate 15-minute documentary script
         run: |
           node --input-type=module <<'NODE'
