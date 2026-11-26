@@ -424,7 +424,7 @@ async function main() {
     throw new Error("Scene transition QA failed: every rendered scene must exceed 0.8 seconds.");
   }
   const videoFade = Math.min(0.65, Math.min(...sceneDurations) * 0.15);
-  const audioFade = Math.min(0.45, Math.min(...sceneDurations) * 0.10);
+  const audioFade = videoFade; // Keep narration and picture transition durations identical to prevent drift.
   const transitionInputs = clips.flatMap(file => ["-i", file]);
   const transitionFilters = [];
   for (let n = 0; n < clips.length; n++) {
