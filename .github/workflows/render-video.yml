@@ -1,5 +1,12 @@
 name: HiddenEngine Cinematic Documentary Render
 on:
+  pull_request:
+    paths:
+      - "production/projects/**/visual-links.json"
+      - "production/projects/**/script.json"
+      - "src/render-video.js"
+      - "src/prepare-project-assets.js"
+      - ".github/workflows/render-video.yml"
   push:
     branches: [main]
     paths:
@@ -70,7 +77,9 @@ jobs:
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
         run: |
           set -euo pipefail
-          if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
+          if [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
+            project_id="2026-11-12-chinas-technology-rise"
+          elif [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
             project_path="$(git diff-tree --no-commit-id --name-only -r HEAD | awk -F/ '$1=="production" && $2=="projects" && ($4=="visual-links.json" || $4=="script.json") {print; exit}')"
             if [[ -z "$project_path" ]]; then
               project_id="2026-11-12-chinas-technology-rise"
