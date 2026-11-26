@@ -5,8 +5,6 @@ on:
       - "production/projects/**/visual-links.json"
       - "production/projects/**/script.json"
       - "src/render-video.js"
-      - "src/prepare-project-assets.js"
-      - ".github/workflows/render-video.yml"
   push:
     branches: [main]
     paths:
