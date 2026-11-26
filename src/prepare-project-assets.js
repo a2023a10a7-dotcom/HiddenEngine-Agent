@@ -56,11 +56,13 @@ async function searchPixabayVideo(query, excerpt, requirements=[]){
  const data=await fetchJson(u);
  return (data.hits||[]).filter(hit=>hit.pageURL&&!seenVideoIds.has(hit.id)&&hit.videos)
   .map(hit=>{
-   const variants=Object.values(hit.videos||{}).filter(v=>v&&v.url&&v.width>=1280&&v.height>=720);
-   const file=variants.sort((a,b)=>(b.width*b.height)-(a.width*a.height))[0];
+   const medium=hit.videos?.medium;
+   const small=hit.videos?.small;
+   const file=medium?.url&&medium.width>=1280&&medium.height>=720?medium:
+    (small?.url&&small.width>=1280&&small.height>=720?small:null);
    const match=relevance(hit.tags||"",excerpt,requirements);
    return {hit,file,score:match.score,matched:match.overlap};
-  }).filter(x=>x.file&&Number(x.hit.duration||0)>=5&&x.matched.length>0)
+  }).filter(x=>x.file&&Number(x.hit.duration||0)>=5&&Number(x.hit.duration||0)<=90&&x.matched.length>0)
   .sort((a,b)=>b.score-a.score||(b.file.width*b.file.height)-(a.file.width*a.file.height))[0]||null;
 }
 
