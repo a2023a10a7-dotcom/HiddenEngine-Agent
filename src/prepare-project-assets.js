@@ -3,6 +3,7 @@ import path from "node:path";
 import { spawn } from "node:child_process";
 import { scoreVisualCandidate } from "./visual-relevance.js";
 import { selectVisualCandidate } from "./ai-visual-selection.js";
+// Gemini Vision retries transient provider-capacity errors in ai-visual-selection.js.
 
 const projectId=process.env.PROJECT_ID;
 const apiKey=process.env.PIXABAY_API_KEY;
