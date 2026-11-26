@@ -27,7 +27,7 @@ function relevance(query, excerpt, requirements=[]){
  const groups=requirements.map(group=>(Array.isArray(group)?group:[]).some(term=>{
   const ts=terms(term); return ts.some(t=>e.has(t)||[...synonymTerms(t)].some(s=>e.has(s)));
  }));
- return {score:overlap.reduce((n,t)=>n+(t.length>5?4:2),0)+groups.filter(Boolean).length*3,overlap,groups};
+ return {score:overlap.reduce((n,t)=>n+(t.length>5?5:3),0)+groups.filter(Boolean).length*2,overlap,groups};
 }
 async function planNarrationShots(scene){
  const narration=String(scene.narration||"").trim();
