@@ -45,7 +45,7 @@ async function planNarrationShots(scene){
   const ranked=queries.map(query=>({query,...relevance(query,excerpt,scene.visual_requirements||[])})).sort((a,b)=>b.score-a.score);
   const best=ranked[0];
   const excerptTerms=terms(excerpt).filter(t=>!stop.has(t)).slice(0,5);
-  const query=[...excerptTerms,best.query].filter(Boolean).join(" ");
+  const query=[...excerptTerms,best.query].filter(Boolean).join(" ").slice(0,95);
   return {shot:i+1,narrationExcerpt:excerpt,visualQuery:query,approvedVisualQuery:best.query,visualType:"narration_matched",reason:"Shot boundaries follow sentence meaning; query is selected by overlap with the actual narration and scene requirements.",targetDurationSeconds:Math.max(3,Math.min(8,excerpt.split(/\s+/).length/2.5))};
  });
 }
@@ -128,9 +128,9 @@ async function main(){
   const selectedShots=[];
   for(const shot of plannedShots){
    const requirementGroups=Array.isArray(scene.visual_requirements)?scene.visual_requirements:[];
-   const queryOptions=[shot.visualQuery,...(Array.isArray(scene.visual_queries)?scene.visual_queries:[]).map(q=>String(q).trim()).filter(q=>q&&q!==shot.visualQuery)];
+   const queryOptions=[shot.visualQuery,shot.approvedVisualQuery].filter((q,index,all)=>q&&all.indexOf(q)===index);
    let chosen=null,selectedQuery=shot.visualQuery;
-   const videoQueryOptions=[shot.visualQuery,shot.approvedVisualQuery,...queryOptions].filter((q,index,all)=>q&&all.indexOf(q)===index);
+   const videoQueryOptions=[shot.visualQuery];
    let selectedVideo=null,selectedVideoQuery=shot.visualQuery;
    for(const query of videoQueryOptions){
     try{
