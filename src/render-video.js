@@ -361,25 +361,34 @@ async function main() {
         tags:asset.tags, license:asset.license, licenseUrl:asset.licenseUrl, illustrative:true });
     }
     const transition = mediaFiles.length > 1 ? 0.42 : 0;
-    const segmentDuration = mediaFiles.length > 1 ? (audioDuration + transition * (mediaFiles.length - 1)) / mediaFiles.length : audioDuration;
+    const shotPlans = selection.scenes.find(item => item.scene === i+1)?.shots || [];
+    const shotWeights = renderIds.map(id => {
+      const shot = shotPlans.find(item => item.imageId === id);
+      return Math.max(1, String(shot?.narrationExcerpt || "").trim().split(/\s+/).filter(Boolean).length);
+    });
+    const totalWeight = shotWeights.reduce((sum,value)=>sum+value,0);
+    const totalInputDuration = audioDuration + transition * (mediaFiles.length - 1);
+    const segmentDurations = shotWeights.map(weight => totalInputDuration * weight / totalWeight);
     const args = ["-y"];
-    for (let n=0;n<mediaFiles.length;n++) { if(mediaTypes[n]==="video") args.push("-stream_loop","-1","-i",mediaFiles[n]); else args.push("-loop","1","-t",segmentDuration.toFixed(3),"-i",mediaFiles[n]); }
+    for (let n=0;n<mediaFiles.length;n++) { if(mediaTypes[n]==="video") args.push("-stream_loop","-1","-i",mediaFiles[n]); else args.push("-loop","1","-t",segmentDurations[n].toFixed(3),"-i",mediaFiles[n]); }
     const audioIndex = mediaFiles.length;
     const svgIndex = mediaFiles.length + 1;
     args.push("-i",audio,"-loop","1","-i",svg);
     const filters = [];
     for (let n=0;n<mediaFiles.length;n++) {
       if(mediaTypes[n]==="video"){
-        filters.push("["+n+":v]trim=duration="+segmentDuration.toFixed(3)+",setpts=PTS-STARTPTS,scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,fps=25,setsar=1,settb=AVTB,format=yuv420p[v"+n+"]");
+        filters.push("["+n+":v]trim=duration="+segmentDurations[n].toFixed(3)+",setpts=PTS-STARTPTS,scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,fps=25,setsar=1,settb=AVTB,format=yuv420p[v"+n+"]");
       } else {
         const zoom = n % 2 === 0 ? "min(zoom+0.00045,1.12)" : "min(zoom+0.00038,1.10)";
         filters.push("["+n+":v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,zoompan=z='"+zoom+"':d=1:s=1920x1080:fps=25,setsar=1,settb=AVTB,format=yuv420p[v"+n+"]");
       }
     }
     let baseLabel = "v0";
+    let elapsedInput = 0;
     for (let n=1;n<mediaFiles.length;n++) {
       const nextLabel = "mix"+n;
-      const offset = Math.max(0, n * (segmentDuration - transition));
+      elapsedInput += segmentDurations[n-1];
+      const offset = Math.max(0, elapsedInput - transition * n);
       filters.push("["+baseLabel+"][v"+n+"]xfade=transition=fade:duration="+transition+":offset="+offset.toFixed(3)+"["+nextLabel+"]");
       baseLabel = nextLabel;
     }
