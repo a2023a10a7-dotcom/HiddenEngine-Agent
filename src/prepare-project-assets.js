@@ -8,7 +8,9 @@ if(!projectId||!/^[a-z0-9-]+$/.test(projectId)) throw new Error("PROJECT_ID miss
 if(!apiKey) throw new Error("PIXABAY_API_KEY is required");
 const root=path.join("production","projects",projectId);
 const out=path.join("dist",projectId);
-const stop=new Set(["with","from","that","this","into","over","under","china","modern","technology","factory","industrial","manufacturing","production","assembly","workers","equipment","plant","market","product","line","system","business","city","global","aerial","advanced","company","industry","facility","machine","machines","process"]);
+const stop=new Set(["with","from","that","this","into","over","under","china","modern","technology","factory","industrial","manufacturing","production","assembly","workers","worker","equipment","plant","market","product","products","line","system","business","city","global","aerial","advanced","company","companies","industry","facility","machine","machines","process",
+ "the","and","for","are","was","were","has","have","had","not","but","can","could","would","should","will","its","their","them","they","there","here","then","than","when","while","where","which","who","what","how","why","also","often","very","more","most","some","many","several","each","every","other","same","such","only","just","still","yet","both","either","neither","all","any","own","out","off","up","down","about","around","across","along","between","behind","before","after","through","during","because","without","within","near","far","onto","upon","against","toward","towards","although","though","if","as","at","by","of","on","in","to","a","an","is","it","be","being","been","do","does","did","doing","done","he","she","we","you","i","me","my","our","your","his","her","these","those","whom","whose","again","once","ever","never","always","sometimes","usually","maybe","perhaps","almost","quite","rather","too","so","since","until","unless","whether","whereas","like",
+ "look","looks","looked","looking","simple","outside","inside","deeper","story","stories","sits","sitting","complicated","described","describes","learned","learn","make","made","makes","rise","need","needs","follow","understand","means","mean","shows","show","visible","results","create","creates","created","permanent","leadership","profits","profit","guarantee","guaranteed","depends","dependent","illustrates","illustrate","including","part","parts","one","two","three","first","second","third","decades","laid","opened","country","markets","foreign","international","buyers","connected","coastal","economic","economics","investment","reduced","cost","costs","moving","goods","linked","foundations","early","focused","focus","skills","workforce","experienced","quality","control","infrastructure","power","networks","parks","trade","local","governments","competed","attract","attracting","sometimes","providing","land","training","brought","capital","access","customers","uneven","wasteful","shift","simply","hosting","developing","domestic","capable","designing","increasingly","sophisticated","supplier","suppliers","specialist","tooling","phone","mechanism","competition","invention","position","scale","home","money","focused","businesswoman"]);
 const synonyms={
  automated:["automation","robotic","robot"],automation:["automated","robotic","robot"],robotics:["robotic","robot"],robot:["robotic","robotics"],
  drone:["quadcopter","uav"],quadcopter:["drone","uav"],uav:["drone","quadcopter"],
@@ -18,6 +20,8 @@ const synonyms={
  train:["railway","bullet train"],railway:["train","bullet train"]
 };
 function synonymTerms(term){return Array.isArray(synonyms[term])?synonyms[term]:[];}
+const strongVisualTerms=new Set(["shenzhen","byd","catl","nio","xpeng","tesla","semiconductor","microchip","chip","wafer","lithography","battery","batteries","lithium","solar","photovoltaic","robot","robotic","robotics","automation","automated","drone","uav","railway","train","port","container","shipping","freight","circuit","electronics","laboratory","cleanroom","satellite","turbine","charger","charging","electric","vehicle","car","ev","wind"]); 
+function hasStrongVisualMatch(matches){return matches.length>=2||matches.some(term=>strongVisualTerms.has(term));}
 function terms(s){return String(s||"").toLowerCase().split(/[^a-z0-9]+/).filter(x=>x.length>2&&!stop.has(x));}
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 const seenVideoIds=new Set();
@@ -70,9 +74,9 @@ async function searchPixabayVideo(query, excerpt, requirements=[]){
    const small=hit.videos?.small;
    const file=medium?.url&&medium.width>=1280&&medium.height>=720?medium:
     (small?.url&&small.width>=1280&&small.height>=720?small:null);
-   const match=relevance(hit.tags||"",excerpt,requirements);
+   const match=relevance(hit.tags||"",query,requirements);
    return {hit,file,score:match.score,matched:match.overlap};
-  }).filter(x=>x.file&&Number(x.hit.duration||0)>=5&&Number(x.hit.duration||0)<=90&&(x.matched.length>=2||x.matched.some(term=>term.length>=6)))
+  }).filter(x=>x.file&&Number(x.hit.duration||0)>=5&&Number(x.hit.duration||0)<=90&&hasStrongVisualMatch(x.matched))
   .sort((a,b)=>b.score-a.score||(b.file.width*b.file.height)-(a.file.width*a.file.height))[0]||null;
 }
 
@@ -181,7 +185,7 @@ async function main(){
        }));
        const score=queryMatches.reduce((n,t)=>n+(t.length>5?5:3),0)+groupMatches.filter(Boolean).length*2;
        return {hit,score,queryMatches,groupMatches};
-      }).filter(x=>(x.queryMatches.length>=2||x.queryMatches.some(term=>term.length>=6))&&(!scene.requireAllVisualGroups||x.groupMatches.every(Boolean)))
+      }).filter(x=>hasStrongVisualMatch(x.queryMatches)&&(!scene.requireAllVisualGroups||x.groupMatches.every(Boolean)))
       .sort((a,b)=>b.score-a.score||(b.hit.imageWidth*b.hit.imageHeight)-(a.hit.imageWidth*a.hit.imageHeight));
     if(candidates.length){chosen=candidates[0];selectedQuery=query;break;}
    }
