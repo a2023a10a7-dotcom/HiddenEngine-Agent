@@ -357,7 +357,7 @@ async function main() {
       }
       mediaFiles.push(visualFile);
       mediaTypes.push(isVideo ? "video" : "image");
-      credits.push({ scene:i+1, sourceScene:asset.scene, imageId:id, provider:asset.provider || "Pixabay", page:asset.sourcePage, creator:asset.creator,
+      credits.push({ scene:i+1, sourceScene:asset.scene, imageId:id, mediaType:asset.mediaType || "image", provider:asset.provider || "Pixabay", page:asset.sourcePage, creator:asset.creator,
         tags:asset.tags, license:asset.license, licenseUrl:asset.licenseUrl, illustrative:true });
     }
     const transition = mediaFiles.length > 1 ? 0.42 : 0;
@@ -414,7 +414,7 @@ async function main() {
       "-c:v","libx264","-preset","veryfast","-crf","20","-c:a","aac","-b:a","192k",
       "-t",audioDuration.toFixed(3),"-shortest","-movflags","+faststart",rendered);
     await run("ffmpeg",args);
-    visualAudit.push({scene:i+1,selectedImageIds:renderIds,renderedImages:mediaFiles.length,videoClips:mediaTypes.filter(x=>x==="video").length,stillImages:mediaTypes.filter(x=>x==="image").length,animated:true,
+    visualAudit.push({scene:i+1,selectedVisualIds:renderIds,selectedImageIds:renderIds,renderedVisuals:mediaFiles.length,renderedImages:mediaFiles.length,videoClips:mediaTypes.filter(x=>x==="video").length,stillImages:mediaTypes.filter(x=>x==="image").length,animated:true,
       targetShotDurationSeconds:5,actualAverageShotDurationSeconds:Number((audioDuration/imageFiles.length).toFixed(2)),
       narrationMatchedShots:selection.scenes.find(item=>item.scene===i+1)?.shots||[],
       sourceTags:selected.map(id=>assetById.get(id).tags)});
@@ -506,18 +506,18 @@ async function main() {
     ...(script.sources || []).map(source=>"- **"+source.name+"** — "+source.supports+" "+source.url),
     "",
     "# Visual credits","",
-    "Visuals were curated for this documentary from the linked source pages. Review the applicable license and credit requirements before publication.",
+    "Visuals were curated for this documentary from the linked source pages. Stock footage is illustrative, not proof of a named event or subject. Review applicable license and credit requirements before publication.",
     "All selected stills are illustrative stock imagery, not evidence of a specific company, person, product, or event unless independently verified.",
     "",
     ...script.scenes.filter(scene=>scene.visual?.source_url).map(scene=>"- Scene "+(script.scenes.indexOf(scene)+1)+" data graphic: "+(scene.visual.source_label||"Source")+": "+scene.visual.source_url),
     ...credits.map(c=>"imageId" in c
-      ? "- Scene "+c.scene+" ("+c.imageId+"): [Pixabay image]("+c.page+") — "+c.creator+"; illustrative stock image. License: [Pixabay Content License]("+c.licenseUrl+")"
+      ? "- Scene "+c.scene+" ("+c.imageId+"): [Pixabay "+(c.mediaType==="video"?"video":"image")+"]("+c.page+") — "+c.creator+"; illustrative stock media. License: [Pixabay Content License]("+c.licenseUrl+")"
       : "- Scene "+c.scene+": "+c.provider+" — "+c.note)
   ].join("\n")+"\n");
   await writeFile(path.join(OUT,"README.txt"),[
     "The Hidden Engine documentary render",
     "Narration: Local Piper neural TTS (no paid API quota required).",
-    "Visuals: unique narration-matched still images selected with query and scene-requirement relevance gates, with animated camera movement, crossfades, and original data overlays.",
+    "Visuals: narration-matched stock video where suitable, with animated still-image fallbacks, source credits, transitions, and original data overlays.",
     "Identity: near-black and charcoal, white/ivory typography, copper #C86D2D accents, restrained documentary-investigative overlays.",
     "Review all claims, pronunciations, visual relevance, licenses, and credits before publication.",
     "Audio: original low-level synthesized ambient underscore with restrained transition accents. No automatic YouTube upload."
@@ -528,7 +528,7 @@ async function main() {
   if (finalDuration < 13*60 || finalDuration > 18*60) throw new Error("Final runtime "+finalDuration.toFixed(1)+"s is outside the 13–18 minute documentary target.");
   if (visualAudit.some(x=>x.renderedImages < 1 || x.actualAverageShotDurationSeconds > 8)) throw new Error("Visual pacing QA failed: every scene needs distinct narration-matched shots averaging no more than 6.5 seconds.");
   await access(path.join(OUT,"contact-sheet.jpg")).catch(()=>{throw new Error("Final contact-sheet.jpg is missing.");});
-  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:finalDuration,targetDurationMinutes:15,acceptedDurationRangeMinutes:[13,18],audio:true,scenes:clips.length,selectedImages:credits.length,videoClips:visualAudit.reduce((n,x)=>n+(x.videoClips||0),0),stillImages:visualAudit.reduce((n,x)=>n+(x.stillImages||0),0),uniqueImages:uniqueImageCount,uniqueImageRatio:Number((uniqueImageCount/Math.max(1,credits.length)).toFixed(3)),imagesPerScene:Math.min(...visualAudit.map(x=>x.renderedImages)),visualRelevanceGate:true,visualChangeTargetSeconds:5,animatedImageScenes:visualAudit.filter(x=>x.animated).length,originalMusic:true,ambientMusicBed:true,musicTargetDb:-28,transitionWhooshes:true,numberClicks:true,sceneVideoCrossfadeSeconds:Number(videoFade.toFixed(3)),sceneAudioCrossfadeSeconds:Number(audioFade.toFixed(3)),sceneTransitions:Math.max(0,clips.length-1),contactSheet:true},null,2)+"\n");
+  await writeFile(path.join(OUT,"QA-REPORT.json"),JSON.stringify({file:path.basename(output),width:1920,height:1080,duration:finalDuration,targetDurationMinutes:15,acceptedDurationRangeMinutes:[13,18],audio:true,scenes:clips.length,selectedVisuals:credits.length,videoClips:visualAudit.reduce((n,x)=>n+(x.videoClips||0),0),stillImages:visualAudit.reduce((n,x)=>n+(x.stillImages||0),0),uniqueImages:uniqueImageCount,uniqueImageRatio:Number((uniqueImageCount/Math.max(1,credits.length)).toFixed(3)),visualsPerScene:Math.min(...visualAudit.map(x=>x.renderedVisuals)),visualRelevanceGate:true,visualChangeTargetSeconds:5,animatedImageScenes:visualAudit.filter(x=>x.animated).length,originalMusic:true,ambientMusicBed:true,musicTargetDb:-28,transitionWhooshes:true,numberClicks:true,sceneVideoCrossfadeSeconds:Number(videoFade.toFixed(3)),sceneAudioCrossfadeSeconds:Number(audioFade.toFixed(3)),sceneTransitions:Math.max(0,clips.length-1),contactSheet:true},null,2)+"\n");
   console.log("Rendered and passed technical QA: "+output);
 }
 main().catch(error=>{console.error("Render failed:",error);process.exit(1);});
